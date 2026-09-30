@@ -121,6 +121,13 @@ namespace ExplodeIt.Enemies
             Body.MovePosition(Body.position + toTarget.normalized * step);
         }
 
+        // 목표와 겹쳐 방향이 없을 때도 공격이 멈추지 않도록 기본 방향을 준다.
+        protected Vector2 DirectionToTarget()
+        {
+            Vector2 toTarget = (Vector2)_target.position - Body.position;
+            return toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : Vector2.right;
+        }
+
         protected bool IsTargetWithin(float range)
         {
             return ((Vector2)_target.position - Body.position).sqrMagnitude <= range * range;

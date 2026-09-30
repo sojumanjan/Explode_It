@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05f1fb9fc087922438db647db1dd5f6e, type: 3}
-  m_Name: ChargerData
-  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ChargerData
-  _moveSpeed: 3.3
+  m_Script: {fileID: 11500000, guid: 00ccbd133157ff54c9dc4cfbb564ecb7, type: 3}
+  m_Name: ArcherData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
+  _moveSpeed: 2
   _hitsToDie: 1
-  _attackTriggerRange: 4
+  _attackTriggerRange: 5
   _telegraphDuration: 0.6
-  _recoverDuration: 0.4
-  _chargeSpeed: 12
-  _chargeDistance: 6
-  _contactRadius: 0.4
+  _recoverDuration: 1
+  _projectileSpeed: 8
+  _projectileRange: 12
+  _projectileHitRadius: 0.15
