@@ -15,8 +15,9 @@ MonoBehaviour:
   _moveSpeed: 3.3
   _hitsToDie: 1
   _attackTriggerRange: 4
+  _arenaEntryDelay: 1
   _telegraphDuration: 0.6
   _recoverDuration: 1
-  _chargeSpeed: 12
-  _chargeDistance: 6
+  _chargeSpeed: 11
+  _chargeDistance: 5
   _contactRadius: 0.4

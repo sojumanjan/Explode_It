@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 고블린 궁수: 다가옴 → 조준 예고(계속 다가오며 조준선이 플레이어를 따라감) → 예고 끝 방향으로 화살 한 발 → 회복.
+    // 고블린 궁수: 다가옴 → 멈춰서 조준 예고(조준선만 플레이어를 따라감) → 예고 끝 방향으로 화살 한 발 → 회복.
     // 예측 과제: 쏘는 순간의 방향으로 날아가므로, 예고가 끝나기 직전에 옆으로 빠지면서 멈춰 선 궁수에게 폭탄을 둔다.
     public class ArcherEnemy : Enemy
     {
@@ -24,9 +24,9 @@ namespace ExplodeIt.Enemies
             return IsTargetWithin(_data.AttackTriggerRange);
         }
 
+        // 조준 중에는 제자리에 서서, 멈춘 궁수가 폭탄을 맞힐 기회가 되게 한다.
         protected override void TickTelegraph(float deltaTime)
         {
-            MoveTowardTarget(_data.MoveSpeed, deltaTime);
             AimAtTarget();
         }
 

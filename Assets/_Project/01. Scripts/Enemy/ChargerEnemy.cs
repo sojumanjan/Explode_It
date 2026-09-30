@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 고블린 돌격병: 다가옴 → 예고(계속 다가오며 경로가 플레이어를 따라감) → 예고 끝 방향으로 직선 돌진.
+    // 고블린 돌격병: 다가옴 → 멈춰서 예고(경로선만 플레이어를 따라감) → 예고 끝 방향으로 직선 돌진.
     // 예측 과제: 돌진 방향은 예고가 끝나는 순간 정해지므로, 그 직전에 경로를 벗어나면서 돌진이 끝날 지점에 폭탄을 둔다.
     public class ChargerEnemy : Enemy
     {
@@ -25,9 +25,9 @@ namespace ExplodeIt.Enemies
             return IsTargetWithin(_data.AttackTriggerRange);
         }
 
+        // 예고 중에는 제자리에 서서, 돌진 시작점이 흔들리지 않게 하고 멈춘 순간이 폭탄 표적이 되게 한다.
         protected override void TickTelegraph(float deltaTime)
         {
-            MoveTowardTarget(_data.MoveSpeed, deltaTime);
             AimAtTarget();
         }
 

@@ -9,8 +9,8 @@ namespace ExplodeIt.Stage
     {
         [SerializeField] private WaveData _wave;
         [SerializeField] private EnemySpawner _spawner;
-        [SerializeField] private SpawnArea[] _areas;
 
+        private SpawnArea[] _areas;
         private float _timer;
         private bool _isRunning;
 
@@ -26,6 +26,9 @@ namespace ExplodeIt.Stage
 
         private void Start()
         {
+            // 구역을 추가할 때마다 인스펙터에 연결하지 않도록 시작할 때 씬에서 모두 찾는다.
+            _areas = FindObjectsByType<SpawnArea>();
+
             if (_wave.Enemies.Count == 0 || _areas.Length == 0)
             {
                 Debug.LogError("WaveRunner: 적 목록이나 스폰 구역이 비어 있습니다.", this);

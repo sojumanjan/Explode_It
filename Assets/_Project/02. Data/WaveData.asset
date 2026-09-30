@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f234863e87ca864890238e3bc818fcc, type: 3}
   m_Name: WaveData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveData
-  _spawnInterval: 3
+  _spawnInterval: 1.2
   _enemies:
   - {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
   - {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
