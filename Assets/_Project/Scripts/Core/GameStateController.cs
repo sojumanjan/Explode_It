@@ -6,9 +6,24 @@ namespace ExplodeIt.Core
     {
         public GameState Current { get; private set; } = GameState.None;
 
+        private void OnEnable()
+        {
+            GameEvents.PlayerDied += OnPlayerDied;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.PlayerDied -= OnPlayerDied;
+        }
+
         private void Start()
         {
             ChangeState(GameState.Playing);
+        }
+
+        private void OnPlayerDied()
+        {
+            ChangeState(GameState.PlayerDead);
         }
 
         public void ChangeState(GameState next)
