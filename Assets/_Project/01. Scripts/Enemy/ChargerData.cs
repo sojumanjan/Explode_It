@@ -9,7 +9,7 @@ namespace ExplodeIt.Enemies
         [Tooltip("돌진 속도 (유닛/초)")]
         [SerializeField, Min(0f)] private float _chargeSpeed = 12f;
 
-        [Tooltip("돌진 거리 (유닛). 예고선 길이와 같다")]
+        [Tooltip("최대 돌진 거리 (유닛). 구조물이 있으면 그 앞에서 멈추고, 예고선도 그 길이로 잘린다")]
         [SerializeField, Min(0f)] private float _chargeDistance = 6f;
 
         [Tooltip("돌진 중 플레이어를 맞히는 판정 반경 (유닛)")]

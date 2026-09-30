@@ -11,13 +11,16 @@ namespace ExplodeIt.Enemies
     {
         // 적 공격은 순차적으로 처리되므로 버퍼 하나를 모든 적이 공유한다.
         private static readonly Collider2D[] AttackBuffer = new Collider2D[8];
+        private static readonly RaycastHit2D[] CastBuffer = new RaycastHit2D[4];
 
         // 씬에 직접 배치해 테스트할 때만 인스펙터로 넣는다. 스폰 시에는 Initialize로 주입한다.
         [SerializeField] private Transform _target;
         [SerializeField] private LayerMask _attackMask;
+        [SerializeField] private LayerMask _obstacleMask;
 
         private HitReceiver _hitReceiver;
         private ContactFilter2D _attackFilter;
+        private ContactFilter2D _obstacleFilter;
         private Action<Enemy> _release;
         private EnemyState _state;
         private float _stateTime;
@@ -35,6 +38,9 @@ namespace ExplodeIt.Enemies
             _attackFilter = new ContactFilter2D();
             _attackFilter.SetLayerMask(_attackMask);
             _attackFilter.useTriggers = true;
+
+            _obstacleFilter = new ContactFilter2D();
+            _obstacleFilter.SetLayerMask(_obstacleMask);
         }
 
         protected virtual void OnEnable()
@@ -77,6 +83,7 @@ namespace ExplodeIt.Enemies
                     break;
 
                 case EnemyState.Telegraph:
+                    TickTelegraph(deltaTime);
                     if (_stateTime >= Data.TelegraphDuration)
                     {
                         EnterState(EnemyState.Attack);
@@ -102,6 +109,11 @@ namespace ExplodeIt.Enemies
         protected abstract void TickMove(float deltaTime);
         protected abstract bool ShouldStartAttack();
 
+        // 예고 중 동작. 예고 표시는 공격 직전까지 실제 공격과 같은 값을 보여줘야 한다.
+        protected virtual void TickTelegraph(float deltaTime)
+        {
+        }
+
         // 공격이 끝나면 true를 돌려준다.
         protected abstract bool TickAttack(float deltaTime);
 
@@ -126,6 +138,24 @@ namespace ExplodeIt.Enemies
         {
             Vector2 toTarget = (Vector2)_target.position - Body.position;
             return toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : Vector2.right;
+        }
+
+        // 주어진 방향으로 반경만 한 원을 밀었을 때 구조물에 닿기 전까지 갈 수 있는 거리.
+        // 구조물은 움직이지 않으므로 예고 시점에 한 번 재면 공격이 끝날 때까지 유효하다.
+        // 예고선과 실제 공격이 같은 값을 쓰므로 보이는 길이가 곧 공격 거리다.
+        protected float ClearDistance(Vector2 direction, float maxDistance, float radius)
+        {
+            int count = Physics2D.CircleCast(Body.position, radius, direction, _obstacleFilter, CastBuffer, maxDistance);
+            float closest = maxDistance;
+            for (int i = 0; i < count; i++)
+            {
+                if (CastBuffer[i].distance < closest)
+                {
+                    closest = CastBuffer[i].distance;
+                }
+            }
+
+            return closest;
         }
 
         protected bool IsTargetWithin(float range)

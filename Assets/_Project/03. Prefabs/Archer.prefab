@@ -128,6 +128,9 @@ MonoBehaviour:
   _attackMask:
     serializedVersion: 2
     m_Bits: 128
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
   _data: {fileID: 11400000, guid: b7048a810d0bd95418e7b97d7c0febeb, type: 2}
   _telegraph: {fileID: 163591638612924593}
 --- !u!1 &2712769617280146494

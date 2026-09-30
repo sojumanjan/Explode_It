@@ -17,6 +17,6 @@ MonoBehaviour:
   _attackTriggerRange: 7
   _telegraphDuration: 0.6
   _recoverDuration: 1
-  _projectileSpeed: 8
+  _projectileSpeed: 30
   _projectileRange: 12
   _projectileHitRadius: 0.15

@@ -9,7 +9,7 @@ namespace ExplodeIt.Enemies
         [Tooltip("화살 속도 (유닛/초)")]
         [SerializeField, Min(0f)] private float _projectileSpeed = 8f;
 
-        [Tooltip("화살 최대 비행 거리 (유닛). 조준선 길이와 같다")]
+        [Tooltip("화살 최대 비행 거리 (유닛). 구조물에 막히면 그 지점에서 사라지고, 조준선도 그 길이로 잘린다")]
         [SerializeField, Min(0f)] private float _projectileRange = 10f;
 
         [Tooltip("화살이 플레이어를 맞히는 판정 반경 (유닛)")]
