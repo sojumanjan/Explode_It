@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdea0c2685b806f4bba29abb0c28ade4, type: 3}
   m_Name: WeaponData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
-  _charges: 3
+  _charges: 1
   _throwInterval: 0.25
-  _rechargeTime: 1.5
+  _rechargeTime: 1
   _maxThrowRange: 6
   _fuseDelay: 1
   _explosionRadius: 1.5
