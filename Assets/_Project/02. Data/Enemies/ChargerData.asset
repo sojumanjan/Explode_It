@@ -16,7 +16,7 @@ MonoBehaviour:
   _hitsToDie: 1
   _attackTriggerRange: 4
   _telegraphDuration: 0.6
-  _recoverDuration: 0.4
+  _recoverDuration: 1
   _chargeSpeed: 12
   _chargeDistance: 6
   _contactRadius: 0.4

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
   _moveSpeed: 2
   _hitsToDie: 1
-  _attackTriggerRange: 5
+  _attackTriggerRange: 8
   _telegraphDuration: 0.6
   _recoverDuration: 1
   _projectileSpeed: 8
