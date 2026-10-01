@@ -16,10 +16,13 @@ MonoBehaviour:
   - _memo: 
     _restBefore: 0
     _groups:
-    - _memo: 
-      _startTime: 0
-      _enemy: {fileID: 0}
-      _count: 0
-      _interval: 0
-      _clusterRadius: 0
-      _areaIds: 
+    - _delay: 0
+      _group: {fileID: 0}
+    - _delay: 0
+      _group: {fileID: 0}
+    - _delay: 0
+      _group: {fileID: 0}
+    - _delay: 0
+      _group: {fileID: 0}
+    - _delay: 0
+      _group: {fileID: 0}

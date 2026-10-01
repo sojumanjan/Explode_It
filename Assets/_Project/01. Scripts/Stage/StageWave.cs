@@ -15,10 +15,10 @@ namespace ExplodeIt.Stage
         [Tooltip("쉬는 시간 (초). 앞 웨이브의 마지막 적이 나온 뒤 이 웨이브가 시작되기까지. 첫 웨이브는 스테이지 시작부터 잰다")]
         [SerializeField, Min(0f)] private float _restBefore = 8f;
 
-        [Tooltip("군집 목록. 각 군집의 시작 시간은 이 웨이브가 시작된 시점 기준이다")]
-        [SerializeField] private SpawnGroup[] _groups;
+        [Tooltip("군집 목록. 위에서부터 차례로, 각 항목의 간격만큼 앞 군집 시작 뒤에 나온다")]
+        [SerializeField] private WaveGroupEntry[] _groups;
 
         public float RestBefore => _restBefore;
-        public IReadOnlyList<SpawnGroup> Groups => _groups ?? Array.Empty<SpawnGroup>();
+        public IReadOnlyList<WaveGroupEntry> Groups => _groups ?? Array.Empty<WaveGroupEntry>();
     }
 }

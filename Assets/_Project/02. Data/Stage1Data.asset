@@ -13,83 +13,32 @@ MonoBehaviour:
   m_Name: Stage1Data
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageData
   _waves:
-  - _memo: "W1 \uBD81\uCABD \uB3CC\uACA9 \u2192 \uB0A8\uCABD \uB3CC\uACA9 \u2192
-      \uB3D9\uCABD \uAD81\uC218"
+  - _memo: "W1 \uBD81 \u2192 \uB0A8 \u2192 \uB3D9\uCABD \uAD81\uC218"
     _restBefore: 2
     _groups:
-    - _memo: "\uBD81\uCABD \uB3CC\uACA9 \uD589\uB82C"
-      _startTime: 0
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 5
-      _interval: 0.15
-      _clusterRadius: 1
-      _areaIds: 0400000005000000
-    - _memo: "\uB0A8\uCABD \uB3CC\uACA9 \uD589\uB82C"
-      _startTime: 2
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 5
-      _interval: 0.15
-      _clusterRadius: 1
-      _areaIds: 0800000009000000
-    - _memo: "\uB3D9\uCABD \uAD81\uC218 \uBB34\uB9AC"
-      _startTime: 5
-      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
-      _count: 3
-      _interval: 0
-      _clusterRadius: 1.5
-      _areaIds: 0300000007000000
+    - _delay: 0
+      _group: {fileID: 11400000, guid: 045e6daf050a56042830baec2d0e1b29, type: 2}
+    - _delay: 2
+      _group: {fileID: 11400000, guid: ff1752f55f9e32b4fac0b9e7d28df78a, type: 2}
+    - _delay: 3
+      _group: {fileID: 11400000, guid: 1d60c4d586ef05b4da32d57de59364fd, type: 2}
   - _memo: "W2 \uC11C\uCABD \uB369\uC5B4\uB9AC + \uB3D9\uCABD \uD589\uB82C"
     _restBefore: 8
     _groups:
-    - _memo: "\uC11C\uCABD \uB3CC\uACA9 \uB369\uC5B4\uB9AC"
-      _startTime: 0
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 8
-      _interval: 0
-      _clusterRadius: 1.5
-      _areaIds: 010000000200000006000000
-    - _memo: "\uBD81\uCABD \uAD81\uC218 \uC904"
-      _startTime: 1.5
-      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
-      _count: 4
-      _interval: 0.3
-      _clusterRadius: 1
-      _areaIds: 04000000
-    - _memo: "\uB3D9\uCABD \uB3CC\uACA9 \uD589\uB82C"
-      _startTime: 4
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 10
-      _interval: 0.1
-      _clusterRadius: 1
-      _areaIds: 030000000700000009000000
-  - _memo: "W3 \uB0A8\uBD81 \uD611\uACF5"
+    - _delay: 0
+      _group: {fileID: 11400000, guid: 0243e6c9e7b811e4b8ed06482516d359, type: 2}
+    - _delay: 1.5
+      _group: {fileID: 11400000, guid: 32bf84962058a2a488613bb4f0250cb3, type: 2}
+    - _delay: 2.5
+      _group: {fileID: 11400000, guid: 920eb6da143dddf45861729b3721ff01, type: 2}
+  - _memo: "W3 \uB0A8\uBD81 \uD611\uACF5 \u2192 \uB9C8\uBB34\uB9AC \uB369\uC5B4\uB9AC"
     _restBefore: 8
     _groups:
-    - _memo: "\uBD81\uCABD \uB3CC\uACA9"
-      _startTime: 0
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 6
-      _interval: 0.1
-      _clusterRadius: 1
-      _areaIds: 04000000
-    - _memo: "\uB0A8\uCABD \uB3CC\uACA9"
-      _startTime: 0
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 6
-      _interval: 0.1
-      _clusterRadius: 1
-      _areaIds: 08000000
-    - _memo: "\uC11C\uCABD \uAD81\uC218"
-      _startTime: 3
-      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
-      _count: 5
-      _interval: 0
-      _clusterRadius: 1.5
-      _areaIds: 0100000006000000
-    - _memo: "\uB3D9\uCABD \uB300\uD615 \uB369\uC5B4\uB9AC"
-      _startTime: 6
-      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
-      _count: 12
-      _interval: 0
-      _clusterRadius: 2
-      _areaIds: 03000000
+    - _delay: 0
+      _group: {fileID: 11400000, guid: 045e6daf050a56042830baec2d0e1b29, type: 2}
+    - _delay: 0
+      _group: {fileID: 11400000, guid: ff1752f55f9e32b4fac0b9e7d28df78a, type: 2}
+    - _delay: 3
+      _group: {fileID: 11400000, guid: a608c3e11c5d7d94db413e549649a4e6, type: 2}
+    - _delay: 3
+      _group: {fileID: 11400000, guid: 5eab0442dd8cbdb48823a5be50f0304e, type: 2}

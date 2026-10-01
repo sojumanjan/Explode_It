@@ -25,8 +25,9 @@ namespace ExplodeIt.Stage
         [SerializeField] private EnemySpawner _spawner;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>();
-        // 펼친 군집 목록. 스폰 이벤트는 인덱스로 군집을 가리킨다.
-        private readonly List<SpawnGroup> _groups = new List<SpawnGroup>();
+        // 웨이브에 등장한 순서대로 펼친 군집 목록. 같은 에셋이 여러 번 나와도 등장마다 따로 둔다.
+        // 스폰 이벤트는 인덱스로 군집을 가리킨다.
+        private readonly List<SpawnGroupData> _groups = new List<SpawnGroupData>();
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
         private SpawnArea[] _allAreas;
         private float[] _waveStartTimes;
@@ -153,10 +154,14 @@ namespace ExplodeIt.Stage
                 float waveEnd = waveStart;
                 _waveStartTimes[w] = waveStart;
 
-                IReadOnlyList<SpawnGroup> groups = waves[w].Groups;
-                for (int g = 0; g < groups.Count; g++)
+                // 각 군집은 앞 군집이 시작된 시점부터 간격을 잰다. 간격이 0이면 앞 군집과 동시에 출발한다.
+                float groupStart = waveStart;
+                IReadOnlyList<WaveGroupEntry> entries = waves[w].Groups;
+                for (int g = 0; g < entries.Count; g++)
                 {
-                    SpawnGroup group = groups[g];
+                    WaveGroupEntry entry = entries[g];
+                    groupStart += entry.Delay;
+                    SpawnGroupData group = entry.Group;
                     if (!IsValid(group, w, g))
                     {
                         continue;
@@ -166,7 +171,7 @@ namespace ExplodeIt.Stage
                     _groups.Add(group);
                     for (int k = 0; k < group.Count; k++)
                     {
-                        float time = waveStart + group.StartTime + k * group.Interval;
+                        float time = groupStart + k * group.Interval;
                         _events.Add(new SpawnEvent(time, groupIndex));
                         waveEnd = Mathf.Max(waveEnd, time);
                     }
@@ -183,11 +188,17 @@ namespace ExplodeIt.Stage
         }
 
         // 데이터 실수는 플레이 도중이 아니라 시작할 때 한 번에 알린다.
-        private bool IsValid(SpawnGroup group, int waveIndex, int groupIndex)
+        private bool IsValid(SpawnGroupData group, int waveIndex, int groupIndex)
         {
+            if (group == null)
+            {
+                Debug.LogError($"StageRunner: 웨이브 {waveIndex + 1} 군집 {groupIndex + 1}에 군집 에셋이 없어 건너뜁니다.", _stage);
+                return false;
+            }
+
             if (group.Enemy == null)
             {
-                Debug.LogError($"StageRunner: 웨이브 {waveIndex + 1} 군집 {groupIndex + 1}에 적 프리팹이 없어 건너뜁니다.", _stage);
+                Debug.LogError($"StageRunner: 군집 '{group.name}'에 적 프리팹이 없어 건너뜁니다.", group);
                 return false;
             }
 
@@ -196,7 +207,7 @@ namespace ExplodeIt.Stage
             {
                 if (!_areasById.ContainsKey(ids[i]))
                 {
-                    Debug.LogError($"StageRunner: 웨이브 {waveIndex + 1} 군집 {groupIndex + 1}의 구역 번호 {ids[i]}가 씬에 없습니다.", _stage);
+                    Debug.LogError($"StageRunner: 군집 '{group.name}'의 구역 번호 {ids[i]}가 씬에 없습니다.", group);
                 }
             }
 
@@ -220,7 +231,7 @@ namespace ExplodeIt.Stage
         // 무작위는 등장 위치에만 둔다. 등장한 뒤의 움직임은 예측 가능해야 한다.
         private void Spawn(int groupIndex)
         {
-            SpawnGroup group = _groups[groupIndex];
+            SpawnGroupData group = _groups[groupIndex];
             if (!_hasAnchor[groupIndex])
             {
                 _anchors[groupIndex] = PickArea(group).GetRandomPoint();
@@ -231,7 +242,7 @@ namespace ExplodeIt.Stage
             _spawner.Spawn(group.Enemy, position);
         }
 
-        private SpawnArea PickArea(SpawnGroup group)
+        private SpawnArea PickArea(SpawnGroupData group)
         {
             IReadOnlyList<int> ids = group.AreaIds;
             if (ids.Count > 0 && _areasById.TryGetValue(ids[Random.Range(0, ids.Count)], out List<SpawnArea> areas))
