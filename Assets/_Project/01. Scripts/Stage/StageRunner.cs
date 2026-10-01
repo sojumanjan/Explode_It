@@ -5,19 +5,21 @@ using UnityEngine;
 
 namespace ExplodeIt.Stage
 {
-    // 스테이지 데이터를 시작할 때 "몇 초에 어느 군집의 적 하나"라는 스폰 목록으로 펼쳐 두고,
+    // 스테이지 데이터를 시작할 때 "몇 초에 어느 항목의 몇 번째 적"이라는 스폰 목록으로 펼쳐 두고,
     // 시간이 되면 앞에서부터 꺼내 스폰한다. 전투 중에는 목록을 읽기만 하므로 할당이 없다.
     public class StageRunner : MonoBehaviour
     {
         private readonly struct SpawnEvent
         {
             public readonly float Time;
-            public readonly int GroupIndex;
+            public readonly int EntryIndex;
+            public readonly int Slot;
 
-            public SpawnEvent(float time, int groupIndex)
+            public SpawnEvent(float time, int entryIndex, int slot)
             {
                 Time = time;
-                GroupIndex = groupIndex;
+                EntryIndex = entryIndex;
+                Slot = slot;
             }
         }
 
@@ -25,13 +27,14 @@ namespace ExplodeIt.Stage
         [SerializeField] private EnemySpawner _spawner;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>();
-        // 웨이브에 등장한 순서대로 펼친 군집 목록. 같은 에셋이 여러 번 나와도 등장마다 따로 둔다.
-        // 스폰 이벤트는 인덱스로 군집을 가리킨다.
-        private readonly List<SpawnGroupData> _groups = new List<SpawnGroupData>();
+        // 모든 웨이브의 유효한 항목을 순서대로 펼친 목록. 스폰 이벤트는 인덱스로 항목을 가리킨다.
+        private readonly List<WaveGroupEntry> _entries = new List<WaveGroupEntry>();
+        // 같은 웨이브 안 바로 앞 유효 항목의 인덱스. 첫 항목이면 -1. "앞 군집 자리 이어 쓰기"에 쓴다.
+        private readonly List<int> _previousEntries = new List<int>();
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
         private SpawnArea[] _allAreas;
         private float[] _waveStartTimes;
-        // 군집마다 기준점을 한 번만 뽑아, 줄지어 나오는 군집도 같은 자리에서 출발하게 한다.
+        // 항목마다 기준점을 한 번만 뽑아, 줄지어 나오는 군집도 같은 자리에서 출발하게 한다.
         private Vector2[] _anchors;
         private bool[] _hasAnchor;
 
@@ -98,7 +101,7 @@ namespace ExplodeIt.Stage
             _elapsed += Time.deltaTime;
             while (_nextEvent < _events.Count && _events[_nextEvent].Time <= _elapsed)
             {
-                Spawn(_events[_nextEvent].GroupIndex);
+                Spawn(_events[_nextEvent]);
                 _nextEvent++;
             }
 
@@ -156,23 +159,32 @@ namespace ExplodeIt.Stage
 
                 // 각 군집은 앞 군집이 시작된 시점부터 간격을 잰다. 간격이 0이면 앞 군집과 동시에 출발한다.
                 float groupStart = waveStart;
+                int previousEntry = -1;
                 IReadOnlyList<WaveGroupEntry> entries = waves[w].Groups;
                 for (int g = 0; g < entries.Count; g++)
                 {
                     WaveGroupEntry entry = entries[g];
                     groupStart += entry.Delay;
-                    SpawnGroupData group = entry.Group;
-                    if (!IsValid(group, w, g))
+                    if (!IsValid(entry, w, g))
                     {
                         continue;
                     }
 
-                    int groupIndex = _groups.Count;
-                    _groups.Add(group);
+                    int entryIndex = _entries.Count;
+                    _entries.Add(entry);
+                    _previousEntries.Add(previousEntry);
+                    previousEntry = entryIndex;
+
+                    SpawnGroupData group = entry.Group;
                     for (int k = 0; k < group.Count; k++)
                     {
+                        if (group.GetEnemy(k) == null)
+                        {
+                            continue;
+                        }
+
                         float time = groupStart + k * group.Interval;
-                        _events.Add(new SpawnEvent(time, groupIndex));
+                        _events.Add(new SpawnEvent(time, entryIndex, k));
                         waveEnd = Mathf.Max(waveEnd, time);
                     }
                 }
@@ -180,34 +192,46 @@ namespace ExplodeIt.Stage
                 previousEnd = waveEnd;
             }
 
-            // 시간이 같으면 데이터에 적은 순서를 지키도록 군집 인덱스로 한 번 더 정렬한다.
-            _events.Sort((a, b) => a.Time != b.Time ? a.Time.CompareTo(b.Time) : a.GroupIndex.CompareTo(b.GroupIndex));
+            // 시간이 같으면 데이터에 적은 순서를 지키도록 항목, 칸 순서로 한 번 더 정렬한다.
+            _events.Sort((a, b) =>
+            {
+                if (a.Time != b.Time)
+                {
+                    return a.Time.CompareTo(b.Time);
+                }
 
-            _anchors = new Vector2[_groups.Count];
-            _hasAnchor = new bool[_groups.Count];
+                return a.EntryIndex != b.EntryIndex ? a.EntryIndex.CompareTo(b.EntryIndex) : a.Slot.CompareTo(b.Slot);
+            });
+
+            _anchors = new Vector2[_entries.Count];
+            _hasAnchor = new bool[_entries.Count];
         }
 
         // 데이터 실수는 플레이 도중이 아니라 시작할 때 한 번에 알린다.
-        private bool IsValid(SpawnGroupData group, int waveIndex, int groupIndex)
+        private bool IsValid(WaveGroupEntry entry, int waveIndex, int entryIndex)
         {
+            string where = $"웨이브 {waveIndex + 1} 군집 {entryIndex + 1}";
+            SpawnGroupData group = entry.Group;
             if (group == null)
             {
-                Debug.LogError($"StageRunner: 웨이브 {waveIndex + 1} 군집 {groupIndex + 1}에 군집 에셋이 없어 건너뜁니다.", _stage);
+                Debug.LogError($"StageRunner: {where}에 군집 에셋이 없어 건너뜁니다.", _stage);
                 return false;
             }
 
-            if (group.Enemy == null)
+            for (int i = 0; i < group.Count; i++)
             {
-                Debug.LogError($"StageRunner: 군집 '{group.name}'에 적 프리팹이 없어 건너뜁니다.", group);
-                return false;
+                if (group.GetEnemy(i) == null)
+                {
+                    Debug.LogError($"StageRunner: 군집 '{group.name}'의 {i + 1}번 칸이 비어 있어 그 칸만 건너뜁니다.", group);
+                }
             }
 
-            IReadOnlyList<int> ids = group.AreaIds;
+            IReadOnlyList<int> ids = entry.AreaIds;
             for (int i = 0; i < ids.Count; i++)
             {
                 if (!_areasById.ContainsKey(ids[i]))
                 {
-                    Debug.LogError($"StageRunner: 군집 '{group.name}'의 구역 번호 {ids[i]}가 씬에 없습니다.", group);
+                    Debug.LogError($"StageRunner: {where}의 구역 번호 {ids[i]}가 씬에 없습니다.", _stage);
                 }
             }
 
@@ -217,11 +241,16 @@ namespace ExplodeIt.Stage
         private List<Enemy> CollectEnemyPrefabs()
         {
             var prefabs = new List<Enemy>();
-            for (int i = 0; i < _groups.Count; i++)
+            for (int i = 0; i < _entries.Count; i++)
             {
-                if (!prefabs.Contains(_groups[i].Enemy))
+                SpawnGroupData group = _entries[i].Group;
+                for (int k = 0; k < group.Count; k++)
                 {
-                    prefabs.Add(_groups[i].Enemy);
+                    Enemy enemy = group.GetEnemy(k);
+                    if (enemy != null && !prefabs.Contains(enemy))
+                    {
+                        prefabs.Add(enemy);
+                    }
                 }
             }
 
@@ -229,22 +258,33 @@ namespace ExplodeIt.Stage
         }
 
         // 무작위는 등장 위치에만 둔다. 등장한 뒤의 움직임은 예측 가능해야 한다.
-        private void Spawn(int groupIndex)
+        private void Spawn(SpawnEvent spawnEvent)
         {
-            SpawnGroupData group = _groups[groupIndex];
-            if (!_hasAnchor[groupIndex])
-            {
-                _anchors[groupIndex] = PickArea(group).GetRandomPoint();
-                _hasAnchor[groupIndex] = true;
-            }
-
-            Vector2 position = _anchors[groupIndex] + Random.insideUnitCircle * group.ClusterRadius;
-            _spawner.Spawn(group.Enemy, position);
+            SpawnGroupData group = _entries[spawnEvent.EntryIndex].Group;
+            Vector2 position = GetAnchor(spawnEvent.EntryIndex) + Random.insideUnitCircle * group.ClusterRadius;
+            _spawner.Spawn(group.GetEnemy(spawnEvent.Slot), position);
         }
 
-        private SpawnArea PickArea(SpawnGroupData group)
+        // 기준점은 항목의 첫 스폰 때 정한다. 이어 쓰기 항목은 앞 항목의 기준점을 그대로 받는다.
+        // 웨이브 건너뛰기로 앞 항목이 스폰되지 않았더라도 여기서 앞 항목의 기준점을 먼저 정해 넘겨준다.
+        private Vector2 GetAnchor(int entryIndex)
         {
-            IReadOnlyList<int> ids = group.AreaIds;
+            if (_hasAnchor[entryIndex])
+            {
+                return _anchors[entryIndex];
+            }
+
+            int previous = _previousEntries[entryIndex];
+            _anchors[entryIndex] = _entries[entryIndex].UseAnchorOfPrevious && previous >= 0
+                ? GetAnchor(previous)
+                : PickArea(_entries[entryIndex]).GetRandomPoint();
+            _hasAnchor[entryIndex] = true;
+            return _anchors[entryIndex];
+        }
+
+        private SpawnArea PickArea(WaveGroupEntry entry)
+        {
+            IReadOnlyList<int> ids = entry.AreaIds;
             if (ids.Count > 0 && _areasById.TryGetValue(ids[Random.Range(0, ids.Count)], out List<SpawnArea> areas))
             {
                 return areas[Random.Range(0, areas.Count)];

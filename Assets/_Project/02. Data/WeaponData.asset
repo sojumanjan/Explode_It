@@ -16,7 +16,7 @@ MonoBehaviour:
   _throwInterval: 0.25
   _rechargeTime: 1
   _maxThrowRange: 6
-  _fuseDelay: 0.8
+  _fuseDelay: 0.65
   _explosionRadius: 1.5
   _flightDuration: 0.35
   _arcHeight: 1

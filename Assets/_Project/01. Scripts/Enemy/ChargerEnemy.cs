@@ -66,7 +66,7 @@ namespace ExplodeIt.Enemies
             _chargeDirection = DirectionToTarget();
             // 벽이 있으면 벽 앞에서 멈춘다.
             _chargeLength = ClearDistance(_chargeDirection, _data.ChargeDistance, _data.ContactRadius);
-            _telegraph.Show(Body.position, _chargeDirection, _chargeLength);
+            _telegraph.Show(Body.position, _chargeDirection, _chargeLength, _data.ContactRadius * 2f);
         }
     }
 }

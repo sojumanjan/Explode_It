@@ -31,6 +31,14 @@ namespace ExplodeIt.Enemies
             Line.enabled = true;
         }
 
+        // 몸통째 부딪히는 공격은 선 굵기를 판정 폭과 같게 그려, 얇은 화살 조준선과 구분되고 피할 폭이 그대로 읽히게 한다.
+        public void Show(Vector2 start, Vector2 direction, float length, float width)
+        {
+            Line.startWidth = width;
+            Line.endWidth = width;
+            Show(start, direction, length);
+        }
+
         public void Hide()
         {
             Line.enabled = false;
