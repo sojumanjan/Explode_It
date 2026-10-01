@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00ccbd133157ff54c9dc4cfbb564ecb7, type: 3}
-  m_Name: ArcherData
+  m_Name: ShooterData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
-  _moveSpeed: 3.5
+  _moveSpeed: 3
   _hitsToDie: 1
-  _attackTriggerRange: 7
+  _attackTriggerRange: 15
   _arenaEntryDelay: 1
-  _telegraphDuration: 1.6
-  _recoverDuration: 1
-  _projectileSpeed: 35
-  _projectileRange: 8
+  _telegraphDuration: 1.5
+  _recoverDuration: 3
+  _projectileSpeed: 50
+  _projectileRange: 15
   _projectileHitRadius: 0.15
   _showAimLine: 1
-  _aimSound: {fileID: 0}
-  _shotSound: {fileID: 11400000, guid: 420a6457b1943fc44b717b507474aeb9, type: 2}
+  _aimSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}
+  _shotSound: {fileID: 11400000, guid: 7b86fd5c603643d4085877448b1f33c4, type: 2}

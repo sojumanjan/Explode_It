@@ -16,11 +16,21 @@ namespace ExplodeIt.Enemies
         [Tooltip("화살이 플레이어를 맞히는 판정 반경 (유닛)")]
         [SerializeField, Min(0f)] private float _projectileHitRadius = 0.15f;
 
+        [Header("예고")]
+        // 궁수는 나중에 조준 애니메이션으로 예고하고, 저격수는 조준선과 소리로 화면 밖에서도 위험을 알린다.
+        [Tooltip("조준선 표시. 켜면 예고 동안 쏠 방향과 비행 거리를 선으로 보여준다")]
+        [SerializeField] private bool _showAimLine;
+
         [Header("사운드")]
-        [Tooltip("화살을 쏘는 순간의 효과음. 비워 두면 소리 없이 쏜다")]
+        [Tooltip("조준을 시작하는 순간의 효과음. 발사하거나 조준이 끊기면 멈춘다. 비워 두면 소리 없이 조준한다")]
+        [SerializeField] private SoundData _aimSound;
+
+        [Tooltip("발사하는 순간의 효과음. 비워 두면 소리 없이 쏜다")]
         [SerializeField] private SoundData _shotSound;
 
         public float ProjectileSpeed => _projectileSpeed;
+        public bool ShowAimLine => _showAimLine;
+        public SoundData AimSound => _aimSound;
         public SoundData ShotSound => _shotSound;
         public float ProjectileRange => _projectileRange;
         public float ProjectileHitRadius => _projectileHitRadius;

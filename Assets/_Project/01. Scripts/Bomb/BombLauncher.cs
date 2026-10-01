@@ -13,8 +13,13 @@ namespace ExplodeIt.Bombs
         [SerializeField] private ThrowRangeIndicator _rangeIndicator;
         [SerializeField, Min(1)] private int _poolPrewarm = 16;
         [SerializeField, Min(1)] private int _poolMaxSize = 64;
+        // 구조물 안에 떨어진 폭탄은 범위가 0이 되어 아무 일 없이 사라지므로, 착지점이 구조물 위면 던지지 않는다.
+        [SerializeField] private LayerMask _obstacleMask;
+
+        private static readonly Collider2D[] LandingBuffer = new Collider2D[1];
 
         private ComponentPool<Bomb> _pool;
+        private ContactFilter2D _obstacleFilter;
         private WeaponStats _stats;
         private Camera _camera;
         private Action<Bomb> _releaseBomb;
@@ -31,6 +36,9 @@ namespace ExplodeIt.Bombs
             _stats = new WeaponStats(_weaponData);
             _chargesLeft = _stats.Charges;
             _releaseBomb = ReleaseBomb;
+
+            _obstacleFilter = new ContactFilter2D();
+            _obstacleFilter.SetLayerMask(_obstacleMask);
 
             // 폭탄은 던진 뒤 플레이어를 따라가면 안 되므로 부모 없이 월드에 둔다.
             _pool = new ComponentPool<Bomb>(_bombPrefab, null, _poolPrewarm, _poolMaxSize);
@@ -105,15 +113,27 @@ namespace ExplodeIt.Bombs
             }
         }
 
+        // 막힌 곳을 겨누면 폭탄도 쓰지 않고 연사 간격도 소모하지 않는다. 커서를 벽 밖으로 옮기는 즉시 던져진다.
         private void Throw()
         {
+            Vector2 target = GetThrowTarget();
+            if (IsOnObstacle(target))
+            {
+                return;
+            }
+
             Bomb bomb = _pool.Get(transform.position);
-            bomb.Launch(GetThrowTarget(), _stats, _releaseBomb);
+            bomb.Launch(target, _stats, _releaseBomb);
 
             _chargesLeft--;
             _nextThrowTime = Time.time + _stats.ThrowInterval;
             _rechargeTimer = _stats.RechargeTime;
             RaiseChargesChanged();
+        }
+
+        private bool IsOnObstacle(Vector2 point)
+        {
+            return Physics2D.OverlapPoint(point, _obstacleFilter, LandingBuffer) > 0;
         }
 
         // 특수 폭탄도 같은 사거리 원 안으로 던지도록 착지점 계산을 공유한다.

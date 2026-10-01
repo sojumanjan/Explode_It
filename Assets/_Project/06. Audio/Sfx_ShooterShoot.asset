@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f55d79f71ff91d4591091dcab66b225, type: 3}
-  m_Name: Sfx_ArchorShoot
+  m_Name: Sfx_ShooterShoot
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
-  - {fileID: 8300000, guid: 019f003ad7e144a41b0197dc54ba86ca, type: 3}
-  _volume: 0.65
-  _pitchMin: 0.9
-  _pitchMax: 0.95
-  _maxInstances: 4
+  - {fileID: 8300000, guid: 3680cca865b64bc4ab4276ee257e703c, type: 3}
+  _volume: 1
+  _pitchMin: 0.97
+  _pitchMax: 1.03
+  _maxInstances: 3
   _minInterval: 0.05
