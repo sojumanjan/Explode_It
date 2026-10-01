@@ -1,16 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace ExplodeIt.Core
 {
-    // 풀, 이벤트 구독, 트윈, 상태를 하나씩 되돌리면 빠뜨리는 곳이 생기므로 씬을 통째로 다시 불러온다.
+    // 키보드로 바로 다시 하기. 버튼으로 하는 재시작은 UI가 같은 SceneFlow를 부른다.
     public class GameRestarter : MonoBehaviour
     {
         [SerializeField] private InputActionReference _retryAction;
         [SerializeField] private InputActionReference _quickRestartAction;
 
-        private bool _isPlayerDead;
+        private bool _canRetry;
         private bool _isRestarting;
 
         private void OnEnable()
@@ -33,8 +32,8 @@ namespace ExplodeIt.Core
 
         private void OnRetry(InputAction.CallbackContext context)
         {
-            // 살아 있을 때 누르면 판이 날아가므로 사망 후에만 받는다.
-            if (_isPlayerDead)
+            // 판 도중에 누르면 판이 날아가므로 판이 끝난 뒤에만 받는다.
+            if (_canRetry)
             {
                 Restart();
             }
@@ -58,12 +57,12 @@ namespace ExplodeIt.Core
             }
 
             _isRestarting = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneFlow.LoadGame();
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)
         {
-            _isPlayerDead = current == GameState.PlayerDead;
+            _canRetry = current == GameState.PlayerDead || current == GameState.StageClear;
         }
     }
 }

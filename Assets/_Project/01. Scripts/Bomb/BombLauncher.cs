@@ -47,6 +47,12 @@ namespace ExplodeIt.Bombs
         {
             _rangeIndicator.SetRadius(_stats.MaxThrowRange);
             _chargesLeft = Mathf.Min(_chargesLeft, _stats.Charges);
+            RaiseChargesChanged();
+        }
+
+        private void RaiseChargesChanged()
+        {
+            GameEvents.RaiseBombChargesChanged(_chargesLeft, _stats.Charges);
         }
 
         public void ResetStats()
@@ -95,6 +101,7 @@ namespace ExplodeIt.Bombs
             if (_rechargeTimer <= 0f)
             {
                 _chargesLeft = _stats.Charges;
+                RaiseChargesChanged();
             }
         }
 
@@ -106,6 +113,7 @@ namespace ExplodeIt.Bombs
             _chargesLeft--;
             _nextThrowTime = Time.time + _stats.ThrowInterval;
             _rechargeTimer = _stats.RechargeTime;
+            RaiseChargesChanged();
         }
 
         // 특수 폭탄도 같은 사거리 원 안으로 던지도록 착지점 계산을 공유한다.

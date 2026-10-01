@@ -16,6 +16,13 @@ namespace ExplodeIt.Core
         public static event Action<Vector2> EnemyKilled;
         // 현재 충전량, 발동에 필요한 양. 게이지 UI가 능력 코드를 몰라도 되게 한다.
         public static event Action<int, int> AbilityChargeChanged;
+        // 남은 폭탄 수, 최대 보유 수. HUD가 무기 코드를 몰라도 되게 한다.
+        public static event Action<int, int> BombChargesChanged;
+
+        public static void RaiseBombChargesChanged(int current, int max)
+        {
+            BombChargesChanged?.Invoke(current, max);
+        }
         // 마지막 웨이브까지 다 나오고 적이 모두 처치된 순간. 상점, 포탈, 과열 구간이 여기서 시작한다.
         public static event Action StageCleared;
 
@@ -58,6 +65,7 @@ namespace ExplodeIt.Core
             PlayerDied = null;
             EnemyKilled = null;
             AbilityChargeChanged = null;
+            BombChargesChanged = null;
             StageCleared = null;
         }
     }
