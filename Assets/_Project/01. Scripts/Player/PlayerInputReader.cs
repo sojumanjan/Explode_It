@@ -15,9 +15,12 @@ namespace ExplodeIt.Player
         // 화면 좌표. 월드 좌표 변환은 카메라를 아는 쪽에서 한다.
         public Vector2 Aim => _aimAction.action.ReadValue<Vector2>();
         // 누르고 있으면 연사 간격마다 계속 던지도록 눌림 상태로 읽는다.
-        public bool ThrowHeld => _throwAction.action.IsPressed();
+        public bool ThrowHeld => !PointerBlocked && _throwAction.action.IsPressed();
         // 게이지가 차는 순간 누르고 있던 버튼으로 바로 나가지 않도록, 누른 프레임만 읽는다.
-        public bool AbilityPressed => _abilityAction.action.WasPressedThisFrame();
+        public bool AbilityPressed => !PointerBlocked && _abilityAction.action.WasPressedThisFrame();
+
+        // 커서가 개발자 패널 같은 화면 UI 위에 있을 때, 슬라이더를 누르는 클릭이 투척으로 새지 않게 막는다.
+        public bool PointerBlocked { get; set; }
 
         private void OnEnable()
         {

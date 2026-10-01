@@ -15,6 +15,12 @@ namespace ExplodeIt.Bombs
 
         public WeaponStats(WeaponData data)
         {
+            CopyFrom(data);
+        }
+
+        // 개발자 패널에서 바꾼 값을 원본 데이터 값으로 되돌릴 때도 쓴다.
+        public void CopyFrom(WeaponData data)
+        {
             Charges = data.Charges;
             ThrowInterval = data.ThrowInterval;
             RechargeTime = data.RechargeTime;

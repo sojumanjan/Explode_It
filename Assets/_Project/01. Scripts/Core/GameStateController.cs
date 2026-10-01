@@ -9,11 +9,22 @@ namespace ExplodeIt.Core
         private void OnEnable()
         {
             GameEvents.PlayerDied += OnPlayerDied;
+            GameEvents.StageCleared += OnStageCleared;
         }
 
         private void OnDisable()
         {
             GameEvents.PlayerDied -= OnPlayerDied;
+            GameEvents.StageCleared -= OnStageCleared;
+        }
+
+        // 마지막 적과 같은 순간에 죽었다면 사망이 우선한다.
+        private void OnStageCleared()
+        {
+            if (Current == GameState.Playing)
+            {
+                ChangeState(GameState.StageClear);
+            }
         }
 
         private void Start()

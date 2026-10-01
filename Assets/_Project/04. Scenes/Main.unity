@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 191715585}
   - component: {fileID: 191715584}
   m_Layer: 0
-  m_Name: SpawnArea2 (2)
+  m_Name: SpawnArea6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -716,8 +716,8 @@ Transform:
   m_GameObject: {fileID: 191715582}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -32.85, y: 22.48, z: 0}
-  m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
+  m_LocalPosition: {x: 20.4223, y: -8.1, z: 0}
+  m_LocalScale: {x: 3.7688293, y: 14.859439, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1757662598}
@@ -734,6 +734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 6
 --- !u!212 &191715585
 SpriteRenderer:
   serializedVersion: 3
@@ -853,7 +854,7 @@ GameObject:
   - component: {fileID: 324551988}
   - component: {fileID: 324551989}
   m_Layer: 0
-  m_Name: SpawnArea3
+  m_Name: SpawnArea7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -868,7 +869,7 @@ Transform:
   m_GameObject: {fileID: 324551986}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.1, y: 21.7, z: 0}
+  m_LocalPosition: {x: 21.2, y: 19.9, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -946,6 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 7
 --- !u!1 &384111207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,7 +1825,7 @@ GameObject:
   - component: {fileID: 522665745}
   - component: {fileID: 522665746}
   m_Layer: 0
-  m_Name: SpawnArea2
+  m_Name: SpawnArea4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1838,7 +1840,7 @@ Transform:
   m_GameObject: {fileID: 522665743}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.59, y: 39.41, z: 0}
+  m_LocalPosition: {x: -13.1, y: -14.7, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1916,6 +1918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 4
 --- !u!1 &534014769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2698,7 +2701,7 @@ GameObject:
   - component: {fileID: 761438424}
   - component: {fileID: 761438425}
   m_Layer: 0
-  m_Name: SpawnArea4
+  m_Name: SpawnArea8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2713,7 +2716,7 @@ Transform:
   m_GameObject: {fileID: 761438422}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.1, y: -14.9, z: 0}
+  m_LocalPosition: {x: 1.6, y: 39.1, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2791,6 +2794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 8
 --- !u!1 &762299246
 GameObject:
   m_ObjectHideFlags: 0
@@ -4505,7 +4509,7 @@ GameObject:
   - component: {fileID: 1290726116}
   - component: {fileID: 1290726115}
   m_Layer: 0
-  m_Name: SpawnArea1 (2)
+  m_Name: SpawnArea3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4520,7 +4524,7 @@ Transform:
   m_GameObject: {fileID: 1290726113}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.38, y: 2.51, z: 0}
+  m_LocalPosition: {x: -33.3, y: -2.5, z: 0}
   m_LocalScale: {x: 5.7242246, y: 9.88652, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4538,6 +4542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 3
 --- !u!212 &1290726116
 SpriteRenderer:
   serializedVersion: 3
@@ -5105,7 +5110,7 @@ GameObject:
   - component: {fileID: 1366762009}
   - component: {fileID: 1366762008}
   m_Layer: 0
-  m_Name: SpawnArea4 (1)
+  m_Name: SpawnArea9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5120,7 +5125,7 @@ Transform:
   m_GameObject: {fileID: 1366762006}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.5, y: -14.8, z: 0}
+  m_LocalPosition: {x: -16.6, y: 40, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5138,6 +5143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 9
 --- !u!212 &1366762009
 SpriteRenderer:
   serializedVersion: 3
@@ -5276,7 +5282,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_UseReflectionProbes: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -5310,28 +5316,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1426144189}
-  - component: {fileID: 1426144188}
+  - component: {fileID: 1426144190}
   m_Layer: 0
-  m_Name: WaveRunner
+  m_Name: StageRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1426144188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1426144187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84bffe1714408574887db51a87aeed00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveRunner
-  _wave: {fileID: 11400000, guid: 69e89a058c13b1941b8dae3e24c2a592, type: 2}
-  _spawner: {fileID: 216240368}
 --- !u!4 &1426144189
 Transform:
   m_ObjectHideFlags: 0
@@ -5347,6 +5339,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1426144190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426144187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a76f4082a08bcfe429463db694703bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageRunner
+  _stage: {fileID: 11400000, guid: 2900bc2a4a6ce8c4ebfc4e193a1bc812, type: 2}
+  _spawner: {fileID: 216240368}
 --- !u!1 &1456756919
 GameObject:
   m_ObjectHideFlags: 0
@@ -6689,7 +6695,7 @@ Transform:
   m_GameObject: {fileID: 1778280075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -33.7, y: 5.9, z: 0}
+  m_LocalPosition: {x: -33.7, y: 22.8, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6767,6 +6773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 1
 --- !u!1 &1787094867
 GameObject:
   m_ObjectHideFlags: 0
@@ -7184,6 +7191,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1875820705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1875820707}
+  - component: {fileID: 1875820706}
+  m_Layer: 0
+  m_Name: DevPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1875820706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875820705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeea331b56aec8a4eaa5cd372c6a58c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.DevPanel
+  _toggleAction: {fileID: -7483476948676965949, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  _input: {fileID: 1456756924}
+  _launcher: {fileID: 1456756926}
+  _stageRunner: {fileID: 1426144190}
+  _spawner: {fileID: 216240368}
+  _ability: {fileID: 1456756929}
+  _playerHitReceiver: {fileID: 1456756928}
+--- !u!4 &1875820707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875820705}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1908230398
 GameObject:
   m_ObjectHideFlags: 0
@@ -7660,7 +7718,7 @@ GameObject:
   - component: {fileID: 1989354032}
   - component: {fileID: 1989354031}
   m_Layer: 0
-  m_Name: SpawnArea2 (1)
+  m_Name: SpawnArea5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7675,7 +7733,7 @@ Transform:
   m_GameObject: {fileID: 1989354029}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.93, y: 38.1, z: 0}
+  m_LocalPosition: {x: 2.7, y: -15.8, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7693,6 +7751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 5
 --- !u!212 &1989354032
 SpriteRenderer:
   serializedVersion: 3
@@ -8182,7 +8241,7 @@ GameObject:
   - component: {fileID: 2067460661}
   - component: {fileID: 2067460660}
   m_Layer: 0
-  m_Name: SpawnArea1 (1)
+  m_Name: SpawnArea2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8197,7 +8256,7 @@ Transform:
   m_GameObject: {fileID: 2067460658}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -32.9, y: -5.34, z: 0}
+  m_LocalPosition: {x: -32.9, y: 8.6, z: 0}
   m_LocalScale: {x: 5.7242246, y: 5.8156, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8215,6 +8274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c71040768faf4ab7d6d716218fba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnArea
+  _id: 2
 --- !u!212 &2067460661
 SpriteRenderer:
   serializedVersion: 3
@@ -8570,3 +8630,4 @@ SceneRoots:
   - {fileID: 762299248}
   - {fileID: 1367413038}
   - {fileID: 850263024}
+  - {fileID: 1875820707}

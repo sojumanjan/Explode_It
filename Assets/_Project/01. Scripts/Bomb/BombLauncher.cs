@@ -39,7 +39,20 @@ namespace ExplodeIt.Bombs
 
         private void Start()
         {
+            ApplyStats();
+        }
+
+        // 실행 중 수치가 바뀌면 화면 표시와 남은 개수를 새 수치에 맞춘다.
+        public void ApplyStats()
+        {
             _rangeIndicator.SetRadius(_stats.MaxThrowRange);
+            _chargesLeft = Mathf.Min(_chargesLeft, _stats.Charges);
+        }
+
+        public void ResetStats()
+        {
+            _stats.CopyFrom(_weaponData);
+            ApplyStats();
         }
 
         private void OnEnable()

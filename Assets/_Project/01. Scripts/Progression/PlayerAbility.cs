@@ -50,6 +50,13 @@ namespace ExplodeIt.Progression
             GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
         }
 
+        // 개발자 패널용. 처치 없이 바로 시험해 볼 수 있게 한다.
+        public void FillCharge()
+        {
+            _charge = _data.KillsToCharge;
+            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
+        }
+
         private void Update()
         {
             if (!_canUse || _isActive || _charge < _data.KillsToCharge || !_input.AbilityPressed)

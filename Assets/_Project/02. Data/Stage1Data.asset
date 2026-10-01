@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b703a28dab122e45b9798cd48f2f33f, type: 3}
+  m_Name: Stage1Data
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageData
+  _waves:
+  - _memo: "W1 \uBD81\uCABD \uB3CC\uACA9 \u2192 \uB0A8\uCABD \uB3CC\uACA9 \u2192
+      \uB3D9\uCABD \uAD81\uC218"
+    _restBefore: 2
+    _groups:
+    - _memo: "\uBD81\uCABD \uB3CC\uACA9 \uD589\uB82C"
+      _startTime: 0
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 5
+      _interval: 0.15
+      _clusterRadius: 1
+      _areaIds: 0400000005000000
+    - _memo: "\uB0A8\uCABD \uB3CC\uACA9 \uD589\uB82C"
+      _startTime: 2
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 5
+      _interval: 0.15
+      _clusterRadius: 1
+      _areaIds: 0800000009000000
+    - _memo: "\uB3D9\uCABD \uAD81\uC218 \uBB34\uB9AC"
+      _startTime: 5
+      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      _count: 3
+      _interval: 0
+      _clusterRadius: 1.5
+      _areaIds: 0300000007000000
+  - _memo: "W2 \uC11C\uCABD \uB369\uC5B4\uB9AC + \uB3D9\uCABD \uD589\uB82C"
+    _restBefore: 8
+    _groups:
+    - _memo: "\uC11C\uCABD \uB3CC\uACA9 \uB369\uC5B4\uB9AC"
+      _startTime: 0
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 8
+      _interval: 0
+      _clusterRadius: 1.5
+      _areaIds: 010000000200000006000000
+    - _memo: "\uBD81\uCABD \uAD81\uC218 \uC904"
+      _startTime: 1.5
+      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      _count: 4
+      _interval: 0.3
+      _clusterRadius: 1
+      _areaIds: 04000000
+    - _memo: "\uB3D9\uCABD \uB3CC\uACA9 \uD589\uB82C"
+      _startTime: 4
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 10
+      _interval: 0.1
+      _clusterRadius: 1
+      _areaIds: 030000000700000009000000
+  - _memo: "W3 \uB0A8\uBD81 \uD611\uACF5"
+    _restBefore: 8
+    _groups:
+    - _memo: "\uBD81\uCABD \uB3CC\uACA9"
+      _startTime: 0
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 6
+      _interval: 0.1
+      _clusterRadius: 1
+      _areaIds: 04000000
+    - _memo: "\uB0A8\uCABD \uB3CC\uACA9"
+      _startTime: 0
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 6
+      _interval: 0.1
+      _clusterRadius: 1
+      _areaIds: 08000000
+    - _memo: "\uC11C\uCABD \uAD81\uC218"
+      _startTime: 3
+      _enemy: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      _count: 5
+      _interval: 0
+      _clusterRadius: 1.5
+      _areaIds: 0100000006000000
+    - _memo: "\uB3D9\uCABD \uB300\uD615 \uB369\uC5B4\uB9AC"
+      _startTime: 6
+      _enemy: {fileID: 7762560572095510038, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
+      _count: 12
+      _interval: 0
+      _clusterRadius: 2
+      _areaIds: 03000000
