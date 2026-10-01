@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StageData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageData
   _waves:
-  - _memo: 
-    _restBefore: 0
+  - _memo: "\uAE30\uCD08 \uD29C\uD1A0\uB9AC\uC5BC "
+    _restBefore: 2
     _groups:
     - _delay: 0
       _group: {fileID: 0}
