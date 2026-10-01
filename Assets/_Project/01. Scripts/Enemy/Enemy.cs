@@ -26,8 +26,13 @@ namespace ExplodeIt.Enemies
         private EnemyState _state;
         private float _stateTime;
         private float _arenaTime;
+        private float _lastPulledTime;
+        private Collider2D _collider;
 
         protected Rigidbody2D Body { get; private set; }
+
+        // 끌려갈 때 벽에 몸이 파묻히지 않도록 쓰는 반경. 콜라이더 크기를 그대로 따른다.
+        private float BodyRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
         protected Transform Target => _target;
         protected EnemyState State => _state;
         protected abstract EnemyData Data { get; }
@@ -36,6 +41,7 @@ namespace ExplodeIt.Enemies
         {
             Body = GetComponent<Rigidbody2D>();
             _hitReceiver = GetComponent<HitReceiver>();
+            _collider = GetComponent<Collider2D>();
 
             _attackFilter = new ContactFilter2D();
             _attackFilter.SetLayerMask(_attackMask);
@@ -109,7 +115,44 @@ namespace ExplodeIt.Enemies
                         EnterState(EnemyState.Move);
                     }
                     break;
+
+                case EnemyState.Pulled:
+                    // 끌어당기는 쪽과 이 컴포넌트의 FixedUpdate 순서는 정해져 있지 않으므로 한 스텝 여유를 둔다.
+                    if (Time.fixedTime - _lastPulledTime > deltaTime * 1.5f)
+                    {
+                        EnterState(EnemyState.Move);
+                    }
+                    break;
             }
+        }
+
+        // 외부 힘으로 center 쪽으로 최대 step만큼 끌려간다. 구조물에 닿으면 그 앞에서 멈춘다.
+        // 끌려가는 동안 예고·공격이 끊기고, 풀려나면 이동부터 다시 하므로 예고 없이 공격하는 일은 없다.
+        public void PullToward(Vector2 center, float step)
+        {
+            if (_state == EnemyState.Dead)
+            {
+                return;
+            }
+
+            _lastPulledTime = Time.fixedTime;
+            if (_state != EnemyState.Pulled)
+            {
+                EnterState(EnemyState.Pulled);
+            }
+
+            Vector2 toCenter = center - Body.position;
+            float distance = toCenter.magnitude;
+            if (distance < 0.0001f)
+            {
+                return;
+            }
+
+            // 중심을 지나쳐 앞뒤로 떨리지 않게 남은 거리까지만 움직인다.
+            Vector2 direction = toCenter / distance;
+            float move = Mathf.Min(step, distance);
+            move = Mathf.Min(move, ClearDistance(direction, move, BodyRadius));
+            Body.MovePosition(Body.position + direction * move);
         }
 
         protected abstract void TickMove(float deltaTime);

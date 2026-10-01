@@ -74,6 +74,17 @@ namespace ExplodeIt.Bombs
             SetRadius(radius);
         }
 
+        // 구조물을 무시하는 범위용. 잘리지 않은 원이라 판정도 벽과 상관없다는 것이 바로 읽힌다.
+        public void BuildCircle(float radius)
+        {
+            for (int i = 0; i < _segments; i++)
+            {
+                _limits[i] = radius;
+            }
+
+            SetRadius(radius);
+        }
+
         // 바깥 모양과 채움 모양은 같은 구조물 조건을 쓰므로 광선을 두 번 쏘지 않는다.
         public void CopyLimits(ExplosionShape source)
         {

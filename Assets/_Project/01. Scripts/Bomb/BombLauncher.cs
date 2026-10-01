@@ -87,25 +87,20 @@ namespace ExplodeIt.Bombs
 
         private void Throw()
         {
-            Vector2 origin = transform.position;
-            Vector2 target = ClampToRange(origin, GetAimWorldPosition());
-
-            Bomb bomb = _pool.Get(origin);
-            bomb.Launch(target, _stats, _releaseBomb);
+            Bomb bomb = _pool.Get(transform.position);
+            bomb.Launch(GetThrowTarget(), _stats, _releaseBomb);
 
             _chargesLeft--;
             _nextThrowTime = Time.time + _stats.ThrowInterval;
             _rechargeTimer = _stats.RechargeTime;
         }
 
-        private Vector2 GetAimWorldPosition()
+        // 특수 폭탄도 같은 사거리 원 안으로 던지도록 착지점 계산을 공유한다.
+        public Vector2 GetThrowTarget()
         {
-            return _camera.ScreenToWorldPoint(_input.Aim);
-        }
-
-        private Vector2 ClampToRange(Vector2 origin, Vector2 target)
-        {
-            return origin + Vector2.ClampMagnitude(target - origin, _stats.MaxThrowRange);
+            Vector2 origin = transform.position;
+            Vector2 aim = _camera.ScreenToWorldPoint(_input.Aim);
+            return origin + Vector2.ClampMagnitude(aim - origin, _stats.MaxThrowRange);
         }
 
         private void ReleaseBomb(Bomb bomb)

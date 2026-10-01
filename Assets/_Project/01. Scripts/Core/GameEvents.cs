@@ -14,6 +14,13 @@ namespace ExplodeIt.Core
         public static event Action PlayerDied;
         // 처치 위치. 재화 드롭, 처치 수 업적, 이펙트가 구독한다.
         public static event Action<Vector2> EnemyKilled;
+        // 현재 충전량, 발동에 필요한 양. 게이지 UI가 능력 코드를 몰라도 되게 한다.
+        public static event Action<int, int> AbilityChargeChanged;
+
+        public static void RaiseAbilityChargeChanged(int current, int required)
+        {
+            AbilityChargeChanged?.Invoke(current, required);
+        }
 
         public static void RaiseGameStateChanged(GameState previous, GameState current)
         {
@@ -43,6 +50,7 @@ namespace ExplodeIt.Core
             BombExploded = null;
             PlayerDied = null;
             EnemyKilled = null;
+            AbilityChargeChanged = null;
         }
     }
 }
