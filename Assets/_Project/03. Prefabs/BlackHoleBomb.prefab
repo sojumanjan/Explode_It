@@ -55,6 +55,8 @@ MonoBehaviour:
     m_Bits: 64
   _explodeFlashColor: {r: 1, g: 1, b: 1, a: 0.6}
   _explosionFxDuration: 0.25
+  _pullSound: {fileID: 11400000, guid: d866eb20f9b171146b546dec7f94983f, type: 2}
+  _explodeSound: {fileID: 11400000, guid: 4f3920bd6d4f9a149bb4e20310451024, type: 2}
 --- !u!1 &2475476411035887707
 GameObject:
   m_ObjectHideFlags: 0

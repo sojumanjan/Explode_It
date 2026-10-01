@@ -20,6 +20,12 @@ namespace ExplodeIt.Bombs
         [SerializeField] private LayerMask _hitMask;
         [SerializeField] private Color _explodeFlashColor = new Color(1f, 1f, 1f, 0.6f);
         [SerializeField, Min(0f)] private float _explosionFxDuration = 0.25f;
+        // 블랙홀은 하나뿐인 특수 폭탄이라 전역 이벤트 대신 자기 데이터로 소리를 낸다.
+        // 흡입음은 착지부터 폭발까지 나고, 폭발하는 순간 끊는다.
+        [SerializeField] private SoundData _pullSound;
+        [SerializeField] private SoundData _explodeSound;
+
+        private SoundHandle _pullHandle = SoundHandle.None;
 
         // 흡입은 매 물리 스텝 범위 안 적을 다시 찾으므로, 콜라이더별 Enemy를 한 번만 찾아 둔다.
         // 적은 풀에서 재사용되어 콜라이더가 바뀌지 않으므로 캐시가 무효화되지 않는다.
@@ -59,6 +65,14 @@ namespace ExplodeIt.Bombs
             _sequence?.Kill();
             _sequence = null;
             _isPulling = false;
+            // 흡입 도중 재시작으로 꺼지면, 씬을 넘어 살아 있는 오디오 매니저에서 소리가 계속 나지 않게 끊는다.
+            StopPullSound();
+        }
+
+        private void StopPullSound()
+        {
+            AudioManager.Stop(_pullHandle);
+            _pullHandle = SoundHandle.None;
         }
 
         public void Launch(Vector2 target, float radius, float pullDuration, float pullSpeed,
@@ -121,11 +135,13 @@ namespace ExplodeIt.Bombs
             _rangeOutline.Visible = true;
             _fuseFill.Visible = true;
             _isPulling = true;
+            _pullHandle = AudioManager.Play(_pullSound);
         }
 
         private void Explode()
         {
             _isPulling = false;
+            StopPullSound();
 
             Vector2 position = transform.position;
             int count = Physics2D.OverlapCircle(position, _radius, _hitFilter, OverlapBuffer);
@@ -140,6 +156,7 @@ namespace ExplodeIt.Bombs
 
             _body.enabled = false;
             _fuseFill.SetColor(_explodeFlashColor);
+            AudioManager.Play(_explodeSound);
         }
 
         private void GrowFill(float radius)

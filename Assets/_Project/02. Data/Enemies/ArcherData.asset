@@ -21,3 +21,4 @@ MonoBehaviour:
   _projectileSpeed: 35
   _projectileRange: 12
   _projectileHitRadius: 0.15
+  _shotSound: {fileID: 11400000, guid: 420a6457b1943fc44b717b507474aeb9, type: 2}

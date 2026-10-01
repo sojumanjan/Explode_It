@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Enemies
@@ -15,7 +16,12 @@ namespace ExplodeIt.Enemies
         [Tooltip("화살이 플레이어를 맞히는 판정 반경 (유닛)")]
         [SerializeField, Min(0f)] private float _projectileHitRadius = 0.15f;
 
+        [Header("사운드")]
+        [Tooltip("화살을 쏘는 순간의 효과음. 비워 두면 소리 없이 쏜다")]
+        [SerializeField] private SoundData _shotSound;
+
         public float ProjectileSpeed => _projectileSpeed;
+        public SoundData ShotSound => _shotSound;
         public float ProjectileRange => _projectileRange;
         public float ProjectileHitRadius => _projectileHitRadius;
     }

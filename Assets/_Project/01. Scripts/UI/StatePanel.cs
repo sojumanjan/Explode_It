@@ -5,6 +5,7 @@ using UnityEngine;
 namespace ExplodeIt.UI
 {
     // 지정한 게임 상태일 때만 보이는 패널. 일시정지·사망·클리어 패널이 이 하나로 동작한다.
+    // 켜고 끄는 건 항상 켜져 있는 StatePanelSwitcher가 맡는다. 그래서 에디터에서 패널을 꺼 두든 켜 두든 결과가 같다.
     [RequireComponent(typeof(CanvasGroup))]
     public class StatePanel : MonoBehaviour
     {
@@ -16,46 +17,31 @@ namespace ExplodeIt.UI
         private CanvasGroup _group;
         private Tween _tween;
 
-        private void Awake()
-        {
-            _group = GetComponent<CanvasGroup>();
-            SetVisible(false);
-        }
+        public GameState ShowOn => _showOn;
 
-        private void OnEnable()
-        {
-            GameEvents.GameStateChanged += OnGameStateChanged;
-        }
+        private CanvasGroup Group => _group != null ? _group : _group = GetComponent<CanvasGroup>();
 
         private void OnDisable()
         {
-            GameEvents.GameStateChanged -= OnGameStateChanged;
             _tween?.Kill();
         }
 
-        private void OnGameStateChanged(GameState previous, GameState current)
+        // 일시정지 중에는 timeScale이 0이므로 실제 시간으로 연출한다.
+        public void Show()
         {
             _tween?.Kill();
-            if (current != _showOn)
-            {
-                SetVisible(false);
-                return;
-            }
-
-            // 일시정지 중에는 timeScale이 0이므로 실제 시간으로 연출한다.
-            _group.blocksRaycasts = true;
-            _group.interactable = true;
-            _tween = _group.DOFade(1f, _fadeDuration)
+            Group.alpha = 0f;
+            gameObject.SetActive(true);
+            _tween = Group.DOFade(1f, _fadeDuration)
                 .SetDelay(_showDelay)
                 .SetUpdate(true)
                 .SetLink(gameObject);
         }
 
-        private void SetVisible(bool visible)
+        public void Hide()
         {
-            _group.alpha = visible ? 1f : 0f;
-            _group.blocksRaycasts = visible;
-            _group.interactable = visible;
+            _tween?.Kill();
+            gameObject.SetActive(false);
         }
     }
 }

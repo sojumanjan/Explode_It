@@ -1,4 +1,3 @@
-using ExplodeIt.Core;
 using ExplodeIt.Stage;
 using TMPro;
 using UnityEngine;
@@ -6,9 +5,9 @@ using UnityEngine;
 namespace ExplodeIt.UI
 {
     // 판이 끝난 순간의 기록을 채운다. 클리어 패널과 사망 패널에 함께 쓴다.
+    // 패널은 판이 끝났을 때만 켜지므로, 켜지는 순간이 곧 기록을 채울 때다.
     public class StageResultView : MonoBehaviour
     {
-        [SerializeField] private GameState _fillOn;
         [SerializeField] private StageStats _stats;
         [SerializeField] private TMP_Text _timeText;
         [SerializeField] private TMP_Text _killsText;
@@ -18,21 +17,6 @@ namespace ExplodeIt.UI
 
         private void OnEnable()
         {
-            GameEvents.GameStateChanged += OnGameStateChanged;
-        }
-
-        private void OnDisable()
-        {
-            GameEvents.GameStateChanged -= OnGameStateChanged;
-        }
-
-        private void OnGameStateChanged(GameState previous, GameState current)
-        {
-            if (current != _fillOn)
-            {
-                return;
-            }
-
             TimeText.Write(_timeText, _buffer, (int)_stats.Elapsed);
             _killsText.SetText("{0}", _stats.Kills);
             if (_bestMultiKillText != null)

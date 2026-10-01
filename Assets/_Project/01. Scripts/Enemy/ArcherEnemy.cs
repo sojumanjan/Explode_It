@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Enemies
@@ -35,6 +36,7 @@ namespace ExplodeIt.Enemies
         {
             EnemyProjectilePool.Current.Fire(Body.position, _aimDirection,
                 _data.ProjectileSpeed, _shotLength, _data.ProjectileHitRadius);
+            AudioManager.Play(_data.ShotSound);
             return true;
         }
 
