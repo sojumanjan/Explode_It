@@ -10,6 +10,7 @@ namespace ExplodeIt.Player
         [SerializeField] private InputActionReference _aimAction;
         [SerializeField] private InputActionReference _throwAction;
         [SerializeField] private InputActionReference _abilityAction;
+        [SerializeField] private InputActionReference _dodgeAction;
 
         public Vector2 Move => _moveAction.action.ReadValue<Vector2>();
         // 화면 좌표. 월드 좌표 변환은 카메라를 아는 쪽에서 한다.
@@ -18,6 +19,8 @@ namespace ExplodeIt.Player
         public bool ThrowHeld => !PointerBlocked && _throwAction.action.IsPressed();
         // 게이지가 차는 순간 누르고 있던 버튼으로 바로 나가지 않도록, 누른 프레임만 읽는다.
         public bool AbilityPressed => !PointerBlocked && _abilityAction.action.WasPressedThisFrame();
+        // 키보드 입력이라 패널 위 커서와 무관하게 받는다.
+        public bool DodgePressed => _dodgeAction.action.WasPressedThisFrame();
 
         // 커서가 개발자 패널 같은 화면 UI 위에 있을 때, 슬라이더를 누르는 클릭이 투척으로 새지 않게 막는다.
         public bool PointerBlocked { get; set; }
@@ -28,6 +31,7 @@ namespace ExplodeIt.Player
             _aimAction.action.Enable();
             _throwAction.action.Enable();
             _abilityAction.action.Enable();
+            _dodgeAction.action.Enable();
         }
 
         private void OnDisable()
@@ -36,6 +40,7 @@ namespace ExplodeIt.Player
             _aimAction.action.Disable();
             _throwAction.action.Disable();
             _abilityAction.action.Disable();
+            _dodgeAction.action.Disable();
         }
     }
 }

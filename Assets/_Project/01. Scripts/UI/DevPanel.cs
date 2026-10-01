@@ -159,7 +159,7 @@ namespace ExplodeIt.UI
         private void DrawCheats()
         {
             Header("Cheats");
-            _playerHitReceiver.IsInvulnerable = GUILayout.Toggle(_playerHitReceiver.IsInvulnerable, " Player Invulnerable");
+            _playerHitReceiver.CheatInvulnerable = GUILayout.Toggle(_playerHitReceiver.CheatInvulnerable, " Player Invulnerable");
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Fill Ability"))

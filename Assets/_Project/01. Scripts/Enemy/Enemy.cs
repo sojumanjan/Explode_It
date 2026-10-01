@@ -37,6 +37,10 @@ namespace ExplodeIt.Enemies
         protected EnemyState State => _state;
         protected abstract EnemyData Data { get; }
 
+        // 표시 컴포넌트가 읽는 값. 상태를 바꾸는 건 여전히 이 클래스만 한다.
+        public EnemyState CurrentState => _state;
+        public Vector2 TargetPosition => _target != null ? (Vector2)_target.position : Body.position;
+
         protected virtual void Awake()
         {
             Body = GetComponent<Rigidbody2D>();

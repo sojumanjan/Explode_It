@@ -15,8 +15,19 @@ namespace ExplodeIt.Core
         public event Action<HitInfo> Died;
 
         public bool IsDead => _isDead;
-        // 판정 단계에서 피격을 무시한다. 개발자 패널 무적, 이후 실드·무적 시간이 같은 자리를 쓴다.
-        public bool IsInvulnerable { get; set; }
+        private float _invulnerableUntil;
+
+        // 개발자 패널의 무적 치트. 구르기 무적과 따로 두어, 구르기가 끝날 때 치트까지 풀리지 않게 한다.
+        public bool CheatInvulnerable { get; set; }
+
+        // 판정 단계에서 피격을 무시한다. 이후 실드도 같은 자리를 쓴다.
+        public bool IsInvulnerable => CheatInvulnerable || Time.time < _invulnerableUntil;
+
+        // 여러 곳에서 겹쳐 줘도 가장 늦게 끝나는 쪽을 따른다.
+        public void GrantInvulnerability(float duration)
+        {
+            _invulnerableUntil = Mathf.Max(_invulnerableUntil, Time.time + duration);
+        }
 
         // 풀에서 재사용될 때마다 소유자가 호출한다.
         public void ResetHits(int hitsToDie)

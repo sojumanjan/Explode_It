@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f55d79f71ff91d4591091dcab66b225, type: 3}
-  m_Name: Sfx_BombExplode
+  m_Name: Sfx_Dodge
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
-  - {fileID: 8300000, guid: 9eaa7bca0351d684c9b8a3681c6a3f83, type: 3}
-  _volume: 0.5
-  _pitchMin: 0.9
-  _pitchMax: 1.1
-  _maxInstances: 6
-  _minInterval: 0.04
+  - {fileID: 8300000, guid: 3d10e3cf66849b34b97dd0f899b93d88, type: 3}
+  _volume: 1
+  _pitchMin: 0.95
+  _pitchMax: 1.05
+  _maxInstances: 1
+  _minInterval: 0.1
