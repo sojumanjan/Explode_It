@@ -11,6 +11,10 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(1)] private int _killsToCharge = 9;
 
         [Header("블랙홀 폭탄")]
+        // 일반 폭탄 사거리 원과 무관하다. 화면에 따로 표시하지 않으므로 커서를 둔 곳에 거의 그대로 떨어진다.
+        [Tooltip("최대 사거리 (유닛). 커서가 이보다 멀면 이 거리 지점에 떨어진다")]
+        [SerializeField, Min(0f)] private float _maxThrowRange = 15f;
+
         // 기본 폭탄 반경에 곱하므로, 기본 폭탄 범위가 강화되면 블랙홀도 함께 커진다.
         [Tooltip("범위 배율 (배). 기본 폭탄 폭발 반경에 곱한다")]
         [SerializeField, Min(0.1f)] private float _radiusMultiplier = 2f;
@@ -22,6 +26,7 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(0f)] private float _pullSpeed = 4f;
 
         public int KillsToCharge => _killsToCharge;
+        public float MaxThrowRange => _maxThrowRange;
         public float RadiusMultiplier => _radiusMultiplier;
         public float PullDuration => _pullDuration;
         public float PullSpeed => _pullSpeed;

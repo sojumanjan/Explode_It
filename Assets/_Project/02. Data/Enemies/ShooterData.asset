@@ -16,7 +16,7 @@ MonoBehaviour:
   _hitsToDie: 1
   _attackTriggerRange: 15
   _arenaEntryDelay: 1
-  _telegraphDuration: 1.5
+  _telegraphDuration: 1.8
   _recoverDuration: 3
   _projectileSpeed: 50
   _projectileRange: 15

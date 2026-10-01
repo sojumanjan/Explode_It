@@ -76,7 +76,7 @@ namespace ExplodeIt.Progression
             WeaponStats weapon = _launcher.Stats;
             _blackHole.transform.position = transform.position;
             _blackHole.gameObject.SetActive(true);
-            _blackHole.Launch(_launcher.GetThrowTarget(), weapon.ExplosionRadius * _data.RadiusMultiplier,
+            _blackHole.Launch(_launcher.GetThrowTarget(_data.MaxThrowRange),weapon.ExplosionRadius * _data.RadiusMultiplier,
                 _data.PullDuration, _data.PullSpeed, weapon, _onBlackHoleFinished);
         }
 

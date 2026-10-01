@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AbilityData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AbilityData
   _killsToCharge: 9
-  _radiusMultiplier: 2
+  _radiusMultiplier: 2.5
   _pullDuration: 2
   _pullSpeed: 4

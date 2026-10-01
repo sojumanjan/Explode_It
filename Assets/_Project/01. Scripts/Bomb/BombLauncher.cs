@@ -136,12 +136,17 @@ namespace ExplodeIt.Bombs
             return Physics2D.OverlapPoint(point, _obstacleFilter, LandingBuffer) > 0;
         }
 
-        // 특수 폭탄도 같은 사거리 원 안으로 던지도록 착지점 계산을 공유한다.
         public Vector2 GetThrowTarget()
+        {
+            return GetThrowTarget(_stats.MaxThrowRange);
+        }
+
+        // 특수 폭탄은 사거리가 따로 있어서, 커서 위치 계산만 공유하고 사거리는 받아서 쓴다.
+        public Vector2 GetThrowTarget(float maxRange)
         {
             Vector2 origin = transform.position;
             Vector2 aim = _camera.ScreenToWorldPoint(_input.Aim);
-            return origin + Vector2.ClampMagnitude(aim - origin, _stats.MaxThrowRange);
+            return origin + Vector2.ClampMagnitude(aim - origin, maxRange);
         }
 
         private void ReleaseBomb(Bomb bomb)
