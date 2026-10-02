@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1bb6b4e0800d640a31fc8b6275ae51, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Player.PlayerData
-  _moveSpeed: 6
+  _moveSpeed: 5
   _acceleration: 80
   _deceleration: 100

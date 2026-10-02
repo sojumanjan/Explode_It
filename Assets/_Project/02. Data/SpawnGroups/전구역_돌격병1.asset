@@ -15,38 +15,47 @@ MonoBehaviour:
   _displayName: "\uC804 \uAD6C\uC5ED \uB3CC\uACA9\uBCD1 1\uB9C8\uB9AC\uC529"
   _areas:
   - _label: Area 1
+    _areaId: 1
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 2
+    _areaId: 2
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 3
+    _areaId: 3
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 4
+    _areaId: 4
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 5
+    _areaId: 5
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 6
+    _areaId: 6
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 7
+    _areaId: 7
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 8
+    _areaId: 8
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1
   - _label: Area 9
+    _areaId: 9
     _units:
     - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
       _count: 1

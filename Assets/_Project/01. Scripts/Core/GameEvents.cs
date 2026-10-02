@@ -18,6 +18,13 @@ namespace ExplodeIt.Core
         public static event Action<int, int> AbilityChargeChanged;
         // 남은 폭탄 수, 최대 보유 수. HUD가 무기 코드를 몰라도 되게 한다.
         public static event Action<int, int> BombChargesChanged;
+        // 폭탄이 손을 떠난 순간. 던지는 동작 연출이 무기 코드를 몰라도 되게 한다.
+        public static event Action BombThrown;
+
+        public static void RaiseBombThrown()
+        {
+            BombThrown?.Invoke();
+        }
 
         public static void RaiseBombChargesChanged(int current, int max)
         {
@@ -80,6 +87,7 @@ namespace ExplodeIt.Core
             EnemyKilled = null;
             AbilityChargeChanged = null;
             BombChargesChanged = null;
+            BombThrown = null;
             StageCleared = null;
             WaveCleared = null;
             BossIntroStarted = null;

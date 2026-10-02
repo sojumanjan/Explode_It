@@ -129,6 +129,7 @@ namespace ExplodeIt.Bombs
             _nextThrowTime = Time.time + _stats.ThrowInterval;
             _rechargeTimer = _stats.RechargeTime;
             RaiseChargesChanged();
+            GameEvents.RaiseBombThrown();
         }
 
         private bool IsOnObstacle(Vector2 point)

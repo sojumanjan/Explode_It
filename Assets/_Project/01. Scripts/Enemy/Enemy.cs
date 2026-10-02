@@ -22,6 +22,7 @@ namespace ExplodeIt.Enemies
         private HitReceiver _hitReceiver;
         private ContactFilter2D _attackFilter;
         private ContactFilter2D _obstacleFilter;
+        private Action<Enemy> _died;
         private Action<Enemy> _release;
         private EnemyState _state;
         private float _stateTime;
@@ -40,6 +41,10 @@ namespace ExplodeIt.Enemies
         // 표시 컴포넌트가 읽는 값. 상태를 바꾸는 건 여전히 이 클래스만 한다.
         public EnemyState CurrentState => _state;
         public Vector2 TargetPosition => _target != null ? (Vector2)_target.position : Body.position;
+        public float TelegraphDuration => Data.TelegraphDuration;
+        // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
+        public virtual Vector2 AimDirection => DirectionToTarget();
+        public float DeathDuration => Data.DeathDuration;
 
         protected virtual void Awake()
         {
@@ -60,6 +65,7 @@ namespace ExplodeIt.Enemies
             _hitReceiver.ResetHits(Data.HitsToDie);
             _hitReceiver.Died += OnDied;
             _arenaTime = 0f;
+            _collider.enabled = true;
             EnterState(EnemyState.Move);
         }
 
@@ -68,21 +74,34 @@ namespace ExplodeIt.Enemies
             _hitReceiver.Died -= OnDied;
         }
 
-        public void Initialize(Transform target, Action<Enemy> release)
+        // died: 죽는 순간(살아 있는 적 목록에서 빼기), release: 사망 연출이 끝난 뒤(풀로 돌려보내기).
+        public void Initialize(Transform target, Action<Enemy> died, Action<Enemy> release)
         {
             _target = target;
+            _died = died;
             _release = release;
         }
 
         // Kinematic 리지드바디를 MovePosition으로 옮기므로 물리 스텝에서 처리한다.
         private void FixedUpdate()
         {
-            if (_target == null || _state == EnemyState.Dead)
+            float deltaTime = Time.fixedDeltaTime;
+            if (_state == EnemyState.Dead)
+            {
+                _stateTime += deltaTime;
+                if (_stateTime >= Data.DeathDuration)
+                {
+                    Release();
+                }
+
+                return;
+            }
+
+            if (_target == null)
             {
                 return;
             }
 
-            float deltaTime = Time.fixedDeltaTime;
             _stateTime += deltaTime;
 
             switch (_state)
@@ -301,11 +320,18 @@ namespace ExplodeIt.Enemies
             OnEnterState(state);
         }
 
+        // 판정과 처치 집계는 죽는 순간 끝내고, 몸만 사망 연출 동안 남겨 둔다.
+        // 콜라이더를 꺼서 남은 몸이 폭탄 범위·블랙홀·길막에 끼어들지 않게 한다.
         private void OnDied(HitInfo hit)
         {
             EnterState(EnemyState.Dead);
+            _collider.enabled = false;
             GameEvents.RaiseEnemyKilled(Body.position);
+            _died?.Invoke(this);
+        }
 
+        private void Release()
+        {
             if (_release != null)
             {
                 _release(this);

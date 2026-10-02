@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1391412092374894169}
   - component: {fileID: 8698082519248213536}
   - component: {fileID: 7329927841262363184}
+  - component: {fileID: 7335901721322789431}
   m_Layer: 6
   m_Name: Warrior
   m_TagString: Untagged
@@ -29,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 391103347237629061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0.15698, z: 0}
+  m_LocalScale: {x: 1.5233, y: 1.5233, z: 1.5233}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1246727631161508885}
@@ -98,8 +99,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.4
+  m_Offset: {x: 0.07803853, y: 0.17558621}
+  m_Radius: 0.49754825
 --- !u!114 &8698082519248213536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +135,22 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: 541a8345f06cdbd428c0f12bcadee283, type: 2}
   _swingShape: {fileID: 1808783296337355108}
   _swingFxDuration: 0.18
+--- !u!114 &7335901721322789431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391103347237629061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa2c47830355c846a5432a8bc6fc57b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyVisual
+  _artFacesRight: 0
+  _enemy: {fileID: 7329927841262363184}
+  _sprite: {fileID: 2587545048131987524}
+  _motion: {fileID: 11400000, guid: 2207bcf14dc3f2241ad88f600c1d8d80, type: 2}
 --- !u!1 &3569141686551466355
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,8 +177,8 @@ Transform:
   m_GameObject: {fileID: 3569141686551466355}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: 0, y: -0.4, z: 0}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3771632269293256626}
@@ -215,8 +232,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: fbc7d69a94963e74081662d1464992f3, type: 3}
-  m_Color: {r: 0.55, g: 0.6, b: 0.75, a: 1}
+  m_Sprite: {fileID: 21300000, guid: abad99931b278314e8326b41a93603df, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

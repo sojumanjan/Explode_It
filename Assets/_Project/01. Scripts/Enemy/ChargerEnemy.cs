@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 고블린 돌격병: 다가옴 → 멈춰서 예고(경로선만 플레이어를 따라감) → 예고 끝 방향으로 직선 돌진.
-    // 예측 과제: 돌진 방향은 예고가 끝나는 순간 정해지므로, 그 직전에 경로를 벗어나면서 돌진이 끝날 지점에 폭탄을 둔다.
+    // 고블린 돌격병: 다가옴 → 멈춰서 예고(예고 시작 순간의 방향으로 경로선 고정) → 그 경로선 그대로 직선 돌진.
+    // 예측 과제: 경로가 예고 시작에 정해지므로, 선 밖으로 빠지면서 돌진이 끝날 지점에 폭탄을 둔다.
     public class ChargerEnemy : Enemy
     {
         [SerializeField] private ChargerData _data;
@@ -14,6 +14,7 @@ namespace ExplodeIt.Enemies
         private float _chargedDistance;
 
         protected override EnemyData Data => _data;
+        public override Vector2 AimDirection => _chargeDirection;
 
         protected override void TickMove(float deltaTime)
         {
@@ -23,12 +24,6 @@ namespace ExplodeIt.Enemies
         protected override bool ShouldStartAttack()
         {
             return IsTargetWithin(_data.AttackTriggerRange);
-        }
-
-        // 예고 중에는 제자리에 서서, 돌진 시작점이 흔들리지 않게 하고 멈춘 순간이 폭탄 표적이 되게 한다.
-        protected override void TickTelegraph(float deltaTime)
-        {
-            AimAtTarget();
         }
 
         protected override bool TickAttack(float deltaTime)
@@ -46,13 +41,14 @@ namespace ExplodeIt.Enemies
 
         protected override void OnEnterState(EnemyState state)
         {
+            // 예고 중에는 제자리에 서고 경로선도 다시 재지 않아, 보이는 선이 곧 돌진 경로가 된다.
             if (state == EnemyState.Telegraph)
             {
                 AimAtTarget();
                 return;
             }
 
-            // 마지막 예고 프레임에 보여준 방향과 길이를 그대로 쓴다. 돌진 중에는 다시 추적하지 않는다.
+            // 예고 때 보여준 방향과 길이를 그대로 쓴다.
             if (state == EnemyState.Attack)
             {
                 _chargedDistance = 0f;

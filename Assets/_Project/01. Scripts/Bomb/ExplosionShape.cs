@@ -20,9 +20,23 @@ namespace ExplodeIt.Bombs
         // 방향마다 구조물에 막히기 전까지의 거리. 반경이 커지는 도중에도 이 값을 넘지 않는다.
         private float[] _limits;
         private MeshRenderer _renderer;
+        private bool _isInitialized;
 
         private void Awake()
         {
+            EnsureInitialized();
+        }
+
+        // 적의 자식으로 붙으면, 풀에서 처음 만들어질 때 부모의 OnEnable이 이 Awake보다 먼저 불려 여기를 건드린다.
+        // 그래서 Awake를 기다리지 않고 처음 쓰이는 순간 스스로 준비한다.
+        private void EnsureInitialized()
+        {
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            _isInitialized = true;
             _renderer = GetComponent<MeshRenderer>();
             _renderer.sortingOrder = _sortingOrder;
 
@@ -60,12 +74,17 @@ namespace ExplodeIt.Bombs
 
         public bool Visible
         {
-            set => _renderer.enabled = value;
+            set
+            {
+                EnsureInitialized();
+                _renderer.enabled = value;
+            }
         }
 
         // 중심에서 반경까지 광선을 부채꼴로 쏴서, 방향마다 막히는 거리를 기록하고 최대 반경으로 그린다.
         public void Build(Vector2 center, float radius, ContactFilter2D obstacleFilter)
         {
+            EnsureInitialized();
             for (int i = 0; i < _segments; i++)
             {
                 _limits[i] = ClosestHit(center, _directions[i], radius, obstacleFilter);
@@ -77,6 +96,7 @@ namespace ExplodeIt.Bombs
         // 구조물을 무시하는 범위용. 잘리지 않은 원이라 판정도 벽과 상관없다는 것이 바로 읽힌다.
         public void BuildCircle(float radius)
         {
+            EnsureInitialized();
             for (int i = 0; i < _segments; i++)
             {
                 _limits[i] = radius;
@@ -89,6 +109,7 @@ namespace ExplodeIt.Bombs
         // 정점 방향은 월드 기준이므로 이 오브젝트는 회전시키지 않는다.
         public void BuildSector(Vector2 forward, float radius, float angle)
         {
+            EnsureInitialized();
             float cosHalf = Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad);
             for (int i = 0; i < _segments; i++)
             {
@@ -101,12 +122,15 @@ namespace ExplodeIt.Bombs
         // 바깥 모양과 채움 모양은 같은 구조물 조건을 쓰므로 광선을 두 번 쏘지 않는다.
         public void CopyLimits(ExplosionShape source)
         {
+            EnsureInitialized();
+            source.EnsureInitialized();
             System.Array.Copy(source._limits, _limits, _limits.Length);
         }
 
         // 원이 반경 radius로 퍼진 상태를 그린다. 벽에 닿은 방향만 그 자리에서 멈춘다.
         public void SetRadius(float radius)
         {
+            EnsureInitialized();
             _vertices[0] = Vector3.zero;
             for (int i = 0; i < _segments; i++)
             {
@@ -119,6 +143,7 @@ namespace ExplodeIt.Bombs
 
         public void SetColor(Color color)
         {
+            EnsureInitialized();
             Color32 color32 = color;
             for (int i = 0; i < _colors.Length; i++)
             {
@@ -130,12 +155,14 @@ namespace ExplodeIt.Bombs
 
         public void ResetColor()
         {
+            EnsureInitialized();
             SetColor(_color);
         }
 
         // 폭발 후 사라지는 연출용. 기본 색의 알파에 비율을 곱한다.
         public void SetOpacity(float opacity)
         {
+            EnsureInitialized();
             Color color = _color;
             color.a *= opacity;
             SetColor(color);

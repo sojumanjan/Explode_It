@@ -18,10 +18,16 @@ namespace ExplodeIt.Stage
         private readonly Dictionary<Enemy, Action<Enemy>> _releases = new Dictionary<Enemy, Action<Enemy>>();
         // 살아 있는 적. 화면 내 적 수 측정과 개발자 패널의 전멸에 쓴다.
         private readonly List<Enemy> _active = new List<Enemy>(256);
+        private Action<Enemy> _removeActive;
 
         public int ActiveCount => _active.Count;
 
-        // 죽으면 반환 델리게이트가 목록에서 빼므로 뒤에서부터 지운다.
+        private void Awake()
+        {
+            _removeActive = RemoveActive;
+        }
+
+        // 죽으면 목록에서 빠지므로 뒤에서부터 지운다.
         public void KillAll()
         {
             for (int i = _active.Count - 1; i >= 0; i--)
@@ -50,7 +56,7 @@ namespace ExplodeIt.Stage
             }
 
             Enemy enemy = pool.Get(position);
-            enemy.Initialize(_target, _releases[prefab]);
+            enemy.Initialize(_target, _removeActive, _releases[prefab]);
             _active.Add(enemy);
             return enemy;
         }
@@ -65,12 +71,14 @@ namespace ExplodeIt.Stage
             var pool = new ComponentPool<Enemy>(prefab, transform, _prewarmPerEnemy, _maxPerEnemy);
             pool.Prewarm(_prewarmPerEnemy);
             _pools.Add(prefab, pool);
-            _releases.Add(prefab, enemy =>
-            {
-                _active.Remove(enemy);
-                pool.Release(enemy);
-            });
+            _releases.Add(prefab, pool.Release);
             return pool;
+        }
+
+        // 죽는 순간 목록에서 뺀다. 사망 연출 중인 몸은 웨이브 클리어와 전멸 대상에 들어가지 않는다.
+        private void RemoveActive(Enemy enemy)
+        {
+            _active.Remove(enemy);
         }
     }
 }

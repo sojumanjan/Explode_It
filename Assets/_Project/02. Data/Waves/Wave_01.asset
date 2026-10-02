@@ -16,6 +16,4 @@ MonoBehaviour:
     100\uB9C8\uB9AC \uAE30\uC900\uC73C\uB85C \uB2E4\uC2DC \uC9DC\uC57C \uD568"
   _groups:
   - _startTime: 0
-    _group: {fileID: 11400000, guid: 9a3004aa02f91d24c862c4d6109d8f48, type: 2}
-  - _startTime: 3
-    _group: {fileID: 11400000, guid: d3f254172308b8e4f847b22a54b291de, type: 2}
+    _group: {fileID: 11400000, guid: 8a35d4df2679d334fa3b1b33fa028208, type: 2}

@@ -190,7 +190,7 @@ namespace ExplodeIt.Stage
                 IReadOnlyList<SpawnAreaSlot> slots = group.Areas;
                 for (int s = 0; s < slots.Count; s++)
                 {
-                    if (slots[s].TotalCount == 0 || !TryPickArea(SpawnGroupData.AreaIdOf(s), out SpawnArea area))
+                    if (slots[s].TotalCount == 0 || !TryPickArea(slots[s].AreaId, out SpawnArea area))
                     {
                         continue;
                     }
@@ -299,7 +299,7 @@ namespace ExplodeIt.Stage
                     continue;
                 }
 
-                int areaId = SpawnGroupData.AreaIdOf(s);
+                int areaId = slots[s].AreaId;
                 if (!_areasById.ContainsKey(areaId))
                 {
                     Debug.LogError($"StageRunner: 군집 '{group.DisplayName}'의 Area {areaId}가 씬에 없어 그 구역 스폰을 건너뜁니다.", group);

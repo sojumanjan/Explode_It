@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.WarriorData
   _moveSpeed: 5
   _hitsToDie: 1
-  _attackTriggerRange: 1.6
+  _attackTriggerRange: 2
   _arenaEntryDelay: 1
   _telegraphDuration: 0.5
   _recoverDuration: 0.8
-  _attackRadius: 2.3
+  _deathDuration: 0.5
+  _attackRadius: 2.1
   _attackAngle: 110
   _swingSound: {fileID: 0}

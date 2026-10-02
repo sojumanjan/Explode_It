@@ -16,6 +16,7 @@ namespace ExplodeIt.Enemies
         private SoundHandle _aimSoundHandle = SoundHandle.None;
 
         protected override EnemyData Data => _data;
+        public override Vector2 AimDirection => _aimDirection;
 
         protected override void TickMove(float deltaTime)
         {

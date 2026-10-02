@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 542730803501241668, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_Radius
+      value: 0.7574334
+      objectReference: {fileID: 0}
+    - target: {fileID: 542730803501241668, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.24647212
+      objectReference: {fileID: 0}
+    - target: {fileID: 542730803501241668, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.16096127
+      objectReference: {fileID: 0}
     - target: {fileID: 984188614491754000, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
       propertyPath: _data
       value: 
@@ -56,6 +68,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4011253128418635484, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.9595783
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011253128418635484, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9595783
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011253128418635484, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.3996989
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011253128418635484, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.67979
+      objectReference: {fileID: 0}
+    - target: {fileID: 6690005847010683893, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: _motion
+      value: 
+      objectReference: {fileID: 11400000, guid: 42d53e12ba81113429b1c9412e617393, type: 2}
     - target: {fileID: 7317469363507702398, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.a
       value: 0.7490196
@@ -105,16 +137,20 @@ PrefabInstance:
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 8231699192129901850, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5707a112afab53a4d8eea0658c1d17a0, type: 3}
+    - target: {fileID: 8231699192129901850, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
       propertyPath: m_Color.b
-      value: 0.24019213
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8231699192129901850, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
       propertyPath: m_Color.g
-      value: 0.57045287
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8231699192129901850, guid: d76333bae33c9a54eb66e0448e8a0406, type: 3}
       propertyPath: m_Color.r
-      value: 0.6528301
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

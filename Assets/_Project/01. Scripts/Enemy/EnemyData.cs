@@ -21,11 +21,16 @@ namespace ExplodeIt.Enemies
 
         [Header("예고 / 회복")]
         // 예고 없는 공격은 버그로 취급하므로 0이 되지 않게 막는다. 하드모드에서도 이 아래로는 줄이지 않는다.
-        [Tooltip("예고 시간 (초). 조준선이 플레이어를 따라가는 시간. 끝나는 순간의 방향으로 공격한다. 최소 0.1")]
+        [Tooltip("예고 시간 (초). 멈춰서 예고하는 시간. 궁수류는 이 동안 조준이 플레이어를 따라가고, 돌격병·전사는 예고 시작 방향으로 고정된다. 최소 0.1")]
         [SerializeField, Min(0.1f)] private float _telegraphDuration = 0.6f;
 
         [Tooltip("회복 시간 (초). 공격 후 멈춰 있는 시간. 플레이어가 반격할 틈이 된다")]
         [SerializeField, Min(0f)] private float _recoverDuration = 0.6f;
+
+        [Header("사망")]
+        // 연출이 끝날 때까지 풀로 돌려보내지 않는다. 판정은 죽는 순간 바로 꺼지므로 길어도 플레이에는 영향이 없다.
+        [Tooltip("사망 연출 시간 (초). 밀려남 → 부풀기 → 줄어들기가 이 시간 안에 끝난다")]
+        [SerializeField, Min(0.05f)] private float _deathDuration = 0.5f;
 
         public float MoveSpeed => _moveSpeed;
         public int HitsToDie => _hitsToDie;
@@ -33,5 +38,6 @@ namespace ExplodeIt.Enemies
         public float ArenaEntryDelay => _arenaEntryDelay;
         public float TelegraphDuration => _telegraphDuration;
         public float RecoverDuration => _recoverDuration;
+        public float DeathDuration => _deathDuration;
     }
 }

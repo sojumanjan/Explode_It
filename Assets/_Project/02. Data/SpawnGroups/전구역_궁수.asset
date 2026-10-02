@@ -13,22 +13,4 @@ MonoBehaviour:
   m_Name: "\uC804\uAD6C\uC5ED_\uAD81\uC218"
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnGroupData
   _displayName: 
-  _areas:
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
-  - _label: 
-    _units: []
+  _areas: []

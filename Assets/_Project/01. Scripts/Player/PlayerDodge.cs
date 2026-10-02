@@ -10,9 +10,6 @@ namespace ExplodeIt.Player
     {
         [SerializeField] private DodgeData _data;
         [SerializeField] private PlayerInputReader _input;
-        [SerializeField] private SpriteRenderer _sprite;
-        // 무적 중임을 눈으로 알 수 있게 반투명하게 그린다.
-        [SerializeField, Range(0f, 1f)] private float _invulnerableAlpha = 0.45f;
 
         private Rigidbody2D _rigidbody;
         private HitReceiver _hitReceiver;
@@ -21,7 +18,6 @@ namespace ExplodeIt.Player
         private float _dodgeEndTime;
         private float _readyTime;
         private bool _canDodge = true;
-        private bool _isShownInvulnerable;
 
         public bool IsDodging => Time.time < _dodgeEndTime;
 
@@ -53,8 +49,6 @@ namespace ExplodeIt.Player
             {
                 StartDodge(move);
             }
-
-            UpdateInvulnerableLook();
         }
 
         // 이동 컴포넌트는 구르는 동안 속도를 건드리지 않으므로 여기서만 속도를 정한다.
@@ -73,21 +67,6 @@ namespace ExplodeIt.Player
             _readyTime = Time.time + _data.Cooldown;
             _hitReceiver.GrantInvulnerability(_data.InvulnerableDuration);
             AudioManager.Play(_data.Sound);
-        }
-
-        // 개발자 패널 무적도 같은 판정을 쓰므로 함께 반투명하게 보인다.
-        private void UpdateInvulnerableLook()
-        {
-            bool isInvulnerable = _hitReceiver.IsInvulnerable && !_hitReceiver.IsDead;
-            if (isInvulnerable == _isShownInvulnerable)
-            {
-                return;
-            }
-
-            _isShownInvulnerable = isInvulnerable;
-            Color color = _sprite.color;
-            color.a = isInvulnerable ? _invulnerableAlpha : 1f;
-            _sprite.color = color;
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)

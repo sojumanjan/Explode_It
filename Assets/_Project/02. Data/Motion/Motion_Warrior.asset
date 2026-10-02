@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e036eb761eb5fc4b826a967a403d3d3, type: 3}
+  m_Name: Motion_Warrior
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyMotionData
+  _springFrequency: 6
+  _springDamping: 0.45
+  _hopRate: 2.8
+  _hopHeight: 0.1
+  _hopStretch: 0.08
+  _hopSquash: 0.15
+  _hopTilt: 6
+  _telegraphScale: {x: 1.1, y: 0.88}
+  _telegraphLean: -10
+  _telegraphShake: 0.04
+  _telegraphShakeRate: 30
+  _kickOffset: 0.15
+  _kickScale: {x: 1.15, y: 0.9}
+  _kickAngle: 25
+  _attackHoldScale: {x: 1, y: 1}
+  _attackHoldLean: 0
+  _recoverScale: {x: 1.05, y: 0.93}
+  _pulledSpinSpeed: 720
+  _pulledScale: {x: 0.85, y: 0.85}
+  _deathKnockDistance: 4.5
+  _deathKnockEnd: 0.57
+  _deathPopPeak: 0.6
+  _deathPopScale: 1.2
+  _deathAlpha: 0.5

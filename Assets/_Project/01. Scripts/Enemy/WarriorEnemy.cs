@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 전사: 다가옴 → 멈춰서 예고(방향만 플레이어를 끝까지 따라감) → 예고 끝 방향으로 부채꼴 휘두르기 → 회복.
+    // 전사: 다가옴 → 공격 거리에 들어온 순간 그 방향으로 고정하고 멈춰서 예고 → 고정된 방향으로 부채꼴 휘두르기 → 회복.
     // 범위가 좁아 바닥 예고는 그리지 않고, 멈춰 서는 모습 자체가 예고다(이후 애니메이션이 맡는다).
-    // 예측 과제: 멈춘 순간 옆이나 뒤로 빠지고, 휘두른 뒤 회복 동안 서 있는 전사에게 폭탄을 둔다.
+    // 예측 과제: 멈춘 순간 방향이 정해지므로 옆이나 뒤로 빠지고, 휘두른 뒤 회복 동안 서 있는 전사에게 폭탄을 둔다.
     public class WarriorEnemy : Enemy
     {
         [SerializeField] private WarriorData _data;
@@ -18,6 +18,7 @@ namespace ExplodeIt.Enemies
         private float _swingFxTime = -1f;
 
         protected override EnemyData Data => _data;
+        public override Vector2 AimDirection => _aimDirection;
 
         protected override void OnEnable()
         {
@@ -36,11 +37,6 @@ namespace ExplodeIt.Enemies
             return IsTargetWithin(_data.AttackTriggerRange);
         }
 
-        protected override void TickTelegraph(float deltaTime)
-        {
-            _aimDirection = DirectionToTarget();
-        }
-
         // 한 번 휘두르고 끝난다.
         protected override bool TickAttack(float deltaTime)
         {
@@ -52,6 +48,7 @@ namespace ExplodeIt.Enemies
 
         protected override void OnEnterState(EnemyState state)
         {
+            // 근접이라 끝까지 따라가면 피할 길이 없다. 예고가 시작되는 순간의 방향으로 고정한다.
             if (state == EnemyState.Telegraph)
             {
                 _aimDirection = DirectionToTarget();
