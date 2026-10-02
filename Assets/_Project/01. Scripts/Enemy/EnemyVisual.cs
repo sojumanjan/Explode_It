@@ -35,7 +35,6 @@ namespace ExplodeIt.Enemies
         private bool _facesRight;
         private float _hopPhase;
         private float _hopWeight;
-        private float _spinAngle;
         private Vector2 _deathDirection;
 
         private SpringValue _scaleX;
@@ -97,7 +96,7 @@ namespace ExplodeIt.Enemies
             TickPose(state, delta, deltaTime);
         }
 
-        // 걸을 때는 가는 방향을, 예고·공격 중에는 예고한 방향을, 그 밖에 멈춰 있을 때는 플레이어 쪽을 본다.
+        // 걸을 때(블랙홀에 끌려갈 때 포함)는 가는 방향을, 예고·공격 중에는 예고한 방향을, 그 밖에 멈춰 있을 때는 플레이어 쪽을 본다.
         // 예고 중 플레이어를 따라 돌아보면, 방향이 고정된 적도 따라오는 것처럼 보여 피할 방향을 잘못 읽게 된다.
         private void UpdateFacing(EnemyState state, Vector2 position, float deltaX)
         {
@@ -106,7 +105,7 @@ namespace ExplodeIt.Enemies
             {
                 faceX = _enemy.AimDirection.x;
             }
-            else if (state == EnemyState.Move && Mathf.Abs(deltaX) > TurnThreshold)
+            else if (IsWalkingState(state) && Mathf.Abs(deltaX) > TurnThreshold)
             {
                 faceX = deltaX;
             }
@@ -124,13 +123,6 @@ namespace ExplodeIt.Enemies
 
         private void OnStateChanged(EnemyState previous, EnemyState current, Vector2 position)
         {
-            if (previous == EnemyState.Pulled)
-            {
-                // 돌던 각도에서 이어서 바로 서도록, 회전값을 기울기로 옮겨 스프링이 이어받게 한다.
-                _lean.Snap(-Mathf.DeltaAngle(0f, _spinAngle) * FacingSign);
-                _spinAngle = 0f;
-            }
-
             switch (current)
             {
                 case EnemyState.Attack:
@@ -141,10 +133,6 @@ namespace ExplodeIt.Enemies
                     _scaleX.Snap(_motion.KickScale.x);
                     _scaleY.Snap(_motion.KickScale.y);
                     _lean.Snap(_motion.KickAngle);
-                    break;
-
-                case EnemyState.Pulled:
-                    _spinAngle = -_lean.Value * FacingSign;
                     break;
 
                 case EnemyState.Dead:
@@ -180,10 +168,6 @@ namespace ExplodeIt.Enemies
                     targetScale = _motion.RecoverScale;
                     break;
 
-                case EnemyState.Pulled:
-                    targetScale = _motion.PulledScale;
-                    _spinAngle += _motion.PulledSpinSpeed * deltaTime;
-                    break;
             }
 
             float frequency = _motion.SpringFrequency;
@@ -199,7 +183,7 @@ namespace ExplodeIt.Enemies
             float lean = _lean.Value;
 
             // 통통 뛰기: 한 번 뛸 때마다 위로 튀고, 착지 순간 납작해지며, 좌우로 번갈아 기운다.
-            bool isWalking = state == EnemyState.Move && delta.sqrMagnitude > HopMoveThreshold * HopMoveThreshold;
+            bool isWalking = IsWalkingState(state) && delta.sqrMagnitude > HopMoveThreshold * HopMoveThreshold;
             _hopWeight = Mathf.MoveTowards(_hopWeight, isWalking ? 1f : 0f, HopBlendSpeed * deltaTime);
             if (_hopWeight > 0f)
             {
@@ -224,8 +208,7 @@ namespace ExplodeIt.Enemies
                 offset.x += Mathf.Sin(_stateTime * _motion.TelegraphShakeRate * 2f * Mathf.PI) * _motion.TelegraphShake * telegraphProgress;
             }
 
-            float angle = state == EnemyState.Pulled ? _spinAngle : -lean * FacingSign;
-            ApplyPose(offset, scale, angle);
+            ApplyPose(offset, scale, -lean * FacingSign);
         }
 
         // 흐려진 채 멀리 밀려남 → 빠르게 부풂 → 쭉 줄어 사라짐. 전체 시간은 적 데이터의 사망 연출 시간을 따른다.
@@ -264,6 +247,12 @@ namespace ExplodeIt.Enemies
         }
 
         private float FacingSign => _facesRight ? 1f : -1f;
+
+        // 블랙홀에 끌려가는 동안에도 따로 연출하지 않고 걷는 모습 그대로 둔다.
+        private static bool IsWalkingState(EnemyState state)
+        {
+            return state == EnemyState.Move || state == EnemyState.Pulled;
+        }
 
         private void ApplyPose(Vector2 offset, Vector2 scale, float angle)
         {

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ChargerData
   _moveSpeed: 4
   _hitsToDie: 1
-  _attackTriggerRange: 6
+  _attackTriggerRange: 4
   _arenaEntryDelay: 1
   _telegraphDuration: 0.6
   _recoverDuration: 1

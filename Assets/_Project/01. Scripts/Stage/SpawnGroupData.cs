@@ -4,29 +4,29 @@ using UnityEngine;
 
 namespace ExplodeIt.Stage
 {
-    // 한 번에 나오는 무리. 어느 구역에서 어떤 적이 몇 마리 나오는지를 구역별로 적는다.
-    // 같은 구역에서 같이 출발해야 흐름장을 따라 뭉쳐 오고, 폭탄 한 방에 여럿을 잡는 상황이 생긴다.
+    // 한 번에 나오는 무리. 어떤 적이 몇 마리인지만 적고, 어디서 나올지는 웨이브가 정한다.
+    // 구역은 맵마다 다르므로, 무리 구성만 담아 두면 같은 군집을 여러 웨이브·맵에서 다시 쓸 수 있다.
     [CreateAssetMenu(fileName = "SpawnGroup", menuName = "Explode It/Stage/Spawn Group")]
     public class SpawnGroupData : ScriptableObject
     {
         [Tooltip("대표 이름. 웨이브에서 이 군집을 알아보기 위한 이름일 뿐 동작에는 영향이 없다")]
         [SerializeField] private string _displayName;
 
-        [Tooltip("구역별 스폰 목록. 쓰는 구역만 칸을 추가하고 구역 번호를 적는다. 같은 번호를 두 칸에 적으면 그 구역에서 두 덩어리가 따로 나온다")]
-        [SerializeField] private SpawnAreaSlot[] _areas;
+        [Tooltip("적 목록. 위 줄부터 순서대로, 같은 구역 스폰 간격을 두고 한 마리씩 나온다")]
+        [SerializeField] private SpawnGroupUnit[] _units;
 
         public string DisplayName => string.IsNullOrEmpty(_displayName) ? name : _displayName;
-        public IReadOnlyList<SpawnAreaSlot> Areas => _areas ?? Array.Empty<SpawnAreaSlot>();
+        public IReadOnlyList<SpawnGroupUnit> Units => _units ?? Array.Empty<SpawnGroupUnit>();
 
         public int TotalCount
         {
             get
             {
                 int total = 0;
-                IReadOnlyList<SpawnAreaSlot> areas = Areas;
-                for (int i = 0; i < areas.Count; i++)
+                IReadOnlyList<SpawnGroupUnit> units = Units;
+                for (int i = 0; i < units.Count; i++)
                 {
-                    total += areas[i].TotalCount;
+                    total += units[i].Count;
                 }
 
                 return total;
@@ -35,23 +35,16 @@ namespace ExplodeIt.Stage
 
         private void OnValidate()
         {
-            if (_areas == null)
+            if (_units == null)
             {
                 return;
             }
 
-            for (int i = 0; i < _areas.Length; i++)
+            for (int i = 0; i < _units.Length; i++)
             {
-                _areas[i] ??= new SpawnAreaSlot();
-                _areas[i].RefreshLabel();
-
-                IReadOnlyList<SpawnGroupUnit> units = _areas[i].Units;
-                for (int u = 0; u < units.Count; u++)
+                if (_units[i] != null && _units[i].Validate())
                 {
-                    if (units[u] != null && units[u].Validate())
-                    {
-                        Debug.LogWarning($"{name}: Area {_areas[i].AreaId}의 {u + 1}번 줄 프리팹에 Enemy 컴포넌트가 없어 비웁니다.", this);
-                    }
+                    Debug.LogWarning($"{name}: {i + 1}번 줄 프리팹에 Enemy 컴포넌트가 없어 비웁니다.", this);
                 }
             }
         }

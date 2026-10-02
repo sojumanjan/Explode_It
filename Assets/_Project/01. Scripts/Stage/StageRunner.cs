@@ -169,7 +169,7 @@ namespace ExplodeIt.Stage
             EnterPhase(Phase.Spawning);
         }
 
-        // 구역마다 기준점을 하나씩 뽑고, 그 구역의 적은 기준점 주변에서 같은 구역 간격을 두고 한 마리씩 나온다.
+        // 항목마다 구역에서 기준점을 하나 뽑고, 그 군집의 적은 기준점 주변에서 같은 구역 간격을 두고 한 마리씩 나온다.
         // 무작위는 등장 위치에만 둔다. 등장한 뒤의 움직임은 예측 가능해야 한다.
         private void BuildWave(WaveData wave)
         {
@@ -182,36 +182,27 @@ namespace ExplodeIt.Stage
             for (int e = 0; e < entries.Count; e++)
             {
                 SpawnGroupData group = entries[e].Group;
-                if (group == null)
+                if (group == null || group.TotalCount == 0 || !TryPickArea(entries[e].AreaId, out SpawnArea area))
                 {
                     continue;
                 }
 
-                IReadOnlyList<SpawnAreaSlot> slots = group.Areas;
-                for (int s = 0; s < slots.Count; s++)
+                Vector2 anchor = area.GetRandomPoint();
+                int sequence = 0;
+                IReadOnlyList<SpawnGroupUnit> units = group.Units;
+                for (int u = 0; u < units.Count; u++)
                 {
-                    if (slots[s].TotalCount == 0 || !TryPickArea(slots[s].AreaId, out SpawnArea area))
+                    Enemy prefab = units[u].Enemy;
+                    for (int k = 0; k < units[u].Count; k++)
                     {
-                        continue;
-                    }
-
-                    Vector2 anchor = area.GetRandomPoint();
-                    int sequence = 0;
-                    IReadOnlyList<SpawnGroupUnit> units = slots[s].Units;
-                    for (int u = 0; u < units.Count; u++)
-                    {
-                        Enemy prefab = units[u].Enemy;
-                        for (int k = 0; k < units[u].Count; k++)
+                        if (prefab != null)
                         {
-                            if (prefab != null)
-                            {
-                                float time = entries[e].StartTime + sequence * interval;
-                                Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
-                                _events.Add(new SpawnEvent(time, order++, prefab, position));
-                            }
-
-                            sequence++;
+                            float time = entries[e].StartTime + sequence * interval;
+                            Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
+                            _events.Add(new SpawnEvent(time, order++, prefab, position));
                         }
+
+                        sequence++;
                     }
                 }
             }
@@ -276,42 +267,33 @@ namespace ExplodeIt.Stage
                 IReadOnlyList<WaveGroupEntry> entries = wave.Groups;
                 for (int e = 0; e < entries.Count; e++)
                 {
-                    ValidateGroup(entries[e].Group, wave, e);
+                    ValidateEntry(entries[e], wave, e);
                 }
             }
 
             return canRun;
         }
 
-        private void ValidateGroup(SpawnGroupData group, WaveData wave, int entryIndex)
+        private void ValidateEntry(WaveGroupEntry entry, WaveData wave, int entryIndex)
         {
+            SpawnGroupData group = entry.Group;
             if (group == null)
             {
                 Debug.LogError($"StageRunner: 웨이브 '{wave.name}'의 {entryIndex + 1}번 군집 칸이 비어 있어 건너뜁니다.", wave);
                 return;
             }
 
-            IReadOnlyList<SpawnAreaSlot> slots = group.Areas;
-            for (int s = 0; s < slots.Count; s++)
+            if (!_areasById.ContainsKey(entry.AreaId))
             {
-                if (slots[s].TotalCount == 0)
-                {
-                    continue;
-                }
+                Debug.LogError($"StageRunner: 웨이브 '{wave.name}'의 {entryIndex + 1}번 항목 Area {entry.AreaId}가 씬에 없어 건너뜁니다.", wave);
+            }
 
-                int areaId = slots[s].AreaId;
-                if (!_areasById.ContainsKey(areaId))
+            IReadOnlyList<SpawnGroupUnit> units = group.Units;
+            for (int u = 0; u < units.Count; u++)
+            {
+                if (units[u].Enemy == null)
                 {
-                    Debug.LogError($"StageRunner: 군집 '{group.DisplayName}'의 Area {areaId}가 씬에 없어 그 구역 스폰을 건너뜁니다.", group);
-                }
-
-                IReadOnlyList<SpawnGroupUnit> units = slots[s].Units;
-                for (int u = 0; u < units.Count; u++)
-                {
-                    if (units[u].Enemy == null)
-                    {
-                        Debug.LogError($"StageRunner: 군집 '{group.DisplayName}'의 Area {areaId} {u + 1}번 줄에 적 프리팹이 없어 그 줄을 건너뜁니다.", group);
-                    }
+                    Debug.LogError($"StageRunner: 군집 '{group.DisplayName}'의 {u + 1}번 줄에 적 프리팹이 없어 그 줄을 건너뜁니다.", group);
                 }
             }
         }
@@ -330,17 +312,13 @@ namespace ExplodeIt.Stage
                         continue;
                     }
 
-                    IReadOnlyList<SpawnAreaSlot> slots = entries[e].Group.Areas;
-                    for (int s = 0; s < slots.Count; s++)
+                    IReadOnlyList<SpawnGroupUnit> units = entries[e].Group.Units;
+                    for (int u = 0; u < units.Count; u++)
                     {
-                        IReadOnlyList<SpawnGroupUnit> units = slots[s].Units;
-                        for (int u = 0; u < units.Count; u++)
+                        Enemy enemy = units[u].Enemy;
+                        if (enemy != null && !prefabs.Contains(enemy))
                         {
-                            Enemy enemy = units[u].Enemy;
-                            if (enemy != null && !prefabs.Contains(enemy))
-                            {
-                                prefabs.Add(enemy);
-                            }
+                            prefabs.Add(enemy);
                         }
                     }
                 }

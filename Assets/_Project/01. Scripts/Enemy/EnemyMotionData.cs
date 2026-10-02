@@ -63,12 +63,6 @@ namespace ExplodeIt.Enemies
         [Tooltip("회복 중 크기 배율 (가로, 세로). 살짝 처져 지금이 반격할 틈임을 보여준다")]
         [SerializeField] private Vector2 _recoverScale = new Vector2(1.05f, 0.93f);
 
-        [Header("블랙홀에 끌려감")]
-        [Tooltip("끌려가는 동안 도는 속도 (도/초)")]
-        [SerializeField] private float _pulledSpinSpeed = 720f;
-
-        [Tooltip("끌려가는 동안 크기 배율")]
-        [SerializeField] private Vector2 _pulledScale = new Vector2(0.85f, 0.85f);
 
         [Header("사망: 밀려남 → 부풀기 → 줄어들기 (전체 시간은 적 데이터의 사망 연출 시간)")]
         [Tooltip("플레이어 반대쪽으로 밀려나는 거리 (유닛)")]
@@ -103,8 +97,6 @@ namespace ExplodeIt.Enemies
         public Vector2 AttackHoldScale => _attackHoldScale;
         public float AttackHoldLean => _attackHoldLean;
         public Vector2 RecoverScale => _recoverScale;
-        public float PulledSpinSpeed => _pulledSpinSpeed;
-        public Vector2 PulledScale => _pulledScale;
         public float DeathKnockDistance => _deathKnockDistance;
         public float DeathKnockEnd => _deathKnockEnd;
         public float DeathPopPeak => Mathf.Max(_deathPopPeak, _deathKnockEnd + 0.01f);

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6834d130732c34aa0c9b152d03c09f, type: 3}
+  m_Name: "\uC804\uC0AC3\uBA85"
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnGroupData
+  _displayName: "\uC804\uC0AC3\uBA85"
+  _units:
+  - _enemyPrefab: {fileID: 391103347237629061, guid: 983b7c9f32aa39a46a723f79815c036a, type: 3}
+    _count: 3

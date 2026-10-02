@@ -20,7 +20,9 @@ MonoBehaviour:
   _hopHeight: 0.1
   _hopStretch: 0.06
   _hopSquash: 0.12
-  _hopTilt: 5
+  _hopTilt: 4
   _dodgeScale: {x: 1.2, y: 0.7}
+  _dodgeSquashTime: 0.1
+  _dodgeRecoverTime: 0.3
   _throwScale: {x: 0.9, y: 1.1}
   _throwAngle: 10

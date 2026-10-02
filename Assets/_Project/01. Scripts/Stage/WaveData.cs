@@ -34,5 +34,19 @@ namespace ExplodeIt.Stage
                 return total;
             }
         }
+
+        private void OnValidate()
+        {
+            if (_groups == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _groups.Length; i++)
+            {
+                _groups[i] ??= new WaveGroupEntry();
+                _groups[i].RefreshLabel();
+            }
+        }
     }
 }

@@ -16,8 +16,9 @@ MonoBehaviour:
   _hitsToDie: 1
   _attackTriggerRange: 7
   _arenaEntryDelay: 1
-  _telegraphDuration: 1.6
+  _telegraphDuration: 1.3
   _recoverDuration: 1
+  _deathDuration: 0.5
   _projectileSpeed: 35
   _projectileRange: 8
   _projectileHitRadius: 0.15
