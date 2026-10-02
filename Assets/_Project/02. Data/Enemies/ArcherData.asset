@@ -14,14 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
   _moveSpeed: 3.5
   _hitsToDie: 1
-  _attackTriggerRange: 7
+  _attackTriggerRange: 5
   _arenaEntryDelay: 1
+  _separationDistanceRatio: 0.6
+  _separationSpeed: 1.5
   _telegraphDuration: 1.3
   _recoverDuration: 1
   _deathDuration: 0.5
   _projectileSpeed: 35
-  _projectileRange: 8
+  _projectileRange: 7
   _projectileHitRadius: 0.15
   _showAimLine: 1
+  _aimLockTime: 0
   _aimSound: {fileID: 0}
   _shotSound: {fileID: 11400000, guid: 420a6457b1943fc44b717b507474aeb9, type: 2}
