@@ -260,6 +260,40 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 부채꼴 근접 공격. 대상의 중심이 반경 안, 정면 기준 각도 안에 있고, 사이에 구조물이 없어야 맞는다.
+        // 폭탄과 같은 규칙(중심 한 점, 구조물에 막힘)이라 플레이어가 결과를 같은 방식으로 읽는다.
+        protected void HitInSector(Vector2 forward, float radius, float angle)
+        {
+            Vector2 center = Body.position;
+            float cosHalf = Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad);
+            int count = Physics2D.OverlapCircle(center, radius, _attackFilter, AttackBuffer);
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 target = AttackBuffer[i].bounds.center;
+                Vector2 toTarget = target - center;
+                if (toTarget.sqrMagnitude > radius * radius)
+                {
+                    continue;
+                }
+
+                // 정면과의 각도는 내적으로 비교한다. 대상이 몸 안에 겹쳐 있으면 방향과 무관하게 맞는다.
+                if (toTarget.sqrMagnitude > 0.0001f && Vector2.Dot(toTarget.normalized, forward) < cosHalf)
+                {
+                    continue;
+                }
+
+                if (Physics2D.Linecast(center, target, _obstacleFilter, CastBuffer) > 0)
+                {
+                    continue;
+                }
+
+                if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
+                {
+                    hittable.ReceiveHit(new HitInfo(center));
+                }
+            }
+        }
+
         private void EnterState(EnemyState state)
         {
             _state = state;

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4719f555518a1fc4fa7b8874baace4c7, type: 3}
+  m_Name: Wave_01
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveData
+  _memo: "\uC608\uC2DC: 9\uBC29\uD5A5\uC5D0\uC11C \uB3CC\uACA9\uBCD1\uC774 1\uB9C8\uB9AC\uC529.
+    100\uB9C8\uB9AC \uAE30\uC900\uC73C\uB85C \uB2E4\uC2DC \uC9DC\uC57C \uD568"
+  _groups:
+  - _startTime: 0
+    _group: {fileID: 11400000, guid: 9a3004aa02f91d24c862c4d6109d8f48, type: 2}
+  - _startTime: 3
+    _group: {fileID: 11400000, guid: d3f254172308b8e4f847b22a54b291de, type: 2}

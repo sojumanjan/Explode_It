@@ -1,72 +1,66 @@
 using System;
-using ExplodeIt.Enemies;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ExplodeIt.Stage
 {
-    // 한 무리의 구성. 어디서 언제 나올지는 웨이브가 정하므로 맵과 무관하게 어느 스테이지에서든 재사용한다.
-    // 같은 곳에서 같이 출발해야 흐름장을 따라 뭉쳐 오고, 폭탄 한 방에 여럿을 잡는 상황이 생긴다.
+    // 한 번에 나오는 무리. 어느 구역에서 어떤 적이 몇 마리 나오는지를 구역별로 적는다.
+    // 같은 구역에서 같이 출발해야 흐름장을 따라 뭉쳐 오고, 폭탄 한 방에 여럿을 잡는 상황이 생긴다.
     [CreateAssetMenu(fileName = "SpawnGroup", menuName = "Explode It/Stage/Spawn Group")]
     public class SpawnGroupData : ScriptableObject
     {
-        // 한 지점에서 한 번에 나오는 무리의 상한. 더 큰 덩어리는 웨이브에서 "앞 군집 자리 이어 쓰기"로 붙인다.
-        public const int MaxCount = 5;
+        // 지금 맵의 구역 수. 새로 만든 군집에 이만큼 칸을 미리 깔아 둔다. 구역이 늘면 칸을 더 추가하면 된다.
+        private const int DefaultAreaCount = 9;
 
-        // Enemy 타입 칸은 오브젝트 피커에 프리팹이 뜨지 않아(프리팹은 GameObject 에셋으로만 검색된다) GameObject로 받고,
-        // 적이 아닌 프리팹은 OnValidate에서 걸러 낸다.
-        [Tooltip("적 프리팹 목록 (최대 5). 크기가 곧 마릿수이고, 위에서부터 순서대로 나온다. Enemy 컴포넌트가 붙은 프리팹만 넣을 수 있다")]
-        [SerializeField] private GameObject[] _enemyPrefabs = new GameObject[1];
+        [Tooltip("대표 이름. 웨이브에서 이 군집을 알아보기 위한 이름일 뿐 동작에는 영향이 없다")]
+        [SerializeField] private string _displayName;
 
-        [Tooltip("간격 (초). 0이면 한 덩어리로 동시에 나오고, 0보다 크면 목록 순서대로 이 간격을 두고 줄지어 나온다")]
-        [SerializeField, Min(0f)] private float _interval;
+        [Tooltip("구역별 스폰 목록. 1번 칸이 Area 1, 2번 칸이 Area 2이다. 비어 있는 칸의 구역에서는 나오지 않는다")]
+        [SerializeField] private SpawnAreaSlot[] _areas = new SpawnAreaSlot[DefaultAreaCount];
 
-        [Tooltip("뭉침 반경 (유닛). 구역 안 무작위 기준점 주변 이 반경 안에 모아서 생성한다")]
-        [SerializeField, Min(0f)] private float _clusterRadius = 1f;
+        public string DisplayName => string.IsNullOrEmpty(_displayName) ? name : _displayName;
+        public IReadOnlyList<SpawnAreaSlot> Areas => _areas ?? Array.Empty<SpawnAreaSlot>();
 
-        // 스폰마다 GetComponent를 부르지 않도록 처음 읽을 때 한 번만 찾는다.
-        [NonSerialized] private Enemy[] _enemies;
-
-        public int Count => _enemyPrefabs?.Length ?? 0;
-        public float Interval => _interval;
-        public float ClusterRadius => _clusterRadius;
-
-        // 비어 있는 칸이면 null을 돌려준다.
-        public Enemy GetEnemy(int index)
+        // 칸 순서가 곧 구역 번호다. 씬의 SpawnArea 번호와 맞춘다.
+        public static int AreaIdOf(int slotIndex)
         {
-            if (_enemies == null || _enemies.Length != Count)
-            {
-                _enemies = new Enemy[Count];
-                for (int i = 0; i < Count; i++)
-                {
-                    if (_enemyPrefabs[i] != null)
-                    {
-                        _enemyPrefabs[i].TryGetComponent(out _enemies[i]);
-                    }
-                }
-            }
+            return slotIndex + 1;
+        }
 
-            return _enemies[index];
+        public int TotalCount
+        {
+            get
+            {
+                int total = 0;
+                IReadOnlyList<SpawnAreaSlot> areas = Areas;
+                for (int i = 0; i < areas.Count; i++)
+                {
+                    total += areas[i].TotalCount;
+                }
+
+                return total;
+            }
         }
 
         private void OnValidate()
         {
-            _enemies = null;
-            if (_enemyPrefabs == null)
+            if (_areas == null || _areas.Length == 0)
             {
-                return;
+                _areas = new SpawnAreaSlot[DefaultAreaCount];
             }
 
-            if (_enemyPrefabs.Length > MaxCount)
+            for (int i = 0; i < _areas.Length; i++)
             {
-                Array.Resize(ref _enemyPrefabs, MaxCount);
-            }
+                _areas[i] ??= new SpawnAreaSlot();
+                _areas[i].SetLabel($"Area {AreaIdOf(i)}");
 
-            for (int i = 0; i < _enemyPrefabs.Length; i++)
-            {
-                if (_enemyPrefabs[i] != null && !_enemyPrefabs[i].TryGetComponent(out Enemy _))
+                IReadOnlyList<SpawnGroupUnit> units = _areas[i].Units;
+                for (int u = 0; u < units.Count; u++)
                 {
-                    Debug.LogWarning($"{name}: '{_enemyPrefabs[i].name}'에는 Enemy 컴포넌트가 없어 비웁니다.", this);
-                    _enemyPrefabs[i] = null;
+                    if (units[u] != null && units[u].Validate())
+                    {
+                        Debug.LogWarning($"{name}: Area {AreaIdOf(i)}의 {u + 1}번 줄 프리팹에 Enemy 컴포넌트가 없어 비웁니다.", this);
+                    }
                 }
             }
         }

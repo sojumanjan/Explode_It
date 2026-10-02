@@ -10,9 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc6834d130732c34aa0c9b152d03c09f, type: 3}
-  m_Name: "\uC800\uACA9\uC2181\uBA85"
+  m_Name: "\uC804\uAD6C\uC5ED_\uAD81\uC218"
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnGroupData
-  _enemyPrefabs:
-  - {fileID: 6060744635536820111, guid: ab11f63dc8c80734f8897ade790e3298, type: 3}
-  _interval: 0
-  _clusterRadius: 3
+  _displayName: 
+  _areas:
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []
+  - _label: 
+    _units: []

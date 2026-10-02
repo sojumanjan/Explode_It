@@ -25,6 +25,20 @@ namespace ExplodeIt.Core
         }
         // 마지막 웨이브까지 다 나오고 적이 모두 처치된 순간. 상점, 포탈, 과열 구간이 여기서 시작한다.
         public static event Action StageCleared;
+        // 몇 번째 웨이브(1부터)를 다 잡았는지. 업적·승천 조건이 구독한다.
+        public static event Action<int> WaveCleared;
+        // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
+        public static event Action<int> BossIntroStarted;
+
+        public static void RaiseWaveCleared(int waveNumber)
+        {
+            WaveCleared?.Invoke(waveNumber);
+        }
+
+        public static void RaiseBossIntroStarted(int bossNumber)
+        {
+            BossIntroStarted?.Invoke(bossNumber);
+        }
 
         public static void RaiseStageCleared()
         {
@@ -67,6 +81,8 @@ namespace ExplodeIt.Core
             AbilityChargeChanged = null;
             BombChargesChanged = null;
             StageCleared = null;
+            WaveCleared = null;
+            BossIntroStarted = null;
         }
     }
 }

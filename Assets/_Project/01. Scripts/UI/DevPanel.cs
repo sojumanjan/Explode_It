@@ -137,7 +137,7 @@ namespace ExplodeIt.UI
         {
             Header("Stage");
             int waveCount = _stageRunner.WaveCount;
-            GUILayout.Label($"Wave {_stageRunner.CurrentWave + 1}/{waveCount}   Time {_stageRunner.Elapsed:0.0}s");
+            GUILayout.Label($"Wave #{_stageRunner.WaveNumber}  {_stageRunner.CurrentPhase} {_stageRunner.PhaseTime:0.0}s");
             _stageRunner.IsPaused = GUILayout.Toggle(_stageRunner.IsPaused, " Pause Spawn");
 
             // 웨이브가 많아져도 패널이 길어지지 않게 한 줄에 몇 개씩 끊는다.

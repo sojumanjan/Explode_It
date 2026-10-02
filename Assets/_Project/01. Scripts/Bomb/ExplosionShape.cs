@@ -85,6 +85,19 @@ namespace ExplodeIt.Bombs
             SetRadius(radius);
         }
 
+        // 정면 기준 각도 안의 방향만 반경까지 그리고 나머지는 접어 부채꼴을 만든다. 근접 공격 표시에 쓴다.
+        // 정점 방향은 월드 기준이므로 이 오브젝트는 회전시키지 않는다.
+        public void BuildSector(Vector2 forward, float radius, float angle)
+        {
+            float cosHalf = Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad);
+            for (int i = 0; i < _segments; i++)
+            {
+                _limits[i] = Vector2.Dot(_directions[i], forward) >= cosHalf ? radius : 0f;
+            }
+
+            SetRadius(radius);
+        }
+
         // 바깥 모양과 채움 모양은 같은 구조물 조건을 쓰므로 광선을 두 번 쏘지 않는다.
         public void CopyLimits(ExplosionShape source)
         {
