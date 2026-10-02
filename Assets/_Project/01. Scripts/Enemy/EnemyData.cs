@@ -19,6 +19,13 @@ namespace ExplodeIt.Enemies
         [Tooltip("등장 유예 (초). 맵 안에 들어온 뒤 이 시간만큼 걸어야 공격할 수 있다")]
         [SerializeField, Min(0f)] private float _arenaEntryDelay = 1f;
 
+        [Header("적끼리 밀어내기")]
+        [Tooltip("밀어내기 시작 거리 (반경 합 대비 비율). 두 적 중심이 서로 반경 합 × 이 값보다 가까우면 밀어낸다. 0.6이면 반경 합의 40%까지는 겹칠 수 있다")]
+        [SerializeField, Range(0f, 1f)] private float _separationDistanceRatio = 0.6f;
+
+        [Tooltip("밀어내는 최대 속도 (유닛/초). 낮을수록 살짝살짝 밀린다. 0이면 밀어내지 않는다")]
+        [SerializeField, Min(0f)] private float _separationSpeed = 1.5f;
+
         [Header("예고 / 회복")]
         // 예고 없는 공격은 버그로 취급하므로 0이 되지 않게 막는다. 하드모드에서도 이 아래로는 줄이지 않는다.
         [Tooltip("예고 시간 (초). 멈춰서 예고하는 시간. 궁수류는 이 동안 조준이 플레이어를 따라가고, 돌격병·전사는 예고 시작 방향으로 고정된다. 최소 0.1")]
@@ -39,5 +46,7 @@ namespace ExplodeIt.Enemies
         public float TelegraphDuration => _telegraphDuration;
         public float RecoverDuration => _recoverDuration;
         public float DeathDuration => _deathDuration;
+        public float SeparationDistanceRatio => _separationDistanceRatio;
+        public float SeparationSpeed => _separationSpeed;
     }
 }

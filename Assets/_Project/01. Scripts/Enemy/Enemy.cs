@@ -13,6 +13,7 @@ namespace ExplodeIt.Enemies
         // 적 공격은 순차적으로 처리되므로 버퍼 하나를 모든 적이 공유한다.
         private static readonly Collider2D[] AttackBuffer = new Collider2D[8];
         private static readonly RaycastHit2D[] CastBuffer = new RaycastHit2D[4];
+        private static readonly Collider2D[] SeparationBuffer = new Collider2D[8];
 
         // 씬에 직접 배치해 테스트할 때만 인스펙터로 넣는다. 스폰 시에는 Initialize로 주입한다.
         [SerializeField] private Transform _target;
@@ -22,6 +23,7 @@ namespace ExplodeIt.Enemies
         private HitReceiver _hitReceiver;
         private ContactFilter2D _attackFilter;
         private ContactFilter2D _obstacleFilter;
+        private ContactFilter2D _separationFilter;
         private Action<Enemy> _died;
         private Action<Enemy> _release;
         private EnemyState _state;
@@ -36,6 +38,8 @@ namespace ExplodeIt.Enemies
         private float BodyRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
         protected Transform Target => _target;
         protected EnemyState State => _state;
+        // 지금 상태에 들어온 뒤 지난 시간 (초, 물리 스텝 기준).
+        protected float StateTime => _stateTime;
         protected abstract EnemyData Data { get; }
 
         // 표시 컴포넌트가 읽는 값. 상태를 바꾸는 건 여전히 이 클래스만 한다.
@@ -58,6 +62,11 @@ namespace ExplodeIt.Enemies
 
             _obstacleFilter = new ContactFilter2D();
             _obstacleFilter.SetLayerMask(_obstacleMask);
+
+            // 적끼리만 밀어낸다. 적 콜라이더는 트리거라 트리거도 검사한다.
+            _separationFilter = new ContactFilter2D();
+            _separationFilter.SetLayerMask(1 << gameObject.layer);
+            _separationFilter.useTriggers = true;
         }
 
         protected virtual void OnEnable()
@@ -197,15 +206,72 @@ namespace ExplodeIt.Enemies
         {
             Vector2 toTarget = (Vector2)_target.position - Body.position;
             float step = speed * deltaTime;
-            if (toTarget.sqrMagnitude <= step * step)
+            Vector2 move = SeparationStep(deltaTime);
+            if (toTarget.sqrMagnitude > step * step)
             {
-                return;
+                // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
+                FlowField field = FlowField.Current;
+                Vector2 direction = field != null ? field.GetDirection(Body.position) : toTarget.normalized;
+                move += direction * step;
             }
 
-            // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
-            FlowField field = FlowField.Current;
-            Vector2 direction = field != null ? field.GetDirection(Body.position) : toTarget.normalized;
-            Body.MovePosition(Body.position + direction * step);
+            if (move.sqrMagnitude > 0f)
+            {
+                Body.MovePosition(Body.position + move);
+            }
+        }
+
+        // 흐름장을 따라 같은 길로 오면 한 점에 포개지므로, 너무 가까운 다른 적에게서 조금씩 떨어진다.
+        // 이동 중에만 적용한다. 예고·공격 중인 적은 제자리를 지켜야 하고, 블랙홀은 일부러 뭉치게 하는 기술이다.
+        // 서 있는 적은 밀리지 않으므로, 걸어오는 쪽이 비켜 간다.
+        private Vector2 SeparationStep(float deltaTime)
+        {
+            if (Data.SeparationSpeed <= 0f)
+            {
+                return Vector2.zero;
+            }
+
+            float radius = BodyRadius;
+            Vector2 position = Body.position;
+            // 내 원과 겹치는 콜라이더만 모은다. 겹치지 않는 적은 밀어낼 대상이 아니다.
+            int count = Physics2D.OverlapCircle(position, radius, _separationFilter, SeparationBuffer);
+            Vector2 push = Vector2.zero;
+            for (int i = 0; i < count; i++)
+            {
+                Collider2D other = SeparationBuffer[i];
+                if (other == _collider)
+                {
+                    continue;
+                }
+
+                Bounds bounds = other.bounds;
+                float desired = (radius + Mathf.Min(bounds.extents.x, bounds.extents.y)) * Data.SeparationDistanceRatio;
+                Vector2 away = position - (Vector2)bounds.center;
+                float distance = away.magnitude;
+                if (distance >= desired)
+                {
+                    continue;
+                }
+
+                // 완전히 같은 자리면 방향이 없으므로, 두 적이 서로 반대쪽으로 갈리도록 생성 순서로 정한다.
+                Vector2 direction = distance > 0.0001f
+                    ? away / distance
+                    : (_collider.GetHashCode() > other.GetHashCode() ? Vector2.right : Vector2.left);
+                push += direction * (1f - distance / desired);
+            }
+
+            float strength = push.magnitude;
+            if (strength < 0.0001f)
+            {
+                return Vector2.zero;
+            }
+
+            // 여럿에게 둘러싸여도 정해진 속도보다 빨리 밀리지 않게 한다.
+            Vector2 pushDirection = push / strength;
+            float pushDistance = Mathf.Min(strength, 1f) * Data.SeparationSpeed * deltaTime;
+            // 키네마틱이라 물리가 막아 주지 않으므로, 밀려서 구조물에 파묻히지 않게 직접 멈춘다.
+            pushDistance = ClearDistance(pushDirection, pushDistance, radius);
+            return pushDirection * pushDistance;
         }
 
         // 맵 밖은 화면 밖이라, 보이지 않는 적에게 맞는 일이 없도록 맵 안에서 걸은 시간을 센다.

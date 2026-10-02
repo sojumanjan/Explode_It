@@ -21,6 +21,10 @@ namespace ExplodeIt.Enemies
         [Tooltip("조준선 표시. 켜면 예고 동안 쏠 방향과 비행 거리를 선으로 보여준다")]
         [SerializeField] private bool _showAimLine;
 
+        // 탄이 빠르면 마지막 순간까지 따라오는 조준을 피할 방법이 없다. 발사 직전에 궤적을 멈춰 옆으로 빠질 틈을 준다.
+        [Tooltip("조준 고정 시간 (초). 발사 이 시간 전부터 조준이 플레이어를 따라가지 않고 멈춘다. 0이면 발사 순간까지 따라간다. 예고 시간보다 길면 예고 시작부터 고정된다")]
+        [SerializeField, Min(0f)] private float _aimLockTime;
+
         [Header("사운드")]
         [Tooltip("조준을 시작하는 순간의 효과음. 발사하거나 조준이 끊기면 멈춘다. 비워 두면 소리 없이 조준한다")]
         [SerializeField] private SoundData _aimSound;
@@ -30,6 +34,7 @@ namespace ExplodeIt.Enemies
 
         public float ProjectileSpeed => _projectileSpeed;
         public bool ShowAimLine => _showAimLine;
+        public float AimLockTime => _aimLockTime;
         public SoundData AimSound => _aimSound;
         public SoundData ShotSound => _shotSound;
         public float ProjectileRange => _projectileRange;

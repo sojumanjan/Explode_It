@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 고블린 궁수·저격수: 다가옴 → 멈춰서 조준 예고(조준 방향만 플레이어를 따라감) → 예고 끝 방향으로 한 발 → 회복.
+    // 고블린 궁수·저격수: 다가옴 → 멈춰서 조준 예고(조준 방향만 플레이어를 따라가다 발사 직전에 고정) → 고정된 방향으로 한 발 → 회복.
     // 두 적은 코드가 같고 데이터(사거리, 탄속, 조준선 표시, 소리)만 다르다.
     // 예측 과제: 쏘는 순간의 방향으로 날아가므로, 예고가 끝나기 직전에 옆으로 빠지면서 멈춰 선 적에게 폭탄을 둔다.
     public class ArcherEnemy : Enemy
@@ -29,12 +29,16 @@ namespace ExplodeIt.Enemies
         }
 
         // 조준 중에는 제자리에 서서, 멈춘 적이 폭탄을 맞힐 기회가 되게 한다.
+        // 발사 직전 고정 시간에 들어가면 조준을 멈추고, 그때의 궤적으로 쏜다.
         protected override void TickTelegraph(float deltaTime)
         {
-            AimAtTarget();
+            if (StateTime < _data.TelegraphDuration - _data.AimLockTime)
+            {
+                AimAtTarget();
+            }
         }
 
-        // 마지막 예고 프레임의 조준 그대로 쏜다.
+        // 마지막으로 잰 조준 그대로 쏜다.
         protected override bool TickAttack(float deltaTime)
         {
             EnemyProjectilePool.Current.Fire(Body.position, _aimDirection,
