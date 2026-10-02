@@ -16,10 +16,10 @@ MonoBehaviour:
   _hitsToDie: 1
   _attackTriggerRange: 15
   _arenaEntryDelay: 1
-  _telegraphDuration: 1.8
+  _telegraphDuration: 1
   _recoverDuration: 3
-  _projectileSpeed: 50
-  _projectileRange: 15
+  _projectileSpeed: 300
+  _projectileRange: 50
   _projectileHitRadius: 0.15
   _showAimLine: 1
   _aimSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}

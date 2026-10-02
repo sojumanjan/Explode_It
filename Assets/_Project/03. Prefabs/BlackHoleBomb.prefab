@@ -57,6 +57,7 @@ MonoBehaviour:
   _explosionFxDuration: 0.25
   _pullSound: {fileID: 11400000, guid: d866eb20f9b171146b546dec7f94983f, type: 2}
   _explodeSound: {fileID: 11400000, guid: 4f3920bd6d4f9a149bb4e20310451024, type: 2}
+  _explodeFeedback: {fileID: 11400000, guid: d45eab9b3544d5648882831af8c5892f, type: 2}
 --- !u!1 &2475476411035887707
 GameObject:
   m_ObjectHideFlags: 0

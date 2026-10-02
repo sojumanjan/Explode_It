@@ -317,7 +317,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.1733398, y: 2.1733398, z: 1.6718}
+  m_LocalScale: {x: 2, y: 2, z: 1.6718}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2751814528167638362}
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa2c47830355c846a5432a8bc6fc57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyVisual
-  _artFacesRight: 0
+  _artFacesRight: 1
   _enemy: {fileID: 984188614491754000}
   _sprite: {fileID: 8231699192129901850}
   _animator: {fileID: 3018285967471700808}

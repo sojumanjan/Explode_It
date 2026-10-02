@@ -53,7 +53,8 @@ namespace ExplodeIt.Core
                 return;
             }
 
-            _resumeTimeScale = Time.timeScale;
+            // 히트스톱으로 잠깐 느려진 순간에 멈춰도, 풀 때는 원래 속도로 돌아가게 한다.
+            _resumeTimeScale = FeedbackPlayer.BaseTimeScale;
             Time.timeScale = 0f;
             ChangeState(GameState.Paused);
         }

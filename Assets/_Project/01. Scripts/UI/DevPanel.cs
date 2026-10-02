@@ -173,6 +173,13 @@ namespace ExplodeIt.UI
             }
             GUILayout.EndHorizontal();
 
+            // 연출은 있을 때와 없을 때를 번갈아 봐야 효과를 판단할 수 있다.
+            GUILayout.BeginHorizontal();
+            FeedbackPlayer.ShakeEnabled = GUILayout.Toggle(FeedbackPlayer.ShakeEnabled, " Shake");
+            FeedbackPlayer.HitStopEnabled = GUILayout.Toggle(FeedbackPlayer.HitStopEnabled, " HitStop");
+            FeedbackPlayer.EffectsEnabled = GUILayout.Toggle(FeedbackPlayer.EffectsEnabled, " Effects");
+            GUILayout.EndHorizontal();
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Time Scale");
             if (GUILayout.Button("0.5x"))

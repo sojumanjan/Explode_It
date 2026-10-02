@@ -24,6 +24,7 @@ namespace ExplodeIt.Bombs
         // 흡입음은 착지부터 폭발까지 나고, 폭발하는 순간 끊는다.
         [SerializeField] private SoundData _pullSound;
         [SerializeField] private SoundData _explodeSound;
+        [SerializeField] private FeedbackData _explodeFeedback;
 
         private SoundHandle _pullHandle = SoundHandle.None;
 
@@ -157,6 +158,7 @@ namespace ExplodeIt.Bombs
             _body.enabled = false;
             _fuseFill.SetColor(_explodeFlashColor);
             AudioManager.Play(_explodeSound);
+            FeedbackPlayer.Play(_explodeFeedback, position);
         }
 
         private void GrowFill(float radius)
