@@ -37,6 +37,28 @@ namespace ExplodeIt.Core
         // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
         public static event Action<int> BossIntroStarted;
 
+        // 연출 동안 플레이어 조작을 막고 푼다. 입력 쪽이 진행 흐름을 몰라도 되게 한다.
+        public static event Action<bool> PlayerControlLockChanged;
+        // 카메라가 바라볼 지점과 옮겨 가는 시간(초). 연출이 카메라 설정을 몰라도 되게 한다.
+        public static event Action<Vector2, float> CameraFocusRequested;
+        // 다시 플레이어를 따라가게 하고, 돌아가는 시간(초).
+        public static event Action<float> CameraFocusReleased;
+
+        public static void RaisePlayerControlLockChanged(bool isLocked)
+        {
+            PlayerControlLockChanged?.Invoke(isLocked);
+        }
+
+        public static void RaiseCameraFocusRequested(Vector2 point, float blendDuration)
+        {
+            CameraFocusRequested?.Invoke(point, blendDuration);
+        }
+
+        public static void RaiseCameraFocusReleased(float blendDuration)
+        {
+            CameraFocusReleased?.Invoke(blendDuration);
+        }
+
         // 몇 번째 보스(1부터)를 잡았는지. 진행 흐름이 다음 웨이브로 넘어가고, 업적이 구독한다.
         public static event Action<int> BossDefeated;
 
@@ -100,6 +122,9 @@ namespace ExplodeIt.Core
             WaveCleared = null;
             BossIntroStarted = null;
             BossDefeated = null;
+            PlayerControlLockChanged = null;
+            CameraFocusRequested = null;
+            CameraFocusReleased = null;
         }
     }
 }

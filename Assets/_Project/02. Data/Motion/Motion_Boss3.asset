@@ -28,11 +28,15 @@ MonoBehaviour:
   _kickAngle: 20
   _attackHoldScale: {x: 1, y: 1}
   _attackHoldLean: 0
+  _attackSpriteDuration: 0.35
   _recoverScale: {x: 1.05, y: 0.93}
-  _stunnedScale: {x: 1.15, y: 0.8}
-  _stunnedLean: -15
-  _deathKnockDistance: 4.5
-  _deathKnockEnd: 0.57
+  _stunnedScale: {x: 1, y: 1}
+  _stunnedLean: 0
+  _deathKnockDistance: 0.6
+  _deathKnockEnd: 0.3
   _deathPopPeak: 0.6
-  _deathPopScale: 1.2
-  _deathAlpha: 0.5
+  _deathPopScale: 1.4
+  _deathWobble: 0.25
+  _deathWobbleRate: 4
+  _deathEndFeedback: {fileID: 11400000, guid: 4c23af869d8b15f49bf7d0b27e73df65, type: 2}
+  _deathAlpha: 0.9

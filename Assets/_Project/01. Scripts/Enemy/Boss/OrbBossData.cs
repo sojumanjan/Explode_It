@@ -24,7 +24,7 @@ namespace ExplodeIt.Enemies
             [Tooltip("파고들기 사이 멈춤 (초, 최소~최대). 도착한 뒤 이만큼 멈췄다가 다음 지점을 찍고 바로 달려간다")]
             [SerializeField] private Vector2 _lungePause = new Vector2(0.2f, 0.3f);
 
-            [Tooltip("할퀴기 간격 (초). 마지막 할퀴기(또는 등장) 뒤 이 시간이 지나면 거리와 상관없이 바로 할퀴기를 준비한다")]
+            [Tooltip("할퀴기 간격 (초). 마지막 할퀴기(또는 등장) 뒤 이 시간이 지난 뒤, 플레이어가 공통 항목의 공격 시작 거리 안에 들어오면 할퀴기를 준비한다")]
             [SerializeField, Min(0f)] private float _clawInterval = 5.5f;
 
             [Tooltip("할퀴기 길이 (유닛). 몸 중심에서 정면으로 뻗는 사각형 길이. 할퀴면서 이 끝까지 돌진한다")]

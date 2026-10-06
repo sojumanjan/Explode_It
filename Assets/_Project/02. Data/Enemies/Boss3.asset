@@ -14,41 +14,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.OrbBossData
   _moveSpeed: 10
   _hitsToDie: 1
-  _attackTriggerRange: 4
+  _attackTriggerRange: 3
   _arenaEntryDelay: 0
   _countsAsKill: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
   _telegraphDuration: 0.65
   _recoverDuration: 0.6
-  _deathDuration: 0.8
+  _deathDuration: 1
   _tiers:
   - _orbCount: 2
-    _orbSpeed: 7
+    _orbSpeed: 6
     _lungeDuration: {x: 0.5, y: 0.7}
     _lungePause: {x: 0.2, y: 0.3}
-    _clawInterval: 5.5
-    _clawLength: 5.5
+    _clawInterval: 4.5
+    _clawLength: 8
     _clawDashSpeed: 20
-    _clawWidth: 4
+    _clawWidth: 5
     _groggyDuration: 5
   - _orbCount: 3
-    _orbSpeed: 7.5
+    _orbSpeed: 6.3
     _lungeDuration: {x: 0.45, y: 0.6}
     _lungePause: {x: 0.15, y: 0.25}
-    _clawInterval: 5
-    _clawLength: 5.5
+    _clawInterval: 4.5
+    _clawLength: 8
     _clawDashSpeed: 20
-    _clawWidth: 4
+    _clawWidth: 5
     _groggyDuration: 5
   - _orbCount: 4
-    _orbSpeed: 8
+    _orbSpeed: 6.6
     _lungeDuration: {x: 0.4, y: 0.55}
     _lungePause: {x: 0.15, y: 0.2}
     _clawInterval: 4.5
-    _clawLength: 5.5
+    _clawLength: 8
     _clawDashSpeed: 20
-    _clawWidth: 4
+    _clawWidth: 5
     _groggyDuration: 5
   _orbBounceJitter: 10
   _orbSpawnRadius: 0.5

@@ -16,6 +16,8 @@ namespace ExplodeIt.Stage
             Rest,
             Spawning,
             BossIntro,
+            // 보스가 내려앉은 뒤: 멈춤 → 카메라 복귀 → 보스 행동 시작.
+            BossEntrance,
             Boss
         }
 
@@ -61,6 +63,8 @@ namespace ExplodeIt.Stage
         private int _bossTier;
         private Vector2 _bossSpawnPoint;
         private bool _isBossDefeated;
+        private IBoss _boss;
+        private bool _isControlReleased;
 
         public bool IsPaused { get; set; }
         public Phase CurrentPhase => _phase;
@@ -157,6 +161,26 @@ namespace ExplodeIt.Stage
                     }
                     break;
 
+                case Phase.BossEntrance:
+                    if (_isBossDefeated)
+                    {
+                        ReleaseEntrance();
+                        FinishBoss();
+                        break;
+                    }
+
+                    if (!_isControlReleased && _phaseTime >= _stage.BossRevealHold)
+                    {
+                        ReleaseEntrance();
+                    }
+
+                    if (_phaseTime >= _stage.BossRevealHold + _stage.BossCameraBlend)
+                    {
+                        _boss?.StartFight();
+                        EnterPhase(Phase.Boss);
+                    }
+                    break;
+
                 case Phase.Boss:
                     if (_isBossDefeated)
                     {
@@ -186,6 +210,11 @@ namespace ExplodeIt.Stage
             if (_bossPrefab != null)
             {
                 _bossSpawnPoint = PickBossSpawnPoint();
+                // 등장 연출 동안 플레이어를 세우고, 카메라를 플레이어와 보스 사이로 옮겨 둘 다 보이게 한다.
+                Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
+                GameEvents.RaisePlayerControlLockChanged(true);
+                GameEvents.RaiseCameraFocusRequested((player + _bossSpawnPoint) * 0.5f, _stage.BossCameraBlend);
+                _isControlReleased = false;
             }
 
             GameEvents.RaiseBossIntroStarted(bossNumber);
@@ -195,13 +224,24 @@ namespace ExplodeIt.Stage
         private void SpawnBoss()
         {
             Enemy boss = _spawner.Spawn(_bossPrefab, _bossSpawnPoint);
-            if (boss is IBoss bossControl)
-            {
-                bossControl.BeginBoss(_bossNumber, _bossTier);
-            }
+            _boss = boss as IBoss;
+            _boss?.BeginBoss(_bossNumber, _bossTier);
 
             FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
-            EnterPhase(Phase.Boss);
+            EnterPhase(Phase.BossEntrance);
+        }
+
+        // 플레이어 조작을 돌려주고 카메라를 플레이어에게 되돌린다. 보스는 카메라가 다 돌아온 뒤 움직인다.
+        private void ReleaseEntrance()
+        {
+            if (_isControlReleased)
+            {
+                return;
+            }
+
+            _isControlReleased = true;
+            GameEvents.RaisePlayerControlLockChanged(false);
+            GameEvents.RaiseCameraFocusReleased(_stage.BossCameraBlend);
         }
 
         private void FinishBoss()

@@ -87,6 +87,15 @@ namespace ExplodeIt.Enemies
         [Tooltip("부풀 때 최대 크기 배율")]
         [SerializeField, Min(1f)] private float _deathPopScale = 1.2f;
 
+        [Tooltip("사망 출렁임 (비율). 0보다 크면 죽는 동안 가로·세로가 번갈아 늘었다 줄며 '뽀잉' 하고 출렁이다 잦아든다. 0이면 출렁이지 않는다")]
+        [SerializeField, Min(0f)] private float _deathWobble;
+
+        [Tooltip("사망 출렁임 빠르기 (회/초)")]
+        [SerializeField, Min(0f)] private float _deathWobbleRate = 5f;
+
+        [Tooltip("사망 연출이 끝나 사라지는 순간의 연출 (터지는 이펙트, 흔들림). 비워 두면 그냥 사라진다")]
+        [SerializeField] private ExplodeIt.Core.FeedbackData _deathEndFeedback;
+
         [Tooltip("죽는 순간 바뀌는 투명도 (0 = 완전 투명, 1 = 불투명). 사라질 때까지 유지한다")]
         [SerializeField, Range(0f, 1f)] private float _deathAlpha = 0.5f;
 
@@ -115,5 +124,8 @@ namespace ExplodeIt.Enemies
         public float DeathPopPeak => Mathf.Max(_deathPopPeak, _deathKnockEnd + 0.01f);
         public float DeathPopScale => _deathPopScale;
         public float DeathAlpha => _deathAlpha;
+        public float DeathWobble => _deathWobble;
+        public float DeathWobbleRate => _deathWobbleRate;
+        public ExplodeIt.Core.FeedbackData DeathEndFeedback => _deathEndFeedback;
     }
 }

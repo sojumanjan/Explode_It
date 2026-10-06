@@ -14,6 +14,8 @@ namespace ExplodeIt.Enemies
         private const float HopMoveThreshold = 0.0005f;
         // 뛰기가 켜지고 꺼지는 빠르기 (초당 비율). 멈출 때 착지하듯 줄어든다.
         private const float HopBlendSpeed = 8f;
+        // 사망 연출 중 사라지는 순간 연출을 터트리는 지점 (전체 시간 대비 비율).
+        private const float DeathEndPoint = 0.9f;
 
         // 개체마다 뛰기 박자를 어긋나게 주기 위한 생성 순번.
         private static int _createdCount;
@@ -36,6 +38,7 @@ namespace ExplodeIt.Enemies
         private int _lastAttackCount;
         // 공격 그림을 보여준 뒤 지난 시간. 음수면 보여주는 중이 아니다.
         private float _attackSpriteTime = -1f;
+        private bool _hasPlayedDeathEnd;
 
         private Vector2 _lastPosition;
         private EnemyState _lastState;
@@ -77,6 +80,7 @@ namespace ExplodeIt.Enemies
             _sprite.color = _baseColor;
             _sprite.sprite = _baseSprite;
             _attackSpriteTime = -1f;
+            _hasPlayedDeathEnd = false;
             _lastAttackCount = _enemy.AttackCount;
             ApplyPose(Vector2.zero, Vector2.one, 0f);
         }
@@ -120,6 +124,12 @@ namespace ExplodeIt.Enemies
         // 예고 중 플레이어를 따라 돌아보면, 방향이 고정된 적도 따라오는 것처럼 보여 피할 방향을 잘못 읽게 된다.
         private void UpdateFacing(EnemyState state, Vector2 position, float deltaX)
         {
+            // 기절(그로기)은 쓰러진 상태라 플레이어를 따라 돌아보면 어색하다. 쓰러진 방향 그대로 둔다.
+            if (state == EnemyState.Stunned)
+            {
+                return;
+            }
+
             float faceX;
             if (state == EnemyState.Telegraph || state == EnemyState.Attack)
             {
@@ -308,7 +318,23 @@ namespace ExplodeIt.Enemies
             color.a *= _motion.DeathAlpha;
             _sprite.color = color;
 
-            ApplyPose(offset, new Vector2(size, size), 0f);
+            // 뽀잉: 가로·세로가 번갈아 늘었다 줄며 출렁이다 끝으로 갈수록 잦아든다. 0이면 일반 적처럼 출렁이지 않는다.
+            Vector2 scale = new Vector2(size, size);
+            if (_motion.DeathWobble > 0f)
+            {
+                float wobble = Mathf.Sin(_stateTime * _motion.DeathWobbleRate * 2f * Mathf.PI) * _motion.DeathWobble * (1f - t);
+                scale.x *= 1f + wobble;
+                scale.y *= 1f - wobble;
+            }
+
+            ApplyPose(offset, scale, 0f);
+
+            // 사라지기 직전에 터트린다. 풀 반환과 같은 프레임에 겹치면 놓칠 수 있어 끝을 조금 남겨 둔다.
+            if (!_hasPlayedDeathEnd && t >= DeathEndPoint)
+            {
+                _hasPlayedDeathEnd = true;
+                FeedbackPlayer.Play(_motion.DeathEndFeedback, _body.position);
+            }
         }
 
         private float FacingSign => _facesRight ? 1f : -1f;

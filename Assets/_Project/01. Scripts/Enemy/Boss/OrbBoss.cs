@@ -10,6 +10,9 @@ namespace ExplodeIt.Enemies
     // 예측 과제: 구체는 직선으로만 움직이므로 1초 뒤 지나갈 자리에 폭탄을 두고, 할퀴기는 범위가 다 차는 순간 구르기로 피한다.
     public class OrbBoss : Enemy, IBoss
     {
+        // 한 폭발 안의 판정은 같은 프레임에 끝나므로 아주 짧아도 된다. 플레이어가 느낄 길이가 아니라 데이터로 빼지 않는다.
+        private const float ShieldBreakGrace = 0.1f;
+
         [SerializeField] private OrbBossData _data;
         [SerializeField] private RectTelegraph _clawTelegraph;
         // 오브젝트 피커가 컴포넌트 타입 칸에 프리팹을 띄우지 않아 GameObject로 받는다.
@@ -31,6 +34,8 @@ namespace ExplodeIt.Enemies
         private bool _hasClawed;
         private float _dashRemaining;
         private SoundHandle _readySoundHandle = SoundHandle.None;
+        // 등장 연출 동안은 구체만 퍼지고 보스는 제자리에 서 있는다.
+        private bool _isFighting;
 
         protected override EnemyData Data => _data;
         protected override bool CanBePulled => false;
@@ -91,14 +96,26 @@ namespace ExplodeIt.Enemies
             _bossNumber = bossNumber;
             _tier = tier;
             _clawTimer = 0f;
+            _isFighting = false;
+            LaunchOrbs();
+        }
+
+        public void StartFight()
+        {
+            _isFighting = true;
+            _clawTimer = 0f;
             _lungeLeft = Random.value < 0.5f;
             PickLungePoint();
-            LaunchOrbs();
         }
 
         // 달려가는 시간 → 멈춤 → 다음 지점. 달려가는 속도는 찍은 순간의 거리를 달려갈 시간으로 나눠 정한다.
         protected override void TickMove(float deltaTime)
         {
+            if (!_isFighting)
+            {
+                return;
+            }
+
             _clawTimer += deltaTime;
             _lungeTime += deltaTime;
             if (_lungeTime < _lungeDuration)
@@ -126,10 +143,10 @@ namespace ExplodeIt.Enemies
             _lungeTime = 0f;
         }
 
-        // 실드 동안은 거리를 재지 않는다. 할퀴기 간격이 차면 어디서든 바로 준비해 돌진한다.
+        // 간격은 최소 대기일 뿐이다. 간격이 찬 뒤에는 배회하다 공격 시작 거리 안에 들어오는 순간 준비해 돌진한다.
         protected override bool ShouldStartAttack()
         {
-            return _clawTimer >= Tier.ClawInterval;
+            return _isFighting && _clawTimer >= Tier.ClawInterval && IsTargetWithin(_data.AttackTriggerRange);
         }
 
         // 준비 동안 제자리에 서서 방향을 바꾸지 않는다. 보이는 사각형이 곧 맞는 사각형이다.
@@ -240,6 +257,9 @@ namespace ExplodeIt.Enemies
             }
 
             SetShield(false);
+            // 마지막 구체와 보스가 한 폭발에 같이 휘말리면, 실드가 풀린 직후 같은 폭발에 바로 죽어 그로기를 건너뛴다.
+            // 실드를 푼 폭발이 보스까지 치지 못하게 아주 잠깐 무적을 준다. 그로기는 다음 폭탄으로 잡는 구간이다.
+            HitReceiver.GrantInvulnerability(ShieldBreakGrace);
             _isGroggy = true;
             Stun(Tier.GroggyDuration);
             AudioManager.Play(_data.GroggySound);

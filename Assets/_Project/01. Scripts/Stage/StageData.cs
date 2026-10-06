@@ -53,6 +53,12 @@ namespace ExplodeIt.Stage
         [Tooltip("보스 등장 여유 (유닛). 맵 테두리와 구조물에서 이만큼은 떨어진 곳에만 내려온다")]
         [SerializeField, Min(0f)] private float _bossSpawnClearance = 1.5f;
 
+        [Tooltip("보스 등장 후 멈춤 (초). 보스가 내려앉고 구체가 퍼진 뒤 이 시간 동안 플레이어는 움직일 수 없고 카메라는 보스 쪽을 비춘다")]
+        [SerializeField, Min(0f)] private float _bossRevealHold = 1f;
+
+        [Tooltip("보스 등장 카메라 이동 시간 (초). 카메라가 플레이어와 보스 사이로 옮겨 가고, 다시 플레이어에게 돌아오는 시간. 돌아오면 보스가 움직이기 시작한다")]
+        [SerializeField, Min(0f)] private float _bossCameraBlend = 0.6f;
+
         [Tooltip("보스가 내려앉는 순간의 연출 (흔들림 등). 비워 두면 연출 없이 나타난다")]
         [SerializeField] private FeedbackData _bossLandFeedback;
 
@@ -62,6 +68,8 @@ namespace ExplodeIt.Stage
         public float BossSpawnDistance => _bossSpawnDistance;
         public float BossSpawnClearance => _bossSpawnClearance;
         public FeedbackData BossLandFeedback => _bossLandFeedback;
+        public float BossRevealHold => _bossRevealHold;
+        public float BossCameraBlend => _bossCameraBlend;
 
         // bossNumber(1부터)로 몇 번째 보스가 어느 바퀴로 나올지 정한다. 바퀴는 0부터.
         // 최종 보스 뒤는 아직 정하지 않았으므로(무한/엔딩 미정) 마지막 바퀴의 보스 순서를 계속 돈다.
