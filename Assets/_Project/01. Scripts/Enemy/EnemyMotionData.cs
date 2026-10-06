@@ -59,9 +59,19 @@ namespace ExplodeIt.Enemies
         [Tooltip("공격이 이어지는 동안 유지할 기울기 (도)")]
         [SerializeField] private float _attackHoldLean;
 
+        [Tooltip("공격 그림 유지 시간 (초). 적 그림 컴포넌트에 공격 그림을 넣었을 때, 공격 순간부터 이 시간 동안 보여주고 걷기 그림으로 돌아간다")]
+        [SerializeField, Min(0f)] private float _attackSpriteDuration = 0.35f;
+
         [Header("회복: 처진 자세")]
         [Tooltip("회복 중 크기 배율 (가로, 세로). 살짝 처져 지금이 반격할 틈임을 보여준다")]
         [SerializeField] private Vector2 _recoverScale = new Vector2(1.05f, 0.93f);
+
+        [Header("기절(그로기): 무너진 자세")]
+        [Tooltip("기절 중 크기 배율 (가로, 세로). 보스 그로기처럼 기믹으로 무너진 상태")]
+        [SerializeField] private Vector2 _stunnedScale = new Vector2(1.15f, 0.8f);
+
+        [Tooltip("기절 중 기울기 (도). 음수면 뒤로 젖혀 넘어진 모습이 된다")]
+        [SerializeField] private float _stunnedLean = -15f;
 
 
         [Header("사망: 밀려남 → 부풀기 → 줄어들기 (전체 시간은 적 데이터의 사망 연출 시간)")]
@@ -96,7 +106,10 @@ namespace ExplodeIt.Enemies
         public float KickAngle => _kickAngle;
         public Vector2 AttackHoldScale => _attackHoldScale;
         public float AttackHoldLean => _attackHoldLean;
+        public float AttackSpriteDuration => _attackSpriteDuration;
         public Vector2 RecoverScale => _recoverScale;
+        public Vector2 StunnedScale => _stunnedScale;
+        public float StunnedLean => _stunnedLean;
         public float DeathKnockDistance => _deathKnockDistance;
         public float DeathKnockEnd => _deathKnockEnd;
         public float DeathPopPeak => Mathf.Max(_deathPopPeak, _deathKnockEnd + 0.01f);

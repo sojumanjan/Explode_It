@@ -29,6 +29,9 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 보스 구체 반사, 보스 등장 위치 계산에 쓴다.
+        public Bounds Bounds => _bounds;
+
         public bool Contains(Vector2 position)
         {
             return position.x >= _bounds.min.x && position.x <= _bounds.max.x

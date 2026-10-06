@@ -30,12 +30,16 @@ namespace ExplodeIt.Enemies
         private float _stateTime;
         private float _arenaTime;
         private float _lastPulledTime;
+        private float _stunDuration;
         private Collider2D _collider;
 
         protected Rigidbody2D Body { get; private set; }
+        protected HitReceiver HitReceiver => _hitReceiver;
+        // 블랙홀 같은 외부 힘에 끌려가는지. 보스처럼 자리를 지켜야 하는 적은 끈다.
+        protected virtual bool CanBePulled => true;
 
         // 끌려갈 때 벽에 몸이 파묻히지 않도록 쓰는 반경. 콜라이더 크기를 그대로 따른다.
-        private float BodyRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
+        protected float BodyRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
         protected Transform Target => _target;
         protected EnemyState State => _state;
         // 지금 상태에 들어온 뒤 지난 시간 (초, 물리 스텝 기준).
@@ -49,6 +53,8 @@ namespace ExplodeIt.Enemies
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
         public virtual Vector2 AimDirection => DirectionToTarget();
         public float DeathDuration => Data.DeathDuration;
+        // 공격에 들어간 횟수. 공격 상태는 물리 한 스텝만에 끝나기도 해서, 그림 쪽이 상태만 보고는 공격 순간을 놓칠 수 있다.
+        public int AttackCount { get; private set; }
 
         protected virtual void Awake()
         {
@@ -148,6 +154,13 @@ namespace ExplodeIt.Enemies
                     }
                     break;
 
+                case EnemyState.Stunned:
+                    if (_stateTime >= _stunDuration)
+                    {
+                        EnterState(EnemyState.Move);
+                    }
+                    break;
+
                 case EnemyState.Pulled:
                     // 끌어당기는 쪽과 이 컴포넌트의 FixedUpdate 순서는 정해져 있지 않으므로 한 스텝 여유를 둔다.
                     if (Time.fixedTime - _lastPulledTime > deltaTime * 1.5f)
@@ -162,7 +175,7 @@ namespace ExplodeIt.Enemies
         // 끌려가는 동안 예고·공격이 끊기고, 풀려나면 이동부터 다시 하므로 예고 없이 공격하는 일은 없다.
         public void PullToward(Vector2 center, float step)
         {
-            if (_state == EnemyState.Dead)
+            if (_state == EnemyState.Dead || !CanBePulled)
             {
                 return;
             }
@@ -187,6 +200,18 @@ namespace ExplodeIt.Enemies
             Body.MovePosition(Body.position + direction * move);
         }
 
+        // 예고·공격 중이어도 끊고 기절시킨다. 풀려나면 이동부터 다시 하므로 예고 없이 공격하는 일은 없다.
+        protected void Stun(float duration)
+        {
+            if (_state == EnemyState.Dead)
+            {
+                return;
+            }
+
+            _stunDuration = duration;
+            EnterState(EnemyState.Stunned);
+        }
+
         protected abstract void TickMove(float deltaTime);
         protected abstract bool ShouldStartAttack();
 
@@ -200,6 +225,28 @@ namespace ExplodeIt.Enemies
 
         protected virtual void OnEnterState(EnemyState state)
         {
+        }
+
+        // 플레이어가 아닌 지점으로 곧장 간다. 구조물에 막히면 흐름장을 따라 플레이어 쪽으로 돌아가며 길을 찾는다.
+        protected void MoveTowardPoint(Vector2 point, float speed, float deltaTime)
+        {
+            Vector2 toPoint = point - Body.position;
+            float distance = toPoint.magnitude;
+            if (distance < 0.0001f)
+            {
+                return;
+            }
+
+            Vector2 direction = toPoint / distance;
+            float step = Mathf.Min(speed * deltaTime, distance);
+            float clear = ClearDistance(direction, step, BodyRadius);
+            if (clear < step * 0.5f)
+            {
+                MoveTowardTarget(speed, deltaTime);
+                return;
+            }
+
+            Body.MovePosition(Body.position + direction * clear);
         }
 
         protected void MoveTowardTarget(float speed, float deltaTime)
@@ -379,8 +426,44 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 정면 사각형 근접 공격. 몸 중심에서 정면으로 length, 좌우 폭 width. 대상 중심이 사각형 안에 있고 사이에 구조물이 없어야 맞는다.
+        protected void HitInBox(Vector2 forward, float length, float width)
+        {
+            Vector2 origin = Body.position;
+            Vector2 center = origin + forward * (length * 0.5f);
+            float angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
+            int count = Physics2D.OverlapBox(center, new Vector2(length, width), angle, _attackFilter, AttackBuffer);
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 target = AttackBuffer[i].bounds.center;
+                // 겹침 검사는 몸 일부만 걸쳐도 잡히므로, 폭탄과 같이 중심 한 점이 사각형 안인지 다시 본다.
+                Vector2 local = target - origin;
+                float along = Vector2.Dot(local, forward);
+                float side = Mathf.Abs(local.x * forward.y - local.y * forward.x);
+                if (along < 0f || along > length || side > width * 0.5f)
+                {
+                    continue;
+                }
+
+                if (Physics2D.Linecast(origin, target, _obstacleFilter, CastBuffer) > 0)
+                {
+                    continue;
+                }
+
+                if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
+                {
+                    hittable.ReceiveHit(new HitInfo(origin));
+                }
+            }
+        }
+
         private void EnterState(EnemyState state)
         {
+            if (state == EnemyState.Attack)
+            {
+                AttackCount++;
+            }
+
             _state = state;
             _stateTime = 0f;
             OnEnterState(state);
@@ -392,7 +475,11 @@ namespace ExplodeIt.Enemies
         {
             EnterState(EnemyState.Dead);
             _collider.enabled = false;
-            GameEvents.RaiseEnemyKilled(Body.position);
+            if (Data.CountsAsKill)
+            {
+                GameEvents.RaiseEnemyKilled(Body.position);
+            }
+
             _died?.Invoke(this);
         }
 

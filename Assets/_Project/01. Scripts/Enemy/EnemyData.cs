@@ -19,6 +19,10 @@ namespace ExplodeIt.Enemies
         [Tooltip("등장 유예 (초). 맵 안에 들어온 뒤 이 시간만큼 걸어야 공격할 수 있다")]
         [SerializeField, Min(0f)] private float _arenaEntryDelay = 1f;
 
+        // 처치 수는 웨이브 100마리 주기와 승천 조건의 기준이라, 보스처럼 그 주기 밖의 적은 세지 않는다.
+        [Tooltip("처치 수 포함. 끄면 잡아도 처치 수·능력 게이지에 들어가지 않는다 (보스용)")]
+        [SerializeField] private bool _countsAsKill = true;
+
         [Header("적끼리 밀어내기")]
         [Tooltip("밀어내기 시작 거리 (반경 합 대비 비율). 두 적 중심이 서로 반경 합 × 이 값보다 가까우면 밀어낸다. 0.6이면 반경 합의 40%까지는 겹칠 수 있다")]
         [SerializeField, Range(0f, 1f)] private float _separationDistanceRatio = 0.6f;
@@ -43,6 +47,7 @@ namespace ExplodeIt.Enemies
         public int HitsToDie => _hitsToDie;
         public float AttackTriggerRange => _attackTriggerRange;
         public float ArenaEntryDelay => _arenaEntryDelay;
+        public bool CountsAsKill => _countsAsKill;
         public float TelegraphDuration => _telegraphDuration;
         public float RecoverDuration => _recoverDuration;
         public float DeathDuration => _deathDuration;

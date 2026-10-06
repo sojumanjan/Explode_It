@@ -23,11 +23,19 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Enemy _enemy;
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private EnemyMotionData _motion;
+        // 공격 순간에만 잠깐 바꿔 보여줄 그림. 비워 두면 그림은 그대로 두고 자세만 바꾼다.
+        [SerializeField] private Sprite _attackSprite;
+        // 기절(그로기) 동안 보여줄 그림. 비워 두면 그림은 그대로 두고 자세만 바꾼다.
+        [SerializeField] private Sprite _stunnedSprite;
 
         private Transform _body;
         private Vector3 _baseLocalPosition;
         private Vector3 _baseLocalScale;
         private Color _baseColor;
+        private Sprite _baseSprite;
+        private int _lastAttackCount;
+        // 공격 그림을 보여준 뒤 지난 시간. 음수면 보여주는 중이 아니다.
+        private float _attackSpriteTime = -1f;
 
         private Vector2 _lastPosition;
         private EnemyState _lastState;
@@ -49,6 +57,7 @@ namespace ExplodeIt.Enemies
             _baseLocalPosition = _body.localPosition;
             _baseLocalScale = _body.localScale;
             _baseColor = _sprite.color;
+            _baseSprite = _sprite.sprite;
             // 같은 무리가 박자를 맞춰 뛰면 기계적으로 보여서 개체마다 뛰기 박자를 어긋나게 둔다. 그림에만 쓰는 값이다.
             _hopPhase = Mathf.Repeat(_createdCount++ * 0.618f, 1f);
         }
@@ -66,6 +75,9 @@ namespace ExplodeIt.Enemies
             _offsetX.Snap(0f);
             _offsetY.Snap(0f);
             _sprite.color = _baseColor;
+            _sprite.sprite = _baseSprite;
+            _attackSpriteTime = -1f;
+            _lastAttackCount = _enemy.AttackCount;
             ApplyPose(Vector2.zero, Vector2.one, 0f);
         }
 
@@ -85,6 +97,14 @@ namespace ExplodeIt.Enemies
             }
 
             _stateTime += deltaTime;
+
+            if (_enemy.AttackCount != _lastAttackCount)
+            {
+                _lastAttackCount = _enemy.AttackCount;
+                OnAttacked();
+            }
+
+            TickSprite(state, deltaTime);
 
             if (state == EnemyState.Dead)
             {
@@ -125,21 +145,61 @@ namespace ExplodeIt.Enemies
         {
             switch (current)
             {
-                case EnemyState.Attack:
-                    // 공격 순간 자세로 순간 이동시키고, 스프링이 탄성 있게 되돌린다.
-                    Vector2 aim = _enemy.AimDirection;
-                    _offsetX.Snap(aim.x * _motion.KickOffset);
-                    _offsetY.Snap(aim.y * _motion.KickOffset);
-                    _scaleX.Snap(_motion.KickScale.x);
-                    _scaleY.Snap(_motion.KickScale.y);
-                    _lean.Snap(_motion.KickAngle);
-                    break;
-
                 case EnemyState.Dead:
                     // 터진 쪽이 아니라 플레이어 반대쪽으로 날려, 누가 잡았는지가 바로 읽히게 한다.
                     Vector2 away = position - _enemy.TargetPosition;
                     _deathDirection = away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.right;
                     break;
+            }
+        }
+
+        // 공격 순간 자세로 순간 이동시키고 스프링이 탄성 있게 되돌린다. 공격 그림이 있으면 잠깐 바꿔 보여준다.
+        private void OnAttacked()
+        {
+            Vector2 aim = _enemy.AimDirection;
+            _offsetX.Snap(aim.x * _motion.KickOffset);
+            _offsetY.Snap(aim.y * _motion.KickOffset);
+            _scaleX.Snap(_motion.KickScale.x);
+            _scaleY.Snap(_motion.KickScale.y);
+            _lean.Snap(_motion.KickAngle);
+
+            if (_attackSprite != null)
+            {
+                _attackSpriteTime = 0f;
+            }
+        }
+
+        // 기절 그림 > 공격 그림 > 기본 그림 순으로 고른다.
+        private void TickSprite(EnemyState state, float deltaTime)
+        {
+            // 죽는 순간의 그림 그대로 사망 연출을 한다. 그로기에서 잡히면 쓰러진 그림이 그대로 날아간다.
+            if (state == EnemyState.Dead)
+            {
+                return;
+            }
+
+            if (_attackSpriteTime >= 0f)
+            {
+                _attackSpriteTime += deltaTime;
+                if (_attackSpriteTime >= _motion.AttackSpriteDuration)
+                {
+                    _attackSpriteTime = -1f;
+                }
+            }
+
+            Sprite sprite = _baseSprite;
+            if (state == EnemyState.Stunned && _stunnedSprite != null)
+            {
+                sprite = _stunnedSprite;
+            }
+            else if (_attackSpriteTime >= 0f)
+            {
+                sprite = _attackSprite;
+            }
+
+            if (_sprite.sprite != sprite)
+            {
+                _sprite.sprite = sprite;
             }
         }
 
@@ -168,6 +228,11 @@ namespace ExplodeIt.Enemies
                     targetScale = _motion.RecoverScale;
                     break;
 
+                // 그로기는 회복보다 더 크게 무너진 자세로, 지금이 때릴 때라는 걸 멀리서도 읽히게 한다.
+                case EnemyState.Stunned:
+                    targetScale = _motion.StunnedScale;
+                    targetLean = _motion.StunnedLean;
+                    break;
             }
 
             float frequency = _motion.SpringFrequency;

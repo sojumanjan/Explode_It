@@ -154,6 +154,26 @@ namespace ExplodeIt.UI
                 }
                 GUILayout.EndHorizontal();
             }
+
+            // 보스 종류(B1~B3) × 바퀴(L1~L3). 버튼 하나가 곧 보스 번호(100마리 단위 순번)다.
+            int kinds = _stageRunner.BossKindCount;
+            for (int lap = 0; lap < _stageRunner.BossLaps; lap++)
+            {
+                GUILayout.BeginHorizontal();
+                for (int kind = 0; kind < kinds; kind++)
+                {
+                    if (GUILayout.Button($"B{kind + 1} L{lap + 1}"))
+                    {
+                        _stageRunner.SkipToBoss(lap * kinds + kind + 1);
+                    }
+                }
+                GUILayout.EndHorizontal();
+            }
+
+            if (GUILayout.Button("Final Boss"))
+            {
+                _stageRunner.SkipToBoss(kinds * _stageRunner.BossLaps + 1);
+            }
         }
 
         private void DrawCheats()

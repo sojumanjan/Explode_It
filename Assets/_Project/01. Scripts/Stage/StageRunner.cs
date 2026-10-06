@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Stage
 {
-    // 처치 수 기반 진행: 대기 → 웨이브(정해진 수 스폰) → 전부 처치 → 보스전 연출 → 웨이브 사이 간격 → 다음 웨이브.
+    // 처치 수 기반 진행: 대기 → 웨이브(정해진 수 스폰) → 전부 처치 → 보스 등장 연출 → 보스전 → 웨이브 사이 간격 → 다음 웨이브.
     // 웨이브가 시작될 때 그 웨이브의 스폰을 "몇 초에, 어떤 적이, 어디서"로 미리 펼쳐 두고,
     // 시간이 되면 앞에서부터 꺼낸다. 전투 중에는 목록을 읽기만 하므로 할당이 없다.
     public class StageRunner : MonoBehaviour
@@ -15,7 +15,8 @@ namespace ExplodeIt.Stage
         {
             Rest,
             Spawning,
-            BossIntro
+            BossIntro,
+            Boss
         }
 
         private readonly struct SpawnEvent
@@ -40,6 +41,10 @@ namespace ExplodeIt.Stage
 
         [SerializeField] private StageData _stage;
         [SerializeField] private EnemySpawner _spawner;
+        // 보스가 내려앉을 자리를 연출 동안 미리 보여주는 원. 비워 두면 표시 없이 나타난다.
+        [SerializeField] private Transform _bossSpawnMarker;
+        // 보스가 구조물 안에 내려앉지 않게 피할 레이어.
+        [SerializeField] private LayerMask _obstacleMask;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
@@ -51,6 +56,11 @@ namespace ExplodeIt.Stage
         private int _waveNumber;
         private int _nextEvent;
         private bool _isRunning;
+        private Enemy _bossPrefab;
+        private int _bossNumber;
+        private int _bossTier;
+        private Vector2 _bossSpawnPoint;
+        private bool _isBossDefeated;
 
         public bool IsPaused { get; set; }
         public Phase CurrentPhase => _phase;
@@ -62,11 +72,13 @@ namespace ExplodeIt.Stage
         private void OnEnable()
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
+            GameEvents.BossDefeated += OnBossDefeated;
         }
 
         private void OnDisable()
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
+            GameEvents.BossDefeated -= OnBossDefeated;
         }
 
         private void Start()
@@ -88,6 +100,8 @@ namespace ExplodeIt.Stage
             }
 
             _spawner.Prepare(CollectEnemyPrefabs());
+            PrepareBosses();
+            SetMarker(false, 0f);
             BeginRest(_stage.FirstWaveDelay);
         }
 
@@ -120,20 +134,161 @@ namespace ExplodeIt.Stage
                     if (_nextEvent >= _events.Count && _spawner.ActiveCount == 0)
                     {
                         GameEvents.RaiseWaveCleared(_waveNumber);
-                        GameEvents.RaiseBossIntroStarted(_waveNumber);
-                        EnterPhase(Phase.BossIntro);
+                        BeginBossIntro(_waveNumber);
                     }
                     break;
 
                 case Phase.BossIntro:
-                    // 보스가 생기면 연출과 다음 웨이브 사이에 보스전이 들어간다.
+                    // 내려앉을 자리를 원으로 키워 보여주다가, 다 차는 순간 보스가 나타난다.
+                    float progress = _stage.BossIntroDuration > 0f ? _phaseTime / _stage.BossIntroDuration : 1f;
+                    SetMarker(_bossPrefab != null, progress);
                     if (_phaseTime >= _stage.BossIntroDuration)
                     {
-                        // 무한/엔딩이 정해지기 전까지는 마지막 웨이브를 반복한다.
-                        _waveIndex = Mathf.Min(_waveIndex + 1, _stage.Waves.Count - 1);
-                        BeginRest(_stage.WaveInterval);
+                        SetMarker(false, 0f);
+                        if (_bossPrefab != null)
+                        {
+                            SpawnBoss();
+                        }
+                        else
+                        {
+                            // 아직 만들지 않은 보스 자리는 연출만 보여주고 넘어간다.
+                            FinishBoss();
+                        }
                     }
                     break;
+
+                case Phase.Boss:
+                    if (_isBossDefeated)
+                    {
+                        FinishBoss();
+                    }
+                    break;
+            }
+        }
+
+        public int BossKindCount => _stage != null ? _stage.BossKindCount : 0;
+        public int BossLaps => _stage != null ? _stage.BossLaps : 0;
+
+        // 개발자 패널용. 남은 적과 스폰을 지우고 해당 보스의 등장 연출부터 바로 시작한다.
+        public void SkipToBoss(int bossNumber)
+        {
+            _spawner.KillAll();
+            _events.Clear();
+            _nextEvent = 0;
+            BeginBossIntro(bossNumber);
+        }
+
+        private void BeginBossIntro(int bossNumber)
+        {
+            _bossNumber = bossNumber;
+            _bossPrefab = _stage.GetBoss(bossNumber, out _bossTier);
+            _isBossDefeated = false;
+            if (_bossPrefab != null)
+            {
+                _bossSpawnPoint = PickBossSpawnPoint();
+            }
+
+            GameEvents.RaiseBossIntroStarted(bossNumber);
+            EnterPhase(Phase.BossIntro);
+        }
+
+        private void SpawnBoss()
+        {
+            Enemy boss = _spawner.Spawn(_bossPrefab, _bossSpawnPoint);
+            if (boss is IBoss bossControl)
+            {
+                bossControl.BeginBoss(_bossNumber, _bossTier);
+            }
+
+            FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
+            EnterPhase(Phase.Boss);
+        }
+
+        private void FinishBoss()
+        {
+            // 무한/엔딩이 정해지기 전까지는 마지막 웨이브를 반복한다.
+            _waveIndex = Mathf.Min(_waveIndex + 1, _stage.Waves.Count - 1);
+            BeginRest(_stage.WaveInterval);
+        }
+
+        private void OnBossDefeated(int bossNumber)
+        {
+            _isBossDefeated = true;
+        }
+
+        // 플레이어 가까이, 맵에서 더 넓은 쪽(맵 중심 쪽)으로 내려온다. 구석에 몰린 플레이어 바로 옆 벽에 붙어 나오지 않게 한다.
+        // 그 자리가 구조물에 걸리면 좌우로 30도씩 돌려 가며 비어 있는 자리를 찾는다.
+        private Vector2 PickBossSpawnPoint()
+        {
+            Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : Vector2.zero;
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena == null)
+            {
+                return player + Vector2.up * _stage.BossSpawnDistance;
+            }
+
+            Bounds bounds = arena.Bounds;
+            Vector2 toCenter = (Vector2)bounds.center - player;
+            Vector2 direction = toCenter.sqrMagnitude > 0.01f ? toCenter.normalized : Vector2.up;
+            float clearance = _stage.BossSpawnClearance;
+            Vector2 min = (Vector2)bounds.min + new Vector2(clearance, clearance);
+            Vector2 max = (Vector2)bounds.max - new Vector2(clearance, clearance);
+
+            Vector2 fallback = Vector2.zero;
+            for (int i = 0; i < 12; i++)
+            {
+                float angle = (i % 2 == 0 ? 1f : -1f) * ((i + 1) / 2) * 30f;
+                Vector2 rotated = Quaternion.Euler(0f, 0f, angle) * direction;
+                Vector2 point = player + rotated * _stage.BossSpawnDistance;
+                point = new Vector2(Mathf.Clamp(point.x, min.x, max.x), Mathf.Clamp(point.y, min.y, max.y));
+                if (i == 0)
+                {
+                    fallback = point;
+                }
+
+                if (!Physics2D.OverlapCircle(point, clearance, _obstacleMask))
+                {
+                    return point;
+                }
+            }
+
+            return fallback;
+        }
+
+        private void SetMarker(bool isVisible, float progress)
+        {
+            if (_bossSpawnMarker == null)
+            {
+                return;
+            }
+
+            _bossSpawnMarker.gameObject.SetActive(isVisible);
+            if (isVisible)
+            {
+                _bossSpawnMarker.position = _bossSpawnPoint;
+                float size = Mathf.Clamp01(progress);
+                _bossSpawnMarker.localScale = new Vector3(size, size, 1f);
+            }
+        }
+
+        // 보스는 한 판에 한 번씩만 나오므로 종류마다 하나만 미리 만든다. 바퀴가 달라도 같은 프리팹이다.
+        private void PrepareBosses()
+        {
+            int kinds = _stage.BossKindCount;
+            for (int n = 1; n <= kinds; n++)
+            {
+                PrepareBoss(n);
+            }
+
+            PrepareBoss(kinds * _stage.BossLaps + 1);
+        }
+
+        private void PrepareBoss(int bossNumber)
+        {
+            Enemy boss = _stage.GetBoss(bossNumber, out _);
+            if (boss != null)
+            {
+                _spawner.Prepare(boss, 1);
             }
         }
 

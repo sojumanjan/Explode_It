@@ -19,9 +19,14 @@ namespace ExplodeIt.Core
         private readonly Dictionary<PooledEffect, Action<PooledEffect>> _releases = new Dictionary<PooledEffect, Action<PooledEffect>>();
         private CinemachineImpulseSource _impulse;
 
+        // 동시에 걸린 히트스톱들. 짧고 강한 멈칫(폭탄)과 길고 약한 슬로모션(보스 처치)이 겹쳐도,
+        // 짧은 쪽이 끝나면 남은 긴 쪽 속도로 돌아가야 해서 하나로 합치지 않고 따로 기억한다.
+        private const int MaxHitStops = 4;
+        private readonly float[] _stopEnds = new float[MaxHitStops];
+        private readonly float[] _stopScales = new float[MaxHitStops];
+
         private bool _isPlaying;
         private bool _isHitStopping;
-        private float _hitStopEnd;
         private float _savedTimeScale = 1f;
 
         // 개발자 패널에서 연출마다 켜고 꺼서 있을 때와 없을 때를 비교한다.
@@ -85,11 +90,35 @@ namespace ExplodeIt.Core
         // 히트스톱은 실제 시간으로 끝나야 하므로 timeScale과 무관한 시간으로 잰다.
         private void Update()
         {
-            if (_isHitStopping && Time.unscaledTime >= _hitStopEnd)
+            if (_isHitStopping)
+            {
+                ApplyHitStops();
+            }
+        }
+
+        // 아직 안 끝난 히트스톱 중 가장 느린 속도를 쓴다. 모두 끝나면 원래 속도로 되돌린다.
+        private void ApplyHitStops()
+        {
+            float now = Time.unscaledTime;
+            float scale = 1f;
+            bool isActive = false;
+            for (int i = 0; i < MaxHitStops; i++)
+            {
+                if (now < _stopEnds[i])
+                {
+                    scale = Mathf.Min(scale, _stopScales[i]);
+                    isActive = true;
+                }
+            }
+
+            if (!isActive)
             {
                 _isHitStopping = false;
                 Time.timeScale = _savedTimeScale;
+                return;
             }
+
+            Time.timeScale = _savedTimeScale * scale;
         }
 
         private void PlayInternal(FeedbackData data, Vector2 position)
@@ -113,17 +142,32 @@ namespace ExplodeIt.Core
             }
         }
 
-        // 겹치면 더 늦게 끝나는 쪽을 따르고, 처음 걸릴 때의 속도만 기억해 둔다.
+        // 처음 걸릴 때의 속도만 기억해 두고, 칸이 모자라면 가장 먼저 끝나는 칸을 덮어쓴다.
         private void StartHitStop(float duration, float timeScale)
         {
+            float now = Time.unscaledTime;
             if (!_isHitStopping)
             {
                 _savedTimeScale = Time.timeScale;
                 _isHitStopping = true;
+                for (int i = 0; i < MaxHitStops; i++)
+                {
+                    _stopEnds[i] = 0f;
+                }
             }
 
-            Time.timeScale = Mathf.Min(Time.timeScale, _savedTimeScale * timeScale);
-            _hitStopEnd = Mathf.Max(_hitStopEnd, Time.unscaledTime + duration);
+            int slot = 0;
+            for (int i = 1; i < MaxHitStops; i++)
+            {
+                if (_stopEnds[i] < _stopEnds[slot])
+                {
+                    slot = i;
+                }
+            }
+
+            _stopEnds[slot] = now + duration;
+            _stopScales[slot] = timeScale;
+            ApplyHitStops();
         }
 
         private ComponentPool<PooledEffect> GetPool(PooledEffect prefab)

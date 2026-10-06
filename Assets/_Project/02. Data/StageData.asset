@@ -20,3 +20,12 @@ MonoBehaviour:
   _clusterRadius: 1
   _waves:
   - {fileID: 11400000, guid: dce335c73ab46ce42807c0d7c00278b6, type: 2}
+  _bossRotation:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 6048178650885375636, guid: 34b734dd630fd594280a0474dca718bd, type: 3}
+  _bossLaps: 3
+  _finalBoss: {fileID: 0}
+  _bossSpawnDistance: 5
+  _bossSpawnClearance: 1.5
+  _bossLandFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}

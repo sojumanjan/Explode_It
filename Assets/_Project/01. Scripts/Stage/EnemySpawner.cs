@@ -21,6 +21,7 @@ namespace ExplodeIt.Stage
         private Action<Enemy> _removeActive;
 
         public int ActiveCount => _active.Count;
+        public Transform Target => _target;
 
         private void Awake()
         {
@@ -48,6 +49,12 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 보스처럼 한 번에 하나만 나오는 적은 미리 만들 수를 따로 정한다.
+        public void Prepare(Enemy prefab, int prewarm)
+        {
+            CreatePool(prefab, prewarm);
+        }
+
         public Enemy Spawn(Enemy prefab, Vector2 position)
         {
             if (!_pools.TryGetValue(prefab, out ComponentPool<Enemy> pool))
@@ -63,13 +70,18 @@ namespace ExplodeIt.Stage
 
         private ComponentPool<Enemy> CreatePool(Enemy prefab)
         {
+            return CreatePool(prefab, _prewarmPerEnemy);
+        }
+
+        private ComponentPool<Enemy> CreatePool(Enemy prefab, int prewarm)
+        {
             if (_pools.TryGetValue(prefab, out ComponentPool<Enemy> existing))
             {
                 return existing;
             }
 
-            var pool = new ComponentPool<Enemy>(prefab, transform, _prewarmPerEnemy, _maxPerEnemy);
-            pool.Prewarm(_prewarmPerEnemy);
+            var pool = new ComponentPool<Enemy>(prefab, transform, prewarm, _maxPerEnemy);
+            pool.Prewarm(prewarm);
             _pools.Add(prefab, pool);
             _releases.Add(prefab, pool.Release);
             return pool;

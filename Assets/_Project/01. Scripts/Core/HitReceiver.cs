@@ -20,8 +20,11 @@ namespace ExplodeIt.Core
         // 개발자 패널의 무적 치트. 구르기 무적과 따로 두어, 구르기가 끝날 때 치트까지 풀리지 않게 한다.
         public bool CheatInvulnerable { get; set; }
 
-        // 판정 단계에서 피격을 무시한다. 이후 실드도 같은 자리를 쓴다.
-        public bool IsInvulnerable => CheatInvulnerable || Time.time < _invulnerableUntil;
+        // 기믹을 풀기 전까지 켜져 있는 실드(보스 등). 시간제 무적과 따로 두어 서로 덮어쓰지 않게 한다.
+        public bool IsShielded { get; set; }
+
+        // 판정 단계에서 피격을 무시한다.
+        public bool IsInvulnerable => CheatInvulnerable || IsShielded || Time.time < _invulnerableUntil;
 
         // 여러 곳에서 겹쳐 줘도 가장 늦게 끝나는 쪽을 따른다.
         public void GrantInvulnerability(float duration)
@@ -34,6 +37,7 @@ namespace ExplodeIt.Core
         {
             _remainingHits = Mathf.Max(1, hitsToDie);
             _isDead = false;
+            IsShielded = false;
         }
 
         public void ReceiveHit(in HitInfo hit)

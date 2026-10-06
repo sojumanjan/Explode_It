@@ -37,6 +37,14 @@ namespace ExplodeIt.Core
         // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
         public static event Action<int> BossIntroStarted;
 
+        // 몇 번째 보스(1부터)를 잡았는지. 진행 흐름이 다음 웨이브로 넘어가고, 업적이 구독한다.
+        public static event Action<int> BossDefeated;
+
+        public static void RaiseBossDefeated(int bossNumber)
+        {
+            BossDefeated?.Invoke(bossNumber);
+        }
+
         public static void RaiseWaveCleared(int waveNumber)
         {
             WaveCleared?.Invoke(waveNumber);
@@ -91,6 +99,7 @@ namespace ExplodeIt.Core
             StageCleared = null;
             WaveCleared = null;
             BossIntroStarted = null;
+            BossDefeated = null;
         }
     }
 }
