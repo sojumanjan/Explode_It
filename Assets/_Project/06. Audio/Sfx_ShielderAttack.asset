@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f55d79f71ff91d4591091dcab66b225, type: 3}
-  m_Name: Sfx_shielder_attack
+  m_Name: Sfx_ShielderAttack
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
-  - {fileID: 8300000, guid: 1eb281e4ac118d44583d8ce4fc1753f6, type: 3}
+  - {fileID: 8300000, guid: 4507492c58161b347a30ab3c68c550ac, type: 3}
   _volume: 1
   _pitchMin: 0.95
   _pitchMax: 1.05

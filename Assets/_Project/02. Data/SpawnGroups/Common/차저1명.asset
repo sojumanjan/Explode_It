@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.SpawnGroupData
   _displayName: "\uCC28\uC8001\uBA85"
   _units:
-  - _enemyPrefab: {fileID: 391103347237629061, guid: 983b7c9f32aa39a46a723f79815c036a, type: 3}
+  - _enemyPrefab: {fileID: 391103347237629061, guid: 634ce26ea96337543831f0855a6d7018, type: 3}
     _count: 1

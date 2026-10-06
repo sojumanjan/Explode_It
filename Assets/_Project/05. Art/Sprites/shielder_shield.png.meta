@@ -3,8 +3,8 @@ guid: 9851727d8a0327a44900488b8ab86245
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2389193319765324094
-    second: shield_0
+      213: -4693328606468519973
+    second: shielder_shield_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shield_0
+      name: shielder_shield_0
       rect:
         serializedVersion: 2
         x: 1
         y: 31
         width: 98
-        height: 39
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3139547aae182120800000000000000
-      internalID: 2389193319765324094
+      spriteID: bd7c34daf72fddeb0800000000000000
+      internalID: -4693328606468519973
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shield_0: 2389193319765324094
+      shielder_shield_0: -4693328606468519973
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
