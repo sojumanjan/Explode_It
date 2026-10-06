@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace ExplodeIt.Progression
 {
-    // 처치로 게이지를 채우고, 다 차면 블랙홀 폭탄을 던진다.
+    // 처치로 게이지를 채우고, 한 칸이 차면 블랙홀 폭탄을 던질 수 있다. 칸은 여러 개라 모아 둘 수 있다.
+    // 블랙홀은 한 번에 하나만 존재한다. 두 칸이 있어도 앞의 블랙홀이 터진 뒤에 다음을 던진다.
     public class PlayerAbility : MonoBehaviour
     {
         [SerializeField] private AbilityData _data;
@@ -28,8 +29,8 @@ namespace ExplodeIt.Progression
             _blackHole.gameObject.SetActive(false);
             _onBlackHoleFinished = OnBlackHoleFinished;
 
-            // 첫 위기에 바로 쓸 수 있게 가득 찬 채로 시작한다. 능력을 처음부터 알게 되는 효과도 있다.
-            _charge = _data.KillsToCharge;
+            // 첫 위기에 바로 쓸 수 있게 차 있는 채로 시작한다. 능력을 처음부터 알게 되는 효과도 있다.
+            _charge = _data.KillsToCharge * _data.StartCharges;
         }
 
         private void OnEnable()
@@ -47,14 +48,21 @@ namespace ExplodeIt.Progression
         // 게이지 UI가 OnEnable에서 구독을 마친 뒤 첫 값을 받도록 Start에서 알린다.
         private void Start()
         {
-            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
+            RaiseChargeChanged();
         }
 
-        // 개발자 패널용. 처치 없이 바로 시험해 볼 수 있게 한다.
+        private int MaxCharge => _data.KillsToCharge * _data.MaxCharges;
+
+        // 개발자 패널용. 처치 없이 바로 시험해 볼 수 있게 모든 칸을 채운다.
         public void FillCharge()
         {
-            _charge = _data.KillsToCharge;
-            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
+            _charge = MaxCharge;
+            RaiseChargeChanged();
+        }
+
+        private void RaiseChargeChanged()
+        {
+            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge, _data.MaxCharges);
         }
 
         private void Update()
@@ -69,9 +77,10 @@ namespace ExplodeIt.Progression
 
         private void Use()
         {
-            _charge = 0;
+            // 한 칸만 쓴다. 차던 중인 다음 칸의 진행분은 그대로 남는다.
+            _charge -= _data.KillsToCharge;
             _isActive = true;
-            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
+            RaiseChargeChanged();
 
             WeaponStats weapon = _launcher.Stats;
             _blackHole.transform.position = transform.position;
@@ -84,13 +93,13 @@ namespace ExplodeIt.Progression
         // 블랙홀이 날아가 터질 때까지는 처치를 세지 않는다.
         private void OnEnemyKilled(Vector2 position)
         {
-            if (_isActive || _charge >= _data.KillsToCharge)
+            if (_isActive || _charge >= MaxCharge)
             {
                 return;
             }
 
             _charge++;
-            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge);
+            RaiseChargeChanged();
         }
 
         private void OnBlackHoleFinished()

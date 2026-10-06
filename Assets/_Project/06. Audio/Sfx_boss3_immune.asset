@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55d79f71ff91d4591091dcab66b225, type: 3}
+  m_Name: Sfx_boss3_immune
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
+  _clips:
+  - {fileID: 8300000, guid: 420124500ee63d24ca7c6313e1eebdef, type: 3}
+  _volume: 1
+  _pitchMin: 0.95
+  _pitchMax: 1.05
+  _maxInstances: 2
+  _minInterval: 0.08

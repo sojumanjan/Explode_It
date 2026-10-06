@@ -17,6 +17,7 @@ namespace ExplodeIt.Enemies
         [SerializeField] private RectTelegraph _clawTelegraph;
         // 오브젝트 피커가 컴포넌트 타입 칸에 프리팹을 띄우지 않아 GameObject로 받는다.
         [SerializeField] private GameObject _orbPrefab;
+        [SerializeField] private EnemyVisual _visual;
 
         private BossOrb[] _orbs;
         private int _aliveOrbs;
@@ -65,12 +66,14 @@ namespace ExplodeIt.Enemies
             _isGroggy = false;
             base.OnEnable();
             _clawTelegraph.Hide();
+            HitReceiver.Blocked += OnHitBlocked;
         }
 
         // 풀로 돌아가거나 재시작으로 꺼질 때 씬을 넘어 살아 있는 오디오 매니저에서 소리가 남지 않게 한다.
         protected override void OnDisable()
         {
             base.OnDisable();
+            HitReceiver.Blocked -= OnHitBlocked;
             RetractOrbs();
             StopReadySound();
         }
@@ -137,8 +140,8 @@ namespace ExplodeIt.Enemies
             Vector2 offset = new Vector2(Mathf.Cos(angle) * side, Mathf.Sin(angle)) * _data.LungeCircleRadius;
             _lungePoint = TargetPosition + offset;
 
-            _lungeDuration = Random.Range(Tier.LungeDuration.x, Tier.LungeDuration.y);
-            _pauseDuration = Random.Range(Tier.LungePause.x, Tier.LungePause.y);
+            _lungeDuration = Random.Range(_data.LungeDuration.x, _data.LungeDuration.y);
+            _pauseDuration = Random.Range(_data.LungePause.x, _data.LungePause.y);
             _lungeSpeed = Vector2.Distance(Body.position, _lungePoint) / Mathf.Max(_lungeDuration, 0.01f);
             _lungeTime = 0f;
         }
@@ -146,14 +149,14 @@ namespace ExplodeIt.Enemies
         // 간격은 최소 대기일 뿐이다. 간격이 찬 뒤에는 배회하다 공격 시작 거리 안에 들어오는 순간 준비해 돌진한다.
         protected override bool ShouldStartAttack()
         {
-            return _isFighting && _clawTimer >= Tier.ClawInterval && IsTargetWithin(_data.AttackTriggerRange);
+            return _isFighting && _clawTimer >= _data.ClawInterval && IsTargetWithin(_data.AttackTriggerRange);
         }
 
         // 준비 동안 제자리에 서서 방향을 바꾸지 않는다. 보이는 사각형이 곧 맞는 사각형이다.
         protected override void TickTelegraph(float deltaTime)
         {
             float progress = StateTime / _data.TelegraphDuration;
-            _clawTelegraph.Show(Body.position, _clawDirection, Tier.ClawLength, Tier.ClawWidth, progress);
+            _clawTelegraph.Show(Body.position, _clawDirection, _data.ClawLength, _data.ClawWidth, progress);
         }
 
         // 할퀴는 순간 사각형 전체를 판정하고, 그 범위 끝까지 빠르게 돌진한다. 벽이 있으면 벽 앞에서 멈춘다.
@@ -162,13 +165,13 @@ namespace ExplodeIt.Enemies
             if (!_hasClawed)
             {
                 _hasClawed = true;
-                HitInBox(_clawDirection, Tier.ClawLength, Tier.ClawWidth);
+                HitInBox(_clawDirection, _data.ClawLength, _data.ClawWidth);
                 AudioManager.Play(_data.ClawSound);
                 _clawTimer = 0f;
-                _dashRemaining = Tier.ClawLength;
+                _dashRemaining = _data.ClawLength;
             }
 
-            float step = Mathf.Min(Tier.ClawDashSpeed * deltaTime, _dashRemaining);
+            float step = Mathf.Min(_data.ClawDashSpeed * deltaTime, _dashRemaining);
             float clear = ClearDistance(_clawDirection, step, BodyRadius);
             Body.MovePosition(Body.position + _clawDirection * clear);
             _dashRemaining -= step;
@@ -185,7 +188,7 @@ namespace ExplodeIt.Enemies
                 case EnemyState.Telegraph:
                     // 걸어서는 못 빠져나가는 폭이므로, 방향은 준비 시작 순간에 고정해 구르기 타이밍만 보게 한다.
                     _clawDirection = DirectionToTarget();
-                    _clawTelegraph.Show(Body.position, _clawDirection, Tier.ClawLength, Tier.ClawWidth, 0f);
+                    _clawTelegraph.Show(Body.position, _clawDirection, _data.ClawLength, _data.ClawWidth, 0f);
                     _readySoundHandle = AudioManager.Play(_data.ClawReadySound);
                     return;
 
@@ -223,7 +226,7 @@ namespace ExplodeIt.Enemies
             {
                 float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, Tier.OrbSpeed, _data.OrbBounceJitter);
+                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, Tier.OrbSpeed, _data, transform);
             }
 
             _aliveOrbs = count;
@@ -261,8 +264,28 @@ namespace ExplodeIt.Enemies
             // 실드를 푼 폭발이 보스까지 치지 못하게 아주 잠깐 무적을 준다. 그로기는 다음 폭탄으로 잡는 구간이다.
             HitReceiver.GrantInvulnerability(ShieldBreakGrace);
             _isGroggy = true;
-            Stun(Tier.GroggyDuration);
+            Stun(_data.GroggyDuration);
             AudioManager.Play(_data.GroggySound);
+        }
+
+        // 실드에 막힌 폭탄에 "팅" 하고 튕겨내는 반응을 준다. 반응이 없으면 빗나간 건지 막힌 건지 구분되지 않는다.
+        // 실드가 풀린 직후의 짧은 무적에 막힌 경우는 실드가 아니므로 반응하지 않는다.
+        private void OnHitBlocked(HitInfo hit)
+        {
+            if (!HitReceiver.IsShielded)
+            {
+                return;
+            }
+
+            Vector2 center = (Vector2)transform.position + _data.TetherAnchorOffset;
+            Vector2 toSource = hit.SourcePosition - center;
+            Vector2 sparkPosition = center + (toSource.sqrMagnitude > 0.0001f ? toSource.normalized * 0.6f : Vector2.zero);
+            FeedbackPlayer.Play(_data.ImmuneFeedback, sparkPosition);
+            AudioManager.Play(_data.ImmuneSound);
+            if (_visual != null)
+            {
+                _visual.Flash(_data.ImmuneFlashColor, _data.ImmuneFlashDuration);
+            }
         }
 
         private void StopReadySound()

@@ -73,6 +73,21 @@ namespace ExplodeIt.Enemies
         [Tooltip("기절 중 기울기 (도). 음수면 뒤로 젖혀 넘어진 모습이 된다")]
         [SerializeField] private float _stunnedLean = -15f;
 
+        [Tooltip("기절하는 순간 눌리는 크기 배율 (가로, 세로). 주저앉는 순간 이 모양에서 탄성 있게 돌아온다")]
+        [SerializeField] private Vector2 _stunnedImpactScale = new Vector2(1.25f, 0.75f);
+
+        [Tooltip("기절 중 숨 몰아쉬기 세기 (비율). 세로로 늘었다 줄었다 한다")]
+        [SerializeField, Min(0f)] private float _stunnedBreath = 0.05f;
+
+        [Tooltip("기절 중 숨 몰아쉬기 빠르기 (회/초)")]
+        [SerializeField, Min(0f)] private float _stunnedBreathRate = 1.5f;
+
+        [Tooltip("기절 중 좌우로 어지럽게 흔들리는 각도 (도)")]
+        [SerializeField, Min(0f)] private float _stunnedSway = 4f;
+
+        [Tooltip("기절 중 좌우 흔들림 빠르기 (회/초)")]
+        [SerializeField, Min(0f)] private float _stunnedSwayRate = 0.8f;
+
 
         [Header("사망: 밀려남 → 부풀기 → 줄어들기 (전체 시간은 적 데이터의 사망 연출 시간)")]
         [Tooltip("플레이어 반대쪽으로 밀려나는 거리 (유닛)")]
@@ -119,6 +134,11 @@ namespace ExplodeIt.Enemies
         public Vector2 RecoverScale => _recoverScale;
         public Vector2 StunnedScale => _stunnedScale;
         public float StunnedLean => _stunnedLean;
+        public Vector2 StunnedImpactScale => _stunnedImpactScale;
+        public float StunnedBreath => _stunnedBreath;
+        public float StunnedBreathRate => _stunnedBreathRate;
+        public float StunnedSway => _stunnedSway;
+        public float StunnedSwayRate => _stunnedSwayRate;
         public float DeathKnockDistance => _deathKnockDistance;
         public float DeathKnockEnd => _deathKnockEnd;
         public float DeathPopPeak => Mathf.Max(_deathPopPeak, _deathKnockEnd + 0.01f);

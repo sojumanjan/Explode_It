@@ -28,9 +28,9 @@ namespace ExplodeIt.Bombs
 
         private SoundHandle _pullHandle = SoundHandle.None;
 
-        // 흡입은 매 물리 스텝 범위 안 적을 다시 찾으므로, 콜라이더별 Enemy를 한 번만 찾아 둔다.
-        // 적은 풀에서 재사용되어 콜라이더가 바뀌지 않으므로 캐시가 무효화되지 않는다.
-        private readonly Dictionary<Collider2D, Enemy> _enemyCache = new Dictionary<Collider2D, Enemy>();
+        // 흡입은 매 물리 스텝 범위 안 대상을 다시 찾으므로, 콜라이더별로 끌려가는 대상(적, 혼불)을 한 번만 찾아 둔다.
+        // 적과 혼불은 재사용되어 콜라이더가 바뀌지 않으므로 캐시가 무효화되지 않는다.
+        private readonly Dictionary<Collider2D, IPullable> _pullableCache = new Dictionary<Collider2D, IPullable>();
 
         private ContactFilter2D _hitFilter;
         private Sequence _sequence;
@@ -109,23 +109,23 @@ namespace ExplodeIt.Bombs
             int count = Physics2D.OverlapCircle(center, _radius, _hitFilter, OverlapBuffer);
             for (int i = 0; i < count; i++)
             {
-                Enemy enemy = GetEnemy(OverlapBuffer[i]);
-                if (enemy != null)
+                IPullable pullable = GetPullable(OverlapBuffer[i]);
+                if (pullable != null)
                 {
-                    enemy.PullToward(center, step);
+                    pullable.PullToward(center, step);
                 }
             }
         }
 
-        private Enemy GetEnemy(Collider2D collider)
+        private IPullable GetPullable(Collider2D collider)
         {
-            if (!_enemyCache.TryGetValue(collider, out Enemy enemy))
+            if (!_pullableCache.TryGetValue(collider, out IPullable pullable))
             {
-                collider.TryGetComponent(out enemy);
-                _enemyCache[collider] = enemy;
+                collider.TryGetComponent(out pullable);
+                _pullableCache[collider] = pullable;
             }
 
-            return enemy;
+            return pullable;
         }
 
         private void OnLanded()

@@ -13,6 +13,8 @@ namespace ExplodeIt.Core
         // 피격 연출용. 죽지 않는 피격에도 발행된다.
         public event Action<HitInfo> Hit;
         public event Action<HitInfo> Died;
+        // 무적·실드에 막힌 피격. "맞았지만 안 먹혔다"는 반응(튕김 연출)을 보여줄 때 쓴다.
+        public event Action<HitInfo> Blocked;
 
         public bool IsDead => _isDead;
         private float _invulnerableUntil;
@@ -75,6 +77,7 @@ namespace ExplodeIt.Core
         {
             if (IsInvulnerable)
             {
+                Blocked?.Invoke(hit);
                 return false;
             }
 

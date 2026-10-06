@@ -29,6 +29,8 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _attackSprite;
         // 기절(그로기) 동안 보여줄 그림. 비워 두면 그림은 그대로 두고 자세만 바꾼다.
         [SerializeField] private Sprite _stunnedSprite;
+        // 죽는 순간(폭탄이 터진 순간)부터 사망 연출 동안 보여줄 그림. 비워 두면 죽기 직전 그림 그대로 간다.
+        [SerializeField] private Sprite _deathSprite;
 
         private Transform _body;
         private Vector3 _baseLocalPosition;
@@ -39,6 +41,10 @@ namespace ExplodeIt.Enemies
         // 공격 그림을 보여준 뒤 지난 시간. 음수면 보여주는 중이 아니다.
         private float _attackSpriteTime = -1f;
         private bool _hasPlayedDeathEnd;
+        private Color _flashColor;
+        private float _flashDuration;
+        // 번쩍임이 시작된 뒤 지난 시간. 음수면 번쩍이는 중이 아니다.
+        private float _flashTime = -1f;
 
         private Vector2 _lastPosition;
         private EnemyState _lastState;
@@ -81,6 +87,7 @@ namespace ExplodeIt.Enemies
             _sprite.sprite = _baseSprite;
             _attackSpriteTime = -1f;
             _hasPlayedDeathEnd = false;
+            _flashTime = -1f;
             _lastAttackCount = _enemy.AttackCount;
             ApplyPose(Vector2.zero, Vector2.one, 0f);
         }
@@ -116,6 +123,7 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
+            TickFlash(deltaTime);
             UpdateFacing(state, position, delta.x);
             TickPose(state, delta, deltaTime);
         }
@@ -159,8 +167,47 @@ namespace ExplodeIt.Enemies
                     // 터진 쪽이 아니라 플레이어 반대쪽으로 날려, 누가 잡았는지가 바로 읽히게 한다.
                     Vector2 away = position - _enemy.TargetPosition;
                     _deathDirection = away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.right;
+                    if (_deathSprite != null)
+                    {
+                        _sprite.sprite = _deathSprite;
+                    }
+                    break;
+
+                case EnemyState.Stunned:
+                    // 철퍼덕 주저앉는 순간 납작하게 눌렸다가 스프링으로 돌아온다.
+                    _scaleX.Snap(_motion.StunnedImpactScale.x);
+                    _scaleY.Snap(_motion.StunnedImpactScale.y);
                     break;
             }
+        }
+
+        // 무적에 막혔을 때처럼 "맞았지만 안 먹혔다"를 보여준다. 색이 번쩍였다 돌아오고 몸이 움찔한다.
+        public void Flash(Color color, float duration)
+        {
+            _flashColor = color;
+            _flashDuration = Mathf.Max(duration, 0.01f);
+            _flashTime = 0f;
+            _scaleX.Snap(1.1f);
+            _scaleY.Snap(0.9f);
+        }
+
+        private void TickFlash(float deltaTime)
+        {
+            if (_flashTime < 0f)
+            {
+                return;
+            }
+
+            _flashTime += deltaTime;
+            float t = _flashTime / _flashDuration;
+            if (t >= 1f)
+            {
+                _flashTime = -1f;
+                _sprite.color = _baseColor;
+                return;
+            }
+
+            _sprite.color = Color.Lerp(_flashColor, _baseColor, t);
         }
 
         // 공격 순간 자세로 순간 이동시키고 스프링이 탄성 있게 되돌린다. 공격 그림이 있으면 잠깐 바꿔 보여준다.
@@ -179,10 +226,10 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 기절 그림 > 공격 그림 > 기본 그림 순으로 고른다.
+        // 기절 그림 > 공격 그림 > 기본 그림 순으로 고른다. 사망 그림은 죽는 순간 한 번 바꾸고 그대로 둔다.
         private void TickSprite(EnemyState state, float deltaTime)
         {
-            // 죽는 순간의 그림 그대로 사망 연출을 한다. 그로기에서 잡히면 쓰러진 그림이 그대로 날아간다.
+            // 죽은 뒤에는 그림을 고르지 않는다. 사망 그림이 없으면 죽는 순간의 그림 그대로 사망 연출을 한다.
             if (state == EnemyState.Dead)
             {
                 return;
@@ -275,6 +322,15 @@ namespace ExplodeIt.Enemies
                 scale.x *= 1f - stretch * 0.5f;
                 offset.y += _hopWeight * _motion.HopHeight * air;
                 lean += _hopWeight * _motion.HopTilt * wave;
+            }
+
+            // 기절: 느리게 숨을 몰아쉬듯 오르내리고, 어지러운 듯 좌우로 천천히 흔들린다.
+            if (state == EnemyState.Stunned)
+            {
+                float breath = Mathf.Sin(_stateTime * _motion.StunnedBreathRate * 2f * Mathf.PI) * _motion.StunnedBreath;
+                scale.y *= 1f + breath;
+                scale.x *= 1f - breath * 0.5f;
+                lean += Mathf.Sin(_stateTime * _motion.StunnedSwayRate * 2f * Mathf.PI) * _motion.StunnedSway;
             }
 
             // 떨림은 무작위 대신 사인파로 둔다. 그림 전용이지만 매 프레임 다르게 튀면 위치가 읽기 어렵다.

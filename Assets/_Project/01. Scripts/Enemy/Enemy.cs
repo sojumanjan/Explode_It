@@ -8,7 +8,7 @@ namespace ExplodeIt.Enemies
     // 상태 전환은 이 클래스만 한다. 하위 클래스는 공격 상태로 직접 들어갈 수 없으므로
     // 모든 공격은 반드시 예고 상태를 거친다.
     [RequireComponent(typeof(Rigidbody2D), typeof(HitReceiver))]
-    public abstract class Enemy : MonoBehaviour
+    public abstract class Enemy : MonoBehaviour, IPullable
     {
         // 적 공격은 순차적으로 처리되므로 버퍼 하나를 모든 적이 공유한다.
         private static readonly Collider2D[] AttackBuffer = new Collider2D[8];

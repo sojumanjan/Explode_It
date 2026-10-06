@@ -459,6 +459,7 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: f44ae2d192b0bea409994fcba08dd851, type: 2}
   _clawTelegraph: {fileID: 5001051421234659930}
   _orbPrefab: {fileID: 5437043043573061399, guid: a57e8cb478ec69949bbada590797bc4f, type: 3}
+  _visual: {fileID: 5877868982524277718}
 --- !u!114 &5877868982524277718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,4 +477,5 @@ MonoBehaviour:
   _sprite: {fileID: 7916980902736097991}
   _motion: {fileID: 11400000, guid: 5af2a6b922c2dcf4b965157c38572c6c, type: 2}
   _attackSprite: {fileID: 21300000, guid: 36f54c8e02d754f409078a0adac3071f, type: 3}
-  _stunnedSprite: {fileID: 21300000, guid: 2e71f6c4958a62341905f797161f8db5, type: 3}
+  _stunnedSprite: {fileID: 21300000, guid: fe5fe147e54eddf43bd2caa490bc6d44, type: 3}
+  _deathSprite: {fileID: 21300000, guid: 2e71f6c4958a62341905f797161f8db5, type: 3}

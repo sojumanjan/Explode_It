@@ -25,35 +25,31 @@ MonoBehaviour:
   _tiers:
   - _orbCount: 2
     _orbSpeed: 6
-    _lungeDuration: {x: 0.5, y: 0.7}
-    _lungePause: {x: 0.2, y: 0.3}
-    _clawInterval: 4.5
-    _clawLength: 8
-    _clawDashSpeed: 20
-    _clawWidth: 5
-    _groggyDuration: 5
   - _orbCount: 3
-    _orbSpeed: 6.3
-    _lungeDuration: {x: 0.45, y: 0.6}
-    _lungePause: {x: 0.15, y: 0.25}
-    _clawInterval: 4.5
-    _clawLength: 8
-    _clawDashSpeed: 20
-    _clawWidth: 5
-    _groggyDuration: 5
+    _orbSpeed: 7
   - _orbCount: 4
-    _orbSpeed: 6.6
-    _lungeDuration: {x: 0.4, y: 0.55}
-    _lungePause: {x: 0.15, y: 0.2}
-    _clawInterval: 4.5
-    _clawLength: 8
-    _clawDashSpeed: 20
-    _clawWidth: 5
-    _groggyDuration: 5
+    _orbSpeed: 8
+  _clawInterval: 2.5
+  _clawLength: 8
+  _clawWidth: 6
+  _clawDashSpeed: 20
+  _groggyDuration: 5
   _orbBounceJitter: 10
   _orbSpawnRadius: 0.5
   _lungeCircleRadius: 2
+  _lungeDuration: {x: 0.35, y: 0.45}
+  _lungePause: {x: 0.15, y: 0.2}
   _clawReadySound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}
   _clawSound: {fileID: 11400000, guid: d877ad611f4f5dc4b912a49f0dafa52c, type: 2}
   _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}
+  _immuneSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _immuneFlashColor: {r: 1, g: 0.55, b: 0.2, a: 1}
+  _immuneFlashDuration: 0.2
+  _tetherAnchorOffset: {x: 0, y: 0.5}
+  _orbBobHeight: 0.12
+  _orbBobRate: 1.6
+  _orbFlicker: 0.08
+  _orbFlickerRate: 5
+  _orbSway: 6
   _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
