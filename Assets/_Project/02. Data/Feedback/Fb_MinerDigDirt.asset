@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4403b8080b97fb6478bb53af96d49d12, type: 3}
+  m_Name: Fb_MinerDigDirt
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.FeedbackData
+  _shakeForce: 0
+  _hitStopDuration: 0
+  _hitStopTimeScale: 0.05
+  _effect: {fileID: 3806710189557243623, guid: 2aec45e9dd97aed4bb69f03f9347ec2a, type: 3}
+  _effectScale: 0.6

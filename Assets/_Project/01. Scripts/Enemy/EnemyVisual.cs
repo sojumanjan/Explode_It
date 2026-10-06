@@ -14,6 +14,8 @@ namespace ExplodeIt.Enemies
         private const float HopMoveThreshold = 0.0005f;
         // 뛰기가 켜지고 꺼지는 빠르기 (초당 비율). 멈출 때 착지하듯 줄어든다.
         private const float HopBlendSpeed = 8f;
+        // 떨림 빠르기 (회/초). 눈으로 좌우가 구분되지 않을 만큼 빠르게 떨어야 진동처럼 보인다.
+        private const float JitterRate = 25f;
         // 사망 연출 중 사라지는 순간 연출을 터트리는 지점 (전체 시간 대비 비율).
         private const float DeathEndPoint = 0.9f;
 
@@ -45,6 +47,8 @@ namespace ExplodeIt.Enemies
         private float _flashDuration;
         // 번쩍임이 시작된 뒤 지난 시간. 음수면 번쩍이는 중이 아니다.
         private float _flashTime = -1f;
+        private Color _tint = Color.white;
+        private float _alpha = 1f;
 
         private Vector2 _lastPosition;
         private EnemyState _lastState;
@@ -88,6 +92,12 @@ namespace ExplodeIt.Enemies
             _attackSpriteTime = -1f;
             _hasPlayedDeathEnd = false;
             _flashTime = -1f;
+            _tint = Color.white;
+            _alpha = 1f;
+            Lift = 0f;
+            ExtraLean = 0f;
+            ExtraScale = Vector2.one;
+            Jitter = 0f;
             _lastAttackCount = _enemy.AttackCount;
             ApplyPose(Vector2.zero, Vector2.one, 0f);
         }
@@ -139,7 +149,11 @@ namespace ExplodeIt.Enemies
             }
 
             float faceX;
-            if (state == EnemyState.Telegraph || state == EnemyState.Attack)
+            if (_enemy.FacesTargetWhileMoving)
+            {
+                faceX = _enemy.TargetPosition.x - position.x;
+            }
+            else if (state == EnemyState.Telegraph || state == EnemyState.Attack)
             {
                 faceX = _enemy.AimDirection.x;
             }
@@ -181,6 +195,40 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 계속 유지되는 색(과열로 점점 붉어짐 등). 기본 색에 곱한다. 번쩍임이 끝나면 이 색으로 돌아온다.
+        public Color Tint
+        {
+            set => _tint = value;
+        }
+
+        // 계속 유지되는 투명도 (0~1). 땅속으로 파고들어 사라질 때처럼 몸 전체를 흐리게 할 때 쓴다.
+        public float Alpha
+        {
+            set => _alpha = Mathf.Clamp01(value);
+        }
+
+        // 그림을 위로 띄우는 높이 (유닛). 도약처럼 판정 위치는 그대로 두고 그림만 들어 올릴 때 쓴다. 음수면 가라앉는다.
+        public float Lift { get; set; }
+
+        // 상태별 자세에 더하는 기울기 (도, + = 바라보는 쪽으로 숙임, - = 뒤로 젖힘). 뒷도약처럼 잠깐 몸을 젖힐 때 쓴다.
+        public float ExtraLean { get; set; }
+
+        // 상태별 자세에 곱하는 크기 배율 (가로, 세로). 드릴로 파고들 때처럼 잠깐 몸을 늘이거나 누를 때 쓴다.
+        public Vector2 ExtraScale { get; set; } = Vector2.one;
+
+        // 좌우로 빠르게 떠는 폭 (유닛). 드릴 진동처럼 그림만 떨게 할 때 쓴다. 0이면 떨지 않는다.
+        public float Jitter { get; set; }
+
+        private Color RestingColor
+        {
+            get
+            {
+                Color color = _baseColor * _tint;
+                color.a = _baseColor.a * _alpha;
+                return color;
+            }
+        }
+
         // 무적에 막혔을 때처럼 "맞았지만 안 먹혔다"를 보여준다. 색이 번쩍였다 돌아오고 몸이 움찔한다.
         public void Flash(Color color, float duration)
         {
@@ -191,10 +239,13 @@ namespace ExplodeIt.Enemies
             _scaleY.Snap(0.9f);
         }
 
+        // 번쩍임이 없을 때도 매 프레임 유지 색을 적용한다. 과열 색·투명도가 바뀌면 바로 반영되게 한다.
         private void TickFlash(float deltaTime)
         {
+            Color resting = RestingColor;
             if (_flashTime < 0f)
             {
+                _sprite.color = resting;
                 return;
             }
 
@@ -203,11 +254,13 @@ namespace ExplodeIt.Enemies
             if (t >= 1f)
             {
                 _flashTime = -1f;
-                _sprite.color = _baseColor;
+                _sprite.color = resting;
                 return;
             }
 
-            _sprite.color = Color.Lerp(_flashColor, _baseColor, t);
+            Color flash = _flashColor;
+            flash.a = resting.a;
+            _sprite.color = Color.Lerp(flash, resting, t);
         }
 
         // 공격 순간 자세로 순간 이동시키고 스프링이 탄성 있게 되돌린다. 공격 그림이 있으면 잠깐 바꿔 보여준다.
@@ -339,7 +392,13 @@ namespace ExplodeIt.Enemies
                 offset.x += Mathf.Sin(_stateTime * _motion.TelegraphShakeRate * 2f * Mathf.PI) * _motion.TelegraphShake * telegraphProgress;
             }
 
-            ApplyPose(offset, scale, -lean * FacingSign);
+            if (Jitter > 0f)
+            {
+                offset.x += Mathf.Sin(_stateTime * JitterRate * 2f * Mathf.PI) * Jitter;
+            }
+
+            scale = Vector2.Scale(scale, ExtraScale);
+            ApplyPose(offset, scale, -(lean + ExtraLean) * FacingSign);
         }
 
         // 흐려진 채 멀리 밀려남 → 빠르게 부풂 → 쭉 줄어 사라짐. 전체 시간은 적 데이터의 사망 연출 시간을 따른다.
@@ -403,7 +462,7 @@ namespace ExplodeIt.Enemies
 
         private void ApplyPose(Vector2 offset, Vector2 scale, float angle)
         {
-            _body.localPosition = _baseLocalPosition + (Vector3)offset;
+            _body.localPosition = _baseLocalPosition + (Vector3)offset + new Vector3(0f, Lift, 0f);
             _body.localScale = new Vector3(_baseLocalScale.x * scale.x, _baseLocalScale.y * scale.y, _baseLocalScale.z);
             _body.localRotation = Quaternion.Euler(0f, 0f, angle);
         }

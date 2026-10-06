@@ -35,6 +35,9 @@ namespace ExplodeIt.Enemies
 
         protected Rigidbody2D Body { get; private set; }
         protected HitReceiver HitReceiver => _hitReceiver;
+        protected LayerMask ObstacleMask => _obstacleMask;
+        // 공격을 시작하려면 플레이어가 보여야 하는지. 땅속에서 나오는 적처럼 벽과 상관없이 공격하는 적은 끈다.
+        protected virtual bool RequiresLineOfSight => true;
         // 블랙홀 같은 외부 힘에 끌려가는지. 보스처럼 자리를 지켜야 하는 적은 끈다.
         protected virtual bool CanBePulled => true;
 
@@ -52,6 +55,8 @@ namespace ExplodeIt.Enemies
         public float TelegraphDuration => Data.TelegraphDuration;
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
         public virtual Vector2 AimDirection => DirectionToTarget();
+        // 움직이는 중에도 그림이 플레이어 쪽을 보게 할지. 뒷걸음질·뒷도약처럼 가는 방향과 보는 방향이 반대일 때 켠다.
+        public virtual bool FacesTargetWhileMoving => false;
         public float DeathDuration => Data.DeathDuration;
         // 공격에 들어간 횟수. 공격 상태는 물리 한 스텝만에 끝나기도 해서, 그림 쪽이 상태만 보고는 공격 순간을 놓칠 수 있다.
         public int AttackCount { get; private set; }
@@ -126,7 +131,7 @@ namespace ExplodeIt.Enemies
                     TrackArenaEntry(deltaTime);
                     // 가려진 상태에서 예고하면 벽에 대고 공격하게 되므로, 보일 때만 시작한다.
                     // 일단 시작한 예고는 도중에 가려져도 끝까지 진행한다.
-                    if (HasEnteredArena() && ShouldStartAttack() && CanSeeTarget())
+                    if (HasEnteredArena() && ShouldStartAttack() && (!RequiresLineOfSight || CanSeeTarget()))
                     {
                         EnterState(EnemyState.Telegraph);
                     }
@@ -210,6 +215,15 @@ namespace ExplodeIt.Enemies
 
             _stunDuration = duration;
             EnterState(EnemyState.Stunned);
+        }
+
+        // 회복(노출) 시간을 다 채우지 않고 이동으로 돌아간다. 맞는 순간 도망가는 적처럼 회복을 일찍 끝낼 때 쓴다.
+        protected void EndRecoverEarly()
+        {
+            if (_state == EnemyState.Recover)
+            {
+                EnterState(EnemyState.Move);
+            }
         }
 
         protected abstract void TickMove(float deltaTime);

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d863a10a69c4cc34ab6a9c02d26d7d1b, type: 3}
+  m_Name: Boss2_Miner
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.DrillMinerData
+  _moveSpeed: 2
+  _hitsToDie: 1
+  _attackTriggerRange: 4
+  _arenaEntryDelay: 0
+  _countsAsKill: 0
+  _separationDistanceRatio: 0.6
+  _separationSpeed: 0
+  _telegraphDuration: 1.5
+  _recoverDuration: 1
+  _deathDuration: 1
+  _tiers:
+  - _holeCount: 3
+  - _holeCount: 4
+  - _holeCount: 5
+  _heatToOverheat: 3
+  _groggyDuration: 5
+  _overheatTint: {r: 1, g: 0.35, b: 0.25, a: 1}
+  _moundVisibleTime: 1
+  _moundFadeTime: 1
+  _hiddenTime: 1
+  _undergroundSpeed: 3
+  _holeRadius: 3
+  _realHoleDistance: {x: 3, y: 4}
+  _fakeHoleDistance: {x: 3, y: 5}
+  _holeSpacing: 2
+  _dynamiteCount: {x: 3, y: 4}
+  _dynamiteDelay: 1
+  _dynamiteDistance: {x: 2, y: 3}
+  _dynamiteRadiusRatio: 0.75
+  _dynamiteArcHeight: 0.8
+  _leapDistance: 10
+  _leapDuration: 0.8
+  _leapHeight: 1.5
+  _leapBackLean: 20
+  _digDuration: 1
+  _digSinkDepth: 0.6
+  _digHopHeight: 0.35
+  _digLean: 30
+  _digJitter: 0.06
+  _digDirtInterval: 0.15
+  _landingClearance: 1
+  _digSound: {fileID: 11400000, guid: 2c35d43679bfefa48a0a139ee6616b60, type: 2}
+  _burstSound: {fileID: 11400000, guid: f99094c801960284f8782cb3a51a8ef0, type: 2}
+  _heatSound: {fileID: 11400000, guid: 5960147957a34d74585f22502271ce05, type: 2}
+  _dynamiteSound: {fileID: 11400000, guid: 792b52cb07a06dd48b30e38b104bb0e9, type: 2}
+  _diggingMoveSound: {fileID: 11400000, guid: c8e9ceb5f079625488cfdc396962b00a, type: 2}
+  _overheatSound: {fileID: 0}
+  _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}
+  _immuneSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _burstFeedback: {fileID: 11400000, guid: 73d51ffe459e55643b64633db4838796, type: 2}
+  _digFeedback: {fileID: 11400000, guid: fedb6ebc10c1f97419f90d4785c904b5, type: 2}
+  _digDirtFeedback: {fileID: 11400000, guid: 5e03354aef6e9664f83c91100365d7a4, type: 2}
+  _heatFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _dynamiteFeedback: {fileID: 11400000, guid: ff012e168cb54f244b8a774605e88538, type: 2}
+  _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
+  _heatFlashColor: {r: 1, g: 0.6, b: 0.3, a: 1}
+  _immuneFlashColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  _flashDuration: 0.2
