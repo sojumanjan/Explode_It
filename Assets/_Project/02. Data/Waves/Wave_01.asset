@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4719f555518a1fc4fa7b8874baace4c7, type: 3}
   m_Name: Wave_01
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveData
-  _memo: "\uC608\uC2DC: 9\uBC29\uD5A5\uC5D0\uC11C \uB3CC\uACA9\uBCD1\uC774 1\uB9C8\uB9AC\uC529.
-    100\uB9C8\uB9AC \uAE30\uC900\uC73C\uB85C \uB2E4\uC2DC \uC9DC\uC57C \uD568"
+  _memo: 
   _totalSpawnPreview: 100
   _groups:
   - _label: "2s \xB7 Area 2 \xB7 \uC804\uC0AC1\uBA85"

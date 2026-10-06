@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702487ddeb892624da0d1d96ea829bad, type: 3}
+  m_Name: ShieldBearerData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ShieldBearerData
+  _moveSpeed: 3
+  _hitsToDie: 1
+  _attackTriggerRange: 1.5
+  _arenaEntryDelay: 1
+  _countsAsKill: 1
+  _separationDistanceRatio: 0.6
+  _separationSpeed: 1.5
+  _telegraphDuration: 0.5
+  _recoverDuration: 0.8
+  _deathDuration: 0.5
+  _shieldAngle: 180
+  _shieldTurnSpeed: 90
+  _shieldOrbitRadius: 0.6
+  _bodyCenterOffset: {x: 0, y: 0.3}
+  _slamRadius: 1
+  _slamForward: 0.6
+  _slamSound: {fileID: 11400000, guid: 44c2a00060ac70c46ae051fdd0007e9b, type: 2}
+  _blockSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _blockFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _blockFlashColor: {r: 1, g: 0.9, b: 0.5, a: 1}
+  _blockFlashDuration: 0.15

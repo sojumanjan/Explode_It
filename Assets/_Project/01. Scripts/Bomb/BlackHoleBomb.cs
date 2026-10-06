@@ -146,7 +146,8 @@ namespace ExplodeIt.Bombs
 
             Vector2 position = transform.position;
             int count = Physics2D.OverlapCircle(position, _radius, _hitFilter, OverlapBuffer);
-            var hit = new HitInfo(position);
+            // 적을 가운데로 모아 터지므로 폭발점이 방패 정면이 되기 쉽다. 방패병에게 쓰는 수단이 되도록 방패를 관통한다.
+            var hit = new HitInfo(position, ignoresGuard: true);
             for (int i = 0; i < count; i++)
             {
                 if (OverlapBuffer[i].TryGetComponent(out IHittable hittable))

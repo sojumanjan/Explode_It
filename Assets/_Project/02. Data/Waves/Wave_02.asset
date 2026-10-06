@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4719f555518a1fc4fa7b8874baace4c7, type: 3}
+  m_Name: Wave_02
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveData
+  _memo: 
+  _totalSpawnPreview: 29
+  _groups:
+  - _label: "2s \xB7 Area 2,8 \xB7 \uAD81\uC2181\uBA85 / \uC804\uC0AC1\uBA85 \xD72"
+    _startTime: 2
+    _areaIds: 2,8
+    _candidates:
+    - {fileID: 11400000, guid: 5fae97bc89b0bf54e8ffdb0e2583dd11, type: 2}
+    - {fileID: 11400000, guid: f317f70dce1833944923eea4f5575585, type: 2}
+  - _label: "3s \xB7 Area 5,10 \xB7 \uAD81\uC2181\uBA85 / \uC804\uC0AC1\uBA85 \xD72"
+    _startTime: 3
+    _areaIds: 5,10
+    _candidates:
+    - {fileID: 11400000, guid: 5fae97bc89b0bf54e8ffdb0e2583dd11, type: 2}
+    - {fileID: 11400000, guid: f317f70dce1833944923eea4f5575585, type: 2}
+  - _label: "5s \xB7 Area 4,8 \xB7 \uC800\uACA9\uC2181\uBA85 \xD72"
+    _startTime: 5
+    _areaIds: 4,8
+    _candidates:
+    - {fileID: 11400000, guid: ffd675f22d13b4844ad2719c95fb3a36, type: 2}
+  - _label: "8s \xB7 Area 3 \xB7 \uAD81\uC2183\uBA85 / \uC804\uC0AC3\uBA85"
+    _startTime: 8
+    _areaIds: 3
+    _candidates:
+    - {fileID: 11400000, guid: 2fd9ac806c422a6499660160486a856f, type: 2}
+    - {fileID: 11400000, guid: e64cb14867546dc4f9a7366c0cb0ff29, type: 2}
+  - _label: "10s \xB7 Area 9 \xB7 \uAD81\uC2183\uBA85 / \uC804\uC0AC3\uBA85"
+    _startTime: 10
+    _areaIds: 9
+    _candidates:
+    - {fileID: 11400000, guid: 2fd9ac806c422a6499660160486a856f, type: 2}
+    - {fileID: 11400000, guid: e64cb14867546dc4f9a7366c0cb0ff29, type: 2}
+  - _label: "13s \xB7 Area 1,2,3,4,5,6,7,8,9,10 \xB7 \uC804\uC0AC1\uBA85 \xD710"
+    _startTime: 13
+    _areaIds: 1,2,3,4,5,6,7,8,9,10
+    _candidates:
+    - {fileID: 11400000, guid: f317f70dce1833944923eea4f5575585, type: 2}
+  - _label: "20s \xB7 Area 2,3 \xB7 \uAD81\uC2181\uBA85 \xD72"
+    _startTime: 20
+    _areaIds: 2,3
+    _candidates:
+    - {fileID: 11400000, guid: 5fae97bc89b0bf54e8ffdb0e2583dd11, type: 2}
+  - _label: "22s \xB7 Area 9 \xB7 \uBC29\uD328\uBCD11\uBA85"
+    _startTime: 22
+    _areaIds: 9
+    _candidates:
+    - {fileID: 11400000, guid: ce096c93b97b3d14c9a44d5e1d43af48, type: 2}
+  - _label: "24s \xB7 Area 7 \xB7 \uBC29\uD328\uBCD11\uBA85"
+    _startTime: 24
+    _areaIds: 7
+    _candidates:
+    - {fileID: 11400000, guid: ce096c93b97b3d14c9a44d5e1d43af48, type: 2}
+  - _label: "24s \xB7 Area 7 \xB7 \uC804\uC0AC2\uBA85"
+    _startTime: 24
+    _areaIds: 7
+    _candidates:
+    - {fileID: 11400000, guid: 2898c0069fb147b4c836651af2e625ce, type: 2}
+  - _label: "24s \xB7 Area 6 \xB7 \uC804\uC0AC1\uBA85"
+    _startTime: 24
+    _areaIds: 6
+    _candidates:
+    - {fileID: 11400000, guid: f317f70dce1833944923eea4f5575585, type: 2}

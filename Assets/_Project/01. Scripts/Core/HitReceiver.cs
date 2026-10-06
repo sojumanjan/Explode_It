@@ -9,11 +9,13 @@ namespace ExplodeIt.Core
     {
         private int _remainingHits = 1;
         private bool _isDead;
+        // 같은 오브젝트에 방패 같은 가드가 있으면 판정 단계에서 묻는다. 없으면 null.
+        private IHitGuard _guard;
 
         // 피격 연출용. 죽지 않는 피격에도 발행된다.
         public event Action<HitInfo> Hit;
         public event Action<HitInfo> Died;
-        // 무적·실드에 막힌 피격. "맞았지만 안 먹혔다"는 반응(튕김 연출)을 보여줄 때 쓴다.
+        // 무적·실드·가드에 막힌 피격. "맞았지만 안 먹혔다"는 반응(튕김 연출)을 보여줄 때 쓴다.
         public event Action<HitInfo> Blocked;
 
         public bool IsDead => _isDead;
@@ -27,6 +29,11 @@ namespace ExplodeIt.Core
 
         // 판정 단계에서 피격을 무시한다.
         public bool IsInvulnerable => CheatInvulnerable || IsShielded || Time.time < _invulnerableUntil;
+
+        private void Awake()
+        {
+            TryGetComponent(out _guard);
+        }
 
         // 여러 곳에서 겹쳐 줘도 가장 늦게 끝나는 쪽을 따른다.
         public void GrantInvulnerability(float duration)
@@ -72,10 +79,11 @@ namespace ExplodeIt.Core
             Died?.Invoke(new HitInfo(transform.position));
         }
 
-        // 이 피격으로 죽는지 결정한다. 실드는 여기서 피격을 흡수하게 된다.
+        // 이 피격으로 죽는지 결정한다. 무적·실드·방패는 여기서 피격을 흡수한다.
         private bool Judge(in HitInfo hit)
         {
-            if (IsInvulnerable)
+            bool isGuarded = !hit.IgnoresGuard && _guard != null && _guard.Blocks(hit);
+            if (IsInvulnerable || isGuarded)
             {
                 Blocked?.Invoke(hit);
                 return false;
