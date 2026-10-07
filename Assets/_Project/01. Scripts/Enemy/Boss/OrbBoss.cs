@@ -1,4 +1,5 @@
 using ExplodeIt.Core;
+using ExplodeIt.Stage;
 using UnityEngine;
 
 namespace ExplodeIt.Enemies
@@ -34,6 +35,8 @@ namespace ExplodeIt.Enemies
         private bool _lungeLeft;
         private bool _hasClawed;
         private float _dashRemaining;
+        // 이번 할퀴기의 길이. 맵 테두리에 닿으면 데이터 길이보다 짧아진다.
+        private float _clawLength;
         private SoundHandle _readySoundHandle = SoundHandle.None;
         // 등장 연출 동안은 구체만 퍼지고 보스는 제자리에 서 있는다.
         private bool _isFighting;
@@ -163,26 +166,61 @@ namespace ExplodeIt.Enemies
         protected override void TickTelegraph(float deltaTime)
         {
             float progress = StateTime / _data.TelegraphDuration;
-            _clawTelegraph.Show(Body.position, _clawDirection, _data.ClawLength, _data.ClawWidth, progress);
+            _clawTelegraph.Show(Body.position, _clawDirection, _clawLength, _data.ClawWidth, progress);
         }
 
-        // 할퀴는 순간 사각형 전체를 판정하고, 그 범위 끝까지 빠르게 돌진한다. 벽이 있으면 벽 앞에서 멈춘다.
+        // 할퀴며 범위 끝까지 빠르게 돌진한다. 보스가 이번 스텝에 지나가는 구간(폭은 사각형 폭)만 판정해,
+        // 몸으로 들이받는 순간에 맞는다. 스텝 구간이 이어 붙어 끝나면 예고 사각형 전체를 한 번씩 훑은 셈이다.
+        // 벽 뒤로 숨어 피하지 못하게 구조물을 무시하고 뚫고 간다. 보이는 사각형 안이면 보스가 지나갈 때 맞고, 구르기로만 피한다.
         protected override bool TickAttack(float deltaTime)
         {
             if (!_hasClawed)
             {
                 _hasClawed = true;
-                HitInBox(_clawDirection, _data.ClawLength, _data.ClawWidth);
                 AudioManager.Play(_data.ClawSound);
                 _clawTimer = 0f;
-                _dashRemaining = _data.ClawLength;
+                _dashRemaining = _clawLength;
             }
 
             float step = Mathf.Min(_data.ClawDashSpeed * deltaTime, _dashRemaining);
-            float clear = ClearDistance(_clawDirection, step, BodyRadius);
-            Body.MovePosition(Body.position + _clawDirection * clear);
+            HitInBox(_clawDirection, step, _data.ClawWidth, true);
+            Body.MovePosition(Body.position + _clawDirection * step);
             _dashRemaining -= step;
-            return _dashRemaining <= 0f || clear < step;
+            return _dashRemaining <= 0f;
+        }
+
+        // 돌진 끝이 맵 밖으로 나가지 않는 길이. 맵 테두리에서 몸 반경만큼 안쪽까지만 간다.
+        private float LengthInsideArena(Vector2 direction, float length)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena == null)
+            {
+                return length;
+            }
+
+            Bounds bounds = arena.Bounds;
+            float radius = BodyRadius;
+            Vector2 position = Body.position;
+            float max = length;
+            if (direction.x > 0.0001f)
+            {
+                max = Mathf.Min(max, (bounds.max.x - radius - position.x) / direction.x);
+            }
+            else if (direction.x < -0.0001f)
+            {
+                max = Mathf.Min(max, (bounds.min.x + radius - position.x) / direction.x);
+            }
+
+            if (direction.y > 0.0001f)
+            {
+                max = Mathf.Min(max, (bounds.max.y - radius - position.y) / direction.y);
+            }
+            else if (direction.y < -0.0001f)
+            {
+                max = Mathf.Min(max, (bounds.min.y + radius - position.y) / direction.y);
+            }
+
+            return Mathf.Max(0f, max);
         }
 
         protected override void OnEnterState(EnemyState state)
@@ -195,7 +233,9 @@ namespace ExplodeIt.Enemies
                 case EnemyState.Telegraph:
                     // 걸어서는 못 빠져나가는 폭이므로, 방향은 준비 시작 순간에 고정해 구르기 타이밍만 보게 한다.
                     _clawDirection = DirectionToTarget();
-                    _clawTelegraph.Show(Body.position, _clawDirection, _data.ClawLength, _data.ClawWidth, 0f);
+                    // 길이도 이때 정한다. 예고 사각형과 실제 돌진·판정이 같은 길이여야 한다.
+                    _clawLength = LengthInsideArena(_clawDirection, _data.ClawLength);
+                    _clawTelegraph.Show(Body.position, _clawDirection, _clawLength, _data.ClawWidth, 0f);
                     _readySoundHandle = AudioManager.Play(_data.ClawReadySound);
                     return;
 

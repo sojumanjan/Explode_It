@@ -22,8 +22,8 @@ MonoBehaviour:
   _telegraphDuration: 0.3
   _recoverDuration: 0.8
   _deathDuration: 0.5
-  _pauseDuration: 0.4
-  _dashDistance: 2.5
+  _pauseDuration: 0.5
+  _dashDistance: 3.5
   _dashDuration: 0.095
   _dashSquash: {x: 1.4, y: 0.55}
   _squashRecoverTime: 0.15

@@ -25,6 +25,11 @@ namespace ExplodeIt.Bombs
         [SerializeField] private SoundData _pullSound;
         [SerializeField] private SoundData _explodeSound;
         [SerializeField] private FeedbackData _explodeFeedback;
+        // 차단 영역에 닿아 타 버릴 때: 뾰잉 하고 부풀었다가(배율, 초) 0까지 쪼그라든다(초). 판정과 상관없는 그림 연출이다.
+        [SerializeField] private Color _burnTint = new Color(1f, 0.45f, 0.2f, 1f);
+        [SerializeField, Min(1f)] private float _burnPopScale = 1.35f;
+        [SerializeField, Min(0f)] private float _burnPopDuration = 0.08f;
+        [SerializeField, Min(0f)] private float _burnShrinkDuration = 0.3f;
 
         private SoundHandle _pullHandle = SoundHandle.None;
 
@@ -39,7 +44,16 @@ namespace ExplodeIt.Bombs
         private float _pullSpeed;
         private bool _isPulling;
         private Vector3 _bodyScale;
+        private Color _bodyColor;
+        private float _pullDuration;
+        // 날아가는 동안의 바닥 위치를 알기 위한 값. 포물선 그림은 높이가 섞여 있어 바닥 위치로 쓸 수 없다.
+        private bool _isFlying;
+        private Vector2 _flightStart;
+        private Vector2 _flightTarget;
+        private float _flightDuration;
+        private float _flightTime;
 
+        private TweenCallback _onStartFuse;
         private TweenCallback _onLanded;
         private TweenCallback _onExplode;
         private TweenCallback _onComplete;
@@ -53,7 +67,9 @@ namespace ExplodeIt.Bombs
             _hitFilter.useTriggers = true;
 
             _bodyScale = _body.transform.localScale;
+            _bodyColor = _body.color;
 
+            _onStartFuse = StartFuse;
             _onLanded = OnLanded;
             _onExplode = Explode;
             _onComplete = Finish;
@@ -66,6 +82,7 @@ namespace ExplodeIt.Bombs
             _sequence?.Kill();
             _sequence = null;
             _isPulling = false;
+            _isFlying = false;
             // 흡입 도중 재시작으로 꺼지면, 씬을 넘어 살아 있는 오디오 매니저에서 소리가 계속 나지 않게 끊는다.
             StopPullSound();
         }
@@ -82,15 +99,60 @@ namespace ExplodeIt.Bombs
             _onFinished = onFinished;
             _radius = radius;
             _pullSpeed = pullSpeed;
+            _pullDuration = pullDuration;
             ResetVisuals();
+
+            _isFlying = true;
+            _flightStart = transform.position;
+            _flightTarget = target;
+            _flightDuration = weapon.FlightDuration;
+            _flightTime = 0f;
 
             _sequence = DOTween.Sequence()
                 .Append(transform.DOJump(target, weapon.ArcHeight, 1, weapon.FlightDuration).SetEase(Ease.Linear))
                 .Join(_body.transform.DOLocalRotate(new Vector3(0f, 0f, -360f), weapon.FlightDuration, RotateMode.FastBeyond360))
+                .OnComplete(_onStartFuse);
+        }
+
+        // 날아가는 도중 차단 영역(화염 영역 등)에 닿으면 일반 폭탄처럼 터지지 않고 그 자리에서 타 버린다.
+        private void Update()
+        {
+            if (!_isFlying)
+            {
+                return;
+            }
+
+            _flightTime += Time.deltaTime;
+            float t = _flightDuration > 0f ? Mathf.Clamp01(_flightTime / _flightDuration) : 1f;
+            Vector2 ground = Vector2.Lerp(_flightStart, _flightTarget, t);
+            if (BombBarriers.TryGetBlocking(ground, out IBombBarrier barrier))
+            {
+                Burn(barrier);
+            }
+        }
+
+        private void Burn(IBombBarrier barrier)
+        {
+            _isFlying = false;
+            _sequence?.Kill();
+            barrier.OnBombBurned(transform.position);
+
+            Transform body = _body.transform;
+            _sequence = DOTween.Sequence()
+                .Append(body.DOScale(_bodyScale * _burnPopScale, _burnPopDuration).SetEase(Ease.OutQuad))
+                .Join(_body.DOColor(_burnTint, _burnPopDuration))
+                .Append(body.DOScale(Vector3.zero, _burnShrinkDuration).SetEase(Ease.InBack))
+                .OnComplete(_onComplete);
+        }
+
+        // 착지 → 빨아들이며 채움 원이 차오름 → 터짐. 일반 폭탄과 같은 읽는 법: 채움 원이 바깥 원에 닿는 순간 터진다.
+        private void StartFuse()
+        {
+            _isFlying = false;
+            _sequence = DOTween.Sequence()
                 .AppendCallback(_onLanded)
-                // 일반 폭탄과 같은 읽는 법: 채움 원이 바깥 원에 닿는 순간 터진다.
-                .Append(DOVirtual.Float(0f, _radius, pullDuration, _onFillGrow).SetEase(Ease.Linear))
-                .Join(_body.transform.DOLocalRotate(new Vector3(0f, 0f, -1080f), pullDuration, RotateMode.FastBeyond360).SetEase(Ease.InQuad))
+                .Append(DOVirtual.Float(0f, _radius, _pullDuration, _onFillGrow).SetEase(Ease.Linear))
+                .Join(_body.transform.DOLocalRotate(new Vector3(0f, 0f, -1080f), _pullDuration, RotateMode.FastBeyond360).SetEase(Ease.InQuad))
                 .AppendCallback(_onExplode)
                 .Append(DOVirtual.Float(1f, 0f, _explosionFxDuration, _onFade))
                 .OnComplete(_onComplete);
@@ -182,6 +244,7 @@ namespace ExplodeIt.Bombs
         private void ResetVisuals()
         {
             _body.enabled = true;
+            _body.color = _bodyColor;
             _body.transform.localRotation = Quaternion.identity;
             _body.transform.localScale = _bodyScale;
 

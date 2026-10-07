@@ -53,6 +53,9 @@ namespace ExplodeIt.Stage
         [Tooltip("보스 등장 여유 (유닛). 맵 테두리와 구조물에서 이만큼은 떨어진 곳에만 내려온다")]
         [SerializeField, Min(0f)] private float _bossSpawnClearance = 1.5f;
 
+        [Tooltip("지정 자리(BossSpawnPoints)가 있는 보스의 최소 거리 (유닛). 플레이어와 이보다 멀리 떨어진 후보 중 가장 가까운 곳에 내려온다")]
+        [SerializeField, Min(0f)] private float _fixedSpawnMinDistance = 6f;
+
         [Tooltip("보스 등장 후 멈춤 (초). 보스가 내려앉고 구체가 퍼진 뒤 이 시간 동안 플레이어는 움직일 수 없고 카메라는 보스 쪽을 비춘다")]
         [SerializeField, Min(0f)] private float _bossRevealHold = 1f;
 
@@ -67,6 +70,7 @@ namespace ExplodeIt.Stage
         public int BossKindCount => _bossRotation != null ? _bossRotation.Length : 0;
         public float BossSpawnDistance => _bossSpawnDistance;
         public float BossSpawnClearance => _bossSpawnClearance;
+        public float FixedSpawnMinDistance => _fixedSpawnMinDistance;
         public FeedbackData BossLandFeedback => _bossLandFeedback;
         public float BossRevealHold => _bossRevealHold;
         public float BossCameraBlend => _bossCameraBlend;

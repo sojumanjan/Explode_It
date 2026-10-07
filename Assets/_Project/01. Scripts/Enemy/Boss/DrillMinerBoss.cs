@@ -34,6 +34,11 @@ namespace ExplodeIt.Enemies
 
         [SerializeField] private DrillMinerData _data;
         [SerializeField] private EnemyVisual _visual;
+        // 튀어나올 때 솟구치며 위로 늘어나는 모양, 착지하며 눌리는 모양, 착지 후 원래대로 돌아오는 시간(초). 그림 전용 연출이라 데이터로 빼지 않는다.
+        private static readonly Vector2 EmergeStretch = new Vector2(0.85f, 1.2f);
+        private static readonly Vector2 EmergeLandSquash = new Vector2(1.18f, 0.82f);
+        private const float EmergeSettleTime = 0.12f;
+
         // 땅속에 있을 때 보이는 흙더미. 보스를 따라 움직인다.
         [SerializeField] private SpriteRenderer _mound;
         // 오브젝트 피커가 컴포넌트 타입 칸에 프리팹을 띄우지 않아 GameObject로 받는다.
@@ -61,6 +66,8 @@ namespace ExplodeIt.Enemies
         private Dynamite[] _dynamites;
         private System.Action<Dynamite> _onDynamiteExplode;
         private SoundHandle _diggingMoveHandle = SoundHandle.None;
+        // 구멍에서 튀어나온 뒤 지난 시간. 음수면 튀어나오는 중이 아니다.
+        private float _emergeTime = -1f;
 
         protected override EnemyData Data => _data;
         protected override bool CanBePulled => false;
@@ -104,6 +111,7 @@ namespace ExplodeIt.Enemies
         {
             _isFighting = false;
             _isEntering = false;
+            _emergeTime = -1f;
             base.OnEnable();
             HitReceiver.Blocked += OnHitBlocked;
             HideHoles();
@@ -320,6 +328,7 @@ namespace ExplodeIt.Enemies
             transform.position = real;
             _visual.Alpha = 1f;
             _visual.Lift = 0f;
+            _emergeTime = 0f;
 
             int nextDynamite = 0;
             for (int i = 0; i < _holeCount; i++)
@@ -339,6 +348,12 @@ namespace ExplodeIt.Enemies
 
         protected override void OnEnterState(EnemyState state)
         {
+            // 튀어나오는 도중 맞아서 도약하거나 그로기에 빠지면 솟구침을 끊는다. 다음 동작이 자세를 이어받는다.
+            if (state != EnemyState.Recover && _emergeTime >= 0f)
+            {
+                EndEmerge();
+            }
+
             switch (state)
             {
                 case EnemyState.Telegraph:
@@ -372,6 +387,44 @@ namespace ExplodeIt.Enemies
                     GameEvents.RaiseBossDefeated(_bossNumber);
                     break;
             }
+        }
+
+        // 구멍에서 위로 늘어나며 솟구쳤다가, 착지하며 납작하게 눌린 뒤 원래 모양으로 돌아온다.
+        private void Update()
+        {
+            if (_emergeTime < 0f)
+            {
+                return;
+            }
+
+            _emergeTime += Time.deltaTime;
+            float hopDuration = _data.EmergeHopDuration;
+            if (_emergeTime < hopDuration)
+            {
+                float t = _emergeTime / hopDuration;
+                _visual.Lift = Mathf.Sin(t * Mathf.PI) * _data.EmergeHopHeight;
+                // 올라가는 동안 늘어난 몸이 꼭대기에서 원래대로, 떨어지는 끝에서 다시 조금 늘어난다.
+                float stretch = t < 0.5f ? 1f - t * 2f : (t - 0.5f) * 0.6f;
+                _visual.ExtraScale = Vector2.LerpUnclamped(Vector2.one, EmergeStretch, stretch);
+                return;
+            }
+
+            _visual.Lift = 0f;
+            float settle = (_emergeTime - hopDuration) / EmergeSettleTime;
+            if (settle >= 1f)
+            {
+                EndEmerge();
+                return;
+            }
+
+            _visual.ExtraScale = Vector2.Lerp(EmergeLandSquash, Vector2.one, settle);
+        }
+
+        private void EndEmerge()
+        {
+            _emergeTime = -1f;
+            _visual.Lift = 0f;
+            _visual.ExtraScale = Vector2.one;
         }
 
         private void BeginLeap()

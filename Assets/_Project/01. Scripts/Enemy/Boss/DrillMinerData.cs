@@ -78,6 +78,14 @@ namespace ExplodeIt.Enemies
         [Tooltip("다이너마이트가 날아갈 때 떠오르는 높이 (유닛)")]
         [SerializeField, Min(0f)] private float _dynamiteArcHeight = 0.8f;
 
+        [Header("튀어나오기")]
+        // 분출 순간 그 자리에 툭 나타나면 어색해서, 구멍에서 솟구쳐 올랐다 착지하는 모습을 보여준다. 그림만 뜨고 판정 위치는 구멍 그대로다.
+        [Tooltip("구멍에서 튀어나올 때 솟구치는 높이 (유닛)")]
+        [SerializeField, Min(0f)] private float _emergeHopHeight = 0.8f;
+
+        [Tooltip("솟구쳤다 착지하기까지 걸리는 시간 (초). 노출 시간 안에 포함된다")]
+        [SerializeField, Min(0.05f)] private float _emergeHopDuration = 0.35f;
+
         [Header("도약 · 파고들기")]
         [Tooltip("도약 거리 (유닛). 노출이 끝나거나 맞는 순간 플레이어 반대쪽으로 이만큼 뛴다. 구조물을 넘어간다")]
         [SerializeField, Min(0f)] private float _leapDistance = 7f;
@@ -156,6 +164,8 @@ namespace ExplodeIt.Enemies
         public FeedbackData DynamiteFeedback => _dynamiteFeedback;
         public float LeapDistance => _leapDistance;
         public float LeapDuration => _leapDuration;
+        public float EmergeHopHeight => _emergeHopHeight;
+        public float EmergeHopDuration => _emergeHopDuration;
         public float LeapHeight => _leapHeight;
         public float LeapBackLean => _leapBackLean;
         public float DigDuration => _digDuration;

@@ -71,6 +71,7 @@ namespace ExplodeIt.Stage
         private IBoss _boss;
         private bool _isControlReleased;
         private bool _hasPlayedEntrance;
+        private BossSpawnPoints[] _bossSpawnPointSets = Array.Empty<BossSpawnPoints>();
         private float _releaseTime;
 
         public bool IsPaused { get; set; }
@@ -104,6 +105,8 @@ namespace ExplodeIt.Stage
             }
 
             IndexAreas(areas);
+            // 보스 지정 자리도 구역처럼 씬에서 모두 찾는다. 없으면 기존 방식(플레이어 근처 넓은 쪽)으로 내려온다.
+            _bossSpawnPointSets = FindObjectsByType<BossSpawnPoints>();
             if (!ValidateWaves())
             {
                 enabled = false;
@@ -278,9 +281,19 @@ namespace ExplodeIt.Stage
 
         // 플레이어 가까이, 맵에서 더 넓은 쪽(맵 중심 쪽)으로 내려온다. 구석에 몰린 플레이어 바로 옆 벽에 붙어 나오지 않게 한다.
         // 그 자리가 구조물에 걸리면 좌우로 30도씩 돌려 가며 비어 있는 자리를 찾는다.
+        // 단, 정해진 자리가 있는 보스는 그 후보 중에서 고른다.
         private Vector2 PickBossSpawnPoint()
         {
             Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : Vector2.zero;
+            for (int i = 0; i < _bossSpawnPointSets.Length; i++)
+            {
+                BossSpawnPoints set = _bossSpawnPointSets[i];
+                if (set.BossPrefab == _bossPrefab.gameObject && set.TryPick(player, _stage.FixedSpawnMinDistance, out Vector2 fixedPoint))
+                {
+                    return fixedPoint;
+                }
+            }
+
             ArenaBounds arena = ArenaBounds.Current;
             if (arena == null)
             {

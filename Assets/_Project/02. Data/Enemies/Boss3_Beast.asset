@@ -30,7 +30,7 @@ MonoBehaviour:
   - _orbCount: 4
     _orbSpeed: 8
   _clawInterval: 2.5
-  _clawLength: 10
+  _clawLength: 8.5
   _clawWidth: 6
   _clawDashSpeed: 20
   _groggyDuration: 5

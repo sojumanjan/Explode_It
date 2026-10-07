@@ -61,7 +61,8 @@ namespace ExplodeIt.Enemies
         // 표시 컴포넌트가 읽는 값. 상태를 바꾸는 건 여전히 이 클래스만 한다.
         public EnemyState CurrentState => _state;
         public Vector2 TargetPosition => _target != null ? (Vector2)_target.position : Body.position;
-        public float TelegraphDuration => Data.TelegraphDuration;
+        // 패턴마다 예고 길이가 다른 적(여러 기술을 쓰는 보스)은 지금 쓰는 패턴의 길이로 바꾼다.
+        public virtual float TelegraphDuration => Data.TelegraphDuration;
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
         public virtual Vector2 AimDirection => DirectionToTarget();
         // 움직이는 중에도 그림이 플레이어 쪽을 보게 할지. 뒷걸음질·뒷도약처럼 가는 방향과 보는 방향이 반대일 때 켠다.
@@ -159,7 +160,7 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Telegraph:
                     TickTelegraph(deltaTime);
-                    if (_stateTime >= Data.TelegraphDuration)
+                    if (_stateTime >= TelegraphDuration)
                     {
                         EnterState(EnemyState.Attack);
                     }
@@ -500,7 +501,8 @@ namespace ExplodeIt.Enemies
         }
 
         // 정면 사각형 근접 공격. 몸 중심에서 정면으로 length, 좌우 폭 width. 대상 중심이 사각형 안에 있고 사이에 구조물이 없어야 맞는다.
-        protected void HitInBox(Vector2 forward, float length, float width)
+        // ignoreObstacles: 구조물을 뚫고 돌진하는 공격처럼, 보이는 사각형 안이면 벽 너머라도 맞힐 때 켠다.
+        protected void HitInBox(Vector2 forward, float length, float width, bool ignoreObstacles = false)
         {
             Vector2 origin = Body.position;
             Vector2 center = origin + forward * (length * 0.5f);
@@ -518,7 +520,7 @@ namespace ExplodeIt.Enemies
                     continue;
                 }
 
-                if (Physics2D.Linecast(origin, target, _obstacleFilter, CastBuffer) > 0)
+                if (!ignoreObstacles && Physics2D.Linecast(origin, target, _obstacleFilter, CastBuffer) > 0)
                 {
                     continue;
                 }
