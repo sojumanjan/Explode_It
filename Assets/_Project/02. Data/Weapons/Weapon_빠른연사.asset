@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
   _charges: 1
   _throwInterval: 0.25
-  _rechargeTime: 0.7
+  _rechargeTime: 0.75
   _burstCount: 1
   _burstInterval: 0.2
   _maxThrowRange: 5.5
   _fuseDelay: 0.5
-  _explosionRadius: 1.35
+  _explosionRadius: 1.25
   _flightDuration: 0.175
   _arcHeight: 1
