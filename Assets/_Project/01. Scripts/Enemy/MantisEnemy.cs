@@ -68,18 +68,17 @@ namespace ExplodeIt.Enemies
         private void BeginDash()
         {
             Vector2 position = Body.position;
-            Vector2 toTarget = TargetPosition - position;
-            float distance = Mathf.Min(_data.DashDistance, toTarget.magnitude - _data.AttackTriggerRange * StopRangeRatio);
+            // 입구로 들어오는 중이면 입구 점까지, 아니면 플레이어 공격 거리 바로 앞까지만 돌진한다.
+            float stopRange = IsEntering ? 0f : _data.AttackTriggerRange * StopRangeRatio;
+            float distance = Mathf.Min(_data.DashDistance, (MoveGoal - position).magnitude - stopRange);
             _moveTime = 0f;
             if (distance < MinDashDistance)
             {
                 return;
             }
 
-            // 구조물을 돌아오도록 다른 적과 같은 길찾기 방향을 따른다. 흐름장이 없는 씬에서는 직진한다.
-            FlowField field = FlowField.Current;
-            Vector2 direction = field != null ? field.GetDirection(position) : toTarget.normalized;
-            _dashEnd = position + direction * distance;
+            // 다른 적과 같은 길찾기 방향을 따른다(입구로 갈 때는 곧장, 쫓을 때는 구조물을 돌아서).
+            _dashEnd = position + MoveDirection() * distance;
             _dashSpeed = distance / _data.DashDuration;
             _isDashing = true;
             _squashRecoverTime = -1f;

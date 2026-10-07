@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ccbd133157ff54c9dc4cfbb564ecb7, type: 3}
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
-  _moveSpeed: 3.5
+  _moveSpeed: 4
   _hitsToDie: 1
-  _attackTriggerRange: 5
+  _attackTriggerRange: 5.5
   _arenaEntryDelay: 1
+  _countsAsKill: 1
   _separationDistanceRatio: 0.6
   _separationSpeed: 1.5
   _telegraphDuration: 1.3
   _recoverDuration: 1
   _deathDuration: 0.5
   _projectileSpeed: 35
-  _projectileRange: 7
+  _projectileRange: 9
   _projectileHitRadius: 0.15
   _showAimLine: 1
   _aimLockTime: 0

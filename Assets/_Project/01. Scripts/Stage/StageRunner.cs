@@ -28,13 +28,18 @@ namespace ExplodeIt.Stage
             public readonly int Order;
             public readonly Enemy Prefab;
             public readonly Vector2 Position;
+            // 구역에 입구가 연결돼 있으면 먼저 걸어갈 입구 안의 점.
+            public readonly bool HasEntry;
+            public readonly Vector2 EntryPoint;
 
-            public SpawnEvent(float time, int order, Enemy prefab, Vector2 position)
+            public SpawnEvent(float time, int order, Enemy prefab, Vector2 position, bool hasEntry, Vector2 entryPoint)
             {
                 Time = time;
                 Order = order;
                 Prefab = prefab;
                 Position = position;
+                HasEntry = hasEntry;
+                EntryPoint = entryPoint;
             }
         }
 
@@ -132,7 +137,11 @@ namespace ExplodeIt.Stage
                     while (_nextEvent < _events.Count && _events[_nextEvent].Time <= _phaseTime)
                     {
                         SpawnEvent spawn = _events[_nextEvent];
-                        _spawner.Spawn(spawn.Prefab, spawn.Position);
+                        Enemy enemy = _spawner.Spawn(spawn.Prefab, spawn.Position);
+                        if (enemy != null && spawn.HasEntry)
+                        {
+                            enemy.SetEntryPoint(spawn.EntryPoint);
+                        }
                         _nextEvent++;
                     }
 
@@ -414,7 +423,9 @@ namespace ExplodeIt.Stage
                             {
                                 float time = entries[e].StartTime + sequence * interval;
                                 Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
-                                _events.Add(new SpawnEvent(time, order++, prefab, position));
+                                bool hasEntry = area.HasEntrance;
+                                Vector2 entryPoint = hasEntry ? area.GetRandomEntrancePoint() : position;
+                                _events.Add(new SpawnEvent(time, order++, prefab, position, hasEntry, entryPoint));
                             }
 
                             sequence++;

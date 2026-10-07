@@ -32,6 +32,15 @@ namespace ExplodeIt.Enemies
         private float _lastPulledTime;
         private float _stunDuration;
         private Collider2D _collider;
+        // 맵 입구로 먼저 걸어가는 중인지. 다 걸어가면 평소 이동(플레이어 추적)으로 넘어간다.
+        private bool _hasEntryPoint;
+        private Vector2 _entryPoint;
+        private float _entryTime;
+
+        // 입구 점에 이만큼 가까워지면 지나간 것으로 본다 (유닛).
+        private const float EntryReachDistance = 0.3f;
+        // 다른 적에 밀리거나 끼어 입구 점에 끝내 닿지 못해도 이 시간이 지나면 추적으로 넘어간다 (초). 안전장치라 데이터로 빼지 않는다.
+        private const float EntryGiveUpTime = 15f;
 
         protected Rigidbody2D Body { get; private set; }
         protected HitReceiver HitReceiver => _hitReceiver;
@@ -85,6 +94,7 @@ namespace ExplodeIt.Enemies
             _hitReceiver.ResetHits(Data.HitsToDie);
             _hitReceiver.Died += OnDied;
             _arenaTime = 0f;
+            _hasEntryPoint = false;
             _collider.enabled = true;
             EnterState(EnemyState.Move);
         }
@@ -100,6 +110,15 @@ namespace ExplodeIt.Enemies
             _target = target;
             _died = died;
             _release = release;
+        }
+
+        // 스폰 직후 호출된다. 맵 밖 구역에서 바로 플레이어를 쫓으면 맵 바깥을 돌아 아무 틈으로나 들어오므로,
+        // 이 점(맵 입구)까지 곧장 걸어간 뒤 평소 이동을 시작한다. 걸어가는 동안은 공격하지 않는다.
+        public void SetEntryPoint(Vector2 point)
+        {
+            _entryPoint = point;
+            _entryTime = 0f;
+            _hasEntryPoint = true;
         }
 
         // Kinematic 리지드바디를 MovePosition으로 옮기므로 물리 스텝에서 처리한다.
@@ -128,10 +147,11 @@ namespace ExplodeIt.Enemies
             {
                 case EnemyState.Move:
                     TickMove(deltaTime);
+                    UpdateEntry(deltaTime);
                     TrackArenaEntry(deltaTime);
                     // 가려진 상태에서 예고하면 벽에 대고 공격하게 되므로, 보일 때만 시작한다.
-                    // 일단 시작한 예고는 도중에 가려져도 끝까지 진행한다.
-                    if (HasEnteredArena() && ShouldStartAttack() && (!RequiresLineOfSight || CanSeeTarget()))
+                    // 일단 시작한 예고는 도중에 가려져도 끝까지 진행한다. 입구로 들어오는 중에는 공격하지 않는다.
+                    if (!_hasEntryPoint && HasEnteredArena() && ShouldStartAttack() && (!RequiresLineOfSight || CanSeeTarget()))
                     {
                         EnterState(EnemyState.Telegraph);
                     }
@@ -186,6 +206,8 @@ namespace ExplodeIt.Enemies
             }
 
             _lastPulledTime = Time.fixedTime;
+            // 끌려가 위치가 바뀌었으니 입구로 되돌아가지 않고 풀려난 자리에서 바로 쫓는다.
+            _hasEntryPoint = false;
             if (_state != EnemyState.Pulled)
             {
                 EnterState(EnemyState.Pulled);
@@ -263,17 +285,54 @@ namespace ExplodeIt.Enemies
             Body.MovePosition(Body.position + direction * clear);
         }
 
+        // 입구 점에 닿았는지 본다. 걷는 방식은 적마다 그대로이고, 가는 곳(MoveGoal)만 입구로 바뀌어 있다.
+        private void UpdateEntry(float deltaTime)
+        {
+            if (!_hasEntryPoint)
+            {
+                return;
+            }
+
+            _entryTime += deltaTime;
+            if ((_entryPoint - Body.position).sqrMagnitude <= EntryReachDistance * EntryReachDistance || _entryTime >= EntryGiveUpTime)
+            {
+                _hasEntryPoint = false;
+            }
+        }
+
+        // 입구로 들어오는 중인지. 이동 방식이 따로인 적(돌진 등)은 이 동안 공격 거리 계산 없이 입구까지 간다.
+        protected bool IsEntering => _hasEntryPoint;
+
+        // 지금 걸어가야 할 곳. 입구로 들어오는 중이면 입구 점, 아니면 플레이어.
+        protected Vector2 MoveGoal => _hasEntryPoint ? _entryPoint : TargetPosition;
+
+        // 이번 걸음의 방향. 입구로 갈 때는 곧장, 플레이어를 쫓을 때는 흐름장을 따라 벽을 돌아간다.
+        protected Vector2 MoveDirection()
+        {
+            Vector2 toGoal = MoveGoal - Body.position;
+            Vector2 direct = toGoal.sqrMagnitude > 0.0001f ? toGoal.normalized : Vector2.zero;
+            if (_hasEntryPoint)
+            {
+                return direct;
+            }
+
+            // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
+            FlowField field = FlowField.Current;
+            return field != null ? field.GetDirection(Body.position) : direct;
+        }
+
+        // 이름은 그대로지만 입구로 들어오는 중에는 입구 점으로 간다. 걷는 속도·밀어내기는 같다.
         protected void MoveTowardTarget(float speed, float deltaTime)
         {
-            Vector2 toTarget = (Vector2)_target.position - Body.position;
+            Vector2 toTarget = MoveGoal - Body.position;
             float step = speed * deltaTime;
             Vector2 move = SeparationStep(deltaTime);
             if (toTarget.sqrMagnitude > step * step)
             {
-                // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
-                FlowField field = FlowField.Current;
-                Vector2 direction = field != null ? field.GetDirection(Body.position) : toTarget.normalized;
-                move += direction * step;
+                Vector2 direction = MoveDirection();
+                // 입구까지는 흐름장을 쓰지 않으므로 구조물에 파묻히지 않게 직접 멈춘다.
+                float distance = _hasEntryPoint ? ClearDistance(direction, step, BodyRadius) : step;
+                move += direction * distance;
             }
 
             if (move.sqrMagnitude > 0f)

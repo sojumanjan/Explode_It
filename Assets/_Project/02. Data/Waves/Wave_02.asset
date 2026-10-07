@@ -64,11 +64,6 @@ MonoBehaviour:
     _areaIds: 7
     _candidates:
     - {fileID: 11400000, guid: db35f80bb41325542807e197ec7d4b30, type: 2}
-  - _label: "24s \xB7 Area 7 \xB7 \uC804\uC0AC2\uBA85"
-    _startTime: 24
-    _areaIds: 7
-    _candidates:
-    - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
   - _label: "24s \xB7 Area 6 \xB7 \uC804\uC0AC1\uBA85"
     _startTime: 24
     _areaIds: 6
@@ -166,16 +161,16 @@ MonoBehaviour:
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "55s \xB7 Area 6 \xB7 \uBC29\uD328\uBCD11\uBA85"
+  - _label: "55s \xB7 Area 6 \xB7 \uBC29\uD328\uBCD12\uBA85"
     _startTime: 55
     _areaIds: 6
     _candidates:
-    - {fileID: 11400000, guid: db35f80bb41325542807e197ec7d4b30, type: 2}
-  - _label: "56s \xB7 Area 7 \xB7 \uBC29\uD328\uBCD11\uBA85"
+    - {fileID: 11400000, guid: 18fe8caca05b97a4186ff29101e3fd43, type: 2}
+  - _label: "56s \xB7 Area 7 \xB7 \uBC29\uD328\uBCD12\uBA85"
     _startTime: 56
     _areaIds: 7
     _candidates:
-    - {fileID: 11400000, guid: db35f80bb41325542807e197ec7d4b30, type: 2}
+    - {fileID: 11400000, guid: 18fe8caca05b97a4186ff29101e3fd43, type: 2}
   - _label: "57s \xB7 Area 8 \xB7 \uC800\uACA9\uC2181\uBA85"
     _startTime: 57
     _areaIds: 8

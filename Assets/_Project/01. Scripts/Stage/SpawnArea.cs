@@ -10,11 +10,15 @@ namespace ExplodeIt.Stage
         // SO는 씬 오브젝트를 직접 가리킬 수 없으므로, 군집 데이터는 이 번호로 구역을 고른다.
         // 같은 번호를 여러 구역에 주면 그중 하나를 무작위로 고른다.
         [SerializeField, Min(0)] private int _id;
+        // 이 구역에서 나온 적이 먼저 지나갈 맵 입구. 비워 두면 나오자마자 플레이어를 쫓는다.
+        // 바로 쫓으면 맵 밖을 빙 돌아 엉뚱한 틈으로 들어오므로, 정해진 입구로 들어오게 한다.
+        [SerializeField] private Collider2D _entrance;
 
         private Bounds _bounds;
         private bool _hasBounds;
 
         public int Id => _id;
+        public bool HasEntrance => _entrance != null;
 
         // 다른 컴포넌트의 Awake에서도 읽히므로 이 컴포넌트의 Awake 순서에 기대지 않고 처음 읽을 때 잰다.
         // 구역은 전투 중 움직이지 않으므로 한 번만 잰다.
@@ -40,11 +44,26 @@ namespace ExplodeIt.Stage
                 Random.Range(bounds.min.y, bounds.max.y));
         }
 
+        // 입구 안의 한 점. 모두 한가운데로 몰려 한 줄로 들어오지 않게 입구 폭 안에서 흩는다.
+        public Vector2 GetRandomEntrancePoint()
+        {
+            Bounds bounds = _entrance.bounds;
+            return new Vector2(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y, bounds.max.y));
+        }
+
 #if UNITY_EDITOR
         // 군집 데이터에 적을 번호를 씬 뷰에서 바로 읽을 수 있게 한다.
         private void OnDrawGizmos()
         {
             UnityEditor.Handles.Label(transform.position, $"Area {_id}");
+            // 어느 입구와 이어졌는지 씬 뷰에서 바로 확인한다.
+            if (_entrance != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position, _entrance.bounds.center);
+            }
         }
 #endif
     }
