@@ -65,8 +65,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("가짜 구멍 하나에서 튀어나오는 다이너마이트 수 (개, 최소~최대)")]
         [SerializeField] private Vector2Int _dynamiteCount = new Vector2Int(3, 4);
 
-        [Tooltip("분출부터 다이너마이트가 터지기까지 (초). 날아가 떨어지는 시간도 여기에 포함된다")]
-        [SerializeField, Min(0.1f)] private float _dynamiteDelay = 0.6f;
+        // 모두 같은 순간에 터지면 한 번 펑 하고 끝나 밋밋하다. 개별로 조금씩 어긋나 연쇄로 터지게 한다.
+        [Tooltip("분출부터 다이너마이트가 터지기까지 (초, 최소~최대). 하나마다 이 사이에서 따로 정한다. 날아가 떨어지는 시간도 여기에 포함된다")]
+        [SerializeField] private Vector2 _dynamiteDelayRange = new Vector2(0.95f, 1.05f);
 
         [Tooltip("다이너마이트가 떨어지는 거리 (유닛, 최소~최대). 가짜 구멍 중심에서 서로 다른 방향으로 이 거리 안에 떨어진다")]
         [SerializeField] private Vector2 _dynamiteDistance = new Vector2(0.5f, 2f);
@@ -146,7 +147,7 @@ namespace ExplodeIt.Enemies
         public Vector2 FakeHoleDistance => _fakeHoleDistance;
         public float HoleSpacing => _holeSpacing;
         public Vector2Int DynamiteCount => _dynamiteCount;
-        public float DynamiteDelay => _dynamiteDelay;
+        public Vector2 DynamiteDelayRange => _dynamiteDelayRange;
         public Vector2 DynamiteDistance => _dynamiteDistance;
         public float DynamiteRadius => _holeRadius * _dynamiteRadiusRatio;
         public float DynamiteArcHeight => _dynamiteArcHeight;

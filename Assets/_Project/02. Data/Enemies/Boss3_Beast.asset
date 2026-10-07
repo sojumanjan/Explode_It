@@ -19,7 +19,7 @@ MonoBehaviour:
   _countsAsKill: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
-  _telegraphDuration: 0.65
+  _telegraphDuration: 0.6
   _recoverDuration: 0.6
   _deathDuration: 1
   _tiers:
@@ -30,7 +30,7 @@ MonoBehaviour:
   - _orbCount: 4
     _orbSpeed: 8
   _clawInterval: 2.5
-  _clawLength: 8
+  _clawLength: 10
   _clawWidth: 6
   _clawDashSpeed: 20
   _groggyDuration: 5
@@ -38,7 +38,7 @@ MonoBehaviour:
   _orbSpawnRadius: 0.5
   _lungeCircleRadius: 2
   _lungeDuration: {x: 0.35, y: 0.45}
-  _lungePause: {x: 0.15, y: 0.2}
+  _lungePause: {x: 0.15, y: 0.175}
   _clawReadySound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}
   _clawSound: {fileID: 11400000, guid: d877ad611f4f5dc4b912a49f0dafa52c, type: 2}
   _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}

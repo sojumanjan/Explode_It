@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186bc05e8d821284b80da15231e957af, type: 3}
   m_Name: AbilityData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AbilityData
-  _killsToCharge: 9
+  _killsToCharge: 10
   _maxCharges: 2
   _startCharges: 1
   _maxThrowRange: 15

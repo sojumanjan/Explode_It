@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f1fb9fc087922438db647db1dd5f6e, type: 3}
   m_Name: ChargerData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ChargerData
-  _moveSpeed: 4
+  _moveSpeed: 6.5
   _hitsToDie: 1
   _attackTriggerRange: 4
   _arenaEntryDelay: 1
+  _countsAsKill: 1
+  _separationDistanceRatio: 0.6
+  _separationSpeed: 1.5
   _telegraphDuration: 0.6
   _recoverDuration: 1
   _deathDuration: 0.5

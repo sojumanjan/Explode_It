@@ -19,7 +19,7 @@ MonoBehaviour:
   _countsAsKill: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
-  _telegraphDuration: 1.5
+  _telegraphDuration: 1
   _recoverDuration: 1
   _deathDuration: 1
   _tiers:
@@ -37,10 +37,10 @@ MonoBehaviour:
   _realHoleDistance: {x: 3, y: 4}
   _fakeHoleDistance: {x: 3, y: 5}
   _holeSpacing: 2
-  _dynamiteCount: {x: 3, y: 4}
-  _dynamiteDelay: 1
-  _dynamiteDistance: {x: 2, y: 3}
-  _dynamiteRadiusRatio: 0.75
+  _dynamiteCount: {x: 4, y: 5}
+  _dynamiteDelayRange: {x: 0.85, y: 1.3}
+  _dynamiteDistance: {x: 2, y: 7}
+  _dynamiteRadiusRatio: 0.9
   _dynamiteArcHeight: 0.8
   _leapDistance: 10
   _leapDuration: 0.8
@@ -56,7 +56,7 @@ MonoBehaviour:
   _digSound: {fileID: 11400000, guid: 2c35d43679bfefa48a0a139ee6616b60, type: 2}
   _burstSound: {fileID: 11400000, guid: f99094c801960284f8782cb3a51a8ef0, type: 2}
   _heatSound: {fileID: 11400000, guid: 5960147957a34d74585f22502271ce05, type: 2}
-  _dynamiteSound: {fileID: 11400000, guid: 792b52cb07a06dd48b30e38b104bb0e9, type: 2}
+  _dynamiteSound: {fileID: 11400000, guid: f99094c801960284f8782cb3a51a8ef0, type: 2}
   _diggingMoveSound: {fileID: 11400000, guid: c8e9ceb5f079625488cfdc396962b00a, type: 2}
   _overheatSound: {fileID: 0}
   _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}

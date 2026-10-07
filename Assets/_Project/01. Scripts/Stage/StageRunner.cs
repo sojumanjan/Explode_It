@@ -16,7 +16,7 @@ namespace ExplodeIt.Stage
             Rest,
             Spawning,
             BossIntro,
-            // 보스가 내려앉은 뒤: 멈춤 → 카메라 복귀 → 보스 행동 시작.
+            // 보스가 내려앉은 뒤: 멈춤 → 보스 등장 동작 → 조작 복귀·카메라 복귀 → 보스 행동 시작.
             BossEntrance,
             Boss
         }
@@ -65,6 +65,8 @@ namespace ExplodeIt.Stage
         private bool _isBossDefeated;
         private IBoss _boss;
         private bool _isControlReleased;
+        private bool _hasPlayedEntrance;
+        private float _releaseTime;
 
         public bool IsPaused { get; set; }
         public Phase CurrentPhase => _phase;
@@ -169,12 +171,20 @@ namespace ExplodeIt.Stage
                         break;
                     }
 
-                    if (!_isControlReleased && _phaseTime >= _stage.BossRevealHold)
+                    if (!_hasPlayedEntrance && _phaseTime >= _stage.BossRevealHold)
                     {
-                        ReleaseEntrance();
+                        _hasPlayedEntrance = true;
+                        _boss?.PlayEntrance();
                     }
 
-                    if (_phaseTime >= _stage.BossRevealHold + _stage.BossCameraBlend)
+                    // 보스마다 등장 동작(예: 광부의 파고들기)이 끝나는 시점이 달라서, 끝났다고 알려 올 때 조작을 돌려준다.
+                    if (!_isControlReleased && _hasPlayedEntrance && (_boss == null || _boss.IsEntranceDone))
+                    {
+                        ReleaseEntrance();
+                        _releaseTime = _phaseTime;
+                    }
+
+                    if (_isControlReleased && _phaseTime >= _releaseTime + _stage.BossCameraBlend)
                     {
                         _boss?.StartFight();
                         EnterPhase(Phase.Boss);
@@ -226,6 +236,7 @@ namespace ExplodeIt.Stage
             Enemy boss = _spawner.Spawn(_bossPrefab, _bossSpawnPoint);
             _boss = boss as IBoss;
             _boss?.BeginBoss(_bossNumber, _bossTier);
+            _hasPlayedEntrance = false;
 
             FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
             EnterPhase(Phase.BossEntrance);

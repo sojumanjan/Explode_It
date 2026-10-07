@@ -46,6 +46,7 @@ namespace ExplodeIt.Enemies
         private int _bossNumber;
         private int _tier;
         private bool _isFighting;
+        private bool _isEntering;
         private MovePhase _phase;
         private float _phaseTime;
         private Vector2 _leapStart;
@@ -102,6 +103,7 @@ namespace ExplodeIt.Enemies
         protected override void OnEnable()
         {
             _isFighting = false;
+            _isEntering = false;
             base.OnEnable();
             HitReceiver.Blocked += OnHitBlocked;
             HideHoles();
@@ -153,16 +155,30 @@ namespace ExplodeIt.Enemies
             ApplyHeatTint();
         }
 
-        // 등장 연출이 끝나면 그 자리에서 파고들며 시작한다.
+        // 플레이어가 멈춰 있는 동안 그 자리에서 파고드는 모습까지 보여준다. 땅속으로 사라진 직후 조작이 돌아온다.
+        public void PlayEntrance()
+        {
+            _isEntering = true;
+            BeginDig();
+        }
+
+        public bool IsEntranceDone => _isEntering && _phase == MovePhase.Underground;
+
+        // 카메라가 돌아오면 땅속 이동부터 시작한다. 등장 동작을 건너뛴 경우에만 직접 파고든다.
         public void StartFight()
         {
             _isFighting = true;
-            BeginDig();
+            _isEntering = false;
+            if (_phase != MovePhase.Underground)
+            {
+                BeginDig();
+            }
         }
 
         protected override void TickMove(float deltaTime)
         {
-            if (!_isFighting)
+            // 등장 동작 중에는 파고들기까지만 진행하고, 땅속 이동은 카메라가 돌아온 뒤에 시작한다.
+            if (!_isFighting && !(_isEntering && _phase == MovePhase.Dig))
             {
                 return;
             }
@@ -528,7 +544,8 @@ namespace ExplodeIt.Enemies
                 float angle = (baseAngle + step * k + Random.Range(-step * 0.25f, step * 0.25f)) * Mathf.Deg2Rad;
                 float distance = Random.Range(_data.DynamiteDistance.x, _data.DynamiteDistance.y);
                 Vector2 landing = ClampToArena(center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance);
-                _dynamites[index].Launch(center, landing, _data.DynamiteDelay, _data.DynamiteArcHeight, _data.DynamiteRadius, _onDynamiteExplode);
+                float delay = Random.Range(_data.DynamiteDelayRange.x, _data.DynamiteDelayRange.y);
+                _dynamites[index].Launch(center, landing, delay,_data.DynamiteArcHeight, _data.DynamiteRadius, _onDynamiteExplode);
                 index++;
             }
 

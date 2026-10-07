@@ -103,6 +103,13 @@ namespace ExplodeIt.Enemies
             LaunchOrbs();
         }
 
+        // 따로 보여줄 등장 동작이 없다. 멈춤이 끝나면 바로 조작을 돌려준다.
+        public void PlayEntrance()
+        {
+        }
+
+        public bool IsEntranceDone => true;
+
         public void StartFight()
         {
             _isFighting = true;
