@@ -6,6 +6,9 @@ namespace ExplodeIt.Enemies
     // 예측 과제: 경로가 예고 시작에 정해지므로, 선 밖으로 빠지면서 돌진이 끝날 지점에 폭탄을 둔다.
     public class ChargerEnemy : Enemy
     {
+        // 물리 밀림으로 몸이 벽에 아주 살짝 파묻혀도 출발점부터 막힌 것으로 치지 않게 두는 여유 (유닛). 물리 오차 보정이라 데이터로 빼지 않는다.
+        private const float WallSkin = 0.05f;
+
         [SerializeField] private ChargerData _data;
         [SerializeField] private TelegraphLine _telegraph;
 
@@ -60,8 +63,10 @@ namespace ExplodeIt.Enemies
         private void AimAtTarget()
         {
             _chargeDirection = DirectionToTarget();
-            // 벽이 있으면 벽 앞에서 멈춘다.
-            _chargeLength = ClearDistance(_chargeDirection, _data.ChargeDistance, _data.ContactRadius);
+            // 벽이 있으면 벽 앞에서 멈춘다. 벽에 부딪히는 건 몸이므로 판정 반경이 아니라 몸 반경으로 잰다.
+            // 판정 반경(몸보다 큼)으로 재면 벽 근처에만 있어도 출발점부터 막혀 돌진 길이가 0이 된다.
+            float castRadius = Mathf.Max(BodyRadius - WallSkin, 0.01f);
+            _chargeLength = ClearDistance(_chargeDirection, _data.ChargeDistance, castRadius);
             _telegraph.Show(Body.position, _chargeDirection, _chargeLength, _data.ContactRadius * 2f);
         }
     }

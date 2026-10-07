@@ -58,6 +58,14 @@ MonoBehaviour:
     m_Bits: 256
   _explodeFlashColor: {r: 1, g: 1, b: 1, a: 0.5}
   _explosionFxDuration: 0.15
+  _burnTint: {r: 1, g: 0.45, b: 0.2, a: 1}
+  _burnPopScale: 1.35
+  _burnPopDuration: 0.08
+  _burnShrinkDuration: 0.3
+  _throbStart: 0.06
+  _throbEnd: 0.25
+  _throbCycles: 3
+  _throbTint: {r: 1, g: 0.35, b: 0.3, a: 1}
 --- !u!1 &2475476411035887707
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,8 +92,8 @@ Transform:
   m_GameObject: {fileID: 2475476411035887707}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalPosition: {x: 0.046, y: 0.083, z: 0}
+  m_LocalScale: {x: 0.76122004, y: 0.76122004, z: 1.2687}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4615696721632847200}
@@ -139,8 +147,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: fbc7d69a94963e74081662d1464992f3, type: 3}
-  m_Color: {r: 0.12, g: 0.12, b: 0.12, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f2dffb267cff79043a6103e92bba2373, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

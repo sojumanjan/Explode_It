@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4719f555518a1fc4fa7b8874baace4c7, type: 3}
+  m_Name: Wave_04
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.WaveData
+  _memo: 
+  _totalSpawnPreview: 4
+  _groups:
+  - _label: "0s \xB7 Area 1,4,7,9 \xB7 \uCC28\uC8001\uBA85 \xD74"
+    _startTime: 0
+    _areaIds: 1,4,7,9
+    _candidates:
+    - {fileID: 11400000, guid: e232578ef37dd2c4c826cc181f4e756d, type: 2}

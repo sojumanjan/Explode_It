@@ -23,13 +23,13 @@ MonoBehaviour:
   _recoverDuration: 0.6
   _deathDuration: 1
   _tiers:
-  - _orbCount: 2
-    _orbSpeed: 6
   - _orbCount: 3
-    _orbSpeed: 7
+    _orbSpeed: 6
   - _orbCount: 4
+    _orbSpeed: 7
+  - _orbCount: 5
     _orbSpeed: 8
-  _clawInterval: 2.5
+  _clawInterval: 2
   _clawLength: 8.5
   _clawWidth: 6
   _clawDashSpeed: 20

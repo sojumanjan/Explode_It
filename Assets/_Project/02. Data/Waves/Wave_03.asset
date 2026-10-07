@@ -90,172 +90,172 @@ MonoBehaviour:
     _areaIds: 1,3,6,8,10
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "35s \xB7 Area 2 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 35
+  - _label: "38s \xB7 Area 2 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 38
     _areaIds: 2
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "35s \xB7 Area 4 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 35
+  - _label: "38s \xB7 Area 4 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 38
     _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "35s \xB7 Area 7 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 35
+  - _label: "38s \xB7 Area 7 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 38
     _areaIds: 7
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "35s \xB7 Area 9 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 35
+  - _label: "38s \xB7 Area 9 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 38
     _areaIds: 9
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "37s \xB7 Area 1 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 37
+  - _label: "40s \xB7 Area 1 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 40
     _areaIds: 1
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "37s \xB7 Area 3 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 37
+  - _label: "40s \xB7 Area 3 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 40
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "37s \xB7 Area 6 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 37
+  - _label: "40s \xB7 Area 6 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 40
     _areaIds: 6
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "37s \xB7 Area 8 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 37
+  - _label: "40s \xB7 Area 8 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 40
     _areaIds: 8
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "37s \xB7 Area 10 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
-    _startTime: 37
+  - _label: "40s \xB7 Area 10 \xB7 \uC804\uC0AC1\uBA85 / \uAD81\uC2181\uBA85"
+    _startTime: 40
     _areaIds: 10
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "42s \xB7 Area 10 \xB7 \uBC29\uD328\uBCD12\uBA85"
-    _startTime: 42
+  - _label: "50s \xB7 Area 10 \xB7 \uBC29\uD328\uBCD12\uBA85"
+    _startTime: 50
     _areaIds: 10
     _candidates:
     - {fileID: 11400000, guid: 18fe8caca05b97a4186ff29101e3fd43, type: 2}
-  - _label: "43s \xB7 Area 10 \xB7 \uAD81\uC2182\uBA85"
-    _startTime: 43
+  - _label: "51s \xB7 Area 10 \xB7 \uAD81\uC2182\uBA85"
+    _startTime: 51
     _areaIds: 10
     _candidates:
     - {fileID: 11400000, guid: 0a08af4ab71dd1e47a3ad91f16dd829a, type: 2}
-  - _label: "45s \xB7 Area 7 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
-    _startTime: 45
+  - _label: "53s \xB7 Area 7 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
+    _startTime: 53
     _areaIds: 7
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "47s \xB7 Area 4 \xB7 \uC804\uC0AC3\uBA85"
-    _startTime: 47
+  - _label: "55s \xB7 Area 4 \xB7 \uC804\uC0AC3\uBA85"
+    _startTime: 55
     _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "49s \xB7 Area 1 \xB7 \uC804\uC0AC3\uBA85"
-    _startTime: 49
+  - _label: "57s \xB7 Area 1 \xB7 \uC804\uC0AC3\uBA85"
+    _startTime: 57
     _areaIds: 1
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "54s \xB7 Area 2,5,8,10 \xB7 \uBC29\uD328\uBCD11\uBA85 \xD74"
-    _startTime: 54
+  - _label: "62s \xB7 Area 2,5,8,10 \xB7 \uBC29\uD328\uBCD11\uBA85 \xD74"
+    _startTime: 62
     _areaIds: 2,5,8,10
     _candidates:
     - {fileID: 11400000, guid: db35f80bb41325542807e197ec7d4b30, type: 2}
-  - _label: "55s \xB7 Area 5,10 \xB7 \uC800\uACA9\uC2181\uBA85 \xD72"
-    _startTime: 55
+  - _label: "63s \xB7 Area 5,10 \xB7 \uC800\uACA9\uC2181\uBA85 \xD72"
+    _startTime: 63
     _areaIds: 5,10
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
-  - _label: "58s \xB7 Area 1,7 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
-    _startTime: 58
+  - _label: "66s \xB7 Area 1,7 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
+    _startTime: 66
     _areaIds: 1,7
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "60s \xB7 Area 3,8 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
-    _startTime: 60
+  - _label: "68s \xB7 Area 3,8 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
+    _startTime: 68
     _areaIds: 3,8
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "63s \xB7 Area 3 \xB7 \uBC29\uD328\uBCD13\uBA85"
-    _startTime: 63
+  - _label: "71s \xB7 Area 3 \xB7 \uBC29\uD328\uBCD13\uBA85"
+    _startTime: 71
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: d8e99bd19186e3b43be27e33ebdcff63, type: 2}
-  - _label: "64s \xB7 Area 3 \xB7 \uC804\uC0AC3\uBA85"
-    _startTime: 64
+  - _label: "72s \xB7 Area 3 \xB7 \uC804\uC0AC3\uBA85"
+    _startTime: 72
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "64s \xB7 Area 3 \xB7 \uC800\uACA9\uC2182\uBA85"
-    _startTime: 64
+  - _label: "72s \xB7 Area 3 \xB7 \uC800\uACA9\uC2182\uBA85"
+    _startTime: 72
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: e4bd13910ed7613458261edb30116299, type: 2}
-  - _label: "70s \xB7 Area 1,4,7,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD74"
-    _startTime: 70
+  - _label: "78s \xB7 Area 1,4,7,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD74"
+    _startTime: 78
     _areaIds: 1,4,7,9
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "73s \xB7 Area 1,4,7,9 \xB7 \uC804\uC0AC2\uBA85 \xD74"
-    _startTime: 73
+  - _label: "81s \xB7 Area 1,4,7,9 \xB7 \uC804\uC0AC2\uBA85 \xD74"
+    _startTime: 81
     _areaIds: 1,4,7,9
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
-  - _label: "80s \xB7 Area 5 \xB7 \uC804\uC0AC2\uBA85"
-    _startTime: 80
+  - _label: "91s \xB7 Area 5 \xB7 \uC804\uC0AC2\uBA85"
+    _startTime: 91
     _areaIds: 5
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
-  - _label: "81s \xB7 Area 1 \xB7 \uAD81\uC2183\uBA85"
-    _startTime: 81
+  - _label: "92s \xB7 Area 1 \xB7 \uAD81\uC2183\uBA85"
+    _startTime: 92
     _areaIds: 1
     _candidates:
     - {fileID: 11400000, guid: 92c132c3649bc2848972325c4f21dd93, type: 2}
-  - _label: "82s \xB7 Area 8 \xB7 \uC800\uACA9\uC2181\uBA85"
-    _startTime: 82
+  - _label: "93s \xB7 Area 8 \xB7 \uC800\uACA9\uC2181\uBA85"
+    _startTime: 93
     _areaIds: 8
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
-  - _label: "83s \xB7 Area 6 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
-    _startTime: 83
+  - _label: "94s \xB7 Area 6 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
+    _startTime: 94
     _areaIds: 6
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "84s \xB7 Area 4 \xB7 \uC804\uC0AC3\uBA85"
-    _startTime: 84
+  - _label: "95s \xB7 Area 4 \xB7 \uC804\uC0AC3\uBA85"
+    _startTime: 95
     _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "85s \xB7 Area 2 \xB7 \uC800\uACA9\uC2181\uBA85"
-    _startTime: 85
+  - _label: "96s \xB7 Area 2 \xB7 \uC800\uACA9\uC2181\uBA85"
+    _startTime: 96
     _areaIds: 2
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
-  - _label: "86s \xB7 Area 10 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
-    _startTime: 86
+  - _label: "97s \xB7 Area 10 \xB7 \uC0AC\uB9C8\uADC01\uBA85"
+    _startTime: 97
     _areaIds: 10
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
-  - _label: "86s \xB7 Area 8 \xB7 \uC804\uC0AC3\uBA85"
-    _startTime: 86
+  - _label: "97s \xB7 Area 8 \xB7 \uC804\uC0AC3\uBA85"
+    _startTime: 97
     _areaIds: 8
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "92s \xB7 Area 1,3,5,7,8,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD76"
-    _startTime: 92
+  - _label: "103s \xB7 Area 1,3,5,7,8,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD76"
+    _startTime: 103
     _areaIds: 1,3,5,7,8,9
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}

@@ -25,6 +25,12 @@ namespace ExplodeIt.Bombs
         [SerializeField, Min(1f)] private float _burnPopScale = 1.35f;
         [SerializeField, Min(0f)] private float _burnPopDuration = 0.08f;
         [SerializeField, Min(0f)] private float _burnShrinkDuration = 0.3f;
+        // 착지 후 터지기 전까지 터질 듯 말 듯 부풀었다 줄었다 하는 연출. 처음엔 느리고 작게, 터지기 직전엔 빠르고 크게 + 붉게 달아오른다.
+        // 남은 시간은 채움 원이 정확히 보여주므로 그림 전용이다. 부풂(비율): 처음/끝, 횟수: 착지부터 폭발까지 몇 번 뛰는지.
+        [SerializeField, Min(0f)] private float _throbStart = 0.06f;
+        [SerializeField, Min(0f)] private float _throbEnd = 0.25f;
+        [SerializeField, Min(0f)] private float _throbCycles = 3f;
+        [SerializeField] private Color _throbTint = new Color(1f, 0.35f, 0.3f, 1f);
 
         private ContactFilter2D _hitFilter;
         private ContactFilter2D _obstacleFilter;
@@ -126,7 +132,6 @@ namespace ExplodeIt.Bombs
                 // 채움 원이 바깥 모양에 닿는 순간 터지므로, 남은 시간을 눈으로 읽을 수 있다.
                 // 모양 전체를 확대하면 벽 쪽이 처음부터 찌그러져 보이므로, 원으로 퍼지다 벽에서 멈추게 반경을 키운다.
                 .Append(DOVirtual.Float(0f, _radius, stats.FuseDelay, _onFillGrow).SetEase(Ease.Linear))
-                .Join(_body.transform.DOPunchScale(_bodyScale * 0.3f, 0.15f, 6))
                 .AppendCallback(_onExplode)
                 .Append(DOVirtual.Float(1f, 0f, _explosionFxDuration, _onFade))
                 .OnComplete(_onComplete);
@@ -180,6 +185,17 @@ namespace ExplodeIt.Bombs
         private void GrowFill(float radius)
         {
             _fuseFill.SetRadius(radius);
+            Throb(_radius > 0f ? radius / _radius : 1f);
+        }
+
+        // progress 0(착지) → 1(폭발). 뛰는 간격이 점점 짧아지도록 위상을 progress의 제곱으로 키운다.
+        private void Throb(float progress)
+        {
+            float phase = _throbCycles * (0.35f * progress + 0.65f * progress * progress);
+            float beat = 0.5f - 0.5f * Mathf.Cos(phase * 2f * Mathf.PI);
+            float amount = Mathf.Lerp(_throbStart, _throbEnd, progress) * beat;
+            _body.transform.localScale = _bodyScale * (1f + amount);
+            _body.color = Color.Lerp(_bodyColor, _throbTint, beat * progress);
         }
 
         private void Fade(float opacity)
