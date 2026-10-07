@@ -7,6 +7,8 @@ namespace ExplodeIt.Bombs
         public int Charges { get; set; }
         public float ThrowInterval { get; set; }
         public float RechargeTime { get; set; }
+        public int BurstCount { get; set; }
+        public float BurstInterval { get; set; }
         public float MaxThrowRange { get; set; }
         public float FuseDelay { get; set; }
         public float ExplosionRadius { get; set; }
@@ -24,6 +26,8 @@ namespace ExplodeIt.Bombs
             Charges = data.Charges;
             ThrowInterval = data.ThrowInterval;
             RechargeTime = data.RechargeTime;
+            BurstCount = data.BurstCount;
+            BurstInterval = data.BurstInterval;
             MaxThrowRange = data.MaxThrowRange;
             FuseDelay = data.FuseDelay;
             ExplosionRadius = data.ExplosionRadius;

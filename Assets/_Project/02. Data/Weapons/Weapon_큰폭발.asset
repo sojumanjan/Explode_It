@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdea0c2685b806f4bba29abb0c28ade4, type: 3}
+  m_Name: "Weapon_\uD070\uD3ED\uBC1C"
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
+  _charges: 1
+  _throwInterval: 0.25
+  _rechargeTime: 1.1
+  _burstCount: 1
+  _burstInterval: 0.2
+  _maxThrowRange: 7
+  _fuseDelay: 1
+  _explosionRadius: 2.3
+  _flightDuration: 0.35
+  _arcHeight: 1

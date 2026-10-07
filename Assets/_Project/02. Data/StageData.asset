@@ -19,7 +19,7 @@ MonoBehaviour:
   _sameAreaSpawnInterval: 0.2
   _clusterRadius: 1
   _waves:
-  - {fileID: 11400000, guid: 38d473f88f0867e439452c29133d8f6c, type: 2}
+  - {fileID: 11400000, guid: dce335c73ab46ce42807c0d7c00278b6, type: 2}
   - {fileID: 11400000, guid: 73ebdf7d16d95be489365e34c20e0a0b, type: 2}
   - {fileID: 11400000, guid: 673b8a5e5efdffe4099a08467e67dcd7, type: 2}
   _bossRotation:

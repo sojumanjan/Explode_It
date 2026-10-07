@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using ExplodeIt.Bombs;
 using ExplodeIt.Core;
@@ -27,6 +28,18 @@ namespace ExplodeIt.UI
         [SerializeField] private EnemySpawner _spawner;
         [SerializeField] private PlayerAbility _ability;
         [SerializeField] private HitReceiver _playerHitReceiver;
+        // 수치 비교용으로 갈아 끼울 무기들. 에셋 이름이 한글이라 IMGUI에서 깨지므로 버튼 이름을 따로 적는다.
+        [SerializeField] private WeaponOption[] _weapons;
+
+        [Serializable]
+        private struct WeaponOption
+        {
+            [SerializeField] private string _label;
+            [SerializeField] private WeaponData _data;
+
+            public string Label => _label;
+            public WeaponData Data => _data;
+        }
 
         private bool _isOpen;
         private float _fps;
@@ -117,6 +130,7 @@ namespace ExplodeIt.UI
         private void DrawWeapon()
         {
             Header("Bomb");
+            DrawWeaponButtons();
             WeaponStats stats = _launcher.Stats;
 
             GUI.changed = false;
@@ -125,11 +139,38 @@ namespace ExplodeIt.UI
             stats.Charges = IntSlider("Charges", stats.Charges, 1, 10);
             stats.RechargeTime = Slider("Recharge Time (s)", stats.RechargeTime, 0f, 5f);
             stats.ThrowInterval = Slider("Throw Interval (s)", stats.ThrowInterval, 0.05f, 1f);
+            stats.BurstCount = IntSlider("Burst Count", stats.BurstCount, 1, 5);
+            stats.BurstInterval = Slider("Burst Interval (s)", stats.BurstInterval, 0.05f, 0.5f);
             stats.MaxThrowRange = Slider("Max Throw Range", stats.MaxThrowRange, 2f, 12f);
 
             if (GUI.changed)
             {
                 _launcher.ApplyStats();
+            }
+        }
+
+        // 지금 낀 무기는 버튼 이름 앞에 > 를 붙여 표시한다.
+        private void DrawWeaponButtons()
+        {
+            if (_weapons == null || _weapons.Length == 0)
+            {
+                return;
+            }
+
+            const int buttonsPerRow = 3;
+            for (int i = 0; i < _weapons.Length; i += buttonsPerRow)
+            {
+                GUILayout.BeginHorizontal();
+                for (int w = i; w < Mathf.Min(i + buttonsPerRow, _weapons.Length); w++)
+                {
+                    WeaponOption option = _weapons[w];
+                    string label = option.Data == _launcher.Weapon ? "> " + option.Label : option.Label;
+                    if (GUILayout.Button(label))
+                    {
+                        _launcher.Equip(option.Data);
+                    }
+                }
+                GUILayout.EndHorizontal();
             }
         }
 
@@ -240,8 +281,9 @@ namespace ExplodeIt.UI
         {
             WeaponStats stats = _launcher.Stats;
             var builder = new StringBuilder("[DevPanel] 현재 값\n");
-            builder.Append($"WeaponData: 딜레이 {stats.FuseDelay:0.00}, 반경 {stats.ExplosionRadius:0.00}, 보유 {stats.Charges}, " +
-                           $"쿨타임 {stats.RechargeTime:0.00}, 연사 {stats.ThrowInterval:0.00}, 사거리 {stats.MaxThrowRange:0.00}");
+            builder.Append($"{_launcher.Weapon.name}: 딜레이 {stats.FuseDelay:0.00}, 반경 {stats.ExplosionRadius:0.00}, 보유 {stats.Charges}, " +
+                           $"쿨타임 {stats.RechargeTime:0.00}, 연사 {stats.ThrowInterval:0.00}, 사거리 {stats.MaxThrowRange:0.00}, " +
+                           $"연발 {stats.BurstCount}, 연발 간격 {stats.BurstInterval:0.00}");
             Debug.Log(builder.ToString());
         }
 

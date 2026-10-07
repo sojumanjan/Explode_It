@@ -12,8 +12,14 @@ namespace ExplodeIt.Bombs
         [Tooltip("연사 간격 (초). 연속 투척 사이 최소 시간")]
         [SerializeField, Min(0f)] private float _throwInterval = 0.25f;
 
-        [Tooltip("쿨타임 (초). 마지막 투척 후 이 시간 동안 던지지 않으면 보유 개수가 한 번에 가득 찬다")]
+        [Tooltip("쿨타임 (초). 보유 개수가 가득 차 있지 않으면 이 시간마다 연발 수만큼(보통 하나씩) 찬다. 던져도 진행 중인 충전은 끊기지 않는다")]
         [SerializeField, Min(0f)] private float _rechargeTime = 1.5f;
+
+        [Tooltip("연발 수 (발). 한 번 누르면 이만큼 자동으로 연달아 던진다. 발마다 보유 개수를 하나씩 쓰고, 충전도 한 번에 이만큼씩 찬다. 보통 무기는 1")]
+        [SerializeField, Min(1)] private int _burstCount = 1;
+
+        [Tooltip("연발 간격 (초). 연발 사이 시간. 다음 발은 그 순간의 커서 위치로 날아간다")]
+        [SerializeField, Min(0f)] private float _burstInterval = 0.2f;
 
         [Tooltip("최대 사거리 (유닛). 커서가 이보다 멀면 사거리 원 경계에 떨어진다")]
         [SerializeField, Min(0f)] private float _maxThrowRange = 6f;
@@ -35,6 +41,8 @@ namespace ExplodeIt.Bombs
         public int Charges => _charges;
         public float ThrowInterval => _throwInterval;
         public float RechargeTime => _rechargeTime;
+        public int BurstCount => _burstCount;
+        public float BurstInterval => _burstInterval;
         public float MaxThrowRange => _maxThrowRange;
         public float FuseDelay => _fuseDelay;
         public float ExplosionRadius => _explosionRadius;

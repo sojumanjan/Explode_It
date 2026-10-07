@@ -17275,6 +17275,17 @@ MonoBehaviour:
   _spawner: {fileID: 216240368}
   _ability: {fileID: 1456756929}
   _playerHitReceiver: {fileID: 1456756928}
+  _weapons:
+  - _label: Normal
+    _data: {fileID: 11400000, guid: 6222f052b9ae27f409ac02e2a4afa7a3, type: 2}
+  - _label: Rapid
+    _data: {fileID: 11400000, guid: d43e31b338f00544eb0b8db66ea60555, type: 2}
+  - _label: Big
+    _data: {fileID: 11400000, guid: 704607521b200f14eb3d5c65cc2d416c, type: 2}
+  - _label: Triple
+    _data: {fileID: 11400000, guid: c6341796715287f45b0e271a626107cc, type: 2}
+  - _label: Double
+    _data: {fileID: 11400000, guid: 93230c5cbba04d449a90769f4393e7fc, type: 2}
 --- !u!4 &1875820707
 Transform:
   m_ObjectHideFlags: 0

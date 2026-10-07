@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fdea0c2685b806f4bba29abb0c28ade4, type: 3}
-  m_Name: WeaponData
+  m_Name: "Weapon_\uB354\uBE14\uBC30\uB7F4"
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
-  _charges: 1
+  _charges: 2
   _throwInterval: 0.25
-  _rechargeTime: 1
+  _rechargeTime: 1.6
+  _burstCount: 2
+  _burstInterval: 0.15
   _maxThrowRange: 6
   _fuseDelay: 0.65
-  _explosionRadius: 1.7
+  _explosionRadius: 1.9
   _flightDuration: 0.25
   _arcHeight: 1

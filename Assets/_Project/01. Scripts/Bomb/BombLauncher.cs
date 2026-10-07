@@ -26,9 +26,13 @@ namespace ExplodeIt.Bombs
         private int _chargesLeft;
         private float _nextThrowTime;
         private float _rechargeTimer;
+        // 연발 무기에서 아직 자동으로 나갈 발 수와 다음 발 시각.
+        private int _pendingShots;
+        private float _nextBurstTime;
         private bool _canThrow = true;
 
         public WeaponStats Stats => _stats;
+        public WeaponData Weapon => _weaponData;
 
         private void Awake()
         {
@@ -69,6 +73,21 @@ namespace ExplodeIt.Bombs
             ApplyStats();
         }
 
+        // 무기를 갈아 끼운다. 새 무기를 바로 시험할 수 있게 가득 찬 상태로 시작한다.
+        public void Equip(WeaponData weapon)
+        {
+            if (weapon == null)
+            {
+                return;
+            }
+
+            _weaponData = weapon;
+            _stats.CopyFrom(weapon);
+            _chargesLeft = _stats.Charges;
+            _pendingShots = 0;
+            ApplyStats();
+        }
+
         private void OnEnable()
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
@@ -83,12 +102,18 @@ namespace ExplodeIt.Bombs
         {
             TickRecharge();
 
-            if (!_canThrow || !_input.ThrowHeld)
+            if (!_canThrow)
             {
                 return;
             }
 
-            if (_chargesLeft <= 0 || Time.time < _nextThrowTime)
+            if (_pendingShots > 0)
+            {
+                TickBurst();
+                return;
+            }
+
+            if (!_input.ThrowHeld || _chargesLeft <= 0 || Time.time < _nextThrowTime)
             {
                 return;
             }
@@ -96,8 +121,8 @@ namespace ExplodeIt.Bombs
             Throw();
         }
 
-        // 마지막 투척 후 쿨타임이 지나면 한 번에 가득 찬다.
-        // 다 쓰기 전에도 차므로, 계속 던질지 잠깐 멈추고 채울지를 플레이어가 고르게 된다.
+        // 가득 차 있지 않으면 쿨타임마다 하나씩 찬다. 던져도 진행 중인 충전은 처음부터 다시 세지 않는다.
+        // 한꺼번에 차는 방식은 다 쓸 때까지 몰아 던지고 기다리는 리듬만 남겨, 아껴 던지는 선택이 의미가 없었다.
         private void TickRecharge()
         {
             if (_chargesLeft >= _stats.Charges)
@@ -108,7 +133,9 @@ namespace ExplodeIt.Bombs
             _rechargeTimer -= Time.deltaTime;
             if (_rechargeTimer <= 0f)
             {
-                _chargesLeft = _stats.Charges;
+                // 연발 무기는 한 번 누를 몫(연발 수)이 한꺼번에 찬다.
+                _chargesLeft = Mathf.Min(_chargesLeft + _stats.BurstCount, _stats.Charges);
+                _rechargeTimer += _stats.RechargeTime;
                 RaiseChargesChanged();
             }
         }
@@ -116,20 +143,54 @@ namespace ExplodeIt.Bombs
         // 막힌 곳을 겨누면 폭탄도 쓰지 않고 연사 간격도 소모하지 않는다. 커서를 벽 밖으로 옮기는 즉시 던져진다.
         private void Throw()
         {
+            if (!TryLaunch())
+            {
+                return;
+            }
+
+            _pendingShots = Mathf.Min(_stats.BurstCount - 1, _chargesLeft);
+            _nextBurstTime = Time.time + _stats.BurstInterval;
+        }
+
+        // 나머지 발은 누르고 있지 않아도 간격마다 그 순간의 커서 위치로 나간다.
+        // 그 순간 커서가 막힌 곳이면 기다리지 않고 그 발만 건너뛴다. 기다리면 자동 연발의 박자가 깨진다.
+        private void TickBurst()
+        {
+            if (Time.time < _nextBurstTime)
+            {
+                return;
+            }
+
+            _pendingShots--;
+            _nextBurstTime = Time.time + _stats.BurstInterval;
+            if (_chargesLeft > 0)
+            {
+                TryLaunch();
+            }
+        }
+
+        private bool TryLaunch()
+        {
             Vector2 target = GetThrowTarget();
             if (IsOnObstacle(target))
             {
-                return;
+                return false;
             }
 
             Bomb bomb = _pool.Get(transform.position);
             bomb.Launch(target, _stats, _releaseBomb);
 
+            // 가득 찬 상태에서 처음 던질 때만 충전을 새로 시작한다.
+            if (_chargesLeft >= _stats.Charges)
+            {
+                _rechargeTimer = _stats.RechargeTime;
+            }
+
             _chargesLeft--;
             _nextThrowTime = Time.time + _stats.ThrowInterval;
-            _rechargeTimer = _stats.RechargeTime;
             RaiseChargesChanged();
             GameEvents.RaiseBombThrown();
+            return true;
         }
 
         private bool IsOnObstacle(Vector2 point)
@@ -158,6 +219,11 @@ namespace ExplodeIt.Bombs
         private void OnGameStateChanged(GameState previous, GameState current)
         {
             _canThrow = current == GameState.Playing;
+            // 죽거나 판이 끝나면 남은 연발은 취소한다. 일시정지는 풀리면 이어서 나가도록 남겨 둔다.
+            if (!_canThrow && current != GameState.Paused)
+            {
+                _pendingShots = 0;
+            }
         }
     }
 }
