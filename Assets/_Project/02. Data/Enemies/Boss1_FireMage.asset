@@ -23,17 +23,21 @@ MonoBehaviour:
   _recoverDuration: 1
   _deathDuration: 1
   _tiers:
-  - _fairyOrbitSpeed: 60
+  - _fairyCount: 3
+    _fairyOrbitSpeed: 60
     _meteorCount: 8
-  - _fairyOrbitSpeed: 80
+  - _fairyCount: 4
+    _fairyOrbitSpeed: 80
     _meteorCount: 10
-  - _fairyOrbitSpeed: 100
+  - _fairyCount: 5
+    _fairyOrbitSpeed: 100
     _meteorCount: 12
   _fieldRadius: 5
   _fieldGrowTime: 1
   _fieldSpinSpeed: 30
-  _fairyCount: 3
   _fairyOrbitRadius: 5.8
+  _fairySpeedUpPerKill: 20
+  _fairyReverseHold: 0.35
   _groggyDuration: 5
   _patternInterval: 1.5
   _meteorCastTime: 0.5

@@ -24,6 +24,12 @@ namespace ExplodeIt.Enemies
         private const float DieDuration = 0.55f;
         private const float DieRise = 0.5f;
         private const float DieSpin = 200f;
+        // 방향 반전 예고: 멈춘 채 좌우로 떨며(유닛, 회/초) 살짝 부푼다(비율).
+        private const float HoldShake = 0.07f;
+        private const float HoldShakeRate = 18f;
+        private const float HoldSwell = 0.15f;
+        // 나타날 때 0에서 톡 튀어나오며 커지는 시간 (초).
+        private const float AppearDuration = 0.25f;
 
         [SerializeField] private FeedbackData _popFeedback;
         // 떠다니는 연출을 줄 그림.
@@ -40,6 +46,10 @@ namespace ExplodeIt.Enemies
         private Sequence _dieSequence;
         private TweenCallback _onDieComplete;
         private bool _isDying;
+        // 반전 예고로 멈춰 있는 남은 시간. 끝나면 _pendingSpeed로 돈다.
+        private float _holdTime;
+        private float _pendingSpeed;
+        private float _appearTime;
         private Vector2 _center;
         private float _radius;
         private float _angle;
@@ -71,13 +81,15 @@ namespace ExplodeIt.Enemies
             _dieSequence = null;
         }
 
-        // angle: 궤도 위 시작 각도 (도). 요정끼리 같은 속도로 돌아 처음 벌려 둔 간격이 그대로 유지된다.
+        // angle: 궤도 위 시작 각도 (도). speed: 부호가 방향(양수 반시계). 요정끼리 같은 속도로 돌아 처음 벌려 둔 간격이 그대로 유지된다.
         public void Launch(Vector2 center, float radius, float angle, float speed)
         {
             _center = center;
             _radius = radius;
             _angle = angle;
             _speed = speed;
+            _holdTime = 0f;
+            _appearTime = 0f;
             _bobTime = UnityEngine.Random.Range(0f, 10f);
             Vector2 position = PositionAt(_angle);
             transform.position = position;
@@ -95,6 +107,22 @@ namespace ExplodeIt.Enemies
             _visual.localRotation = Quaternion.identity;
         }
 
+        // 동료가 잡혔을 때: 잠깐 멈춰 떨다가 새 속도(부호가 방향)로 돈다. 남은 요정이 모두 같은 시간 멈추므로 간격은 유지된다.
+        public void ChangeOrbit(float speed, float holdTime)
+        {
+            if (_isDying || !gameObject.activeSelf)
+            {
+                return;
+            }
+
+            _pendingSpeed = speed;
+            _holdTime = holdTime;
+            if (holdTime <= 0f)
+            {
+                _speed = speed;
+            }
+        }
+
         // 터트리지 않고 거둘 때(보스 사망, 판 재시작). 실드 계산에 들어가지 않도록 알리지 않는다.
         public void Retract()
         {
@@ -106,6 +134,17 @@ namespace ExplodeIt.Enemies
             if (_isDying)
             {
                 return;
+            }
+
+            if (_holdTime > 0f)
+            {
+                _holdTime -= Time.fixedDeltaTime;
+                if (_holdTime > 0f)
+                {
+                    return;
+                }
+
+                _speed = _pendingSpeed;
             }
 
             _angle += _speed * Time.fixedDeltaTime;
@@ -120,11 +159,29 @@ namespace ExplodeIt.Enemies
             }
 
             _bobTime += Time.deltaTime;
+            _appearTime += Time.deltaTime;
             const float tau = 2f * Mathf.PI;
-            _visual.localPosition = new Vector3(0f, Mathf.Sin(_bobTime * BobRate * tau) * BobHeight, 0f);
+            bool holding = _holdTime > 0f;
+            float shake = holding ? Mathf.Sin(_bobTime * HoldShakeRate * tau) * HoldShake : 0f;
+            float swell = (holding ? 1f + HoldSwell : 1f) * AppearScale();
+            _visual.localPosition = new Vector3(shake, Mathf.Sin(_bobTime * BobRate * tau) * BobHeight, 0f);
             float flap = Mathf.Sin(_bobTime * FlapRate * tau) * FlapSquash;
-            _visual.localScale = new Vector3(_visualScale.x * (1f - flap), _visualScale.y * (1f + flap), _visualScale.z);
+            _visual.localScale = new Vector3(_visualScale.x * (1f - flap) * swell, _visualScale.y * (1f + flap) * swell, _visualScale.z);
             _visual.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(_bobTime * SwayRate * tau) * SwayAngle);
+        }
+
+        // 살짝 넘쳤다가 제 크기로 돌아오는 튀어나옴(OutBack).
+        private float AppearScale()
+        {
+            float t = Mathf.Clamp01(_appearTime / AppearDuration);
+            if (t >= 1f)
+            {
+                return 1f;
+            }
+
+            const float overshoot = 1.70158f;
+            float u = t - 1f;
+            return 1f + (overshoot + 1f) * u * u * u + overshoot * u * u;
         }
 
         private Vector2 PositionAt(float angle)

@@ -31,11 +31,17 @@ namespace ExplodeIt.Enemies
 
         private FireFairy[] _fairies;
         private Meteor[] _meteors;
-        private EnemyProjectile _fireball;
+        private EnemyProjectile[] _fireballs;
         private System.Action<Meteor> _onMeteorImpact;
         private System.Action<EnemyProjectile> _releaseFireball;
 
         private int _aliveFairies;
+        // 이번 바퀴에 띄운 요정 수. 미리 만든 수보다 적을 수 있다.
+        private int _launchedFairies;
+        // 요정이 도는 방향(1 반시계, -1 시계). 하나 잡힐 때마다 뒤집힌다.
+        private float _orbitDirection = 1f;
+        // 한 폭발에 두 마리가 같이 잡혀도 한 번만 뒤집히게 마지막으로 뒤집은 프레임을 기억한다.
+        private int _lastReverseFrame = -1;
         private int _bossNumber;
         private int _tier;
         private bool _isFighting;
@@ -44,7 +50,8 @@ namespace ExplodeIt.Enemies
         private Pattern _nextPattern;
         private Pattern _currentPattern;
         private int _meteorsFired;
-        private float _meteorTimer;
+        private int _shotsFired;
+        private float _burstTimer;
         private Vector2 _aimDirection = Vector2.right;
         private float _shotLength;
         private SoundHandle _chargeHandle = SoundHandle.None;
@@ -69,7 +76,7 @@ namespace ExplodeIt.Enemies
             base.Awake();
 
             // 보스는 판마다 한 번씩만 나오므로 요정·메테오·화염구도 미리 만든다. 보스를 따라 움직이면 안 되므로 월드에 둔다.
-            _fairies = new FireFairy[_data.FairyCount];
+            _fairies = new FireFairy[_data.MaxFairyCount];
             for (int i = 0; i < _fairies.Length; i++)
             {
                 _fairies[i] = Instantiate(_fairyPrefab).GetComponent<FireFairy>();
@@ -84,8 +91,12 @@ namespace ExplodeIt.Enemies
                 _meteors[i].Hide();
             }
 
-            _fireball = Instantiate(_fireballPrefab).GetComponent<EnemyProjectile>();
-            _fireball.gameObject.SetActive(false);
+            _fireballs = new EnemyProjectile[_data.FireballCount];
+            for (int i = 0; i < _fireballs.Length; i++)
+            {
+                _fireballs[i] = Instantiate(_fireballPrefab).GetComponent<EnemyProjectile>();
+                _fireballs[i].gameObject.SetActive(false);
+            }
             _onMeteorImpact = OnMeteorImpact;
             _releaseFireball = ReleaseFireball;
         }
@@ -135,9 +146,12 @@ namespace ExplodeIt.Enemies
                 }
             }
 
-            if (_fireball != null)
+            for (int i = 0; i < _fireballs.Length; i++)
             {
-                Destroy(_fireball.gameObject);
+                if (_fireballs[i] != null)
+                {
+                    Destroy(_fireballs[i].gameObject);
+                }
             }
         }
 
@@ -147,16 +161,18 @@ namespace ExplodeIt.Enemies
             _tier = tier;
             _isFighting = false;
             _nextPattern = Pattern.Meteor;
-            LaunchFairies();
+            _aliveFairies = 0;
+            // 요정은 영역이 다 펼쳐진 뒤에 나오므로, 그 전에도 맞지 않게 실드부터 켠다.
+            HitReceiver.IsShielded = true;
         }
 
-        // 플레이어가 멈춰 있는 동안 영역이 펼쳐지는 모습을 보여준다. 다 펼쳐지면 조작이 돌아온다.
+        // 플레이어가 멈춰 있는 동안 영역이 펼쳐지고, 다 펼쳐지면 요정이 나온다. 요정이 나오는 순간 조작이 돌아온다.
         public void PlayEntrance()
         {
             BeginFieldGrow();
         }
 
-        public bool IsEntranceDone => _fieldGrowTime < 0f && _fieldRadius > 0f;
+        public bool IsEntranceDone => _aliveFairies > 0;
 
         public void StartFight()
         {
@@ -190,7 +206,11 @@ namespace ExplodeIt.Enemies
             // 영역은 늘 보이는 위험이라 따로 예고하지 않는다. 다시 펼쳐질 때는 퍼지는 모습이 예고다.
             if (_isFighting && _fieldRadius > 0f && CurrentState != EnemyState.Dead)
             {
-                HitOverlapping(Center, _fieldRadius);
+                float killRadius = _fieldRadius - _data.FieldKillInset;
+                if (killRadius > 0f)
+                {
+                    HitOverlapping(Center, killRadius);
+                }
             }
         }
 
@@ -218,19 +238,27 @@ namespace ExplodeIt.Enemies
 
         protected override bool TickAttack(float deltaTime)
         {
+            // 첫 발은 차징이 끝나는 순간 조준선 그대로, 이후 간격마다 조준선 근처로 흩어 빠바바방 연사한다.
             if (_currentPattern == Pattern.Fireball)
             {
-                FireFireball();
-                return true;
+                _burstTimer -= deltaTime;
+                if (_burstTimer <= 0f && _shotsFired < _fireballs.Length)
+                {
+                    FireFireball(_fireballs[_shotsFired], _shotsFired > 0);
+                    _shotsFired++;
+                    _burstTimer += _data.FireballBurstInterval;
+                }
+
+                return _shotsFired >= _fireballs.Length;
             }
 
             // 첫 메테오는 시전이 끝나는 순간 바로, 이후 간격마다 그 순간의 플레이어 위치에 떨어뜨린다.
-            _meteorTimer -= deltaTime;
-            if (_meteorTimer <= 0f && _meteorsFired < _meteors.Length)
+            _burstTimer -= deltaTime;
+            if (_burstTimer <= 0f && _meteorsFired < _meteors.Length)
             {
                 _meteors[_meteorsFired].Launch(TargetPosition, _data.MeteorFallTime, _data.MeteorRadius, _onMeteorImpact);
                 _meteorsFired++;
-                _meteorTimer += _data.MeteorInterval;
+                _burstTimer += _data.MeteorInterval;
             }
 
             return _meteorsFired >= Mathf.Min(Tier.MeteorCount, _meteors.Length);
@@ -259,7 +287,8 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Attack:
                     _meteorsFired = 0;
-                    _meteorTimer = 0f;
+                    _shotsFired = 0;
+                    _burstTimer = 0f;
                     break;
 
                 case EnemyState.Move:
@@ -268,7 +297,7 @@ namespace ExplodeIt.Enemies
                     if (_isGroggy)
                     {
                         _isGroggy = false;
-                        LaunchFairies();
+                        HitReceiver.IsShielded = true;
                         BeginFieldGrow();
                     }
                     break;
@@ -293,11 +322,20 @@ namespace ExplodeIt.Enemies
             _aimLine.Show(Body.position, _aimDirection, _shotLength, _data.FireballHitRadius * 2f);
         }
 
-        private void FireFireball()
+        private void FireFireball(EnemyProjectile fireball, bool spread)
         {
-            _fireball.transform.position = Body.position;
-            _fireball.gameObject.SetActive(true);
-            _fireball.Launch(_aimDirection, _data.FireballSpeed, _shotLength, _data.FireballHitRadius, _releaseFireball);
+            Vector2 direction = _aimDirection;
+            float length = _shotLength;
+            if (spread)
+            {
+                float angle = Random.Range(-_data.FireballSpread, _data.FireballSpread);
+                direction = Quaternion.Euler(0f, 0f, angle) * _aimDirection;
+                length = ClearDistance(direction, _data.FireballRange, _data.FireballHitRadius);
+            }
+
+            fireball.transform.position = Body.position;
+            fireball.gameObject.SetActive(true);
+            fireball.Launch(direction, _data.FireballSpeed, length, _data.FireballHitRadius, _releaseFireball);
             AudioManager.Play(_data.FireballShotSound);
         }
 
@@ -317,14 +355,16 @@ namespace ExplodeIt.Enemies
         private void LaunchFairies()
         {
             Vector2 center = Center;
-            float step = 360f / _fairies.Length;
+            _launchedFairies = Mathf.Min(Tier.FairyCount, _fairies.Length);
+            float step = 360f / _launchedFairies;
             float start = Random.Range(0f, 360f);
-            for (int i = 0; i < _fairies.Length; i++)
+            _orbitDirection = 1f;
+            for (int i = 0; i < _launchedFairies; i++)
             {
                 _fairies[i].Launch(center, _data.FairyOrbitRadius, start + step * i, Tier.FairyOrbitSpeed);
             }
 
-            _aliveFairies = _fairies.Length;
+            _aliveFairies = _launchedFairies;
             HitReceiver.IsShielded = true;
         }
 
@@ -349,8 +389,15 @@ namespace ExplodeIt.Enemies
         private void OnFairyPopped(FireFairy fairy)
         {
             _aliveFairies--;
-            if (_aliveFairies > 0 || CurrentState == EnemyState.Dead)
+            if (CurrentState == EnemyState.Dead)
             {
+                return;
+            }
+
+            // 한 자리에 서서 같은 박자로 던지는 공략을 막으려고, 잡을 때마다 남은 요정이 뒤집혀 더 빨리 돈다.
+            if (_aliveFairies > 0)
+            {
+                ReverseFairies();
                 return;
             }
 
@@ -365,6 +412,22 @@ namespace ExplodeIt.Enemies
             _isGroggy = true;
             Stun(_data.GroggyDuration);
             AudioManager.Play(_data.GroggySound);
+        }
+
+        private void ReverseFairies()
+        {
+            if (_lastReverseFrame != Time.frameCount)
+            {
+                _orbitDirection = -_orbitDirection;
+                _lastReverseFrame = Time.frameCount;
+            }
+
+            int killed = _launchedFairies - _aliveFairies;
+            float speed = (Tier.FairyOrbitSpeed + _data.FairySpeedUpPerKill * killed) * _orbitDirection;
+            for (int i = 0; i < _fairies.Length; i++)
+            {
+                _fairies[i].ChangeOrbit(speed, _data.FairyReverseHold);
+            }
         }
 
         private void BeginFieldGrow()
@@ -389,6 +452,8 @@ namespace ExplodeIt.Enemies
             if (t >= 1f)
             {
                 _fieldGrowTime = -1f;
+                // 등장 때와 그로기 뒤 모두 영역이 다 펼쳐진 다음 요정이 나온다.
+                LaunchFairies();
             }
         }
 
@@ -420,9 +485,15 @@ namespace ExplodeIt.Enemies
                 }
             }
 
-            if (_fireball != null)
+            if (_fireballs != null)
             {
-                _fireball.gameObject.SetActive(false);
+                for (int i = 0; i < _fireballs.Length; i++)
+                {
+                    if (_fireballs[i] != null)
+                    {
+                        _fireballs[i].gameObject.SetActive(false);
+                    }
+                }
             }
         }
 

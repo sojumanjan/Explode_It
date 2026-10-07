@@ -387,8 +387,8 @@ MonoBehaviour:
   _sprite: {fileID: 1092477605792415003}
   _motion: {fileID: 11400000, guid: 63da58c2d46d2ef458d60ba6cd9e9c33, type: 2}
   _attackSprite: {fileID: 0}
-  _stunnedSprite: {fileID: 0}
-  _deathSprite: {fileID: 0}
+  _stunnedSprite: {fileID: 21300000, guid: a6e7adcf2c8fde747bf0e9cd03203302, type: 3}
+  _deathSprite: {fileID: 21300000, guid: 0b58df57ccff0cd4e8937b92cb366180, type: 3}
 --- !u!114 &6499077392668045236
 MonoBehaviour:
   m_ObjectHideFlags: 0
