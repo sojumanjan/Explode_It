@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d94f373b32b04604c8f0c70c1325c564, type: 3}
+  m_Name: KingSprites
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.KingSpriteSet
+  _entries:
+  - _mood: 0
+    _sprite: {fileID: 21300000, guid: 62e0af15a9cd841419083d85ba9ea31f, type: 3}
+  - _mood: 1
+    _sprite: {fileID: 21300000, guid: 6c0692357f4b8ff46a47a84a1d808c11, type: 3}
+  - _mood: 2
+    _sprite: {fileID: 21300000, guid: 8c19511e0d3f6e24eb5c462f1dac6912, type: 3}
+  - _mood: 3
+    _sprite: {fileID: 21300000, guid: a4ed1fc916e29554181e6749201417f3, type: 3}
+  - _mood: 4
+    _sprite: {fileID: 21300000, guid: 43ace0c964476a045898ebe304967242, type: 3}
+  - _mood: 5
+    _sprite: {fileID: 21300000, guid: 2b5d9df8b2959e94cba8a617b4846e3b, type: 3}

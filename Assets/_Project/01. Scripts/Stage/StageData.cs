@@ -7,10 +7,15 @@ using UnityEngine;
 namespace ExplodeIt.Stage
 {
     // 한 판의 진행표. 웨이브 하나를 다 잡으면 보스전, 보스전이 끝나면 다음 웨이브.
-    // 정의된 마지막 웨이브 뒤에는 마지막 웨이브를 반복한다. 무한/엔딩은 아직 정하지 않았다.
+    // 스토리 모드: 보스 순서를 1바퀴 돈 뒤 최종 보스를 잡으면 판이 끝난다(엔딩).
+    // 무한 모드의 강화 로테이션(여러 바퀴)도 같은 진행표 구조를 쓸 수 있게 바퀴 수는 남겨 둔다.
     [CreateAssetMenu(fileName = "StageData", menuName = "Explode It/Stage/Stage Data")]
     public class StageData : ScriptableObject
     {
+        [Header("모드")]
+        [Tooltip("스토리 모드 진행표인지. 켜면 보스 등장 대화와 우측 하단 왕 컷인이 나온다")]
+        [SerializeField] private bool _isStoryMode = true;
+
         [Header("흐름")]
         [Tooltip("첫 웨이브 전 대기 (초). 판 시작 후 첫 적이 나오기까지")]
         [SerializeField, Min(0f)] private float _firstWaveDelay = 2f;
@@ -38,13 +43,13 @@ namespace ExplodeIt.Stage
 
         [Header("보스")]
         // 프리팹 칸은 오브젝트 피커가 컴포넌트 타입에 프리팹을 띄우지 않아 GameObject로 받는다.
-        [Tooltip("보스 순서. 1번 칸이 100마리, 2번 칸이 200마리, 3번 칸이 300마리 보스이고, 다 돌면 다시 1번 칸부터 한 바퀴 더 강해져서 나온다. 빈 칸은 연출만 보여주고 넘어간다")]
+        [Tooltip("보스 순서. 1번 칸이 100마리, 2번 칸이 200마리, 3번 칸이 300마리 보스다. 바퀴 수가 2 이상이면 다 돈 뒤 1번 칸부터 한 바퀴 더 강해져서 나온다. 빈 칸은 연출만 보여주고 넘어간다")]
         [SerializeField] private GameObject[] _bossRotation = new GameObject[3];
 
-        [Tooltip("바퀴 수. 보스 순서를 이만큼 돈 뒤 최종 보스가 나온다 (3바퀴 × 3종 = 900마리, 최종 보스는 1,000마리)")]
+        [Tooltip("바퀴 수. 보스 순서를 이만큼 돈 뒤 최종 보스가 나온다. 스토리 모드는 1 (3종 = 300마리, 최종 보스는 400마리)")]
         [SerializeField, Min(1)] private int _bossLaps = 3;
 
-        [Tooltip("최종 보스. 모든 바퀴가 끝난 다음 보스전에 나온다. 비워 두면 연출만 보여주고 넘어간다")]
+        [Tooltip("최종 보스. 모든 바퀴가 끝난 다음 보스전에 나오고, 잡으면 판이 끝난다(엔딩). 비워 두면 연출만 보여주고 바로 끝난다")]
         [SerializeField] private GameObject _finalBoss;
 
         [Tooltip("보스 등장 거리 (유닛). 플레이어에게서 맵의 넓은 쪽으로 이만큼 떨어진 곳에 내려온다")]
@@ -62,9 +67,17 @@ namespace ExplodeIt.Stage
         [Tooltip("보스 등장 카메라 이동 시간 (초). 카메라가 플레이어와 보스 사이로 옮겨 가고, 다시 플레이어에게 돌아오는 시간. 돌아오면 보스가 움직이기 시작한다")]
         [SerializeField, Min(0f)] private float _bossCameraBlend = 0.6f;
 
+        [Header("스토리 대화")]
+        [Tooltip("보스 등장 대화. 보스 순서와 같은 칸 순서(1번 칸 = 1번 보스). 비워 두면 대화 없이 진행한다")]
+        [SerializeField] private BossDialogueData[] _bossDialogues = new BossDialogueData[3];
+
+        [Tooltip("최종 보스 등장 대화")]
+        [SerializeField] private BossDialogueData _finalBossDialogue;
+
         [Tooltip("보스가 내려앉는 순간의 연출 (흔들림 등). 비워 두면 연출 없이 나타난다")]
         [SerializeField] private FeedbackData _bossLandFeedback;
 
+        public bool IsStoryMode => _isStoryMode;
         public float FirstWaveDelay => _firstWaveDelay;
         public int BossLaps => _bossLaps;
         public int BossKindCount => _bossRotation != null ? _bossRotation.Length : 0;
@@ -75,8 +88,11 @@ namespace ExplodeIt.Stage
         public float BossRevealHold => _bossRevealHold;
         public float BossCameraBlend => _bossCameraBlend;
 
+        // 최종 보스는 모든 바퀴 다음 순번이다. 이 보스를 잡으면 판이 끝난다.
+        public int FinalBossNumber => BossKindCount * _bossLaps + 1;
+
         // bossNumber(1부터)로 몇 번째 보스가 어느 바퀴로 나올지 정한다. 바퀴는 0부터.
-        // 최종 보스 뒤는 아직 정하지 않았으므로(무한/엔딩 미정) 마지막 바퀴의 보스 순서를 계속 돈다.
+        // 최종 보스 뒤로 가는 경우(개발자 패널 건너뛰기 등)는 마지막 바퀴의 보스 순서를 계속 돈다.
         public Enemy GetBoss(int bossNumber, out int tier)
         {
             int kinds = BossKindCount;
@@ -95,6 +111,20 @@ namespace ExplodeIt.Stage
 
             tier = Mathf.Min(index / kinds, _bossLaps - 1);
             return ToEnemy(_bossRotation[index % kinds]);
+        }
+
+        // 스토리 대화는 첫 바퀴에만 있다. 같은 보스가 다시 나오는 바퀴(무한 모드)에는 대화를 붙이지 않는다.
+        public BossDialogueData GetBossDialogue(int bossNumber)
+        {
+            if (bossNumber == FinalBossNumber)
+            {
+                return _finalBossDialogue;
+            }
+
+            int index = bossNumber - 1;
+            return _bossDialogues != null && index >= 0 && index < _bossDialogues.Length && index < BossKindCount
+                ? _bossDialogues[index]
+                : null;
         }
 
         private static Enemy ToEnemy(GameObject prefab)

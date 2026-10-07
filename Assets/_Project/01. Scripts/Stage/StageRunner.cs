@@ -52,6 +52,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private Transform _bossSpawnMarker;
         // 보스가 구조물 안에 내려앉지 않게 피할 레이어.
         [SerializeField] private LayerMask _obstacleMask;
+        // 스토리 보스전 등장 대화 연출. 보스 등장 동작을 대화가 끝날 때까지 미뤄야 해서 직접 참조한다. 비워 두면 대화 없이 진행한다.
+        [SerializeField] private BossDialoguePlayer _dialoguePlayer;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
@@ -73,6 +75,8 @@ namespace ExplodeIt.Stage
         private bool _hasPlayedEntrance;
         private BossSpawnPoints[] _bossSpawnPointSets = Array.Empty<BossSpawnPoints>();
         private float _releaseTime;
+        private Enemy _bossEnemy;
+        private bool _hasStartedDialogue;
 
         public bool IsPaused { get; set; }
         public Phase CurrentPhase => _phase;
@@ -116,6 +120,7 @@ namespace ExplodeIt.Stage
             _spawner.Prepare(CollectEnemyPrefabs());
             PrepareBosses();
             SetMarker(false, 0f);
+            GameEvents.RaiseStageStarted(_stage.IsStoryMode);
             BeginRest(_stage.FirstWaveDelay);
         }
 
@@ -183,10 +188,20 @@ namespace ExplodeIt.Stage
                         break;
                     }
 
+                    // 스토리 보스전은 왕과 보스의 대화가 끝난 뒤 등장 동작을 시작한다. 광부처럼 등장 동작이 땅속으로 들어가는 보스도 대사가 보이게 한다.
                     if (!_hasPlayedEntrance && _phaseTime >= _stage.BossRevealHold)
                     {
-                        _hasPlayedEntrance = true;
-                        _boss?.PlayEntrance();
+                        if (!_hasStartedDialogue)
+                        {
+                            _hasStartedDialogue = true;
+                            StartBossDialogue();
+                        }
+
+                        if (_dialoguePlayer == null || !_dialoguePlayer.IsPlaying)
+                        {
+                            _hasPlayedEntrance = true;
+                            _boss?.PlayEntrance();
+                        }
                     }
 
                     // 보스마다 등장 동작(예: 광부의 파고들기)이 끝나는 시점이 달라서, 끝났다고 알려 올 때 조작을 돌려준다.
@@ -246,12 +261,25 @@ namespace ExplodeIt.Stage
         private void SpawnBoss()
         {
             Enemy boss = _spawner.Spawn(_bossPrefab, _bossSpawnPoint);
+            _bossEnemy = boss;
             _boss = boss as IBoss;
             _boss?.BeginBoss(_bossNumber, _bossTier);
             _hasPlayedEntrance = false;
+            _hasStartedDialogue = false;
 
             FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
             EnterPhase(Phase.BossEntrance);
+        }
+
+        private void StartBossDialogue()
+        {
+            if (_dialoguePlayer == null || !_stage.IsStoryMode || _bossEnemy == null)
+            {
+                return;
+            }
+
+            Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
+            _dialoguePlayer.Play(_stage.GetBossDialogue(_bossNumber), _bossEnemy.transform, player);
         }
 
         // 플레이어 조작을 돌려주고 카메라를 플레이어에게 되돌린다. 보스는 카메라가 다 돌아온 뒤 움직인다.
@@ -269,7 +297,15 @@ namespace ExplodeIt.Stage
 
         private void FinishBoss()
         {
-            // 무한/엔딩이 정해지기 전까지는 마지막 웨이브를 반복한다.
+            // 최종 보스를 잡으면(아직 비어 있으면 연출만 보여준 뒤) 판이 끝난다.
+            if (_bossNumber >= _stage.FinalBossNumber)
+            {
+                _isRunning = false;
+                GameEvents.RaiseStageCleared();
+                return;
+            }
+
+            // 웨이브가 보스 수보다 적으면 마지막 웨이브를 반복한다.
             _waveIndex = Mathf.Min(_waveIndex + 1, _stage.Waves.Count - 1);
             BeginRest(_stage.WaveInterval);
         }
@@ -353,7 +389,7 @@ namespace ExplodeIt.Stage
                 PrepareBoss(n);
             }
 
-            PrepareBoss(kinds * _stage.BossLaps + 1);
+            PrepareBoss(_stage.FinalBossNumber);
         }
 
         private void PrepareBoss(int bossNumber)
@@ -393,6 +429,7 @@ namespace ExplodeIt.Stage
         {
             BuildWave(_stage.Waves[_waveIndex]);
             _waveNumber++;
+            GameEvents.RaiseWaveStarted(_waveNumber);
             _nextEvent = 0;
             EnterPhase(Phase.Spawning);
         }

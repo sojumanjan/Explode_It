@@ -59,6 +59,22 @@ namespace ExplodeIt.Core
             CameraFocusReleased?.Invoke(blendDuration);
         }
 
+        // 판이 시작될 때 한 번. 스토리 모드인지 알려 준다(왕 컷인 등 스토리 전용 연출이 구독한다).
+        public static event Action<bool> StageStarted;
+
+        // 몇 번째 웨이브(1부터)가 시작됐는지.
+        public static event Action<int> WaveStarted;
+
+        public static void RaiseStageStarted(bool isStoryMode)
+        {
+            StageStarted?.Invoke(isStoryMode);
+        }
+
+        public static void RaiseWaveStarted(int waveNumber)
+        {
+            WaveStarted?.Invoke(waveNumber);
+        }
+
         // 몇 번째 보스(1부터)를 잡았는지. 진행 흐름이 다음 웨이브로 넘어가고, 업적이 구독한다.
         public static event Action<int> BossDefeated;
 
@@ -125,6 +141,8 @@ namespace ExplodeIt.Core
             PlayerControlLockChanged = null;
             CameraFocusRequested = null;
             CameraFocusReleased = null;
+            StageStarted = null;
+            WaveStarted = null;
         }
     }
 }

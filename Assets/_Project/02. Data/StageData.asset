@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b703a28dab122e45b9798cd48f2f33f, type: 3}
   m_Name: StageData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageData
+  _isStoryMode: 1
   _firstWaveDelay: 2
   _waveInterval: 5
   _bossIntroDuration: 2
@@ -27,11 +28,16 @@ MonoBehaviour:
   - {fileID: 5819474946675302735, guid: ba8234f74e4101a4f8f42543ecf83b55, type: 3}
   - {fileID: 6048178650885375636, guid: 4d584cbc4d77f674d84f507e3e277766, type: 3}
   - {fileID: 6048178650885375636, guid: 34b734dd630fd594280a0474dca718bd, type: 3}
-  _bossLaps: 3
+  _bossLaps: 1
   _finalBoss: {fileID: 0}
   _bossSpawnDistance: 5
   _bossSpawnClearance: 1.5
   _fixedSpawnMinDistance: 6
   _bossRevealHold: 1
   _bossCameraBlend: 0.6
+  _bossDialogues:
+  - {fileID: 11400000, guid: 6966eb9c20c802b499c12363a1fd53ca, type: 2}
+  - {fileID: 11400000, guid: 0bddd7fc46170c14d8c706e681a73e13, type: 2}
+  - {fileID: 11400000, guid: 950231a7178169e4f854b3d40aab41c0, type: 2}
+  _finalBossDialogue: {fileID: 11400000, guid: 1e6f40ea633444a459e614ee6da9708c, type: 2}
   _bossLandFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}
