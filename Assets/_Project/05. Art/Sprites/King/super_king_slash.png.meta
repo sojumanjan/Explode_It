@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: cbcf0366a32108d43b82c5966fdbf3b0
+guid: d4e2e0a6176fdc14b92023d5e762d85a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8166820641706311407
-    second: king_chibi_rage_0
-  - first:
-      213: 7953143627900033528
-    second: king_chibi_rage_1
+      213: -3746708651048879646
+    second: super_king_slash_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 7
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: king_chibi_rage_0
+      name: super_king_slash_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 0
-        width: 83
-        height: 66
+        x: 1
+        y: 1
+        width: 97
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 11184c265ef99ae80800000000000000
-      internalID: -8166820641706311407
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: king_chibi_rage_1
-      rect:
-        serializedVersion: 2
-        x: 37
-        y: 62
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8f994a4fdfd3f5e60800000000000000
-      internalID: 7953143627900033528
+      spriteID: 2e939513554010cc0800000000000000
+      internalID: -3746708651048879646
       vertices: []
       indices: 
       edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      king_chibi_rage_0: -8166820641706311407
-      king_chibi_rage_1: 7953143627900033528
+      super_king_slash_0: -3746708651048879646
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

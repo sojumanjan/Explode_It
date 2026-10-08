@@ -15,6 +15,8 @@ namespace ExplodeIt.Core
         // 피격 연출용. 죽지 않는 피격에도 발행된다.
         public event Action<HitInfo> Hit;
         public event Action<HitInfo> Died;
+        // 판정을 통과했지만 아직 죽지 않은 피격. 여러 번 맞아야 하는 적(최종 보스 등)이 한 대 맞은 순간을 알 때 쓴다.
+        public event Action<HitInfo> Damaged;
         // 무적·실드·가드에 막힌 피격. "맞았지만 안 먹혔다"는 반응(튕김 연출)을 보여줄 때 쓴다.
         public event Action<HitInfo> Blocked;
 
@@ -63,6 +65,12 @@ namespace ExplodeIt.Core
                 return;
             }
 
+            if (_remainingHits > 0)
+            {
+                Damaged?.Invoke(hit);
+                return;
+            }
+
             _isDead = true;
             Died?.Invoke(hit);
         }
@@ -79,7 +87,7 @@ namespace ExplodeIt.Core
             Died?.Invoke(new HitInfo(transform.position));
         }
 
-        // 이 피격으로 죽는지 결정한다. 무적·실드·방패는 여기서 피격을 흡수한다.
+        // 이 피격이 먹히는지 결정한다. 무적·실드·방패는 여기서 피격을 흡수한다. 먹힌 뒤 남은 수가 0이면 죽는다.
         private bool Judge(in HitInfo hit)
         {
             bool isGuarded = !hit.IgnoresGuard && _guard != null && _guard.Blocks(hit);
@@ -90,7 +98,7 @@ namespace ExplodeIt.Core
             }
 
             _remainingHits--;
-            return _remainingHits <= 0;
+            return true;
         }
     }
 }

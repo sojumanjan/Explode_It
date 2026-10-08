@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: cbcf0366a32108d43b82c5966fdbf3b0
+guid: be3a91e47799ef2449d5278abdd43250
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8166820641706311407
-    second: king_chibi_rage_0
-  - first:
-      213: 7953143627900033528
-    second: king_chibi_rage_1
+      213: -8222406987496834216
+    second: crown_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,9 +49,9 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 7
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: king_chibi_rage_0
+      name: crown_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 0
-        width: 83
-        height: 66
+        x: 71
+        y: 98
+        width: 469
+        height: 225
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 11184c265ef99ae80800000000000000
-      internalID: -8166820641706311407
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: king_chibi_rage_1
-      rect:
-        serializedVersion: 2
-        x: 37
-        y: 62
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8f994a4fdfd3f5e60800000000000000
-      internalID: 7953143627900033528
+      spriteID: 85bbf87b86424ed80800000000000000
+      internalID: -8222406987496834216
       vertices: []
       indices: 
       edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      king_chibi_rage_0: -8166820641706311407
-      king_chibi_rage_1: 7953143627900033528
+      crown_0: -8222406987496834216
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

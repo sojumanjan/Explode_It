@@ -146,6 +146,7 @@ namespace ExplodeIt.Bombs
             _fuseFill.SetRadius(0f);
             _rangeOutline.Visible = true;
             _fuseFill.Visible = true;
+            GameEvents.RaiseBombLanded(transform.position, _radius);
         }
 
         private void Explode()

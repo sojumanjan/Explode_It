@@ -216,6 +216,10 @@ namespace ExplodeIt.Enemies
         // 상태별 자세에 곱하는 크기 배율 (가로, 세로). 드릴로 파고들 때처럼 잠깐 몸을 늘이거나 누를 때 쓴다.
         public Vector2 ExtraScale { get; set; } = Vector2.one;
 
+        // 기본 그림 대신 보여줄 자세 그림. 여러 동작 그림을 가진 보스가 패턴마다 바꾼다. null이면 기본 그림.
+        // 기절·공격 그림이 있으면 그쪽이 먼저다.
+        public Sprite PoseSprite { get; set; }
+
         // 좌우로 빠르게 떠는 폭 (유닛). 드릴 진동처럼 그림만 떨게 할 때 쓴다. 0이면 떨지 않는다.
         public float Jitter { get; set; }
 
@@ -279,7 +283,7 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 기절 그림 > 공격 그림 > 기본 그림 순으로 고른다. 사망 그림은 죽는 순간 한 번 바꾸고 그대로 둔다.
+        // 기절 그림 > 공격 그림 > 자세 그림 > 기본 그림 순으로 고른다. 사망 그림은 죽는 순간 한 번 바꾸고 그대로 둔다.
         private void TickSprite(EnemyState state, float deltaTime)
         {
             // 죽은 뒤에는 그림을 고르지 않는다. 사망 그림이 없으면 죽는 순간의 그림 그대로 사망 연출을 한다.
@@ -297,7 +301,7 @@ namespace ExplodeIt.Enemies
                 }
             }
 
-            Sprite sprite = _baseSprite;
+            Sprite sprite = PoseSprite != null ? PoseSprite : _baseSprite;
             if (state == EnemyState.Stunned && _stunnedSprite != null)
             {
                 sprite = _stunnedSprite;

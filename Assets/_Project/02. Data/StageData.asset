@@ -29,7 +29,7 @@ MonoBehaviour:
   - {fileID: 6048178650885375636, guid: 4d584cbc4d77f674d84f507e3e277766, type: 3}
   - {fileID: 6048178650885375636, guid: 34b734dd630fd594280a0474dca718bd, type: 3}
   _bossLaps: 1
-  _finalBoss: {fileID: 0}
+  _finalBoss: {fileID: 4511829112722997646, guid: b273a0763e659b64d98e08c0f9b169ee, type: 3}
   _bossSpawnDistance: 5
   _bossSpawnClearance: 1.5
   _fixedSpawnMinDistance: 6

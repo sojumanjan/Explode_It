@@ -39,7 +39,15 @@ namespace ExplodeIt.Stage
         [Tooltip("보스가 내려앉는 줄에서 대사를 띄우기 전 기다리는 시간 (초). 착지 연출에 눈이 가도록 그동안 말풍선을 숨기고 클릭도 받지 않는다")]
         [SerializeField, Min(0f)] private float _spawnPause = 2f;
 
+        [Tooltip("왕이 곧 보스인 대화(최종 보스). 켜면 왕이 보스 자리에 서서 말하고, 보스 등장을 체크한 줄에서 그 자리에서 보스로 바뀐다(변신 연출은 멈춤 시간 동안). 이후 왕 대사는 보스 머리 위에 뜬다. 체크한 줄이 없으면 대화가 끝난 뒤 바뀐다")]
+        [SerializeField] private bool _kingBecomesBoss;
+
+        [Tooltip("왕이 곧 보스일 때 왕이 서는 높이 (유닛, 보스 자리 기준). 보스 프리팹의 2등신 그림(Chibi) 높이와 같게 두어야 보스로 바뀌는 순간 발 위치가 튀지 않는다")]
+        [SerializeField] private float _kingStandHeight;
+
         public float SpawnPause => _spawnPause;
+        public bool KingBecomesBoss => _kingBecomesBoss;
+        public float KingStandHeight => _kingStandHeight;
 
         public int LineCount => _lines != null ? _lines.Length : 0;
 

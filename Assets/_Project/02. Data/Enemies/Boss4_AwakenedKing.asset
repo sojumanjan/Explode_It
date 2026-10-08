@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dac8a2bd4d84cd49ad019ac1e4ce3b5, type: 3}
+  m_Name: Boss4_AwakenedKing
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.AwakenedKingData
+  _moveSpeed: 3.5
+  _hitsToDie: 1
+  _attackTriggerRange: 2
+  _arenaEntryDelay: 0
+  _countsAsKill: 0
+  _separationDistanceRatio: 0.6
+  _separationSpeed: 0
+  _telegraphDuration: 0.6
+  _recoverDuration: 0.5
+  _deathDuration: 1.5
+  _crownHits: 3
+  _crownRegainTime: 0.2
+  _groggyDuration: 5
+  _transformDuration: 1.4
+  _crownSummonDuration: 0.6
+  _preferredDistance: 5
+  _patternInterval: 1
+  _patternStartup: 0.3
+  _dodgeMargin: 0.4
+  _dodgeWindup: 0.08
+  _dodgeDistance: 3.5
+  _dodgeDuration: 0.25
+  _slashCount: 3
+  _slashDashSpeed: 22
+  _slashReach: 1.3
+  _slashWindup: 0.4
+  _slashRadius: 3.3
+  _slashAngle: 150
+  _slashPause: 0.2
+  _lungeCount: 3
+  _backstepDistance: 3
+  _backstepDuration: 0.15
+  _lungeAimTime: 0.6
+  _lungeLockTime: 0.25
+  _lungeSpeed: 32
+  _lungeOvershoot: 3
+  _lungeMaxDistance: 14
+  _lungeWidth: 2.8
+  _lungePause: 0.2
+  _crownWindup: 0.6
+  _crownSpeed: 15
+  _crownDistance: 10
+  _crownHangTime: 0.5
+  _crownHitRadius: 0.5
+  _crownlessWalkSpeed: 1.2
+  _transformChargeSound: {fileID: 0}
+  _transformSound: {fileID: 11400000, guid: ceb51ec362f39514380edc3005726baf, type: 2}
+  _dodgeSound: {fileID: 11400000, guid: a069a81ce776d0f478c31f0a8a9e9715, type: 2}
+  _slashSound: {fileID: 11400000, guid: d877ad611f4f5dc4b912a49f0dafa52c, type: 2}
+  _lungeSound: {fileID: 11400000, guid: 44c2a00060ac70c46ae051fdd0007e9b, type: 2}
+  _crownThrowSound: {fileID: 11400000, guid: 39d57ab3f9d4cb64e97f1a718f0392ac, type: 2}
+  _crownCatchSound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}
+  _hurtSound: {fileID: 11400000, guid: f99094c801960284f8782cb3a51a8ef0, type: 2}
+  _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}
+  _immuneSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _transformFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
+  _transformGlowColor: {r: 1, g: 0.15, b: 0.1, a: 1}
+  _hurtFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}
+  _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
+  _immuneFlashColor: {r: 1, g: 0.9, b: 0.4, a: 1}
+  _immuneFlashDuration: 0.2

@@ -77,7 +77,9 @@ namespace ExplodeIt.Stage
 
             _side = player.x >= bossPoint.x ? 1f : -1f;
             Transform king = _king.transform;
-            king.position = bossPoint + Vector2.right * (_side * _kingSideDistance);
+            // 왕이 곧 보스면 보스 자리에 바로 서서, 대화가 끝나는 순간 같은 자리의 보스로 이어진다.
+            Vector2 offset = data.KingBecomesBoss ? Vector2.up * data.KingStandHeight : Vector2.right * (_side * _kingSideDistance);
+            king.position = bossPoint + offset;
             _king.sprite = _kingSprites.Get(FirstKingMood());
             _king.gameObject.SetActive(true);
 
@@ -102,6 +104,12 @@ namespace ExplodeIt.Stage
             if (boss != null)
             {
                 _bossTopOffset = TopOf(boss) - boss.position.y;
+                // 왕이 곧 보스면 같은 자리에 나타난 보스(2등신 모습)가 이어받으므로 대화용 왕 그림은 숨긴다.
+                if (_data != null && _data.KingBecomesBoss)
+                {
+                    _punch?.Kill();
+                    _king.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -142,7 +150,8 @@ namespace ExplodeIt.Stage
 
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = false;
-            if (line.SpawnBoss || (_line == 0 && !_data.HasSpawnLine))
+            // 왕이 곧 보스인 대화는 표시한 줄에서만 보스(변신)를 부른다. 표시가 없으면 대화가 끝난 뒤 부른다.
+            if (line.SpawnBoss || (_line == 0 && !_data.HasSpawnLine && !_data.KingBecomesBoss))
             {
                 BossSpawnRequested?.Invoke();
                 // 착지 연출과 대사가 겹치면 착지에 눈이 안 가므로, 잠깐 말없이 보여 준 뒤 이 줄을 띄운다.
@@ -161,7 +170,7 @@ namespace ExplodeIt.Stage
         {
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = true;
-            if (line.Speaker == DialogueSpeaker.King)
+            if (UsesKingBubble(line))
             {
                 // 표정이 바뀔 때마다 뽀잉 하고 튀어서 대사보다 표정이 먼저 읽히게 한다.
                 _king.sprite = _kingSprites.Get(line.Mood);
@@ -184,6 +193,14 @@ namespace ExplodeIt.Stage
         {
             _isTalking = false;
             _punch?.Kill();
+            // 왕이 곧 보스면 떼어지지 않고 그 자리에서 바로 보스 몸으로 바뀐다.
+            if (_data.KingBecomesBoss)
+            {
+                _sequence?.Kill();
+                Finish();
+                return;
+            }
+
             Transform king = _king.transform;
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
@@ -209,7 +226,13 @@ namespace ExplodeIt.Stage
 
         private SpeechBubble CurrentBubble()
         {
-            return _data.GetLine(_line).Speaker == DialogueSpeaker.King ? _kingBubble : _bossBubble;
+            return UsesKingBubble(_data.GetLine(_line)) ? _kingBubble : _bossBubble;
+        }
+
+        // 왕이 보스로 바뀐 뒤의 왕 대사는 보스 머리 위에 띄운다.
+        private bool UsesKingBubble(BossDialogueData.Line line)
+        {
+            return line.Speaker == DialogueSpeaker.King && !(_data.KingBecomesBoss && _boss != null);
         }
 
         private KingMood FirstKingMood()

@@ -62,6 +62,14 @@ namespace ExplodeIt.Core
         // 판이 시작될 때 한 번. 스토리 모드인지 알려 준다(왕 컷인 등 스토리 전용 연출이 구독한다).
         public static event Action<bool> StageStarted;
 
+        // 폭탄(블랙홀 포함)이 착지해 범위가 정해진 순간. 위치, 반경. 폭탄을 보고 피하는 적이 구독한다.
+        public static event Action<Vector2, float> BombLanded;
+
+        public static void RaiseBombLanded(Vector2 position, float radius)
+        {
+            BombLanded?.Invoke(position, radius);
+        }
+
         // 몇 번째 웨이브(1부터)가 시작됐는지.
         public static event Action<int> WaveStarted;
 
@@ -142,6 +150,7 @@ namespace ExplodeIt.Core
             CameraFocusRequested = null;
             CameraFocusReleased = null;
             StageStarted = null;
+            BombLanded = null;
             WaveStarted = null;
         }
     }

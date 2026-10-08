@@ -23,7 +23,7 @@ MonoBehaviour:
   _recoverDuration: 1
   _deathDuration: 0.5
   _projectileSpeed: 35
-  _projectileRange: 9
+  _projectileRange: 7.5
   _projectileHitRadius: 0.15
   _showAimLine: 1
   _aimLockTime: 0

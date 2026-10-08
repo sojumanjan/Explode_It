@@ -199,6 +199,7 @@ namespace ExplodeIt.Bombs
             _fuseFill.Visible = true;
             _isPulling = true;
             _pullHandle = AudioManager.Play(_pullSound);
+            GameEvents.RaiseBombLanded(transform.position, _radius);
         }
 
         private void Explode()

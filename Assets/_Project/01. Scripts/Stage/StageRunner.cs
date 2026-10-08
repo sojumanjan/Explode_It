@@ -75,6 +75,7 @@ namespace ExplodeIt.Stage
         private IBoss _boss;
         private bool _isControlReleased;
         private bool _hasPlayedEntrance;
+        private BossDialogueData _dialogue;
         private BossSpawnPoints[] _bossSpawnPointSets = Array.Empty<BossSpawnPoints>();
         private float _releaseTime;
         private Enemy _bossEnemy;
@@ -277,6 +278,7 @@ namespace ExplodeIt.Stage
             _boss = null;
             _hasPlayedEntrance = false;
             BossDialogueData dialogue = _stage.IsStoryMode && _dialoguePlayer != null ? _stage.GetBossDialogue(bossNumber) : null;
+            _dialogue = dialogue;
             if (_bossPrefab != null || dialogue != null)
             {
                 _bossSpawnPoint = PickBossSpawnPoint();
@@ -305,7 +307,11 @@ namespace ExplodeIt.Stage
             _bossEnemy = boss;
             _boss = boss as IBoss;
             _boss?.BeginBoss(_bossNumber, _bossTier);
-            FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
+            // 왕이 그 자리에서 변신하는 보스는 내려앉지 않으므로 착지 연출을 뺀다.
+            if (_dialogue == null || !_dialogue.KingBecomesBoss)
+            {
+                FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
+            }
         }
 
         private void StartEntrance()
