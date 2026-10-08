@@ -14,29 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.BossDialogueData
   _lines:
   - _speaker: 0
-    _mood: 3
-    _text: "\uB9C8\uBC95\uC0AC \uB140\uC11D... \uB3C8\uB9CC \uBC1B\uACE0 \uADF8\uB0E5
-      \uB4DC\uB7EC\uB204\uC6E0\uC5B4..."
-    _spawnBoss: 0
-    _startEntrance: 0
-  - _speaker: 0
-    _mood: 1
-    _text: "\uC774\uBC88\uC5D4 \uB545\uC18D\uC5D0\uC11C \uB05D\uB0B8\uB2E4. \uAD11\uBD80,
-      \uB098\uC640\uB77C!"
-    _spawnBoss: 1
-    _startEntrance: 0
-  - _speaker: 1
-    _mood: 0
-    _text: "\uB2E4\uC774\uB108\uB9C8\uC774\uD2B8 \uAC12\uC740 \uB530\uB85C\uC785\uB2C8\uB2E4\uC694."
-    _spawnBoss: 0
-    _startEntrance: 0
-  - _speaker: 0
-    _mood: 4
-    _text: "...\uC694\uC998 \uC6A9\uBCD1\uB4E4\uC740 \uB2E4 \uC65C \uC774\uB798."
+    _mood: 8
+    _text: "\uB9C8\uBC95\uC0AC \uB140\uC11D... \uB3C8\uB9CC \uBC1B\uACE0\n\uADF8\uB0E5
+      \uB4DC\uB7EC\uB204\uC6E0\uC9C0..."
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 0
     _mood: 5
-    _text: "\uB0A0\uB824 \uBC84\uB824!"
+    _text: "\uC774\uBC88\uC5D4 \uB545\uC18D\uC5D0\uC11C \uB110 \uB05D\uB0B4\uAE30
+      \uC704\uD574\n\uB178\uC7A5 \uAD11\uBD80\uB97C \uBD88\uB800\uB2E4!!"
+    _spawnBoss: 0
+    _startEntrance: 0
+  - _speaker: 0
+    _mood: 2
+    _text: "\uC774 \uB178\uC7A5 \uAD11\uBD80\uB3C4 \uB3C8 \uAF64\uB098 \uC37C\uB2E4\uACE0?"
+    _spawnBoss: 1
+    _startEntrance: 0
+  - _speaker: 1
+    _mood: 7
+    _text: "\uB2E4\uC774\uB108\uB9C8\uC774\uD2B8 \uAC12\uC740 \uB530\uB85C\uC785\uB2C8\uB2E4\uC694."
+    _spawnBoss: 0
+    _startEntrance: 0
+  - _speaker: 0
+    _mood: 7
+    _text: "....\uC694\uC998 \uC6A9\uBCD1\uB4E4 \uC65C\uC774\uB798?"
+    _spawnBoss: 0
+    _startEntrance: 0
+  - _speaker: 0
+    _mood: 5
+    _text: "\uD130\uD2B8\uB824\uB77C!!"
     _spawnBoss: 0
     _startEntrance: 1
+  _spawnPause: 1.3

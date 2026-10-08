@@ -36,6 +36,11 @@ namespace ExplodeIt.Stage
         [Tooltip("위에서부터 차례로 말한다")]
         [SerializeField] private Line[] _lines;
 
+        [Tooltip("보스가 내려앉는 줄에서 대사를 띄우기 전 기다리는 시간 (초). 착지 연출에 눈이 가도록 그동안 말풍선을 숨기고 클릭도 받지 않는다")]
+        [SerializeField, Min(0f)] private float _spawnPause = 2f;
+
+        public float SpawnPause => _spawnPause;
+
         public int LineCount => _lines != null ? _lines.Length : 0;
 
         public Line GetLine(int index)

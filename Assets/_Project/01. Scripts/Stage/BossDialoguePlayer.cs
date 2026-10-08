@@ -37,6 +37,8 @@ namespace ExplodeIt.Stage
         private Vector3 _kingScale;
         private Sequence _sequence;
         private Tween _punch;
+        private Tween _pause;
+        private TweenCallback _onPauseEnd;
 
         public bool IsPlaying { get; private set; }
 
@@ -46,6 +48,7 @@ namespace ExplodeIt.Stage
         private void Awake()
         {
             _kingScale = _king.transform.localScale;
+            _onPauseEnd = ShowCurrentLine;
             HideAll();
         }
 
@@ -53,6 +56,7 @@ namespace ExplodeIt.Stage
         {
             _sequence?.Kill();
             _punch?.Kill();
+            _pause?.Kill();
         }
 
         // bossPoint: 보스가 내려앉을 자리. 보스는 아직 없고, 표시한 줄에서 진행 흐름이 불러낸 뒤 SetBoss로 알려 준다.
@@ -137,11 +141,25 @@ namespace ExplodeIt.Stage
             }
 
             BossDialogueData.Line line = _data.GetLine(_line);
+            _isTalking = false;
             if (line.SpawnBoss || (_line == 0 && !_data.HasSpawnLine))
             {
                 BossSpawnRequested?.Invoke();
+                // 착지 연출과 대사가 겹치면 착지에 눈이 안 가므로, 잠깐 말없이 보여 준 뒤 이 줄을 띄운다.
+                if (_data.SpawnPause > 0f)
+                {
+                    _pause?.Kill();
+                    _pause = DOVirtual.DelayedCall(_data.SpawnPause, _onPauseEnd).SetLink(gameObject);
+                    return;
+                }
             }
 
+            ShowCurrentLine();
+        }
+
+        private void ShowCurrentLine()
+        {
+            BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = true;
             if (line.Speaker == DialogueSpeaker.King)
             {

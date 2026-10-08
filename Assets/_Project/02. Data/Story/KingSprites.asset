@@ -25,3 +25,9 @@ MonoBehaviour:
     _sprite: {fileID: 21300000, guid: 43ace0c964476a045898ebe304967242, type: 3}
   - _mood: 5
     _sprite: {fileID: 21300000, guid: 2b5d9df8b2959e94cba8a617b4846e3b, type: 3}
+  - _mood: 6
+    _sprite: {fileID: 21300000, guid: a302b3b82b774b64489caf664add24ca, type: 3}
+  - _mood: 7
+    _sprite: {fileID: 21300000, guid: 3b6d924b8f20ecc4e823e840df2fff91, type: 3}
+  - _mood: 8
+    _sprite: {fileID: 21300000, guid: cbcf0366a32108d43b82c5966fdbf3b0, type: 3}

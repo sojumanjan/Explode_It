@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46db9384e0a322d47b969bf1a3c2608d, type: 3}
-  m_Name: Remark_BossDown
+  m_Name: Remark_Boss2Down
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.KingRemarkData
   _trigger: 3
-  _value: 0
+  _value: 2
   _mood: 3
-  _text: "...\uC608\uC0B0\uC774 \uB610 \uB0A0\uC544\uAC14\uAD70."
+  _text: "\uB178\uC7A5 \uAD11\uBD80\uB3C4 \uC548\uD1B5\uD55C\uB2E4\uACE0?!?!"
   _hold: 1.8

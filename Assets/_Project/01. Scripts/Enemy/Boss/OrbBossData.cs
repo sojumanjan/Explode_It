@@ -52,6 +52,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("구체가 생기는 거리 (유닛). 보스 중심에서 이 거리만큼 떨어진 곳에서 각자 무작위 방향으로 퍼져 나간다")]
         [SerializeField, Min(0f)] private float _orbSpawnRadius = 0.5f;
 
+        [Tooltip("등장 동작으로 혼불이 퍼져 나간 뒤 플레이어 조작이 돌아오기까지 (초). 혼불이 어디로 흩어지는지 볼 시간을 준다")]
+        [SerializeField, Min(0f)] private float _entranceSettleTime = 1.5f;
+
         [Header("이동: 야수처럼 좌우로 파고들기")]
         // 실드가 있는 동안은 맞지 않으므로 쫓아온다기보다 플레이어 주변을 빠르게 배회하며 압박한다.
         // 플레이어 둘레 작은 원의 왼쪽·오른쪽 반원을 번갈아 한 점씩 찍고, 짧게 달려간 뒤 잠깐 멈추기를 반복한다.
@@ -113,6 +116,7 @@ namespace ExplodeIt.Enemies
 
         public float OrbBounceJitter => _orbBounceJitter;
         public float OrbSpawnRadius => _orbSpawnRadius;
+        public float EntranceSettleTime => _entranceSettleTime;
         public float LungeCircleRadius => _lungeCircleRadius;
         public Vector2 LungeDuration => _lungeDuration;
         public Vector2 LungePause => _lungePause;

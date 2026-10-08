@@ -23,9 +23,9 @@ MonoBehaviour:
   _recoverDuration: 1
   _deathDuration: 1
   _tiers:
-  - _holeCount: 3
   - _holeCount: 4
   - _holeCount: 5
+  - _holeCount: 6
   _heatToOverheat: 3
   _groggyDuration: 5
   _overheatTint: {r: 1, g: 0.35, b: 0.25, a: 1}
@@ -33,15 +33,17 @@ MonoBehaviour:
   _moundFadeTime: 1
   _hiddenTime: 1
   _undergroundSpeed: 3
-  _holeRadius: 3
-  _realHoleDistance: {x: 3, y: 4}
-  _fakeHoleDistance: {x: 3, y: 5}
-  _holeSpacing: 2
+  _holeRadius: 3.2
+  _realHoleDistance: {x: 4, y: 5}
+  _fakeHoleDistance: {x: 4, y: 5}
+  _holeSpacing: 3
   _dynamiteCount: {x: 4, y: 5}
   _dynamiteDelayRange: {x: 0.85, y: 1.3}
   _dynamiteDistance: {x: 2, y: 7}
   _dynamiteRadiusRatio: 0.9
   _dynamiteArcHeight: 0.8
+  _emergeHopHeight: 0.8
+  _emergeHopDuration: 0.35
   _leapDistance: 10
   _leapDuration: 0.8
   _leapHeight: 1.5

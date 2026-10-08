@@ -40,6 +40,8 @@ namespace ExplodeIt.Enemies
         private SoundHandle _readySoundHandle = SoundHandle.None;
         // 등장 연출 동안은 구체만 퍼지고 보스는 제자리에 서 있는다.
         private bool _isFighting;
+        // 등장 동작(혼불 퍼뜨리기)을 시작한 시각. 음수면 아직 시작하지 않았다.
+        private float _entranceStartTime = -1f;
 
         protected override EnemyData Data => _data;
         protected override bool CanBePulled => false;
@@ -103,15 +105,19 @@ namespace ExplodeIt.Enemies
             _tier = tier;
             _clawTimer = 0f;
             _isFighting = false;
-            LaunchOrbs();
+            _entranceStartTime = -1f;
+            // 혼불은 등장 동작에서 퍼뜨린다. 그 전에도 맞지 않도록 실드부터 켠다.
+            SetShield(true);
         }
 
-        // 따로 보여줄 등장 동작이 없다. 멈춤이 끝나면 바로 조작을 돌려준다.
+        // 등장 동작: 혼불이 몸에서 사방으로 퍼져 나가고, 흩어지는 모습을 볼 시간이 지나면 조작이 돌아온다.
         public void PlayEntrance()
         {
+            LaunchOrbs();
+            _entranceStartTime = Time.time;
         }
 
-        public bool IsEntranceDone => true;
+        public bool IsEntranceDone => _entranceStartTime >= 0f && Time.time - _entranceStartTime >= _data.EntranceSettleTime;
 
         public void StartFight()
         {
