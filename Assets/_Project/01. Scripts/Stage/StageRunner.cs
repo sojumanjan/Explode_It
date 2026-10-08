@@ -16,6 +16,8 @@ namespace ExplodeIt.Stage
             Rest,
             Spawning,
             BossIntro,
+            // 스토리 보스전: 왕이 먼저 나와 대화하고, 대화 중 표시한 줄에서 보스가 내려앉고 등장 동작을 시작한다.
+            BossDialogue,
             // 보스가 내려앉은 뒤: 멈춤 → 보스 등장 동작 → 조작 복귀·카메라 복귀 → 보스 행동 시작.
             BossEntrance,
             Boss
@@ -76,7 +78,8 @@ namespace ExplodeIt.Stage
         private BossSpawnPoints[] _bossSpawnPointSets = Array.Empty<BossSpawnPoints>();
         private float _releaseTime;
         private Enemy _bossEnemy;
-        private bool _hasStartedDialogue;
+        private System.Action _onDialogueSpawnBoss;
+        private System.Action _onDialogueEntrance;
 
         public bool IsPaused { get; set; }
         public Phase CurrentPhase => _phase;
@@ -89,12 +92,24 @@ namespace ExplodeIt.Stage
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.BossDefeated += OnBossDefeated;
+            if (_dialoguePlayer != null)
+            {
+                _onDialogueSpawnBoss ??= OnDialogueSpawnBoss;
+                _onDialogueEntrance ??= OnDialogueEntrance;
+                _dialoguePlayer.BossSpawnRequested += _onDialogueSpawnBoss;
+                _dialoguePlayer.EntranceRequested += _onDialogueEntrance;
+            }
         }
 
         private void OnDisable()
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.BossDefeated -= OnBossDefeated;
+            if (_dialoguePlayer != null)
+            {
+                _dialoguePlayer.BossSpawnRequested -= _onDialogueSpawnBoss;
+                _dialoguePlayer.EntranceRequested -= _onDialogueEntrance;
+            }
         }
 
         private void Start()
@@ -171,6 +186,7 @@ namespace ExplodeIt.Stage
                         if (_bossPrefab != null)
                         {
                             SpawnBoss();
+                            EnterPhase(Phase.BossEntrance);
                         }
                         else
                         {
@@ -178,6 +194,30 @@ namespace ExplodeIt.Stage
                             FinishBoss();
                         }
                     }
+                    break;
+
+                case Phase.BossDialogue:
+                    if (_dialoguePlayer.IsPlaying)
+                    {
+                        break;
+                    }
+
+                    // 아직 만들지 않은 보스(최종 보스 등)는 대화만 보여 주고 넘어간다.
+                    if (_bossPrefab == null)
+                    {
+                        ReleaseEntrance();
+                        FinishBoss();
+                        break;
+                    }
+
+                    // 대화에서 표시하지 않은 단계는 대화가 끝난 지금 진행한다.
+                    if (_bossEnemy == null)
+                    {
+                        SpawnBoss();
+                    }
+
+                    StartEntrance();
+                    EnterPhase(Phase.BossEntrance);
                     break;
 
                 case Phase.BossEntrance:
@@ -188,20 +228,9 @@ namespace ExplodeIt.Stage
                         break;
                     }
 
-                    // 스토리 보스전은 왕과 보스의 대화가 끝난 뒤 등장 동작을 시작한다. 광부처럼 등장 동작이 땅속으로 들어가는 보스도 대사가 보이게 한다.
                     if (!_hasPlayedEntrance && _phaseTime >= _stage.BossRevealHold)
                     {
-                        if (!_hasStartedDialogue)
-                        {
-                            _hasStartedDialogue = true;
-                            StartBossDialogue();
-                        }
-
-                        if (_dialoguePlayer == null || !_dialoguePlayer.IsPlaying)
-                        {
-                            _hasPlayedEntrance = true;
-                            _boss?.PlayEntrance();
-                        }
+                        StartEntrance();
                     }
 
                     // 보스마다 등장 동작(예: 광부의 파고들기)이 끝나는 시점이 달라서, 끝났다고 알려 올 때 조작을 돌려준다.
@@ -244,7 +273,11 @@ namespace ExplodeIt.Stage
             _bossNumber = bossNumber;
             _bossPrefab = _stage.GetBoss(bossNumber, out _bossTier);
             _isBossDefeated = false;
-            if (_bossPrefab != null)
+            _bossEnemy = null;
+            _boss = null;
+            _hasPlayedEntrance = false;
+            BossDialogueData dialogue = _stage.IsStoryMode && _dialoguePlayer != null ? _stage.GetBossDialogue(bossNumber) : null;
+            if (_bossPrefab != null || dialogue != null)
             {
                 _bossSpawnPoint = PickBossSpawnPoint();
                 // 등장 연출 동안 플레이어를 세우고, 카메라를 플레이어와 보스 사이로 옮겨 둘 다 보이게 한다.
@@ -255,6 +288,14 @@ namespace ExplodeIt.Stage
             }
 
             GameEvents.RaiseBossIntroStarted(bossNumber);
+            if (dialogue != null)
+            {
+                Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
+                _dialoguePlayer.Play(dialogue, _bossSpawnPoint, player);
+                EnterPhase(Phase.BossDialogue);
+                return;
+            }
+
             EnterPhase(Phase.BossIntro);
         }
 
@@ -264,22 +305,42 @@ namespace ExplodeIt.Stage
             _bossEnemy = boss;
             _boss = boss as IBoss;
             _boss?.BeginBoss(_bossNumber, _bossTier);
-            _hasPlayedEntrance = false;
-            _hasStartedDialogue = false;
-
             FeedbackPlayer.Play(_stage.BossLandFeedback, _bossSpawnPoint);
-            EnterPhase(Phase.BossEntrance);
         }
 
-        private void StartBossDialogue()
+        private void StartEntrance()
         {
-            if (_dialoguePlayer == null || !_stage.IsStoryMode || _bossEnemy == null)
+            if (_hasPlayedEntrance)
             {
                 return;
             }
 
-            Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
-            _dialoguePlayer.Play(_stage.GetBossDialogue(_bossNumber), _bossEnemy.transform, player);
+            _hasPlayedEntrance = true;
+            _boss?.PlayEntrance();
+        }
+
+        // 대화의 "보스 등장" 줄. 보스가 내려앉고, 이후 보스 줄 말풍선이 보스 머리 위에 뜨도록 알려 준다.
+        private void OnDialogueSpawnBoss()
+        {
+            if (_phase != Phase.BossDialogue || _bossPrefab == null || _bossEnemy != null)
+            {
+                return;
+            }
+
+            SpawnBoss();
+            _dialoguePlayer.SetBoss(_bossEnemy != null ? _bossEnemy.transform : null);
+        }
+
+        // 대화의 "등장 동작 시작" 줄. 보스가 아직 없으면 먼저 내려앉힌다.
+        private void OnDialogueEntrance()
+        {
+            if (_phase != Phase.BossDialogue || _bossPrefab == null)
+            {
+                return;
+            }
+
+            OnDialogueSpawnBoss();
+            StartEntrance();
         }
 
         // 플레이어 조작을 돌려주고 카메라를 플레이어에게 되돌린다. 보스는 카메라가 다 돌아온 뒤 움직인다.
@@ -321,7 +382,7 @@ namespace ExplodeIt.Stage
         private Vector2 PickBossSpawnPoint()
         {
             Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : Vector2.zero;
-            for (int i = 0; i < _bossSpawnPointSets.Length; i++)
+            for (int i = 0; _bossPrefab != null && i < _bossSpawnPointSets.Length; i++)
             {
                 BossSpawnPoints set = _bossSpawnPointSets[i];
                 if (set.BossPrefab == _bossPrefab.gameObject && set.TryPick(player, _stage.FixedSpawnMinDistance, out Vector2 fixedPoint))

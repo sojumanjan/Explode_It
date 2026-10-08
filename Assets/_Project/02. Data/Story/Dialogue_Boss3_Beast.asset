@@ -17,21 +17,26 @@ MonoBehaviour:
     _mood: 0
     _text: "\uD6C4\uD6C4... \uC774\uBC88\uC5D4 \uB3C8 \uD55C \uD47C \uC548 \uB4DC\uB294
       \uB140\uC11D\uC774\uC9C0."
-    _hold: 1.2
+    _spawnBoss: 0
+    _startEntrance: 0
   - _speaker: 0
     _mood: 2
     _text: "\uAD81\uC815 \uC0AC\uC721\uC7A5\uC5D0\uC11C \uC81C\uC77C \uC0AC\uB098\uC6B4
       \uB188\uC744 \uD480\uC5C8\uB2E4!"
-    _hold: 1.2
+    _spawnBoss: 1
+    _startEntrance: 0
   - _speaker: 1
     _mood: 0
     _text: "\uD06C\uB974\uB974\uB974..."
-    _hold: 1
+    _spawnBoss: 0
+    _startEntrance: 0
   - _speaker: 0
     _mood: 3
     _text: "\uC57C, \uC57C! \uB098 \uB9D0\uACE0! \uC800\uCABD! \uC800 \uACE0\uBE14\uB9B0!"
-    _hold: 1
+    _spawnBoss: 0
+    _startEntrance: 0
   - _speaker: 0
     _mood: 5
     _text: "\uBB3C\uC5B4!"
-    _hold: 0.8
+    _spawnBoss: 0
+    _startEntrance: 0

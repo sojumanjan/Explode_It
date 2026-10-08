@@ -16,13 +16,16 @@ MonoBehaviour:
   - _speaker: 0
     _mood: 3
     _text: "\uC9D0\uC758 \uBCD1\uC0AC\uB3C4, \uC6A9\uBCD1\uB3C4, \uC560\uC644\uB3D9\uBB3C\uAE4C\uC9C0..."
-    _hold: 1.2
+    _spawnBoss: 0
+    _startEntrance: 0
   - _speaker: 0
     _mood: 1
     _text: "\uB354\uB294 \uBABB \uCC38\uACA0\uB2E4. \uC9D0\uC774 \uC9C1\uC811 \uB098\uC11C\uACA0\uB2E4!"
-    _hold: 1.2
+    _spawnBoss: 0
+    _startEntrance: 0
   - _speaker: 0
     _mood: 0
     _text: "\uD6C4\uD68C\uD558\uAC8C \uB420 \uAC70\uB2E4, \uACE0\uBE14\uB9B0. \uC774
       \uBAB8\uC758 \uC9C4\uC9DC \uBAA8\uC2B5\uC744 \uBCF4\uC5EC \uC8FC\uC9C0!"
-    _hold: 1.4
+    _spawnBoss: 0
+    _startEntrance: 0

@@ -17,10 +17,24 @@ namespace ExplodeIt.UI
         [SerializeField, Min(0f)] private float _popDuration = 0.18f;
         // 사망 슬로모션 중에도 컷인 대사가 제 속도로 나오게 하려면 켠다.
         [SerializeField] private bool _useUnscaledTime;
+        // 글자가 다 나오면 위아래로 통통 튀는 ▼. 클릭해서 넘기는 대화에만 연결하고, 자동으로 넘어가는 컷인은 비워 둔다.
+        [SerializeField] private RectTransform _nextMark;
+        [SerializeField, Min(0f)] private float _nextMarkBob = 6f;
+        [SerializeField, Min(0f)] private float _nextMarkRate = 2.5f;
 
         private float _shown;
         private int _total;
         private Tween _pop;
+        private Vector2 _nextMarkHome;
+        private float _nextMarkTime;
+
+        private void Awake()
+        {
+            if (_nextMark != null)
+            {
+                _nextMarkHome = _nextMark.anchoredPosition;
+            }
+        }
 
         public bool IsTyping => _text.maxVisibleCharacters < _total;
 
@@ -37,6 +51,7 @@ namespace ExplodeIt.UI
             _total = _text.textInfo.characterCount;
             _shown = 0f;
             _text.maxVisibleCharacters = 0;
+            SetNextMark(false);
 
             _pop?.Kill();
             _box.localScale = Vector3.one * 0.6f;
@@ -57,13 +72,44 @@ namespace ExplodeIt.UI
 
         private void Update()
         {
+            float deltaTime = _useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
             if (!IsTyping)
+            {
+                BobNextMark(deltaTime);
+                return;
+            }
+
+            _shown += _charsPerSecond * deltaTime;
+            _text.maxVisibleCharacters = Mathf.Min(_total, (int)_shown);
+        }
+
+        private void BobNextMark(float deltaTime)
+        {
+            if (_nextMark == null)
             {
                 return;
             }
 
-            _shown += _charsPerSecond * (_useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
-            _text.maxVisibleCharacters = Mathf.Min(_total, (int)_shown);
+            if (!_nextMark.gameObject.activeSelf)
+            {
+                SetNextMark(true);
+            }
+
+            _nextMarkTime += deltaTime;
+            float bob = Mathf.Abs(Mathf.Sin(_nextMarkTime * _nextMarkRate * Mathf.PI)) * _nextMarkBob;
+            _nextMark.anchoredPosition = _nextMarkHome - new Vector2(0f, bob);
+        }
+
+        private void SetNextMark(bool isVisible)
+        {
+            if (_nextMark == null)
+            {
+                return;
+            }
+
+            _nextMark.gameObject.SetActive(isVisible);
+            _nextMarkTime = 0f;
+            _nextMark.anchoredPosition = _nextMarkHome;
         }
     }
 }
