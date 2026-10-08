@@ -150,6 +150,9 @@ MonoBehaviour:
   _enemy: {fileID: 7762560572095510038}
   _sprite: {fileID: 2587545048131987524}
   _motion: {fileID: 11400000, guid: 76a58a38a69afac499927d78a01837b5, type: 2}
+  _attackSprite: {fileID: 0}
+  _stunnedSprite: {fileID: 0}
+  _deathSprite: {fileID: 0}
 --- !u!1 &3569141686551466355
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +243,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
 --- !u!1 &8155210835603187799
 GameObject:
