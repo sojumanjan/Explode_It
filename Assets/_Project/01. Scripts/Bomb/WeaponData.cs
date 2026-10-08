@@ -38,6 +38,13 @@ namespace ExplodeIt.Bombs
         [Tooltip("포물선 높이 (유닛). 보이는 연출만 바뀌고 착지 지점은 그대로다")]
         [SerializeField, Min(0f)] private float _arcHeight = 1f;
 
+        [Header("사운드")]
+        [Tooltip("폭발음 최소 피치. 터질 때마다 최소~최대 사이에서 무작위로 정한다. 1이면 원음, 낮을수록 묵직하고 높을수록 가볍게 들린다")]
+        [SerializeField, Range(0.5f, 2f)] private float _explosionPitchMin = 0.95f;
+
+        [Tooltip("폭발음 최대 피치")]
+        [SerializeField, Range(0.5f, 2f)] private float _explosionPitchMax = 1.05f;
+
         public int Charges => _charges;
         public float ThrowInterval => _throwInterval;
         public float RechargeTime => _rechargeTime;
@@ -48,5 +55,7 @@ namespace ExplodeIt.Bombs
         public float ExplosionRadius => _explosionRadius;
         public float FlightDuration => _flightDuration;
         public float ArcHeight => _arcHeight;
+        public float ExplosionPitchMin => _explosionPitchMin;
+        public float ExplosionPitchMax => Mathf.Max(_explosionPitchMin, _explosionPitchMax);
     }
 }

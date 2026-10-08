@@ -19,8 +19,20 @@ namespace ExplodeIt.Enemies
         [SerializeField, Min(0.1f)] private float _groggyDuration = 5f;
 
         [Header("등장")]
-        [Tooltip("2등신 왕이 붉게 달아올라 떠는 시간 (초). 끝나는 순간 펑 하고 각성 모습으로 바뀐다. 보스가 나타나는 대화 줄의 멈춤 시간보다 짧게 둔다")]
+        [Tooltip("2등신 왕이 불티 속에서 떠는 시간 (초). 끝나면 쏙 줄어들었다가 팍 커지며 각성 모습으로 바뀐다. 보스가 나타나는 대화 줄의 멈춤 시간보다 짧게 둔다")]
         [SerializeField, Min(0.1f)] private float _transformDuration = 1.4f;
+
+        [Tooltip("변신하는 동안 카메라 확대 배율. 1이면 평소, 작을수록 왕에게 가까이 다가간다 (0.65 = 화면이 0.65배로 좁아짐)")]
+        [SerializeField, Range(0.3f, 1f)] private float _transformZoom = 0.65f;
+
+        [Tooltip("변신이 시작될 때 카메라가 왕에게 다가가는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _zoomInTime = 0.8f;
+
+        [Tooltip("각성 모습으로 바뀐 뒤 확대한 채 머무는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _zoomHoldTime = 0.4f;
+
+        [Tooltip("확대를 풀고 원래 화면으로 스윽 돌아가는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _zoomOutTime = 1f;
 
         [Tooltip("등장 동작: 왕관이 머리 위로 내려와 빛나기까지 (초). 끝나면 조작이 돌아온다")]
         [SerializeField, Min(0.05f)] private float _crownSummonDuration = 0.6f;
@@ -124,8 +136,8 @@ namespace ExplodeIt.Enemies
         [SerializeField, Min(0f)] private float _crownlessWalkSpeed = 1.2f;
 
         [Header("사운드")]
-        [SerializeField, Tooltip("붉게 달아오르기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
-        [SerializeField, Tooltip("펑 하고 각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
+        [SerializeField, Tooltip("떨기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
+        [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
         [SerializeField, Tooltip("구르는 순간의 효과음")] private SoundData _dodgeSound;
         [SerializeField, Tooltip("베는 순간의 효과음")] private SoundData _slashSound;
         [SerializeField, Tooltip("돌진하는 순간의 효과음")] private SoundData _lungeSound;
@@ -136,8 +148,7 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("왕관에 막힌 순간의 효과음")] private SoundData _immuneSound;
 
         [Header("연출")]
-        [SerializeField, Tooltip("펑 하고 각성 모습으로 바뀌는 순간의 연출 (흔들림, 히트스톱, 폭발). 그림 한가운데서 터진다")] private FeedbackData _transformFeedback;
-        [SerializeField, Tooltip("달아오르는 동안 몸 둘레에 도는 빛 색")] private Color _transformGlowColor = new Color(1f, 0.15f, 0.1f, 1f);
+        [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 연출 (흔들림, 히트스톱, 폭발). 그림 한가운데서 터진다")] private FeedbackData _transformFeedback;
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 연출")] private FeedbackData _hurtFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
@@ -149,7 +160,10 @@ namespace ExplodeIt.Enemies
         public float GroggyDuration => _groggyDuration;
         public float TransformDuration => _transformDuration;
         public float CrownSummonDuration => _crownSummonDuration;
-        public Color TransformGlowColor => _transformGlowColor;
+        public float TransformZoom => _transformZoom;
+        public float ZoomInTime => _zoomInTime;
+        public float ZoomHoldTime => _zoomHoldTime;
+        public float ZoomOutTime => _zoomOutTime;
         public SoundData TransformChargeSound => _transformChargeSound;
         public float PreferredDistance => _preferredDistance;
         public float PatternInterval => _patternInterval;

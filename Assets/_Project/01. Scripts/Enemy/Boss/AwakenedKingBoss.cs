@@ -13,11 +13,11 @@ namespace ExplodeIt.Enemies
     public class AwakenedKingBoss : Enemy, IBoss
     {
         // 그림 전용 연출 값이라 데이터로 빼지 않는다.
-        // 변신 시간 중 둘레 빛이 다 차오르는 구간의 비율. 나머지는 다 달아오른 채 점점 세게 떤다.
-        private const float TransformHeatPortion = 0.35f;
-        // 푸쉭 하고 바뀐 순간 각성 모습이 살짝 부풀었다 돌아오는 시간 (초)과 크기.
+        // 다 떤 뒤 2등신이 0으로 줄어드는 시간 (초).
+        private const float ShrinkDuration = 0.1f;
+        // 각성 모습이 0에서 팍 커지는 시간 (초)과 넘쳤다 돌아오는 세기(OutBack 계수, 1.7이면 약 10% 넘침).
         private const float PopDuration = 0.25f;
-        private const float PopScale = 1.15f;
+        private const float PopOvershoot = 1.7f;
         // 등장 동작에서 왕관이 내려오기 시작하는 높이 (유닛).
         private const float CrownDropHeight = 1.5f;
         // 머리 위 왕관이 위아래로 둥둥 뜨는 폭 (유닛)과 빠르기 (rad/초).
@@ -66,9 +66,7 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SpriteRenderer _crown;
         // 변신 전 2등신 모습. 그림(Body)과 따로 두어 각성 모습과 겹쳐 바꿔 보여 준다.
         [SerializeField] private SpriteRenderer _chibi;
-        // 변신 연출. 2등신 그림 뒤에서 같은 모양으로 번지는 붉은 빛(Chibi 자식, 실루엣 재질)과 달아오르는 동안 튀는 불티.
-        // 화난 얼굴이 그대로 보여야 해서 그림 위를 덮지는 않는다.
-        [SerializeField] private SpriteRenderer _chibiGlow;
+        // 변신하며 떠는 동안 튀는 불티.
         [SerializeField] private ParticleSystem _transformAura;
         [SerializeField] private ExplosionShape _slashRange;
         [SerializeField] private ExplosionShape _slashFill;
@@ -113,6 +111,9 @@ namespace ExplodeIt.Enemies
         private bool _hasTransformed;
         private bool _isEntranceRequested;
         private bool _isEntranceDone;
+        // 각성한 뒤 확대한 채 머문 시간. 음수면 머무는 중이 아니다.
+        private float _zoomHoldTime = -1f;
+        private bool _isZoomed;
 
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
@@ -163,6 +164,14 @@ namespace ExplodeIt.Enemies
             {
                 _flyingCrown.gameObject.SetActive(false);
             }
+
+            // 변신 도중 사라지면(개발자 패널 전멸 등) 확대된 채 남지 않게 바로 되돌린다.
+            if (_isZoomed)
+            {
+                _isZoomed = false;
+                _zoomHoldTime = -1f;
+                GameEvents.RaiseCameraZoomRequested(1f, 0f);
+            }
         }
 
         private void OnDestroy()
@@ -173,7 +182,7 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 나타난 순간은 2등신 모습이고, 곧바로 붉은 빛에 휩싸여 떨다가 푸쉭 하고 각성한다(대화 중 멈춤 시간 동안 보이게).
+        // 나타난 순간은 2등신 모습이고, 곧바로 불티 속에서 떨다가 쏙 줄어든 뒤 팍 커지며 각성한다(대화 중 멈춤 시간 동안 보이게).
         // 등장 동작(왕관 강림)이 끝나야 싸운다. 그 전에도 맞지 않게 무적부터 켠다.
         public void BeginBoss(int bossNumber, int tier)
         {
@@ -198,8 +207,9 @@ namespace ExplodeIt.Enemies
             _visual.Alpha = 0f;
 
             _transformTime = 0f;
-            _chibiGlow.enabled = true;
+            _zoomHoldTime = -1f;
             TickTransform(0f);
+            ZoomIn();
             _transformAura.Play();
             AudioManager.Play(_data.TransformChargeSound);
         }
@@ -228,6 +238,15 @@ namespace ExplodeIt.Enemies
             if (_transformTime >= 0f)
             {
                 TickTransform(deltaTime);
+            }
+
+            if (_zoomHoldTime >= 0f)
+            {
+                _zoomHoldTime += deltaTime;
+                if (_zoomHoldTime >= _data.ZoomHoldTime)
+                {
+                    ZoomOut();
+                }
             }
 
             if (_summonTime >= 0f)
@@ -273,34 +292,28 @@ namespace ExplodeIt.Enemies
             return _slashFrames[index];
         }
 
-        // ── 변신: 화난 2등신 그대로 둘레에 붉은 빛이 번지며 점점 세게 떨다가, 푸쉭 하고 각성 모습으로 바뀐다.
+        // ── 변신: 화난 2등신 그대로 점점 세게 떨다가, 한가운데로 쏙 줄어들어 사라지고 그 자리에서 각성 모습이 팍 커진다.
+        // 줄어들고 커지는 동안 그림 한가운데를 기준으로 삼아, 발밑으로 빨려 들어가거나 발밑에서 솟는 것처럼 보이지 않게 한다.
 
         private void TickTransform(float deltaTime)
         {
             _transformTime += deltaTime;
-            float t = Mathf.Clamp01(_transformTime / _data.TransformDuration);
-            float heat = Mathf.Clamp01(t / TransformHeatPortion);
-            float shake = t * t;
-            Color glow = _data.TransformGlowColor;
-
-            // 표정이 바뀌어도 같은 모양으로 번지게 매번 그림을 따라 맞춘다.
-            _chibiGlow.sprite = _chibi.sprite;
-
-            // 빛 층은 그림 한가운데를 기준으로 부풀어, 발밑이 아니라 몸 둘레 전체에 테두리처럼 번진다.
-            float pulse = 0.5f + 0.5f * Mathf.Sin(_transformTime * Mathf.Lerp(10f, 40f, t));
-            float glowScale = 1.08f + 0.1f * pulse + 0.12f * t;
-            float centerY = _chibi.sprite != null ? _chibi.sprite.bounds.center.y : 0f;
-            Transform glowTransform = _chibiGlow.transform;
-            glowTransform.localScale = new Vector3(glowScale, glowScale, 1f);
-            glowTransform.localPosition = new Vector3(0f, centerY * (1f - glowScale), 0f);
-            _chibiGlow.color = new Color(glow.r, glow.g, glow.b, heat * (0.35f + 0.4f * pulse));
-
             Transform chibi = _chibi.transform;
-            float amplitude = 0.02f + 0.12f * shake;
-            chibi.localPosition = _chibiPosition + new Vector3(Mathf.Sin(_transformTime * 83f), 0.5f * Mathf.Sin(_transformTime * 67f), 0f) * amplitude;
-            chibi.localScale = _chibiScale * (1f + 0.12f * shake);
+            if (_transformTime < _data.TransformDuration)
+            {
+                float t = _transformTime / _data.TransformDuration;
+                float shake = t * t;
+                float amplitude = 0.02f + 0.12f * shake;
+                chibi.localPosition = _chibiPosition + new Vector3(Mathf.Sin(_transformTime * 83f), 0.5f * Mathf.Sin(_transformTime * 67f), 0f) * amplitude;
+                chibi.localScale = _chibiScale * (1f + 0.12f * shake);
+                return;
+            }
 
-            if (t >= 1f)
+            float shrink = Mathf.Clamp01((_transformTime - _data.TransformDuration) / ShrinkDuration);
+            float size = (1f - shrink * shrink) * 1.12f;
+            chibi.localScale = _chibiScale * size;
+            chibi.localPosition = _chibiPosition + Vector3.up * (ChibiCenterHeight() * (1f - size));
+            if (shrink >= 1f)
             {
                 PopTransform();
             }
@@ -309,17 +322,17 @@ namespace ExplodeIt.Enemies
         private void PopTransform()
         {
             // 그림 피벗이 발밑이라 위치 대신 그림 한가운데에서 터트린다.
-            Vector2 center = _chibi.bounds.center;
+            Vector2 center = (Vector2)transform.position + (Vector2)_chibiPosition + Vector2.up * ChibiCenterHeight();
             _transformTime = -1f;
             _hasTransformed = true;
             _chibi.enabled = false;
-            _chibiGlow.enabled = false;
             _chibi.transform.localPosition = _chibiPosition;
             _chibi.transform.localScale = _chibiScale;
             _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
             _visual.Alpha = 1f;
             _popTime = 0f;
+            _zoomHoldTime = 0f;
             FeedbackPlayer.Play(_data.TransformFeedback, center);
             AudioManager.Play(_data.TransformSound);
 
@@ -329,7 +342,31 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 각성 모습이 살짝 부풀었다가 돌아온다.
+        // 변신에 눈이 가도록 카메라가 왕 한가운데로 다가간다.
+        private void ZoomIn()
+        {
+            Vector2 center = (Vector2)transform.position + (Vector2)_chibiPosition + Vector2.up * ChibiCenterHeight();
+            _isZoomed = true;
+            GameEvents.RaiseCameraFocusRequested(center, _data.ZoomInTime);
+            GameEvents.RaiseCameraZoomRequested(_data.TransformZoom, _data.ZoomInTime);
+        }
+
+        // 보스전 등장 연출이 처음 잡아 둔 화면(플레이어와 보스 사이)으로 스윽 물러난다. 이후 조작이 돌아올 때 진행 흐름이 플레이어에게 돌려준다.
+        private void ZoomOut()
+        {
+            _zoomHoldTime = -1f;
+            _isZoomed = false;
+            Vector2 middle = ((Vector2)transform.position + TargetPosition) * 0.5f;
+            GameEvents.RaiseCameraFocusRequested(middle, _data.ZoomOutTime);
+            GameEvents.RaiseCameraZoomRequested(1f, _data.ZoomOutTime);
+        }
+
+        // 2등신 그림 한가운데가 발밑에서 얼마나 위인지 (유닛).
+        private float ChibiCenterHeight()
+        {
+            return _chibi.sprite != null ? _chibi.sprite.bounds.center.y * _chibiScale.y : 0f;
+        }
+
         private void TickPop(float deltaTime)
         {
             if (_popTime < 0f)
@@ -338,12 +375,17 @@ namespace ExplodeIt.Enemies
             }
 
             _popTime += deltaTime;
+            float size = CurrentPopScale();
+            // 0에서 커지는 동안 2등신이 사라진 한가운데에서 솟아나게 그림을 들어 올렸다가 내려놓는다.
+            _visual.Lift = ChibiCenterHeight() * (1f - size);
             if (_popTime >= PopDuration)
             {
                 _popTime = -1f;
+                _visual.Lift = 0f;
             }
         }
 
+        // 0에서 시작해 조금 넘쳤다가 1로 자리 잡는다.
         private float CurrentPopScale()
         {
             if (_popTime < 0f)
@@ -351,8 +393,8 @@ namespace ExplodeIt.Enemies
                 return 1f;
             }
 
-            float t = Mathf.Clamp01(_popTime / PopDuration);
-            return Mathf.Lerp(PopScale, 1f, 1f - (1f - t) * (1f - t));
+            float t = Mathf.Clamp01(_popTime / PopDuration) - 1f;
+            return 1f + (PopOvershoot + 1f) * t * t * t + PopOvershoot * t * t;
         }
 
         // ── 등장 동작(왕관 강림): 머리 위로 왕관이 내려와 빛나면 조작이 돌아온다.

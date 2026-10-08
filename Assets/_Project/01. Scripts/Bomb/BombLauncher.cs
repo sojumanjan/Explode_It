@@ -15,11 +15,19 @@ namespace ExplodeIt.Bombs
         [SerializeField, Min(1)] private int _poolMaxSize = 64;
         // 구조물 안에 떨어진 폭탄은 범위가 0이 되어 아무 일 없이 사라지므로, 착지점이 구조물 위면 던지지 않는다.
         [SerializeField] private LayerMask _obstacleMask;
+        // 던지는 길을 막는 것(구조물, 맵 테두리). 커서가 그 너머에 있으면 막힌 지점 바로 앞까지만 던진다.
+        // 플레이어가 갈 수 없는 곳(맵 밖 적 등장 구역 등)에 폭탄을 떨어뜨려 나오자마자 잡는 것을 막는다.
+        [SerializeField] private LayerMask _throwBlockMask;
+
+        // 막힌 지점에서 이만큼(유닛) 앞에 떨어뜨려 착지점이 벽 속으로 잡히지 않게 한다.
+        private const float BlockedLandingGap = 0.15f;
 
         private static readonly Collider2D[] LandingBuffer = new Collider2D[1];
+        private static readonly RaycastHit2D[] ThrowHits = new RaycastHit2D[8];
 
         private ComponentPool<Bomb> _pool;
         private ContactFilter2D _obstacleFilter;
+        private ContactFilter2D _throwBlockFilter;
         private WeaponStats _stats;
         private Camera _camera;
         private Action<Bomb> _releaseBomb;
@@ -43,6 +51,9 @@ namespace ExplodeIt.Bombs
 
             _obstacleFilter = new ContactFilter2D();
             _obstacleFilter.SetLayerMask(_obstacleMask);
+            _throwBlockFilter = new ContactFilter2D();
+            _throwBlockFilter.useTriggers = false;
+            _throwBlockFilter.SetLayerMask(_throwBlockMask);
 
             // 폭탄은 던진 뒤 플레이어를 따라가면 안 되므로 부모 없이 월드에 둔다.
             _pool = new ComponentPool<Bomb>(_bombPrefab, null, _poolPrewarm, _poolMaxSize);
@@ -52,6 +63,7 @@ namespace ExplodeIt.Bombs
         private void Start()
         {
             ApplyStats();
+            RaiseWeaponSound();
         }
 
         // 실행 중 수치가 바뀌면 화면 표시와 남은 개수를 새 수치에 맞춘다.
@@ -86,6 +98,12 @@ namespace ExplodeIt.Bombs
             _chargesLeft = _stats.Charges;
             _pendingShots = 0;
             ApplyStats();
+            RaiseWeaponSound();
+        }
+
+        private void RaiseWeaponSound()
+        {
+            GameEvents.RaiseExplosionPitchChanged(_weaponData.ExplosionPitchMin, _weaponData.ExplosionPitchMax);
         }
 
         private void OnEnable()
@@ -204,11 +222,34 @@ namespace ExplodeIt.Bombs
         }
 
         // 특수 폭탄은 사거리가 따로 있어서, 커서 위치 계산만 공유하고 사거리는 받아서 쓴다.
+        // 가는 길에 벽이나 맵 테두리가 있으면 그 바로 앞까지만 던진다.
         public Vector2 GetThrowTarget(float maxRange)
         {
             Vector2 origin = transform.position;
             Vector2 aim = _camera.ScreenToWorldPoint(_input.Aim);
-            return origin + Vector2.ClampMagnitude(aim - origin, maxRange);
+            Vector2 offset = Vector2.ClampMagnitude(aim - origin, maxRange);
+            float distance = offset.magnitude;
+            if (distance <= 0.0001f)
+            {
+                return origin;
+            }
+
+            Vector2 direction = offset / distance;
+            int count = Physics2D.Raycast(origin, direction, _throwBlockFilter, ThrowHits, distance);
+            for (int i = 0; i < count; i++)
+            {
+                if (ThrowHits[i].distance < distance)
+                {
+                    distance = ThrowHits[i].distance;
+                }
+            }
+
+            if (count > 0)
+            {
+                distance = Mathf.Max(0f, distance - BlockedLandingGap);
+            }
+
+            return origin + direction * distance;
         }
 
         private void ReleaseBomb(Bomb bomb)

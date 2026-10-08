@@ -102,7 +102,18 @@ namespace ExplodeIt.Core
         {
             if (_current != null && sound != null)
             {
-                return _current.PlaySfx(sound);
+                return _current.PlaySfx(sound, sound.PickPitch());
+            }
+
+            return SoundHandle.None;
+        }
+
+        // 같은 소리를 쓰는 쪽마다 높낮이를 달리할 때(무기별 폭발음 등) 소리 데이터의 피치 대신 이 피치로 낸다.
+        public static SoundHandle Play(SoundData sound, float pitch)
+        {
+            if (_current != null && sound != null)
+            {
+                return _current.PlaySfx(sound, pitch);
             }
 
             return SoundHandle.None;
@@ -130,7 +141,7 @@ namespace ExplodeIt.Core
             }
         }
 
-        private SoundHandle PlaySfx(SoundData sound)
+        private SoundHandle PlaySfx(SoundData sound, float pitch)
         {
             if (!sound.HasClip)
             {
@@ -157,7 +168,7 @@ namespace ExplodeIt.Core
 
             voice.clip = sound.PickClip();
             voice.volume = sound.Volume * _sfxVolume;
-            voice.pitch = sound.PickPitch();
+            voice.pitch = pitch;
             voice.Play();
             _voiceData[index] = sound;
             _lastPlayTimes[sound] = now;

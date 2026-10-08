@@ -20,6 +20,13 @@ namespace ExplodeIt.Core
         public static event Action<int, int> BombChargesChanged;
         // 폭탄이 손을 떠난 순간. 던지는 동작 연출이 무기 코드를 몰라도 되게 한다.
         public static event Action BombThrown;
+        // 장착한 무기의 폭발음 피치 범위(최소, 최대). 무기를 바꿀 때마다 발행해, 효과음 쪽이 무기 코드를 몰라도 되게 한다.
+        public static event Action<float, float> ExplosionPitchChanged;
+
+        public static void RaiseExplosionPitchChanged(float min, float max)
+        {
+            ExplosionPitchChanged?.Invoke(min, max);
+        }
 
         public static void RaiseBombThrown()
         {
@@ -43,6 +50,8 @@ namespace ExplodeIt.Core
         public static event Action<Vector2, float> CameraFocusRequested;
         // 다시 플레이어를 따라가게 하고, 돌아가는 시간(초).
         public static event Action<float> CameraFocusReleased;
+        // 카메라 확대 배율(1 = 평소, 0.7 = 화면이 0.7배 크기로 좁아져 가까이 보임)과 바뀌는 시간(초).
+        public static event Action<float, float> CameraZoomRequested;
 
         public static void RaisePlayerControlLockChanged(bool isLocked)
         {
@@ -57,6 +66,11 @@ namespace ExplodeIt.Core
         public static void RaiseCameraFocusReleased(float blendDuration)
         {
             CameraFocusReleased?.Invoke(blendDuration);
+        }
+
+        public static void RaiseCameraZoomRequested(float zoom, float blendDuration)
+        {
+            CameraZoomRequested?.Invoke(zoom, blendDuration);
         }
 
         // 판이 시작될 때 한 번. 스토리 모드인지 알려 준다(왕 컷인 등 스토리 전용 연출이 구독한다).
@@ -141,6 +155,7 @@ namespace ExplodeIt.Core
             EnemyKilled = null;
             AbilityChargeChanged = null;
             BombChargesChanged = null;
+            ExplosionPitchChanged = null;
             BombThrown = null;
             StageCleared = null;
             WaveCleared = null;
@@ -149,6 +164,7 @@ namespace ExplodeIt.Core
             PlayerControlLockChanged = null;
             CameraFocusRequested = null;
             CameraFocusReleased = null;
+            CameraZoomRequested = null;
             StageStarted = null;
             BombLanded = null;
             WaveStarted = null;

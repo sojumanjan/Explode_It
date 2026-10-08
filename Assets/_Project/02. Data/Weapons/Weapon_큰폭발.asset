@@ -22,3 +22,5 @@ MonoBehaviour:
   _explosionRadius: 2.3
   _flightDuration: 0.3
   _arcHeight: 1
+  _explosionPitchMin: 0.7
+  _explosionPitchMax: 0.85
