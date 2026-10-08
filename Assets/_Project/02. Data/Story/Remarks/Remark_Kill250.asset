@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.KingRemarkData
   _trigger: 2
   _value: 250
-  _mood: 4
-  _text: "...\uC624\uB298\uB3C4 \uC57C\uADFC\uC774\uAD70."
+  _mood: 8
+  _text: "\uB108\uB124\uAC00 \uBC1B\uB294 \uC6D4\uAE09\uC774 \uC5BC\uB9CC\uB370...
+    \uB354 \uBD84\uBC1C\uD558\uB77C\uACE0!!"
   _hold: 1.8
