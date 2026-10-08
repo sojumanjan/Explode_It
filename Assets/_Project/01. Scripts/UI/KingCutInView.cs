@@ -39,9 +39,22 @@ namespace ExplodeIt.UI
         private Tween _punch;
         private TweenCallback _onSlidIn;
         private TweenCallback _onSlidOut;
+        private Canvas _canvas;
+        // 인스펙터에 잡아 둔 왕 그림 크기(캔버스 단위). 실제 화면에서는 이 크기에 가장 가까운 정수 배율로 맞춘다.
+        private float _kingSize;
+        private readonly Vector3[] _corners = new Vector3[4];
 
         private void Awake()
         {
+            _canvas = GetComponentInParent<Canvas>().rootCanvas;
+            // 패널에 늘려 붙인 그림이면 크기를 직접 정할 수 없으므로, 패널 아래 가운데에 세워 크기를 코드에서 정한다.
+            RectTransform king = _king.rectTransform;
+            _kingSize = king.rect.height;
+            king.anchorMin = new Vector2(0.5f, 0f);
+            king.anchorMax = new Vector2(0.5f, 0f);
+            king.pivot = new Vector2(0.5f, 0f);
+            king.anchoredPosition = Vector2.zero;
+            king.sizeDelta = new Vector2(_kingSize, _kingSize);
             _onSlidIn = StartTalking;
             _onSlidOut = OnSlidOut;
             SetPanelY(_hiddenY);
@@ -203,6 +216,7 @@ namespace ExplodeIt.UI
             _current = remark;
             _king.sprite = _kingSprites.Get(remark.Mood);
             _king.enabled = true;
+            SnapKingSize();
             _bubble.Hide();
             _isTalking = false;
 
@@ -226,6 +240,7 @@ namespace ExplodeIt.UI
         {
             _punch?.Kill();
             _king.rectTransform.localScale = Vector3.one;
+            SnapKingToPixels();
             _punch = _king.rectTransform.DOPunchScale(Vector3.one * _moodPunch, 0.25f, 6).SetUpdate(true).SetLink(gameObject);
             _bubble.Show(_current.Text);
             _holdTimer = _current.Hold;
@@ -262,6 +277,39 @@ namespace ExplodeIt.UI
         {
             _isShown = false;
             _king.enabled = false;
+        }
+
+        // 도트 그림은 화면 픽셀 기준으로 정수 배율일 때만 또렷하다. 캔버스가 화면 크기에 맞춰 늘고 줄면(예: 1600×900 창에서 0.83배)
+        // 100px 그림이 333px처럼 어중간한 배율로 그려져 픽셀 굵기가 들쭉날쭉해 흐려 보이므로, 지금 화면 배율로 크기를 다시 잡는다.
+        private void SnapKingSize()
+        {
+            Sprite sprite = _king.sprite;
+            float scale = _canvas.scaleFactor;
+            if (sprite == null || scale <= 0f)
+            {
+                return;
+            }
+
+            float pixels = sprite.rect.height;
+            int multiple = Mathf.Max(1, Mathf.RoundToInt(_kingSize * scale / pixels));
+            float size = pixels * multiple / scale;
+            _king.rectTransform.sizeDelta = new Vector2(size * sprite.rect.width / pixels, size);
+            _king.rectTransform.anchoredPosition = Vector2.zero;
+        }
+
+        // 배율이 정수여도 그림 모서리가 화면 픽셀 사이에 걸치면 칸 경계가 한 줄씩 밀린다. 다 올라온 뒤 모서리를 픽셀에 맞춘다.
+        private void SnapKingToPixels()
+        {
+            float scale = _canvas.scaleFactor;
+            if (scale <= 0f)
+            {
+                return;
+            }
+
+            _king.rectTransform.GetWorldCorners(_corners);
+            Vector2 corner = _corners[0];
+            Vector2 offset = new Vector2(Mathf.Round(corner.x) - corner.x, Mathf.Round(corner.y) - corner.y);
+            _king.rectTransform.anchoredPosition += offset / scale;
         }
 
         private void SetPanelY(float y)

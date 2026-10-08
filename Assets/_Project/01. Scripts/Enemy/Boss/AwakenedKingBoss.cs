@@ -13,12 +13,11 @@ namespace ExplodeIt.Enemies
     public class AwakenedKingBoss : Enemy, IBoss
     {
         // 그림 전용 연출 값이라 데이터로 빼지 않는다.
-        // 변신 시간 중 붉은 덧칠이 다 차오르는 구간의 비율. 나머지는 다 달아오른 채 점점 세게 떤다.
+        // 변신 시간 중 둘레 빛이 다 차오르는 구간의 비율. 나머지는 다 달아오른 채 점점 세게 떤다.
         private const float TransformHeatPortion = 0.35f;
-        // 펑 하고 바뀐 순간 각성 모습이 부풀었다 돌아오는 시간 (초)과 크기, 하얗게 번쩍이는 시간 (초).
-        private const float PopDuration = 0.3f;
-        private const float PopScale = 1.35f;
-        private const float PopFlashDuration = 0.35f;
+        // 푸쉭 하고 바뀐 순간 각성 모습이 살짝 부풀었다 돌아오는 시간 (초)과 크기.
+        private const float PopDuration = 0.25f;
+        private const float PopScale = 1.15f;
         // 등장 동작에서 왕관이 내려오기 시작하는 높이 (유닛).
         private const float CrownDropHeight = 1.5f;
         // 머리 위 왕관이 위아래로 둥둥 뜨는 폭 (유닛)과 빠르기 (rad/초).
@@ -67,11 +66,9 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SpriteRenderer _crown;
         // 변신 전 2등신 모습. 그림(Body)과 따로 두어 각성 모습과 겹쳐 바꿔 보여 준다.
         [SerializeField] private SpriteRenderer _chibi;
-        // 변신 연출 층. 2등신 그림과 같은 모양을 붉게 덮어 씌우는 층, 뒤에서 번지는 빛 층(둘 다 Chibi 자식, 실루엣 재질),
-        // 펑 하는 순간 각성 모습을 하얗게 덮는 층(Body 자식, 실루엣 재질), 달아오르는 동안 튀는 불티.
-        [SerializeField] private SpriteRenderer _chibiOverlay;
+        // 변신 연출. 2등신 그림 뒤에서 같은 모양으로 번지는 붉은 빛(Chibi 자식, 실루엣 재질)과 달아오르는 동안 튀는 불티.
+        // 화난 얼굴이 그대로 보여야 해서 그림 위를 덮지는 않는다.
         [SerializeField] private SpriteRenderer _chibiGlow;
-        [SerializeField] private SpriteRenderer _bodyFlash;
         [SerializeField] private ParticleSystem _transformAura;
         [SerializeField] private ExplosionShape _slashRange;
         [SerializeField] private ExplosionShape _slashFill;
@@ -79,8 +76,9 @@ namespace ExplodeIt.Enemies
         // 던진 왕관. 왕을 따라 움직이면 안 되므로 시작할 때 월드로 뗀다.
         [SerializeField] private Transform _flyingCrown;
         // 동작 그림. 기본 자세는 그림(Body)에 넣어 둔 그림이고, 패턴 중에만 이 그림들로 바꾼다. 비워 두면 기본 그림 그대로다.
+        // 베기는 파고들며 자세를 잡는 그림 한 장과, 베는 순간 빠르게 넘기는 동작 그림들(순서대로).
         [SerializeField] private Sprite _slashReadySprite;
-        [SerializeField] private Sprite _slashStrikeSprite;
+        [SerializeField] private Sprite[] _slashFrames;
         [SerializeField] private Sprite _thrustSprite;
 
         private int _bossNumber;
@@ -116,7 +114,6 @@ namespace ExplodeIt.Enemies
         private bool _isEntranceRequested;
         private bool _isEntranceDone;
 
-        private SpriteRenderer _bodySprite;
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
         private Vector3 _crownPositionLocal;
@@ -135,7 +132,6 @@ namespace ExplodeIt.Enemies
         protected override void Awake()
         {
             base.Awake();
-            _bodySprite = _bodyFlash.transform.parent.GetComponent<SpriteRenderer>();
             _chibiPosition = _chibi.transform.localPosition;
             _chibiScale = _chibi.transform.localScale;
             _crownPositionLocal = _crown.transform.localPosition;
@@ -177,7 +173,7 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 나타난 순간은 2등신 모습이고, 곧바로 붉게 달아올라 떨다가 펑 하고 각성한다(대화 중 멈춤 시간 동안 보이게).
+        // 나타난 순간은 2등신 모습이고, 곧바로 붉은 빛에 휩싸여 떨다가 푸쉭 하고 각성한다(대화 중 멈춤 시간 동안 보이게).
         // 등장 동작(왕관 강림)이 끝나야 싸운다. 그 전에도 맞지 않게 무적부터 켠다.
         public void BeginBoss(int bossNumber, int tier)
         {
@@ -196,14 +192,12 @@ namespace ExplodeIt.Enemies
             HitReceiver.IsShielded = true;
             _hasCrown = true;
             _crown.enabled = false;
-            _bodyFlash.enabled = false;
             _chibi.enabled = true;
             _chibi.transform.localPosition = _chibiPosition;
             _chibi.transform.localScale = _chibiScale;
             _visual.Alpha = 0f;
 
             _transformTime = 0f;
-            _chibiOverlay.enabled = true;
             _chibiGlow.enabled = true;
             TickTransform(0f);
             _transformAura.Play();
@@ -257,7 +251,7 @@ namespace ExplodeIt.Enemies
             Sprite pose = null;
             if (State == EnemyState.Attack && _pattern == Pattern.Slash)
             {
-                pose = _step == Step.Pause ? _slashStrikeSprite : _slashReadySprite;
+                pose = _step == Step.Pause ? SlashFrame() : _slashReadySprite;
             }
             else if (State == EnemyState.Attack && _pattern == Pattern.Lunge && _step == Step.Dash)
             {
@@ -267,7 +261,19 @@ namespace ExplodeIt.Enemies
             _visual.PoseSprite = pose;
         }
 
-        // ── 변신: 2등신 그림 위에 같은 모양을 붉게 덮고 둘레에 빛이 번지며, 점점 세게 떨다가 펑 하고 각성 모습으로 바뀐다.
+        // 베는 순간부터 지난 시간(쉬는 단계의 시간)에 맞춰 동작 그림을 넘긴다. 마지막 그림에서 멈춘다.
+        private Sprite SlashFrame()
+        {
+            if (_slashFrames == null || _slashFrames.Length == 0)
+            {
+                return null;
+            }
+
+            int index = Mathf.Min((int)(_stepTime / _data.SlashFrameTime), _slashFrames.Length - 1);
+            return _slashFrames[index];
+        }
+
+        // ── 변신: 화난 2등신 그대로 둘레에 붉은 빛이 번지며 점점 세게 떨다가, 푸쉭 하고 각성 모습으로 바뀐다.
 
         private void TickTransform(float deltaTime)
         {
@@ -277,10 +283,8 @@ namespace ExplodeIt.Enemies
             float shake = t * t;
             Color glow = _data.TransformGlowColor;
 
-            // 표정이 바뀌어도 같은 모양으로 덮이게 매번 그림을 따라 맞춘다.
-            _chibiOverlay.sprite = _chibi.sprite;
+            // 표정이 바뀌어도 같은 모양으로 번지게 매번 그림을 따라 맞춘다.
             _chibiGlow.sprite = _chibi.sprite;
-            _chibiOverlay.color = new Color(glow.r, glow.g, glow.b, heat * 0.85f);
 
             // 빛 층은 그림 한가운데를 기준으로 부풀어, 발밑이 아니라 몸 둘레 전체에 테두리처럼 번진다.
             float pulse = 0.5f + 0.5f * Mathf.Sin(_transformTime * Mathf.Lerp(10f, 40f, t));
@@ -309,7 +313,6 @@ namespace ExplodeIt.Enemies
             _transformTime = -1f;
             _hasTransformed = true;
             _chibi.enabled = false;
-            _chibiOverlay.enabled = false;
             _chibiGlow.enabled = false;
             _chibi.transform.localPosition = _chibiPosition;
             _chibi.transform.localScale = _chibiScale;
@@ -317,8 +320,6 @@ namespace ExplodeIt.Enemies
 
             _visual.Alpha = 1f;
             _popTime = 0f;
-            _bodyFlash.enabled = true;
-            TickPop(0f);
             FeedbackPlayer.Play(_data.TransformFeedback, center);
             AudioManager.Play(_data.TransformSound);
 
@@ -328,7 +329,7 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 각성 모습이 하얗게 번쩍이며 부풀었다가 돌아온다.
+        // 각성 모습이 살짝 부풀었다가 돌아온다.
         private void TickPop(float deltaTime)
         {
             if (_popTime < 0f)
@@ -337,13 +338,9 @@ namespace ExplodeIt.Enemies
             }
 
             _popTime += deltaTime;
-            _bodyFlash.sprite = _bodySprite.sprite;
-            _bodyFlash.flipX = _bodySprite.flipX;
-            _bodyFlash.color = new Color(1f, 1f, 1f, 1f - Mathf.Clamp01(_popTime / PopFlashDuration));
-            if (_popTime >= Mathf.Max(PopDuration, PopFlashDuration))
+            if (_popTime >= PopDuration)
             {
                 _popTime = -1f;
-                _bodyFlash.enabled = false;
             }
         }
 

@@ -35,4 +35,4 @@ MonoBehaviour:
     _startEntrance: 1
   _spawnPause: 2.2
   _kingBecomesBoss: 1
-  _kingStandHeight: -1.2729999
+  _kingStandHeight: -1.221

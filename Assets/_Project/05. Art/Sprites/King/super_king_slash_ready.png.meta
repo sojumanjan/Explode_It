@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d4e2e0a6176fdc14b92023d5e762d85a
+guid: dce7286de63c1ff47bb163fe432e18a6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3746708651048879646
-    second: super_king_slash_0
+      213: -6679747806112274671
+    second: king_nocrown_backswing_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 7
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 80
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: super_king_slash_0
+      name: king_nocrown_backswing_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 1
-        width: 97
-        height: 80
+        width: 99
+        height: 74
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2e939513554010cc0800000000000000
-      internalID: -3746708651048879646
+      spriteID: 117ab7bd2c4cc43a0800000000000000
+      internalID: -6679747806112274671
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      super_king_slash_0: -3746708651048879646
+      king_nocrown_backswing_0: -6679747806112274671
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

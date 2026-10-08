@@ -70,6 +70,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("베고 다음 베기까지 쉬는 시간 (초)")]
         [SerializeField, Min(0f)] private float _slashPause = 0.15f;
 
+        [Tooltip("베는 동작 그림 한 장을 보여 주는 시간 (초). 베는 순간부터 그림을 차례로 넘기고 마지막 그림에서 멈춘다. 장수 × 이 값이 쉬는 시간보다 짧아야 끝까지 보인다")]
+        [SerializeField, Min(0.01f)] private float _slashFrameTime = 0.04f;
+
         [Header("돌진 찌르기")]
         [Tooltip("한 패턴에 돌진하는 횟수 (번)")]
         [SerializeField, Min(1)] private int _lungeCount = 3;
@@ -162,6 +165,7 @@ namespace ExplodeIt.Enemies
         public float SlashRadius => _slashRadius;
         public float SlashAngle => _slashAngle;
         public float SlashPause => _slashPause;
+        public float SlashFrameTime => _slashFrameTime;
         public int LungeCount => _lungeCount;
         public float BackstepDistance => _backstepDistance;
         public float BackstepDuration => _backstepDuration;
