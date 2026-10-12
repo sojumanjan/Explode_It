@@ -19,6 +19,10 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Transform _target;
         [SerializeField] private LayerMask _attackMask;
         [SerializeField] private LayerMask _obstacleMask;
+        // 벽·구조물에 부딪히는 발 판정. 꺼 둔 원 콜라이더로 크기(반경)만 읽고 물리에는 참여하지 않는다.
+        // 몸에 붙은 콜라이더는 폭탄에 맞는 판정이라 그림보다 크게 잡혀 있어, 그대로 벽 검사에 쓰면 좁은 틈을 못 지나간다.
+        // 비워 두면 피격 콜라이더 크기를 쓴다(보스 등).
+        [SerializeField] private CircleCollider2D _moveCollider;
 
         private HitReceiver _hitReceiver;
         private ContactFilter2D _attackFilter;
@@ -50,8 +54,10 @@ namespace ExplodeIt.Enemies
         // 블랙홀 같은 외부 힘에 끌려가는지. 보스처럼 자리를 지켜야 하는 적은 끈다.
         protected virtual bool CanBePulled => true;
 
-        // 끌려갈 때 벽에 몸이 파묻히지 않도록 쓰는 반경. 콜라이더 크기를 그대로 따른다.
-        protected float BodyRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
+        // 벽·구조물 검사에 쓰는 이동 반경. 이동용 콜라이더가 있으면 그 크기, 없으면 피격 콜라이더 크기.
+        protected float BodyRadius => _moveCollider != null ? MoveColliderRadius() : HitRadius;
+        // 폭탄에 맞는 몸 크기. 적끼리 간격을 벌릴 때도 이 크기로 잰다.
+        protected float HitRadius => Mathf.Min(_collider.bounds.extents.x, _collider.bounds.extents.y);
         protected Transform Target => _target;
         protected EnemyState State => _state;
         // 지금 상태에 들어온 뒤 지난 시간 (초, 물리 스텝 기준).
@@ -352,7 +358,7 @@ namespace ExplodeIt.Enemies
                 return Vector2.zero;
             }
 
-            float radius = BodyRadius;
+            float radius = HitRadius;
             Vector2 position = Body.position;
             // 내 원과 겹치는 콜라이더만 모은다. 겹치지 않는 적은 밀어낼 대상이 아니다.
             int count = Physics2D.OverlapCircle(position, radius, _separationFilter, SeparationBuffer);
@@ -391,7 +397,7 @@ namespace ExplodeIt.Enemies
             Vector2 pushDirection = push / strength;
             float pushDistance = Mathf.Min(strength, 1f) * Data.SeparationSpeed * deltaTime;
             // 키네마틱이라 물리가 막아 주지 않으므로, 밀려서 구조물에 파묻히지 않게 직접 멈춘다.
-            pushDistance = ClearDistance(pushDirection, pushDistance, radius);
+            pushDistance = ClearDistance(pushDirection, pushDistance, BodyRadius);
             return pushDirection * pushDistance;
         }
 
@@ -428,6 +434,13 @@ namespace ExplodeIt.Enemies
         {
             Vector2 toTarget = (Vector2)_target.position - Body.position;
             return toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : Vector2.right;
+        }
+
+        // 꺼 둔 콜라이더는 bounds가 비므로 반경에 크기 배율을 직접 곱한다.
+        private float MoveColliderRadius()
+        {
+            Vector3 scale = _moveCollider.transform.lossyScale;
+            return _moveCollider.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
         }
 
         // 주어진 방향으로 반경만 한 원을 밀었을 때 구조물에 닿기 전까지 갈 수 있는 거리.

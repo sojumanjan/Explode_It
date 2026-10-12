@@ -113,23 +113,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_0"
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice0"
       rect:
         serializedVersion: 2
         x: 130
         y: 34
-        width: 239
+        width: 39
         height: 432
       alignment: 9
-      pivot: {x: 0.5, y: 0.12148148}
+      pivot: {x: 0.5, y: 0.5648148}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4f673c18105a84b00800000000000000
-      internalID: 813081158630995700
+      spriteID: 8a6c77920bc59e747a4b8bb8c5e0cc0d
+      internalID: -1167568209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice1"
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 34
+        width: 40
+        height: 432
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44907406}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20f3f334dd538bb48b7e7a47e572bed8
+      internalID: 1793975577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice2"
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 34
+        width: 40
+        height: 432
+      alignment: 9
+      pivot: {x: 0.5, y: 0.30092594}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80793415731b08643ac899d13ccbed33
+      internalID: -1609940493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice3"
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 34
+        width: 40
+        height: 432
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08796296}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5100c228f644db74684084cebd82d3d5
+      internalID: 401076539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice4"
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 34
+        width: 40
+        height: 432
+      alignment: 9
+      pivot: {x: 0.5, y: 0.016203703}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab2767f5c08697b4eaacdf49d1fac116
+      internalID: 1285606965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice5"
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 34
+        width: 40
+        height: 432
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e598bfdf6b4b3fd4ca0caa80e015f8d0
+      internalID: -447289502
       vertices: []
       indices: 
       edges: []
@@ -149,6 +259,12 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_0": 813081158630995700
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice0": -1167568209
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice1": 1793975577
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice2": -1609940493
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice3": 401076539
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice4": 1285606965
+      "\uC1E0 \uC6B8\uD0C0\uB9AC \uB300\uAC011_slice5": -447289502
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

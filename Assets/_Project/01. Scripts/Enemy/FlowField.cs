@@ -21,7 +21,7 @@ namespace ExplodeIt.Enemies
         [SerializeField] private LayerMask _obstacleMask;
         [Tooltip("칸 한 변의 길이 (유닛). 작을수록 좁은 통로를 인식하지만 칸 수가 제곱으로 늘어난다")]
         [SerializeField, Min(0.1f)] private float _cellSize = 0.5f;
-        [Tooltip("적 몸 반경 (유닛). 벽을 이만큼 부풀려 검사해 적이 벽 모서리에 몸을 걸치지 않게 한다")]
+        [Tooltip("적 이동 반경 (유닛). 칸 가운데에서 이 반경 안에 벽이 있으면 막힌 칸으로 본다. 적 프리팹의 이동용 콜라이더(MoveCollider) 반경과 같게 둔다")]
         [SerializeField, Min(0f)] private float _agentRadius = 0.4f;
 
         private Vector2 _origin;
@@ -127,7 +127,6 @@ namespace ExplodeIt.Enemies
 
             var filter = new ContactFilter2D();
             filter.SetLayerMask(_obstacleMask);
-            var boxSize = Vector2.one * (_cellSize + _agentRadius * 2f);
 
             // 씬 로드 직후 Awake에서는 콜라이더 위치가 물리 쪽에 아직 반영되지 않았을 수 있어 먼저 맞춘다.
             Physics2D.SyncTransforms();
@@ -136,7 +135,9 @@ namespace ExplodeIt.Enemies
             {
                 for (int x = 0; x < _width; x++)
                 {
-                    _blocked[y * _width + x] = Physics2D.OverlapBox(CellCenter(x, y), boxSize, 0f, filter, OverlapBuffer) > 0;
+                    // 칸 전체에 몸 여유를 더한 상자로 검사하면 1.3유닛보다 좁은 틈(특히 대각선 울타리 사이)이 모두 막혀,
+                    // 그림상 지나갈 수 있는 길로 적이 오지 못한다. 적 이동 반경만 한 원으로 칸 가운데를 검사해 이동 판정과 기준을 맞춘다.
+                    _blocked[y * _width + x] = Physics2D.OverlapCircle(CellCenter(x, y), _agentRadius, filter, OverlapBuffer) > 0;
                 }
             }
         }

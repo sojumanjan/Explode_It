@@ -877,7 +877,7 @@ namespace ExplodeIt.Enemies
             }
 
             Vector2 away = Body.position - position;
-            float reach = radius + BodyRadius + _data.DodgeMargin;
+            float reach = radius + HitRadius + _data.DodgeMargin;
             if (away.sqrMagnitude > reach * reach)
             {
                 return;
