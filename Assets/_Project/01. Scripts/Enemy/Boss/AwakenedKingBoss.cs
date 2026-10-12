@@ -9,6 +9,7 @@ namespace ExplodeIt.Enemies
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이고, 근처에 폭탄이 떨어지면 굴러서 피한다(쿨타임 없음).
     // 패턴은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑을 차례로 돈다. 왕관 부메랑으로 왕관이 날아가 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
+    // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오는 연출을 거친다.
     // 예측 과제: 왕관이 날아가 있는 짧은 시간 동안 걸어오는 왕의 1초 뒤 자리에 폭탄을 두고, 돌아오는 왕관도 피한다.
     public class AwakenedKingBoss : Enemy, IBoss
     {
@@ -29,6 +30,15 @@ namespace ExplodeIt.Enemies
         private const float GroggyGrace = 0.1f;
         // 벽을 뚫는 돌진이 멈출 자리를 찾을 때 뒤로 당겨 보는 간격 (유닛).
         private const float LungeSafeStep = 0.25f;
+        // 맞아서 떨어진 왕관이 튀어 오르는 높이 (유닛), 바닥까지 떨어지는 거리 (유닛), 떨어지는 시간 (초), 바닥에 누운 기울기 (도).
+        private const float CrownDropHop = 0.5f;
+        private const float CrownDropFall = 0.6f;
+        private const float CrownDropDuration = 0.35f;
+        private const float CrownRestAngle = -25f;
+        // 왕관이 머리로 돌아올 때 그리는 포물선 높이 (유닛).
+        private const float CrownReturnArc = 1.5f;
+        // 분노 대사를 외치는 동안 몸이 떠는 폭 (유닛).
+        private const float RageJitter = 0.05f;
 
         private static readonly Collider2D[] StandBuffer = new Collider2D[4];
 
@@ -115,6 +125,19 @@ namespace ExplodeIt.Enemies
         private float _zoomHoldTime = -1f;
         private bool _isZoomed;
 
+        // 국면 전환·밀려남·왕관 떨어짐이 시작된 뒤 지난 시간. 음수면 그 연출 중이 아니다.
+        private float _shiftTime = -1f;
+        private float _knockTime = -1f;
+        private float _crownDropTime = -1f;
+        private bool _isShoutDone;
+        private bool _isCrownReturning;
+        private bool _isLockingPlayer;
+        private bool _isFocusing;
+        private Vector2 _knockFrom;
+        private Vector2 _knockTo;
+        private Vector2 _crownDropFrom;
+        private Vector2 _crownGround;
+
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
         private Vector3 _crownPositionLocal;
@@ -172,6 +195,10 @@ namespace ExplodeIt.Enemies
                 _zoomHoldTime = -1f;
                 GameEvents.RaiseCameraZoomRequested(1f, 0f);
             }
+
+            // 국면 전환 도중 사라져도 조작이 막히거나 카메라가 왕 자리에 묶인 채 남지 않게 한다.
+            _shiftTime = -1f;
+            ReleasePhaseCamera(0f);
         }
 
         private void OnDestroy()
@@ -196,6 +223,11 @@ namespace ExplodeIt.Enemies
             _hasTransformed = false;
             _isEntranceRequested = false;
             _isEntranceDone = false;
+            _shiftTime = -1f;
+            _knockTime = -1f;
+            _crownDropTime = -1f;
+            _isCrownReturning = false;
+            _visual.Jitter = 0f;
             // 왕관 횟수만큼은 맞아도 버티고, 그로기 때의 한 방에 쓰러진다.
             HitReceiver.ResetHits(_data.CrownHits + 1);
             HitReceiver.IsShielded = true;
@@ -259,6 +291,13 @@ namespace ExplodeIt.Enemies
             }
 
             TickPop(deltaTime);
+            TickKnockback(deltaTime);
+            TickCrownDrop(deltaTime);
+            if (_shiftTime >= 0f)
+            {
+                TickPhaseShift(deltaTime);
+            }
+
             UpdateDodgePose();
             UpdatePoseSprite();
         }
@@ -521,6 +560,12 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Move:
                     _moveTimer = 0f;
+                    // 기절 시간과 연출 시간은 다른 시계(물리 스텝, 프레임)로 재므로, 연출이 한 프레임 늦어도 여기서 마무리한다.
+                    if (_shiftTime >= 0f)
+                    {
+                        FinishPhaseShift();
+                    }
+
                     // 맞고 비틀거린 뒤, 또는 그로기 동안 못 잡았으면 왕관이 다시 생긴다.
                     _isGroggy = false;
                     if (!_hasCrown && _hasTransformed)
@@ -829,13 +874,15 @@ namespace ExplodeIt.Enemies
             HitReceiver.IsShielded = isOn;
         }
 
-        // 왕관 없이 맞았다. 다음 국면으로 넘어가고, 정해진 횟수를 다 맞으면 그로기에 빠진다.
+        // 왕관 없이 맞았다. 크게 번쩍이며 밀려나고 왕관을 떨어뜨린다. 정해진 횟수를 다 맞으면 그로기에, 아니면 국면 전환에 들어간다.
         private void OnDamaged(HitInfo hit)
         {
             _hitsTaken++;
-            _flyingCrown.gameObject.SetActive(false);
+            Knockback(hit.SourcePosition);
+            DropCrown();
             FeedbackPlayer.Play(_data.HurtFeedback, Body.position);
             AudioManager.Play(_data.HurtSound);
+            _visual.Flash(_data.HurtFlashColor, _data.HurtFlashDuration);
 
             if (_hitsTaken >= _data.CrownHits)
             {
@@ -849,15 +896,167 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
-            // 왕관은 잠깐 뒤 머리 위에 다시 생기지만, 연발 폭탄의 다음 발에 또 맞지 않게 무적은 바로 켠다.
+            // 연발 폭탄의 다음 발에 또 맞지 않게 무적은 바로 켠다. 왕관은 연출 끝에 머리로 돌아온다.
             HitReceiver.IsShielded = true;
-            Stun(_data.CrownRegainTime);
+            BeginPhaseShift();
+        }
+
+        // ── 맞은 반응: 폭탄 반대쪽으로 밀려나고, 날아가 있던 왕관이 그 자리에 툭 떨어진다.
+
+        private void Knockback(Vector2 source)
+        {
+            Vector2 away = Body.position - source;
+            Vector2 direction = away.sqrMagnitude > 0.0001f ? away.normalized : -DirectionToTarget();
+            _knockFrom = Body.position;
+            _knockTo = _knockFrom + direction * ClearDistance(direction, _data.KnockbackDistance, BodyRadius);
+            _knockTime = 0f;
+        }
+
+        // 밀려난 자리를 시간에 맞춰 정해 두고 옮기므로, 물리 스텝 사이에 여러 번 불려도 밀리는 거리가 늘지 않는다.
+        private void TickKnockback(float deltaTime)
+        {
+            if (_knockTime < 0f)
+            {
+                return;
+            }
+
+            _knockTime += deltaTime;
+            float t = Mathf.Clamp01(_knockTime / _data.KnockbackDuration);
+            Body.MovePosition(Vector2.Lerp(_knockFrom, _knockTo, 1f - (1f - t) * (1f - t)));
+            if (t >= 1f)
+            {
+                _knockTime = -1f;
+            }
+        }
+
+        private void DropCrown()
+        {
+            _crownDropFrom = _flyingCrown.gameObject.activeSelf ? (Vector2)_flyingCrown.position : HeadCrownPosition();
+            _crownGround = _crownDropFrom + Vector2.down * CrownDropFall;
+            _crownDropTime = 0f;
+            _isCrownReturning = false;
+            _flyingCrown.gameObject.SetActive(true);
+            _flyingCrown.position = _crownDropFrom;
+        }
+
+        // 한 번 통 튀었다가 바닥에 비스듬히 눕는다. 돌던 왕관이 힘을 잃고 떨어진 느낌을 준다.
+        private void TickCrownDrop(float deltaTime)
+        {
+            if (_crownDropTime < 0f || _isCrownReturning)
+            {
+                return;
+            }
+
+            _crownDropTime += deltaTime;
+            float t = Mathf.Clamp01(_crownDropTime / CrownDropDuration);
+            _flyingCrown.position = Vector2.Lerp(_crownDropFrom, _crownGround, t * t) + Vector2.up * (4f * CrownDropHop * t * (1f - t));
+            _flyingCrown.rotation = Quaternion.Euler(0f, 0f, Mathf.Lerp(-540f, CrownRestAngle, 1f - (1f - t) * (1f - t)));
+            if (t >= 1f)
+            {
+                _crownDropTime = -1f;
+            }
+        }
+
+        private Vector2 HeadCrownPosition()
+        {
+            return transform.TransformPoint(_crownPositionLocal);
+        }
+
+        // ── 국면 전환: 밀려남 → 카메라가 다가가고 몸을 떨며 분노 대사 → 떨어진 왕관이 머리로 날아 돌아와 번쩍 → 다시 싸운다.
+        // 이 동안 왕은 무적이고 공격하지 않는다. 플레이어가 "한 방 먹였다"를 확실히 느끼고 숨을 고르는 구간이다.
+
+        private void BeginPhaseShift()
+        {
+            _shiftTime = 0f;
+            _isShoutDone = false;
+            Stun(_data.PhaseShiftDuration);
+
+            // 밀려난 뒤의 자리(몸과 머리 사이)를 미리 바라본다.
+            Vector2 offset = _knockTo - Body.position;
+            Vector2 center = Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f) + offset;
+            _isFocusing = true;
+            GameEvents.RaiseCameraFocusRequested(center, _data.PhaseZoomInTime);
+            GameEvents.RaiseCameraZoomRequested(_data.PhaseZoom, _data.PhaseZoomInTime);
+            if (_data.LocksPlayerOnPhaseShift)
+            {
+                _isLockingPlayer = true;
+                GameEvents.RaisePlayerControlLockChanged(true);
+            }
+        }
+
+        private void TickPhaseShift(float deltaTime)
+        {
+            _shiftTime += deltaTime;
+            float returnStart = _data.PhaseShiftDuration - _data.CrownReturnTime;
+
+            if (!_isShoutDone && _shiftTime >= _data.PhaseLineDelay)
+            {
+                _isShoutDone = true;
+                _visual.Jitter = RageJitter;
+                _transformAura.Play();
+                GameEvents.RaiseBossLineRequested(_data.GetPhaseLine(_hitsTaken), returnStart - _data.PhaseLineDelay);
+            }
+
+            if (_shiftTime < returnStart)
+            {
+                return;
+            }
+
+            // 바닥의 왕관이 포물선을 그리며 빙글빙글 머리 위로 돌아온다.
+            if (!_isCrownReturning)
+            {
+                _isCrownReturning = true;
+                _crownDropTime = -1f;
+                _visual.Jitter = 0f;
+                _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
+
+            float t = Mathf.Clamp01((_shiftTime - returnStart) / _data.CrownReturnTime);
+            float ease = t * t * (3f - 2f * t);
+            _flyingCrown.position = Vector2.Lerp(_crownGround, HeadCrownPosition(), ease) + Vector2.up * (4f * CrownReturnArc * t * (1f - t));
+            _flyingCrown.Rotate(0f, 0f, -900f * deltaTime);
+            if (t >= 1f)
+            {
+                FinishPhaseShift();
+            }
+        }
+
+        private void FinishPhaseShift()
+        {
+            _shiftTime = -1f;
+            _isCrownReturning = false;
+            _crownDropTime = -1f;
+            _visual.Jitter = 0f;
+            _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            _flyingCrown.gameObject.SetActive(false);
+            SetCrown(true);
+            _visual.Flash(_data.ImmuneFlashColor, 0.3f);
+            FeedbackPlayer.Play(_data.PhaseShiftFeedback, Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f));
+            AudioManager.Play(_data.PhaseShiftSound != null ? _data.PhaseShiftSound : _data.CrownCatchSound);
+            ReleasePhaseCamera(_data.ZoomOutTime);
+        }
+
+        private void ReleasePhaseCamera(float blendDuration)
+        {
+            if (_isFocusing)
+            {
+                _isFocusing = false;
+                GameEvents.RaiseCameraZoomRequested(1f, blendDuration);
+                GameEvents.RaiseCameraFocusReleased(blendDuration);
+            }
+
+            if (_isLockingPlayer)
+            {
+                _isLockingPlayer = false;
+                GameEvents.RaisePlayerControlLockChanged(false);
+            }
         }
 
         // 왕관에 막힌 폭탄에 "팅" 하고 튕겨내는 반응을 준다. 그로기 직후의 짧은 무적은 왕관이 아니므로 반응하지 않는다.
         private void OnHitBlocked(HitInfo hit)
         {
-            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy)
+            // 국면 전환 중에는 왕관이 머리에 없으므로 "팅"으로 튕겨 내는 반응도 없다.
+            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy || _shiftTime >= 0f)
             {
                 return;
             }

@@ -52,6 +52,13 @@ namespace ExplodeIt.Core
         public static event Action<float> CameraFocusReleased;
         // 카메라 확대 배율(1 = 평소, 0.7 = 화면이 0.7배 크기로 좁아져 가까이 보임)과 바뀌는 시간(초).
         public static event Action<float, float> CameraZoomRequested;
+        // 싸우는 도중 보스가 외치는 대사와 띄워 둘 시간(초). 클릭 없이 시간이 지나면 사라진다.
+        public static event Action<string, float> BossLineRequested;
+
+        public static void RaiseBossLineRequested(string text, float duration)
+        {
+            BossLineRequested?.Invoke(text, duration);
+        }
 
         public static void RaisePlayerControlLockChanged(bool isLocked)
         {

@@ -27,6 +27,7 @@ namespace ExplodeIt.UI
         private Tween _pop;
         private Vector2 _nextMarkHome;
         private float _nextMarkTime;
+        private bool _waitsForClick = true;
 
         private void Awake()
         {
@@ -38,9 +39,11 @@ namespace ExplodeIt.UI
 
         public bool IsTyping => _text.maxVisibleCharacters < _total;
 
-        public void Show(string line)
+        // waitsForClick: 클릭해야 넘어가는 줄인지. 저절로 사라지는 줄에 ▼가 뜨면 눌러야 할 것처럼 읽히므로 끈다.
+        public void Show(string line, bool waitsForClick = true)
         {
             gameObject.SetActive(true);
+            _waitsForClick = waitsForClick;
             _text.text = line;
             Vector2 preferred = _text.GetPreferredValues(line, _maxTextWidth, 0f);
             float width = Mathf.Min(preferred.x, _maxTextWidth);
@@ -85,7 +88,7 @@ namespace ExplodeIt.UI
 
         private void BobNextMark(float deltaTime)
         {
-            if (_nextMark == null)
+            if (_nextMark == null || !_waitsForClick)
             {
                 return;
             }

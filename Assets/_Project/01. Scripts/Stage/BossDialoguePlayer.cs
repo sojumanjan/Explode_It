@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using ExplodeIt.Core;
 using ExplodeIt.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +40,8 @@ namespace ExplodeIt.Stage
         private Tween _punch;
         private Tween _pause;
         private TweenCallback _onPauseEnd;
+        private Tween _shoutHide;
+        private TweenCallback _onShoutEnd;
 
         public bool IsPlaying { get; private set; }
 
@@ -49,14 +52,45 @@ namespace ExplodeIt.Stage
         {
             _kingScale = _king.transform.localScale;
             _onPauseEnd = ShowCurrentLine;
+            _onShoutEnd = HideShout;
             HideAll();
+        }
+
+        private void OnEnable()
+        {
+            GameEvents.BossLineRequested += OnBossLineRequested;
         }
 
         private void OnDisable()
         {
+            GameEvents.BossLineRequested -= OnBossLineRequested;
             _sequence?.Kill();
             _punch?.Kill();
             _pause?.Kill();
+            _shoutHide?.Kill();
+        }
+
+        // 싸우는 도중 보스가 외치는 대사. 등장 대화와 같은 보스 말풍선을 쓰고, 클릭 없이 시간이 지나면 사라진다.
+        // 보스 모습이 등장 때와 달라졌을 수 있어(최종 보스 변신) 머리 높이는 이때 다시 잰다.
+        private void OnBossLineRequested(string text, float duration)
+        {
+            if (_boss == null || IsPlaying || string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            _bossBubble.transform.position = new Vector3(_boss.position.x, TopOf(_boss) + _bubbleGap, 0f);
+            _bossBubble.Show(text, false);
+            _shoutHide?.Kill();
+            _shoutHide = DOVirtual.DelayedCall(duration, _onShoutEnd).SetLink(gameObject);
+        }
+
+        private void HideShout()
+        {
+            if (!IsPlaying)
+            {
+                _bossBubble.Hide();
+            }
         }
 
         // bossPoint: 보스가 내려앉을 자리. 보스는 아직 없고, 표시한 줄에서 진행 흐름이 불러낸 뒤 SetBoss로 알려 준다.

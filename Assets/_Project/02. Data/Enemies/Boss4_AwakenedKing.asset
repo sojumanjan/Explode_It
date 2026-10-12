@@ -17,15 +17,32 @@ MonoBehaviour:
   _attackTriggerRange: 2
   _arenaEntryDelay: 0
   _countsAsKill: 0
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
   _telegraphDuration: 0.6
   _recoverDuration: 0.5
   _deathDuration: 1.5
   _crownHits: 3
-  _crownRegainTime: 0.2
   _groggyDuration: 5
+  _hurtFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  _hurtFlashDuration: 0.15
+  _knockbackDistance: 1.2
+  _knockbackDuration: 0.25
+  _phaseShiftDuration: 2.2
+  _phaseLineDelay: 0.35
+  _phaseLines:
+  - "\uAC10\uD788 \uC9D0\uC758 \uC655\uAD00\uC744\u2026!"
+  - "\uC774 \uBB34\uC5C4\uD55C \uACE0\uBE14\uB9B0 \uB140\uC11D\uC774!!"
+  _crownReturnTime: 0.45
+  _phaseZoom: 0.8
+  _phaseZoomInTime: 0.3
+  _locksPlayerOnPhaseShift: 1
   _transformDuration: 1.4
+  _transformZoom: 0.65
+  _zoomInTime: 0.8
+  _zoomHoldTime: 0.4
+  _zoomOutTime: 1
   _crownSummonDuration: 0.6
   _preferredDistance: 5
   _patternInterval: 1
@@ -41,6 +58,7 @@ MonoBehaviour:
   _slashRadius: 3.5
   _slashAngle: 130
   _slashPause: 0.2
+  _slashFrameTime: 0.04
   _lungeCount: 3
   _backstepDistance: 3
   _backstepDuration: 0.15
@@ -51,8 +69,8 @@ MonoBehaviour:
   _lungeMaxDistance: 14
   _lungeWidth: 2.5
   _lungePause: 0.2
-  _crownWindup: 0.6
-  _crownSpeed: 15
+  _crownWindup: 0.8
+  _crownSpeed: 13
   _crownDistance: 10
   _crownHangTime: 0.8
   _crownHitRadius: 0.5
@@ -67,10 +85,11 @@ MonoBehaviour:
   _hurtSound: {fileID: 11400000, guid: f99094c801960284f8782cb3a51a8ef0, type: 2}
   _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}
   _immuneSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _phaseShiftSound: {fileID: 0}
   _transformFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
-  _transformGlowColor: {r: 1, g: 0.15, b: 0.1, a: 1}
-  _hurtFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}
+  _hurtFeedback: {fileID: 11400000, guid: c814bb79101123449b12c72ccb695a94, type: 2}
   _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
+  _phaseShiftFeedback: {fileID: 11400000, guid: 945dab3355730634682ac0e6ebe18d02, type: 2}
   _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
   _immuneFlashColor: {r: 1, g: 0.9, b: 0.4, a: 1}
   _immuneFlashDuration: 0.2

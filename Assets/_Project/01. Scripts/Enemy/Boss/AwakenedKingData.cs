@@ -12,11 +12,43 @@ namespace ExplodeIt.Enemies
         [Tooltip("왕관을 벗겨 맞혀야 하는 횟수 (번). 이만큼 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다")]
         [SerializeField, Min(1)] private int _crownHits = 3;
 
-        [Tooltip("맞은 뒤 왕관이 다시 생겨 무적이 되기까지 (초). 이 동안 비틀거린 뒤 다음 국면으로 넘어간다")]
-        [SerializeField, Min(0f)] private float _crownRegainTime = 0.2f;
 
         [Tooltip("그로기 시간 (초). 왕관 없이 쓰러져 있어 한 방에 잡힌다. 못 잡으면 왕관이 다시 생긴다")]
         [SerializeField, Min(0.1f)] private float _groggyDuration = 5f;
+
+        [Header("피격·국면 전환")]
+        [Tooltip("왕관 없이 맞은 순간 몸이 번쩍이는 색")]
+        [SerializeField] private Color _hurtFlashColor = Color.white;
+
+        [Tooltip("맞은 순간 번쩍이는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _hurtFlashDuration = 0.15f;
+
+        [Tooltip("맞은 순간 폭탄 반대쪽으로 밀려나는 거리 (유닛). 벽이 있으면 그 앞에서 멈춘다")]
+        [SerializeField, Min(0f)] private float _knockbackDistance = 1.2f;
+
+        [Tooltip("밀려나는 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _knockbackDuration = 0.25f;
+
+        [Tooltip("국면 전환 전체 시간 (초). 맞은 순간부터 왕관이 머리로 돌아와 다시 싸우기까지. 이 동안 왕은 무적이고 공격하지 않는다")]
+        [SerializeField, Min(0.1f)] private float _phaseShiftDuration = 2.2f;
+
+        [Tooltip("맞은 뒤 분노 대사가 뜨기까지 (초). 밀려나는 시간보다 길게 두어야 말풍선이 제자리에 뜬다")]
+        [SerializeField, Min(0f)] private float _phaseLineDelay = 0.35f;
+
+        [Tooltip("국면이 바뀔 때 왕이 외치는 대사. 첫 번째 칸은 처음 맞았을 때, 두 번째 칸은 두 번째로 맞았을 때. 비워 두면 대사 없이 넘어간다")]
+        [SerializeField, TextArea(1, 2)] private string[] _phaseLines = { "감히 짐의 왕관을…!", "이 무엄한 고블린 녀석이!!" };
+
+        [Tooltip("국면 전환 끝에 바닥에 떨어진 왕관이 머리 위로 날아 돌아오는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _crownReturnTime = 0.45f;
+
+        [Tooltip("국면 전환 동안 카메라 확대 배율. 1이면 평소, 작을수록 왕에게 가까이 다가간다")]
+        [SerializeField, Range(0.3f, 1f)] private float _phaseZoom = 0.8f;
+
+        [Tooltip("국면 전환이 시작될 때 카메라가 왕에게 다가가는 시간 (초). 끝나고 돌아갈 때는 '확대를 풀고 돌아가는 시간'을 쓴다")]
+        [SerializeField, Min(0f)] private float _phaseZoomInTime = 0.3f;
+
+        [Tooltip("국면 전환 동안 플레이어 조작을 막는다. 끄면 연출 중에도 움직일 수 있다(왕은 그래도 무적)")]
+        [SerializeField] private bool _locksPlayerOnPhaseShift = true;
 
         [Header("등장")]
         [Tooltip("2등신 왕이 불티 속에서 떠는 시간 (초). 끝나면 쏙 줄어들었다가 팍 커지며 각성 모습으로 바뀐다. 보스가 나타나는 대화 줄의 멈춤 시간보다 짧게 둔다")]
@@ -146,17 +178,37 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 효과음")] private SoundData _hurtSound;
         [SerializeField, Tooltip("그로기에 빠지는 순간의 효과음")] private SoundData _groggySound;
         [SerializeField, Tooltip("왕관에 막힌 순간의 효과음")] private SoundData _immuneSound;
+        [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 효과음. 비우면 왕관을 받는 효과음을 쓴다")] private SoundData _phaseShiftSound;
 
         [Header("연출")]
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 연출 (흔들림, 히트스톱, 폭발). 그림 한가운데서 터진다")] private FeedbackData _transformFeedback;
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 연출")] private FeedbackData _hurtFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
+        [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
         [SerializeField, Min(0f), Tooltip("번쩍임 시간 (초)")] private float _immuneFlashDuration = 0.2f;
 
         public int CrownHits => _crownHits;
-        public float CrownRegainTime => _crownRegainTime;
+        public Color HurtFlashColor => _hurtFlashColor;
+        public float HurtFlashDuration => _hurtFlashDuration;
+        public float KnockbackDistance => _knockbackDistance;
+        public float KnockbackDuration => _knockbackDuration;
+        public float PhaseShiftDuration => _phaseShiftDuration;
+        public float PhaseLineDelay => _phaseLineDelay;
+        public float CrownReturnTime => _crownReturnTime;
+        public float PhaseZoom => _phaseZoom;
+        public float PhaseZoomInTime => _phaseZoomInTime;
+        public bool LocksPlayerOnPhaseShift => _locksPlayerOnPhaseShift;
+        public SoundData PhaseShiftSound => _phaseShiftSound;
+        public FeedbackData PhaseShiftFeedback => _phaseShiftFeedback;
+
+        // 맞은 횟수(1부터)에 맞는 국면 전환 대사. 없으면 null.
+        public string GetPhaseLine(int hitsTaken)
+        {
+            int index = hitsTaken - 1;
+            return _phaseLines != null && index >= 0 && index < _phaseLines.Length && !string.IsNullOrEmpty(_phaseLines[index]) ? _phaseLines[index] : null;
+        }
         public float GroggyDuration => _groggyDuration;
         public float TransformDuration => _transformDuration;
         public float CrownSummonDuration => _crownSummonDuration;
