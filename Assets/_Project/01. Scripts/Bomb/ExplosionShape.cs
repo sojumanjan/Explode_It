@@ -20,6 +20,7 @@ namespace ExplodeIt.Bombs
         // 방향마다 구조물에 막히기 전까지의 거리. 반경이 커지는 도중에도 이 값을 넘지 않는다.
         private float[] _limits;
         private MeshRenderer _renderer;
+        private Material _material;
         private bool _isInitialized;
 
         private void Awake()
@@ -39,6 +40,10 @@ namespace ExplodeIt.Bombs
             _isInitialized = true;
             _renderer = GetComponent<MeshRenderer>();
             _renderer.sortingOrder = _sortingOrder;
+            // 같은 재질(Sprite-Unlit-Default)을 쓰는 다른 그림(던질 거리 원 등)과 SRP 배처에 함께 묶이면
+            // 화면 속 위치에 따라 이 메쉬가 통째로 빠지는 일이 있었다. 모양마다 재질 사본을 써서 묶이지 않게 한다.
+            _material = new Material(_renderer.sharedMaterial);
+            _renderer.sharedMaterial = _material;
 
             // 정점 수, 방향, 삼각형 구성은 바뀌지 않으므로 한 번만 만들고, 이후엔 정점 위치와 색만 덮어쓴다.
             _vertices = new Vector3[_segments + 1];
@@ -70,6 +75,7 @@ namespace ExplodeIt.Bombs
         private void OnDestroy()
         {
             Destroy(_mesh);
+            Destroy(_material);
         }
 
         public bool Visible
