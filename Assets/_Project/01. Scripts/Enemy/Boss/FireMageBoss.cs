@@ -314,29 +314,36 @@ namespace ExplodeIt.Enemies
             _aimLine.Hide();
         }
 
-        // 화염구는 구조물에 막힌다. 조준선 끝이 곧 화염구가 사라지는 곳이고, 굵기가 곧 판정 폭이다.
+        // 조준선 끝이 곧 화염구가 사라지는 곳이고, 굵기가 곧 판정 폭이다. 벽을 뚫는 설정이면 사거리 끝까지 그린다.
         private void Aim()
         {
             _aimDirection = DirectionToTarget();
-            _shotLength = ClearDistance(_aimDirection, _data.FireballRange, _data.FireballHitRadius);
+            _shotLength = ShotLength(_aimDirection);
             _aimLine.Show(Body.position, _aimDirection, _shotLength, _data.FireballHitRadius * 2f);
         }
 
-        private void FireFireball(EnemyProjectile fireball, bool spread)
+        // 첫 발은 예고선대로 나간다. 둘째 발부터는 쏘는 순간 플레이어를 다시 조준해, 한 번 옆으로 비켜서는 걸로는 못 피하고
+        // 연사가 따라오는 동안 계속 걸어야 피하게 한다.
+        private void FireFireball(EnemyProjectile fireball, bool isFollowUp)
         {
             Vector2 direction = _aimDirection;
             float length = _shotLength;
-            if (spread)
+            if (isFollowUp)
             {
                 float angle = Random.Range(-_data.FireballSpread, _data.FireballSpread);
-                direction = Quaternion.Euler(0f, 0f, angle) * _aimDirection;
-                length = ClearDistance(direction, _data.FireballRange, _data.FireballHitRadius);
+                direction = Quaternion.Euler(0f, 0f, angle) * DirectionToTarget();
+                length = ShotLength(direction);
             }
 
             fireball.transform.position = Body.position;
             fireball.gameObject.SetActive(true);
             fireball.Launch(direction, _data.FireballSpeed, length, _data.FireballHitRadius, _releaseFireball);
             AudioManager.Play(_data.FireballShotSound);
+        }
+
+        private float ShotLength(Vector2 direction)
+        {
+            return _data.FireballIgnoresWalls ? _data.FireballRange : ClearDistance(direction, _data.FireballRange, _data.FireballHitRadius);
         }
 
         private void ReleaseFireball(EnemyProjectile fireball)

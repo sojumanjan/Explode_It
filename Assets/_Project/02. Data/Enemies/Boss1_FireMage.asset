@@ -17,6 +17,7 @@ MonoBehaviour:
   _attackTriggerRange: 4
   _arenaEntryDelay: 0
   _countsAsKill: 0
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
   _telegraphDuration: 0.6
@@ -34,21 +35,26 @@ MonoBehaviour:
     _meteorCount: 12
   _fieldRadius: 5
   _fieldGrowTime: 1
+  _fieldKillInset: 0.5
   _fieldSpinSpeed: 30
   _fairyOrbitRadius: 5.8
   _fairySpeedUpPerKill: 20
   _fairyReverseHold: 0.35
   _groggyDuration: 5
-  _patternInterval: 1.5
+  _patternInterval: 0.5
   _meteorCastTime: 0.5
   _meteorInterval: 0.45
   _meteorFallTime: 0.9
   _meteorRadius: 1.3
-  _fireballChargeTime: 2
+  _fireballChargeTime: 1.5
   _fireballAimLockTime: 0
-  _fireballSpeed: 35
+  _fireballSpeed: 33
   _fireballHitRadius: 0.4
   _fireballRange: 40
+  _fireballCount: 10
+  _fireballBurstInterval: 0.12
+  _fireballSpread: 2
+  _fireballIgnoresWalls: 1
   _meteorCastSound: {fileID: 0}
   _meteorImpactSound: {fileID: 11400000, guid: ceb51ec362f39514380edc3005726baf, type: 2}
   _fireballChargeSound: {fileID: 11400000, guid: a20c090afed78274789fd1f6e1493179, type: 2}

@@ -91,14 +91,17 @@ namespace ExplodeIt.Enemies
         [Tooltip("화염구 최대 비행 거리 (유닛). 구조물에 막히면 그 지점에서 사라지고 조준선도 그 길이로 잘린다")]
         [SerializeField, Min(0f)] private float _fireballRange = 40f;
 
-        [Tooltip("한 번 차징에 연달아 쏘는 화염구 수 (발). 첫 발은 조준선 그대로, 나머지는 조준선에서 흩어진 각도로 나간다")]
+        [Tooltip("한 번 차징에 연달아 쏘는 화염구 수 (발). 첫 발은 조준선 그대로, 나머지는 쏠 때마다 플레이어를 다시 조준해 흩어진 각도로 나간다")]
         [SerializeField, Min(1)] private int _fireballCount = 4;
 
         [Tooltip("연사 간격 (초). 화염구 사이 시간")]
         [SerializeField, Min(0f)] private float _fireballBurstInterval = 0.1f;
 
-        [Tooltip("두 번째 발부터 조준선에서 흩어지는 최대 각도 (도). 이 범위 안에서 발마다 무작위로 정한다")]
+        [Tooltip("두 번째 발부터 그 순간 플레이어 방향에서 흩어지는 최대 각도 (도). 이 범위 안에서 발마다 무작위로 정한다")]
         [SerializeField, Min(0f)] private float _fireballSpread = 5f;
+
+        [Tooltip("화염구가 벽을 뚫고 사거리 끝까지 날아가는지. 켜면 벽 뒤에 숨어도 피할 수 없어, 연사가 따라오는 동안 계속 옆으로 걸어야 피한다. 조준선도 벽을 뚫고 보인다")]
+        [SerializeField] private bool _fireballIgnoresWalls = true;
 
         [Header("사운드")]
         [SerializeField, Tooltip("메테오 시전을 시작하는 순간의 효과음")] private SoundData _meteorCastSound;
@@ -141,6 +144,7 @@ namespace ExplodeIt.Enemies
         public float FireballRange => _fireballRange;
         public int FireballCount => _fireballCount;
         public float FireballBurstInterval => _fireballBurstInterval;
+        public bool FireballIgnoresWalls => _fireballIgnoresWalls;
         public float FireballSpread => _fireballSpread;
         public SoundData MeteorCastSound => _meteorCastSound;
         public SoundData MeteorImpactSound => _meteorImpactSound;
