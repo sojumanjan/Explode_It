@@ -320,19 +320,20 @@ namespace ExplodeIt.Enemies
         // 지금 걸어가야 할 곳. 입구로 들어오는 중이면 입구 점, 아니면 플레이어.
         protected Vector2 MoveGoal => _hasEntryPoint ? _entryPoint : TargetPosition;
 
-        // 이번 걸음의 방향. 입구로 갈 때는 곧장, 플레이어를 쫓을 때는 흐름장을 따라 벽을 돌아간다.
+        // 이번 걸음의 방향. 입구로 갈 때는 입구를, 입구를 지난 뒤에는 플레이어를 목적지로 흐름장을 따라 벽을 돌아간다.
+        // 입구까지 곧장 걸으면 스폰 구역과 입구 사이에 놓인 소품에 막혀 오래 멈췄다.
         protected Vector2 MoveDirection()
         {
             Vector2 toGoal = MoveGoal - Body.position;
             Vector2 direct = toGoal.sqrMagnitude > 0.0001f ? toGoal.normalized : Vector2.zero;
-            if (_hasEntryPoint)
+            // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
+            FlowField field = FlowField.Current;
+            if (field == null)
             {
                 return direct;
             }
 
-            // 흐름장이 없는 씬(테스트 씬 등)에서는 예전처럼 직진한다.
-            FlowField field = FlowField.Current;
-            return field != null ? field.GetDirection(Body.position) : direct;
+            return _hasEntryPoint ? field.GetDirectionTo(_entryPoint, Body.position) : field.GetDirection(Body.position);
         }
 
         // 이름은 그대로지만 입구로 들어오는 중에는 입구 점으로 간다. 걷는 속도·밀어내기는 같다.
@@ -344,7 +345,7 @@ namespace ExplodeIt.Enemies
             if (toTarget.sqrMagnitude > step * step)
             {
                 Vector2 direction = MoveDirection();
-                // 입구까지는 흐름장을 쓰지 않으므로 구조물에 파묻히지 않게 직접 멈춘다.
+                // 입구까지는 흐름장이 소품을 돌아가게 하지만, 흐름 방향이 벽 모서리를 스칠 수 있어 구조물에 파묻히지 않게 직접 멈춘다.
                 float distance = _hasEntryPoint ? ClearDistance(direction, step, BodyRadius) : step;
                 move += direction * distance;
             }

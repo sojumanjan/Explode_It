@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ExplodeIt.Stage;
 using UnityEngine;
 
@@ -31,6 +32,8 @@ namespace ExplodeIt.Enemies
         private float[] _distance;
         private Vector2[] _flow;
         private CellMinHeap _heap;
+        // 고정 목적지(입구) 칸별 흐름. 입구 수만큼만 쌓인다.
+        private readonly Dictionary<int, Vector2[]> _goalFields = new Dictionary<int, Vector2[]>();
 
         // 시야는 적이 실제로 있는 칸만 필요하므로, 조회될 때 계산해 재계산 전까지 기억한다.
         private int[] _sightStamp;
@@ -97,8 +100,54 @@ namespace ExplodeIt.Enemies
                 return direct;
             }
 
-            Vector2 flow = SampleFlow(position);
+            Vector2 flow = SampleFlow(position, _flow);
             return flow.sqrMagnitude > Epsilon ? flow.normalized : direct;
+        }
+
+        // 고정 목적지(맵 입구)로 가는 방향. 적이 스폰 구역에서 입구까지 소품을 돌아 걸어가게 한다.
+        // 목적지가 움직이지 않으므로 목적지 칸마다 처음 요청될 때 한 번만 계산해 두고 계속 쓴다.
+        // 목적지가 직선으로 보이면(부풀린 벽 격자 기준) 곧장 간다.
+        public Vector2 GetDirectionTo(Vector2 goal, Vector2 position)
+        {
+            Vector2 toGoal = goal - position;
+            Vector2 direct = toGoal.sqrMagnitude > Epsilon ? toGoal.normalized : Vector2.zero;
+            int goalCell = CellIndexAt(goal);
+            int cell = CellIndexAt(position);
+            if (goalCell < 0 || cell < 0)
+            {
+                return direct;
+            }
+
+            if (!_blocked[cell] && IsLineClear(CellCenter(cell % _width, cell / _width), goal, goalCell))
+            {
+                return direct;
+            }
+
+            if (!_goalFields.TryGetValue(goalCell, out Vector2[] flowMap))
+            {
+                flowMap = new Vector2[_width * _height];
+                ComputeField(goalCell, new float[_width * _height], flowMap);
+                _goalFields.Add(goalCell, flowMap);
+            }
+
+            Vector2 flow = SampleFlow(position, flowMap);
+            return flow.sqrMagnitude > Epsilon ? flow.normalized : direct;
+        }
+
+        // 격자 위에서만 직선 경로가 막혔는지 본다. 목적지 칸은 벽에 붙어 막힌 칸일 수 있어 제외한다.
+        private bool IsLineClear(Vector2 from, Vector2 to, int goalCell)
+        {
+            int steps = Mathf.CeilToInt(Vector2.Distance(from, to) / (_cellSize * 0.5f));
+            for (int i = 1; i < steps; i++)
+            {
+                int sample = CellIndexAt(Vector2.Lerp(from, to, (float)i / steps));
+                if (sample >= 0 && sample != goalCell && _blocked[sample])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void BuildGrid()
@@ -144,19 +193,25 @@ namespace ExplodeIt.Enemies
 
         private void Recompute()
         {
-            for (int i = 0; i < _distance.Length; i++)
+            _stamp++;
+            ComputeField(_targetCell, _distance, _flow);
+        }
+
+        // 목표 칸까지의 걸음 거리와 흐름 방향을 채운다. 플레이어용과 고정 목적지(입구)용이 같은 계산을 쓴다.
+        private void ComputeField(int targetCell, float[] distanceMap, Vector2[] flowMap)
+        {
+            for (int i = 0; i < distanceMap.Length; i++)
             {
-                _distance[i] = float.PositiveInfinity;
+                distanceMap[i] = float.PositiveInfinity;
             }
 
-            _stamp++;
             _heap.Clear();
-            SeedTarget();
+            SeedTarget(targetCell, distanceMap);
 
             while (_heap.Count > 0)
             {
                 int cell = _heap.Pop(out float distance);
-                if (distance > _distance[cell])
+                if (distance > distanceMap[cell])
                 {
                     continue;
                 }
@@ -181,9 +236,9 @@ namespace ExplodeIt.Enemies
 
                     int neighbor = ny * _width + nx;
                     float next = distance + (isDiagonal ? DiagonalCost : 1f);
-                    if (next < _distance[neighbor])
+                    if (next < distanceMap[neighbor])
                     {
-                        _distance[neighbor] = next;
+                        distanceMap[neighbor] = next;
                         _heap.Push(neighbor, next);
                     }
                 }
@@ -193,20 +248,20 @@ namespace ExplodeIt.Enemies
             {
                 for (int x = 0; x < _width; x++)
                 {
-                    _flow[y * _width + x] = ComputeFlow(x, y);
+                    flowMap[y * _width + x] = ComputeFlow(x, y, distanceMap);
                 }
             }
         }
 
         // 벽에 붙어 있으면 부풀린 벽 때문에 플레이어 칸이 막힌 칸일 수 있다. 그때는 주변의 열린 칸에서 시작한다.
-        private void SeedTarget()
+        private void SeedTarget(int targetCell, float[] distanceMap)
         {
-            int tx = _targetCell % _width;
-            int ty = _targetCell / _width;
-            if (!_blocked[_targetCell])
+            int tx = targetCell % _width;
+            int ty = targetCell / _width;
+            if (!_blocked[targetCell])
             {
-                _distance[_targetCell] = 0f;
-                _heap.Push(_targetCell, 0f);
+                distanceMap[targetCell] = 0f;
+                _heap.Push(targetCell, 0f);
                 return;
             }
 
@@ -221,25 +276,25 @@ namespace ExplodeIt.Enemies
 
                 int neighbor = ny * _width + nx;
                 float cost = k >= 4 ? DiagonalCost : 1f;
-                _distance[neighbor] = cost;
+                distanceMap[neighbor] = cost;
                 _heap.Push(neighbor, cost);
             }
         }
 
         // 좌우·상하 거리 차이로 연속적인 방향을 만든다.
-        private Vector2 ComputeFlow(int x, int y)
+        private Vector2 ComputeFlow(int x, int y, float[] distanceMap)
         {
             int cell = y * _width + x;
-            float self = _distance[cell];
+            float self = distanceMap[cell];
             if (_blocked[cell] || float.IsInfinity(self))
             {
                 return Vector2.zero;
             }
 
-            float left = DistanceOr(x - 1, y, self);
-            float right = DistanceOr(x + 1, y, self);
-            float down = DistanceOr(x, y - 1, self);
-            float up = DistanceOr(x, y + 1, self);
+            float left = DistanceOr(x - 1, y, self, distanceMap);
+            float right = DistanceOr(x + 1, y, self, distanceMap);
+            float down = DistanceOr(x, y - 1, self, distanceMap);
+            float up = DistanceOr(x, y + 1, self, distanceMap);
             var gradient = new Vector2(left - right, down - up);
 
             // 막힌 쪽으로 향하는 성분은 지운다. 그대로 두면 벽 쪽으로 밀려 붙는다.
@@ -260,10 +315,10 @@ namespace ExplodeIt.Enemies
 
             // 벽 정중앙 뒤처럼 양쪽 길이 똑같으면 기울기가 0이 된다.
             // 이웃 순서로 항상 같은 쪽을 골라 멈추지 않게 하고, 결과도 매번 같게 한다.
-            return LowestNeighborDirection(x, y, self);
+            return LowestNeighborDirection(x, y, self, distanceMap);
         }
 
-        private Vector2 LowestNeighborDirection(int x, int y, float self)
+        private Vector2 LowestNeighborDirection(int x, int y, float self, float[] distanceMap)
         {
             float lowest = self;
             Vector2 direction = Vector2.zero;
@@ -281,7 +336,7 @@ namespace ExplodeIt.Enemies
                     continue;
                 }
 
-                float distance = _distance[ny * _width + nx];
+                float distance = distanceMap[ny * _width + nx];
                 if (distance < lowest)
                 {
                     lowest = distance;
@@ -293,7 +348,7 @@ namespace ExplodeIt.Enemies
         }
 
         // 적을 둘러싼 칸 중심 4개의 방향을 가까운 비율로 섞어, 칸 경계를 넘어도 방향이 끊기지 않게 한다.
-        private Vector2 SampleFlow(Vector2 position)
+        private Vector2 SampleFlow(Vector2 position, Vector2[] flowMap)
         {
             float gx = (position.x - _origin.x) / _cellSize - 0.5f;
             float gy = (position.y - _origin.y) / _cellSize - 0.5f;
@@ -303,22 +358,22 @@ namespace ExplodeIt.Enemies
             float ty = gy - y0;
 
             Vector2 sum = Vector2.zero;
-            AddCorner(x0, y0, (1f - tx) * (1f - ty), ref sum);
-            AddCorner(x0 + 1, y0, tx * (1f - ty), ref sum);
-            AddCorner(x0, y0 + 1, (1f - tx) * ty, ref sum);
-            AddCorner(x0 + 1, y0 + 1, tx * ty, ref sum);
+            AddCorner(x0, y0, (1f - tx) * (1f - ty), flowMap, ref sum);
+            AddCorner(x0 + 1, y0, tx * (1f - ty), flowMap, ref sum);
+            AddCorner(x0, y0 + 1, (1f - tx) * ty, flowMap, ref sum);
+            AddCorner(x0 + 1, y0 + 1, tx * ty, flowMap, ref sum);
             return sum;
         }
 
         // 벽 칸이나 도달할 수 없는 칸은 방향이 없으므로 섞지 않는다. 합은 호출 쪽에서 정규화한다.
-        private void AddCorner(int x, int y, float weight, ref Vector2 sum)
+        private void AddCorner(int x, int y, float weight, Vector2[] flowMap, ref Vector2 sum)
         {
             if (!IsOpen(x, y))
             {
                 return;
             }
 
-            sum += _flow[y * _width + x] * weight;
+            sum += flowMap[y * _width + x] * weight;
         }
 
         // 부풀린 벽 기준의 격자 위에서만 본다. 물리 검사를 하지 않아 적이 많아도 가볍다.
@@ -357,14 +412,14 @@ namespace ExplodeIt.Enemies
             return visible;
         }
 
-        private float DistanceOr(int x, int y, float fallback)
+        private float DistanceOr(int x, int y, float fallback, float[] distanceMap)
         {
             if (!IsOpen(x, y))
             {
                 return fallback;
             }
 
-            float distance = _distance[y * _width + x];
+            float distance = distanceMap[y * _width + x];
             return float.IsInfinity(distance) ? fallback : distance;
         }
 
