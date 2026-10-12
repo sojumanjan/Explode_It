@@ -17,6 +17,7 @@ MonoBehaviour:
   _attackTriggerRange: 4
   _arenaEntryDelay: 0
   _countsAsKill: 0
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
   _telegraphDuration: 1
@@ -40,7 +41,7 @@ MonoBehaviour:
   _dynamiteCount: {x: 4, y: 5}
   _dynamiteDelayRange: {x: 0.85, y: 1.3}
   _dynamiteDistance: {x: 2, y: 7}
-  _dynamiteRadiusRatio: 0.9
+  _dynamiteRadiusRatio: 0.83
   _dynamiteArcHeight: 0.8
   _emergeHopHeight: 0.8
   _emergeHopDuration: 0.35
