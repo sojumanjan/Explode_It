@@ -13,7 +13,7 @@ namespace ExplodeIt.Bombs
         [SerializeField] private ThrowRangeIndicator _rangeIndicator;
         [SerializeField, Min(1)] private int _poolPrewarm = 16;
         [SerializeField, Min(1)] private int _poolMaxSize = 64;
-        // 구조물 안에 떨어진 폭탄은 범위가 0이 되어 아무 일 없이 사라지므로, 착지점이 구조물 위면 던지지 않는다.
+        // 구조물 안에 떨어진 폭탄은 범위가 0이 되어 아무 일 없이 사라지므로, 착지점이 구조물 위면 가장 가까운 바닥으로 옮긴다.
         [SerializeField] private LayerMask _obstacleMask;
         // 던지는 길을 막는 것(구조물, 맵 테두리). 커서가 그 너머에 있으면 막힌 지점 바로 앞까지만 던진다.
         // 플레이어가 갈 수 없는 곳(맵 밖 적 등장 구역 등)에 폭탄을 떨어뜨려 나오자마자 잡는 것을 막는다.
@@ -22,7 +22,16 @@ namespace ExplodeIt.Bombs
         // 막힌 지점에서 이만큼(유닛) 앞에 떨어뜨려 착지점이 벽 속으로 잡히지 않게 한다.
         private const float BlockedLandingGap = 0.15f;
 
+        // 구조물 위를 조준했을 때 가까운 바닥을 찾는 범위. 원을 조금씩 넓히며 방향마다 확인한다(유닛, 개수).
+        // 그림 크기에 맞춘 탐색 값이라 데이터로 빼지 않는다. 이 안에 바닥이 없으면 예전처럼 던지지 않는다.
+        private const float GroundSearchStep = 0.1f;
+        private const float GroundSearchRange = 3f;
+        private const int GroundSearchDirections = 24;
+        // 옮긴 착지점이 구조물 가장자리에 딱 붙지 않게 두는 여유 (유닛).
+        private const float GroundClearance = 0.1f;
+
         private static readonly Collider2D[] LandingBuffer = new Collider2D[1];
+        private static readonly Vector2[] SearchDirections = BuildSearchDirections();
         private static readonly RaycastHit2D[] ThrowHits = new RaycastHit2D[8];
 
         private ComponentPool<Bomb> _pool;
@@ -249,7 +258,70 @@ namespace ExplodeIt.Bombs
                 distance = Mathf.Max(0f, distance - BlockedLandingGap);
             }
 
-            return origin + direction * distance;
+            return SnapToGround(origin + direction * distance, origin, maxRange);
+        }
+
+        // 구조물(울타리·건물 등) 위를 조준하면 던지지 않는 대신, 조준한 점에서 가장 가까운 바닥으로 옮겨 그곳을 착지점으로 삼는다.
+        // 맵 밖을 조준하면 테두리 앞에 떨어지는 것과 같은 감각이다. 같은 거리면 플레이어에게 가까운 쪽을 고른다.
+        // 옮긴 점도 사거리 안이어야 하고, 플레이어에서 그 점까지 던지는 길이 막히면 안 된다.
+        private Vector2 SnapToGround(Vector2 target, Vector2 origin, float maxRange)
+        {
+            if (!IsOnObstacle(target))
+            {
+                return target;
+            }
+
+            float maxRangeSqr = maxRange * maxRange;
+            for (float radius = GroundSearchStep; radius <= GroundSearchRange; radius += GroundSearchStep)
+            {
+                bool isFound = false;
+                Vector2 best = target;
+                float bestSqr = float.MaxValue;
+                for (int i = 0; i < SearchDirections.Length; i++)
+                {
+                    Vector2 point = target + SearchDirections[i] * radius;
+                    float toOriginSqr = (point - origin).sqrMagnitude;
+                    if (toOriginSqr > maxRangeSqr || toOriginSqr >= bestSqr)
+                    {
+                        continue;
+                    }
+
+                    if (Physics2D.OverlapCircle(point, GroundClearance, _obstacleFilter, LandingBuffer) > 0 || IsThrowBlocked(origin, point))
+                    {
+                        continue;
+                    }
+
+                    isFound = true;
+                    best = point;
+                    bestSqr = toOriginSqr;
+                }
+
+                if (isFound)
+                {
+                    return best;
+                }
+            }
+
+            return target;
+        }
+
+        private bool IsThrowBlocked(Vector2 origin, Vector2 point)
+        {
+            Vector2 toPoint = point - origin;
+            float distance = toPoint.magnitude;
+            return distance > 0.0001f && Physics2D.Raycast(origin, toPoint / distance, _throwBlockFilter, ThrowHits, distance) > 0;
+        }
+
+        private static Vector2[] BuildSearchDirections()
+        {
+            var directions = new Vector2[GroundSearchDirections];
+            for (int i = 0; i < directions.Length; i++)
+            {
+                float angle = Mathf.PI * 2f * i / directions.Length;
+                directions[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            }
+
+            return directions;
         }
 
         private void ReleaseBomb(Bomb bomb)
