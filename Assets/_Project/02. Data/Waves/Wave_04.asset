@@ -15,9 +15,9 @@ MonoBehaviour:
   _memo: 
   _totalSpawnPreview: 100
   _groups:
-  - _label: "0s \xB7 Area 5 \xB7 \uCC28\uC8001\uBA85"
+  - _label: "0s \xB7 Area 4 \xB7 \uCC28\uC8001\uBA85"
     _startTime: 0
-    _areaIds: 5
+    _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: e232578ef37dd2c4c826cc181f4e756d, type: 2}
   - _label: "3s \xB7 Area 9 \xB7 \uCC28\uC8001\uBA85"
@@ -35,9 +35,9 @@ MonoBehaviour:
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
-  - _label: "12s \xB7 Area 2,5,8 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD73"
+  - _label: "12s \xB7 Area 2,4,8 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD73"
     _startTime: 12
-    _areaIds: 2,5,8
+    _areaIds: 2,4,8
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
   - _label: "17s \xB7 Area 10 \xB7 \uAD81\uC2182\uBA85"
@@ -60,9 +60,9 @@ MonoBehaviour:
     _areaIds: 7,8
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "25s \xB7 Area 5 \xB7 \uC800\uACA9\uC2181\uBA85"
+  - _label: "25s \xB7 Area 6 \xB7 \uC800\uACA9\uC2181\uBA85"
     _startTime: 25
-    _areaIds: 5
+    _areaIds: 6
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
   - _label: "27s \xB7 Area 2,3 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
@@ -102,9 +102,9 @@ MonoBehaviour:
     _areaIds: 10
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
-  - _label: "47s \xB7 Area 5,6 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
+  - _label: "47s \xB7 Area 4,6 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD72"
     _startTime: 47
-    _areaIds: 5,6
+    _areaIds: 4,6
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
   - _label: "49s \xB7 Area 2 \xB7 \uC800\uACA9\uC2182\uBA85"
@@ -137,14 +137,14 @@ MonoBehaviour:
     _areaIds: 6,10
     _candidates:
     - {fileID: 11400000, guid: e232578ef37dd2c4c826cc181f4e756d, type: 2}
-  - _label: "62s \xB7 Area 5 \xB7 \uC804\uC0AC3\uBA85"
+  - _label: "62s \xB7 Area 4 \xB7 \uC804\uC0AC3\uBA85"
     _startTime: 62
-    _areaIds: 5
+    _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "70s \xB7 Area 1,3,5,7,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD75"
+  - _label: "70s \xB7 Area 1,3,4,7,9 \xB7 \uC0AC\uB9C8\uADC01\uBA85 \xD75"
     _startTime: 70
-    _areaIds: 1,3,5,7,9
+    _areaIds: 1,3,4,7,9
     _candidates:
     - {fileID: 11400000, guid: b4ad6159b6db85544910108b79477838, type: 2}
   - _label: "73s \xB7 Area 2,8 \xB7 \uCC28\uC8002\uBA85 \xD72"
@@ -159,9 +159,9 @@ MonoBehaviour:
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
-  - _label: "77s \xB7 Area 5,10 \xB7 \uBC29\uD328\uBCD11\uBA85 \xD72"
+  - _label: "77s \xB7 Area 6,10 \xB7 \uBC29\uD328\uBCD11\uBA85 \xD72"
     _startTime: 77
-    _areaIds: 5,10
+    _areaIds: 6,10
     _candidates:
     - {fileID: 11400000, guid: db35f80bb41325542807e197ec7d4b30, type: 2}
   - _label: "78s \xB7 Area 10 \xB7 \uC804\uC0AC3\uBA85"
@@ -179,9 +179,9 @@ MonoBehaviour:
     _areaIds: 7
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
-  - _label: "85s \xB7 Area 1,3,5 \xB7 \uCC28\uC8001\uBA85 \xD73"
+  - _label: "85s \xB7 Area 1,3,4 \xB7 \uCC28\uC8001\uBA85 \xD73"
     _startTime: 85
-    _areaIds: 1,3,5
+    _areaIds: 1,3,4
     _candidates:
     - {fileID: 11400000, guid: e232578ef37dd2c4c826cc181f4e756d, type: 2}
   - _label: "87s \xB7 Area 9 \xB7 \uAD81\uC2183\uBA85"
@@ -194,10 +194,10 @@ MonoBehaviour:
     _areaIds: 4,7
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
-  - _label: "95s \xB7 Area 1,2,3,4,5,6,7,8,9,10 \xB7 \uC804\uC0AC1\uBA85 / \uCC28\uC8001\uBA85
+  - _label: "95s \xB7 Area 1,2,3,4,6,6,7,8,9,10 \xB7 \uC804\uC0AC1\uBA85 / \uCC28\uC8001\uBA85
       \xD710"
     _startTime: 95
-    _areaIds: 1,2,3,4,5,6,7,8,9,10
+    _areaIds: 1,2,3,4,6,6,7,8,9,10
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
     - {fileID: 11400000, guid: e232578ef37dd2c4c826cc181f4e756d, type: 2}

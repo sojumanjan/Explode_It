@@ -35,9 +35,9 @@ MonoBehaviour:
     _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "11s \xB7 Area 5 \xB7 \uC804\uC0AC2\uBA85"
+  - _label: "11s \xB7 Area 6 \xB7 \uC804\uC0AC2\uBA85"
     _startTime: 11
-    _areaIds: 5
+    _areaIds: 6
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
   - _label: "11s \xB7 Area 2,3 \xB7 \uC804\uC0AC1\uBA85 \xD72"
@@ -76,9 +76,9 @@ MonoBehaviour:
     _areaIds: 1
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "20s \xB7 Area 4,5 \xB7 \uAD81\uC2181\uBA85 \xD72"
+  - _label: "20s \xB7 Area 4,6 \xB7 \uAD81\uC2181\uBA85 \xD72"
     _startTime: 20
-    _areaIds: 4,5
+    _areaIds: 4,6
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
   - _label: "22s \xB7 Area 6,7 \xB7 \uC804\uC0AC1\uBA85 \xD72"
@@ -121,9 +121,9 @@ MonoBehaviour:
     _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "38s \xB7 Area 5 \xB7 \uC800\uACA9\uC2181\uBA85"
+  - _label: "38s \xB7 Area 4 \xB7 \uC800\uACA9\uC2181\uBA85"
     _startTime: 38
-    _areaIds: 5
+    _areaIds: 4
     _candidates:
     - {fileID: 11400000, guid: c14b808633b70f8429ef7be02c6977ee, type: 2}
   - _label: "40s \xB7 Area 1 \xB7 \uC804\uC0AC1\uBA85"
@@ -156,9 +156,9 @@ MonoBehaviour:
     _areaIds: 3
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
-  - _label: "48s \xB7 Area 5,7 \xB7 \uC804\uC0AC1\uBA85 \xD72"
+  - _label: "48s \xB7 Area 6,7 \xB7 \uC804\uC0AC1\uBA85 \xD72"
     _startTime: 48
-    _areaIds: 5,7
+    _areaIds: 6,7
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
   - _label: "50s \xB7 Area 9 \xB7 \uC800\uACA9\uC2181\uBA85"
@@ -202,9 +202,9 @@ MonoBehaviour:
     _candidates:
     - {fileID: 11400000, guid: dcc52dca74dc9ee4580683631957134f, type: 2}
     - {fileID: 11400000, guid: 0a08af4ab71dd1e47a3ad91f16dd829a, type: 2}
-  - _label: "63s \xB7 Area 4,5 \xB7 \uC804\uC0AC1\uBA85 \xD72"
+  - _label: "63s \xB7 Area 4,6 \xB7 \uC804\uC0AC1\uBA85 \xD72"
     _startTime: 63
-    _areaIds: 4,5
+    _areaIds: 4,6
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
   - _label: "63s \xB7 Area 4 \xB7 \uC800\uACA9\uC2181\uBA85"
@@ -224,9 +224,9 @@ MonoBehaviour:
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "75s \xB7 Area 4,5,6,7 \xB7 \uC804\uC0AC1\uBA85 \xD74"
+  - _label: "75s \xB7 Area 4,6,7,8 \xB7 \uC804\uC0AC1\uBA85 \xD74"
     _startTime: 75
-    _areaIds: 4,5,6,7
+    _areaIds: 4,6,7,8
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
   - _label: "76s \xB7 Area 7 \xB7 \uAD81\uC2182\uBA85"
@@ -239,14 +239,14 @@ MonoBehaviour:
     _areaIds: 2,4
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "78s \xB7 Area 2,5,7,9 \xB7 \uC804\uC0AC1\uBA85 \xD74"
+  - _label: "78s \xB7 Area 2,4,7,9 \xB7 \uC804\uC0AC1\uBA85 \xD74"
     _startTime: 78
-    _areaIds: 2,5,7,9
+    _areaIds: 2,4,7,9
     _candidates:
     - {fileID: 11400000, guid: 65c706c7828cfcd42a4bf98f32b53f6e, type: 2}
-  - _label: "82s \xB7 Area 2,5,7,9 \xB7 \uAD81\uC2181\uBA85 \xD74"
+  - _label: "82s \xB7 Area 2,4,7,9 \xB7 \uAD81\uC2181\uBA85 \xD74"
     _startTime: 82
-    _areaIds: 2,5,7,9
+    _areaIds: 2,4,7,9
     _candidates:
     - {fileID: 11400000, guid: 304391d6822aad24f931e7a0ef858d21, type: 2}
   - _label: "83s \xB7 Area 4 \xB7 \uC800\uACA9\uC2181\uBA85"
@@ -259,9 +259,9 @@ MonoBehaviour:
     _areaIds: 3,4
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
-  - _label: "89s \xB7 Area 4,5 \xB7 \uC804\uC0AC3\uBA85 \xD72"
+  - _label: "89s \xB7 Area 3,4 \xB7 \uC804\uC0AC3\uBA85 \xD72"
     _startTime: 89
-    _areaIds: 4,5
+    _areaIds: 3,4
     _candidates:
     - {fileID: 11400000, guid: 5b2db2acbdb9a26479232a3f740b7c69, type: 2}
   - _label: "95s \xB7 Area 7,8 \xB7 \uAD81\uC2181\uBA85 / \uC804\uC0AC1\uBA85 \xD72"
