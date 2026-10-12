@@ -23,6 +23,10 @@ namespace ExplodeIt.Enemies
         [Tooltip("처치 수 포함. 끄면 잡아도 처치 수·능력 게이지에 들어가지 않는다 (보스용)")]
         [SerializeField] private bool _countsAsKill = true;
 
+        [Header("시야 (공격 시작 조건)")]
+        [Tooltip("확인 시간 (초). 플레이어를 처음 본 뒤 이 시간 동안 계속 걸으면서도 벽에 가려지지 않아야 예고를 시작한다. 도중에 가려지면 처음부터 다시 센다. 0이면 보이는 즉시 시작한다. 벽 모서리 너머로 겨우 보이는 순간 쏘아 투사체가 모서리에 박히는 것을 막는다")]
+        [SerializeField, Min(0f)] private float _sightConfirmTime;
+
         [Header("적끼리 밀어내기")]
         [Tooltip("밀어내기 시작 거리 (반경 합 대비 비율). 두 적 중심이 서로 반경 합 × 이 값보다 가까우면 밀어낸다. 0.6이면 반경 합의 40%까지는 겹칠 수 있다")]
         [SerializeField, Range(0f, 1f)] private float _separationDistanceRatio = 0.6f;
@@ -53,5 +57,6 @@ namespace ExplodeIt.Enemies
         public float DeathDuration => _deathDuration;
         public float SeparationDistanceRatio => _separationDistanceRatio;
         public float SeparationSpeed => _separationSpeed;
+        public float SightConfirmTime => _sightConfirmTime;
     }
 }

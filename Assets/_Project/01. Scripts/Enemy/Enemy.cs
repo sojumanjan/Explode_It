@@ -35,6 +35,8 @@ namespace ExplodeIt.Enemies
         private float _arenaTime;
         private float _lastPulledTime;
         private float _stunDuration;
+        // 공격 거리 안에서 플레이어가 계속 보인 시간 (초).
+        private float _sightTime;
         private Collider2D _collider;
         // 맵 입구로 먼저 걸어가는 중인지. 다 걸어가면 평소 이동(플레이어 추적)으로 넘어간다.
         private bool _hasEntryPoint;
@@ -158,7 +160,12 @@ namespace ExplodeIt.Enemies
                     TrackArenaEntry(deltaTime);
                     // 가려진 상태에서 예고하면 벽에 대고 공격하게 되므로, 보일 때만 시작한다.
                     // 일단 시작한 예고는 도중에 가려져도 끝까지 진행한다. 입구로 들어오는 중에는 공격하지 않는다.
-                    if (!_hasEntryPoint && HasEnteredArena() && ShouldStartAttack() && (!RequiresLineOfSight || CanSeeTarget()))
+                    // 처음 본 뒤 확인 시간 동안은 계속 걸어 나오며 시야가 이어지는지 본다. 가려지면 처음부터 다시 센다.
+                    // 시야 검사는 공격 거리 안일 때만 한다. 적 100마리가 매 스텝 검사하지 않게 한다.
+                    bool isReady = !_hasEntryPoint && HasEnteredArena() && ShouldStartAttack();
+                    bool canSee = isReady && (!RequiresLineOfSight || CanSeeTarget());
+                    _sightTime = canSee ? _sightTime + deltaTime : 0f;
+                    if (canSee && _sightTime >= Data.SightConfirmTime)
                     {
                         EnterState(EnemyState.Telegraph);
                     }
@@ -554,6 +561,8 @@ namespace ExplodeIt.Enemies
 
             _state = state;
             _stateTime = 0f;
+            // 공격·기절 뒤 다시 걸을 때는 처음부터 다시 확인한다.
+            _sightTime = 0f;
             OnEnterState(state);
         }
 
