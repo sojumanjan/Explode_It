@@ -10,6 +10,7 @@ namespace ExplodeIt.Stage
     // 스토리 보스전 등장 대화. 보스보다 왕이 먼저 보스 자리 옆에 스티커처럼 찰싹 붙어 나와 말하고,
     // 데이터에 표시한 줄이 시작될 때 보스를 불러내고(BossSpawnRequested), 표시한 줄을 넘길 때 보스 등장 동작을 시작시킨다(EntranceRequested).
     // 줄은 클릭해야 넘어간다. 글자가 다 나오면 말풍선에 ▼가 통통 튀어 클릭을 유도한다.
+    // 두 캐릭터 사이 위쪽의 스킵 버튼을 누르면 남은 대사를 건너뛰고, 등장 동작을 표시한 줄을 넘긴 것처럼 바로 등장 동작을 시작한다.
     public class BossDialoguePlayer : MonoBehaviour
     {
         [SerializeField] private KingSpriteSet _kingSprites;
@@ -27,6 +28,12 @@ namespace ExplodeIt.Stage
         [SerializeField, Min(0f)] private float _appearDuration = 0.25f;
         [SerializeField, Min(0f)] private float _leaveDuration = 0.3f;
         [SerializeField, Min(0f)] private float _moodPunch = 0.25f;
+        // 스킵 버튼. 말풍선과 같은 월드 캔버스에 두고, 클릭은 대사 넘기기와 같이 마우스로 직접 판정한다.
+        [SerializeField] private RectTransform _skipButton;
+        // 두 캐릭터 머리 중 높은 쪽에서 스킵 버튼까지의 높이 (유닛). 말풍선과 겹치지 않게 말풍선보다 위에 둔다.
+        [SerializeField, Min(0f)] private float _skipButtonGap = 1.8f;
+        // 마우스를 올렸을 때 스킵 버튼이 커지는 배율.
+        [SerializeField, Min(1f)] private float _skipHoverScale = 1.12f;
 
         private BossDialogueData _data;
         private Transform _boss;
@@ -42,6 +49,8 @@ namespace ExplodeIt.Stage
         private TweenCallback _onPauseEnd;
         private Tween _shoutHide;
         private TweenCallback _onShoutEnd;
+        private Vector3 _skipScale;
+        private bool _isSkipHovered;
 
         public bool IsPlaying { get; private set; }
 
@@ -53,6 +62,11 @@ namespace ExplodeIt.Stage
             _kingScale = _king.transform.localScale;
             _onPauseEnd = ShowCurrentLine;
             _onShoutEnd = HideShout;
+            if (_skipButton != null)
+            {
+                _skipScale = _skipButton.localScale;
+            }
+
             HideAll();
         }
 
@@ -129,6 +143,26 @@ namespace ExplodeIt.Stage
                 .Join(_king.DOFade(1f, _appearDuration * 0.5f))
                 .OnComplete(NextLine)
                 .SetLink(gameObject);
+            ShowSkipButton(bossPoint, offset);
+        }
+
+        // 왕과 보스 자리의 가운데, 둘 중 높은 머리보다 위에 띄운다. 왕이 곧 보스면 그 한 명의 머리 위다.
+        private void ShowSkipButton(Vector2 bossPoint, Vector2 kingOffset)
+        {
+            if (_skipButton == null)
+            {
+                return;
+            }
+
+            float kingTop = bossPoint.y + kingOffset.y + (_king.sprite != null ? _king.sprite.bounds.max.y * _kingScale.y : 0f);
+            float bossTop = bossPoint.y + _emptyBossHeight;
+            float x = bossPoint.x + kingOffset.x * 0.5f;
+            _skipButton.position = new Vector3(x, Mathf.Max(kingTop, bossTop) + _skipButtonGap, 0f);
+            _skipButton.gameObject.SetActive(true);
+            _isSkipHovered = false;
+            _skipButton.DOKill();
+            _skipButton.localScale = Vector3.zero;
+            _skipButton.DOScale(_skipScale, _appearDuration).SetDelay(_startDelay).SetEase(Ease.OutBack).SetLink(_skipButton.gameObject);
         }
 
         // 보스가 내려앉은 뒤 불린다. 머리 높이는 이때 한 번만 잰다. 대화 동안 보스는 제자리에 있다.
@@ -149,7 +183,26 @@ namespace ExplodeIt.Stage
 
         private void Update()
         {
-            if (!_isTalking || Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame)
+            if (!IsPlaying || Mouse.current == null)
+            {
+                return;
+            }
+
+            bool isOverSkip = IsPointerOverSkip();
+            UpdateSkipHover(isOverSkip);
+            if (!Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                return;
+            }
+
+            // 스킵 버튼을 누른 클릭이 대사까지 넘기지 않게 먼저 가로챈다.
+            if (isOverSkip)
+            {
+                Skip();
+                return;
+            }
+
+            if (!_isTalking)
             {
                 return;
             }
@@ -222,10 +275,42 @@ namespace ExplodeIt.Stage
             }
         }
 
+        private bool IsPointerOverSkip()
+        {
+            return _skipButton != null && _skipButton.gameObject.activeSelf
+                && RectTransformUtility.RectangleContainsScreenPoint(_skipButton, Mouse.current.position.ReadValue(), Camera.main);
+        }
+
+        private void UpdateSkipHover(bool isOver)
+        {
+            if (isOver == _isSkipHovered)
+            {
+                return;
+            }
+
+            _isSkipHovered = isOver;
+            _skipButton.DOKill();
+            _skipButton.DOScale(_skipScale * (isOver ? _skipHoverScale : 1f), 0.1f).SetLink(_skipButton.gameObject);
+        }
+
+        // 남은 대사를 건너뛴다. 진행 흐름은 등장 동작 요청을 받으면 보스가 아직 없을 때 먼저 불러내므로,
+        // 어느 줄에서 누르든 "등장 동작을 표시한 줄을 넘긴 것"과 같아진다. 이미 시작했으면 진행 흐름이 다시 시작하지 않는다.
+        private void Skip()
+        {
+            _pause?.Kill();
+            _isTalking = false;
+            _kingBubble.Hide();
+            _bossBubble.Hide();
+            EntranceRequested?.Invoke();
+            _line = _data.LineCount;
+            Leave();
+        }
+
         // 스티커가 떼어지듯 젖혀지며 납작해져 사라진다.
         private void Leave()
         {
             _isTalking = false;
+            HideSkipButton();
             _punch?.Kill();
             // 왕이 곧 보스면 떼어지지 않고 그 자리에서 바로 보스 몸으로 바뀐다.
             if (_data.KingBecomesBoss)
@@ -251,8 +336,18 @@ namespace ExplodeIt.Stage
             IsPlaying = false;
         }
 
+        private void HideSkipButton()
+        {
+            if (_skipButton != null)
+            {
+                _skipButton.DOKill();
+                _skipButton.gameObject.SetActive(false);
+            }
+        }
+
         private void HideAll()
         {
+            HideSkipButton();
             _king.gameObject.SetActive(false);
             _kingBubble.Hide();
             _bossBubble.Hide();
