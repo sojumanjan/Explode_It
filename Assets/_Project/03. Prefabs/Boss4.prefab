@@ -5519,6 +5519,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d3dcb0921a8e19c4688a80da46479c5a, type: 3}
   _thrustSprite: {fileID: 21300000, guid: 40cee37ee7c3ed84bbeea7a60549e856, type: 3}
   _leapSprite: {fileID: 0}
+  _rageIdleSprite: {fileID: 21300000, guid: 71ea406b1bad4fb48b57eded4d6347fd, type: 3}
+  _rageSlashReadySprite: {fileID: 21300000, guid: 75d4ed74056e243458a6f3a8ebdb29ee, type: 3}
+  _rageSlashFrames:
+  - {fileID: 21300000, guid: 6340304905dd47144a5e9837b3436c4f, type: 3}
   _leapShadow: {fileID: 892974968279583419}
   _dropShadow: {fileID: 1501924787870337037}
   _dropRange: {fileID: 4012758335554164064}
@@ -11201,8 +11205,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.08
+      scalar: 0.4
+      minScalar: 0.16
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11253,7 +11257,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -11306,7 +11310,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -11784,7 +11788,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 210
+      scalar: 105
       minScalar: 10
       maxCurve:
         serializedVersion: 2

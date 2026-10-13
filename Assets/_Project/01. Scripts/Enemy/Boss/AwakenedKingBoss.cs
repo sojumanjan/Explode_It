@@ -127,6 +127,10 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _thrustSprite;
         // 도약해 공중에 있는 동안의 그림. 비워 두면 기본 그림이다.
         [SerializeField] private Sprite _leapSprite;
+        // 2국면부터(분노 오라가 켜진 순간부터) 쓰는 살짝 붉어진 그림. 비워 둔 칸은 1국면 그림을 그대로 쓴다.
+        [SerializeField] private Sprite _rageIdleSprite;
+        [SerializeField] private Sprite _rageSlashReadySprite;
+        [SerializeField] private Sprite[] _rageSlashFrames;
         // 도약 중 바닥에 드리우는 그림자. 왕 발밑(루트 자식)에 두고 도약할 때만 켠다.
         [SerializeField] private SpriteRenderer _leapShadow;
         // 왕관 투하의 떨어질 자리 표시(큰 그림자, 금빛 범위 원과 채움). 왕이 걸어 다녀도 그 자리에 있어야 하므로 시작할 때 월드로 뗀다.
@@ -412,7 +416,7 @@ namespace ExplodeIt.Enemies
             Sprite pose = null;
             if (State == EnemyState.Attack && _pattern == Pattern.Slash)
             {
-                pose = _step == Step.Pause ? SlashFrame() : _slashReadySprite;
+                pose = _step == Step.Pause ? SlashFrame() : RagePick(_rageSlashReadySprite, _slashReadySprite);
             }
             else if (State == EnemyState.Attack && _pattern == Pattern.Lunge && _step == Step.Dash)
             {
@@ -423,19 +427,31 @@ namespace ExplodeIt.Enemies
                 pose = _leapSprite;
             }
 
+            // 기본 자세는 그림(Body)에 넣어 둔 1국면 그림이라, 2국면에서는 붉어진 기본 그림을 자세 그림으로 덮어 쓴다.
+            if (pose == null && _isRaging)
+            {
+                pose = _rageIdleSprite;
+            }
+
             _visual.PoseSprite = pose;
+        }
+
+        private Sprite RagePick(Sprite rage, Sprite normal)
+        {
+            return _isRaging && rage != null ? rage : normal;
         }
 
         // 베는 순간부터 지난 시간(쉬는 단계의 시간)에 맞춰 동작 그림을 넘긴다. 마지막 그림에서 멈춘다.
         private Sprite SlashFrame()
         {
-            if (_slashFrames == null || _slashFrames.Length == 0)
+            Sprite[] frames = _isRaging && _rageSlashFrames != null && _rageSlashFrames.Length > 0 ? _rageSlashFrames : _slashFrames;
+            if (frames == null || frames.Length == 0)
             {
                 return null;
             }
 
-            int index = Mathf.Min((int)(_stepTime / _data.SlashFrameTime), _slashFrames.Length - 1);
-            return _slashFrames[index];
+            int index = Mathf.Min((int)(_stepTime / _data.SlashFrameTime), frames.Length - 1);
+            return frames[index];
         }
 
         // ── 변신: 화난 2등신 그대로 점점 세게 떨다가, 한가운데로 쏙 줄어들어 사라지고 그 자리에서 각성 모습이 팍 커진다.
@@ -706,7 +722,9 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Dead:
                     _crown.enabled = false;
-                    SetRage(false);
+                    // 불꽃만 끄고 붉어진 모습은 그대로 둔 채 쓰러진다.
+                    _rageFlames.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                    _rageEmbers.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                     _flyingCrown.gameObject.SetActive(false);
                     FeedbackPlayer.Play(_data.DefeatFeedback, Body.position);
                     GameEvents.RaiseBossDefeated(_bossNumber);
@@ -1301,7 +1319,8 @@ namespace ExplodeIt.Enemies
             _step = Step.CrownOut;
             _stepTime = 0f;
             _crownTravel = 0f;
-            _crownPosition = _crown.transform.position;
+            // 예고선과 같은 길(몸 한가운데에서 시작)로 날아가야 한다. 머리 위에서 출발하면 왕관과 판정이 선보다 위로 떠서 지나간다.
+            _crownPosition = Body.position;
             SetCrown(false);
             _flyingCrown.position = _crownPosition;
             _flyingCrown.gameObject.SetActive(true);
@@ -1339,7 +1358,8 @@ namespace ExplodeIt.Enemies
                     break;
 
                 default:
-                    Vector2 home = _crown.transform.position;
+                    // 돌아올 때도 예고선의 시작점(몸 한가운데)으로 온다.
+                    Vector2 home = Body.position;
                     Vector2 toHome = home - _crownPosition;
                     if (toHome.magnitude <= Mathf.Max(step, CrownCatchDistance))
                     {
