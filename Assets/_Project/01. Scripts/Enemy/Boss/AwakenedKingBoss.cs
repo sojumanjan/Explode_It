@@ -56,6 +56,11 @@ namespace ExplodeIt.Enemies
         private const float CrownPickupDistance = 0.6f;
         // 유성우를 부르는 동안 왕 주위 보라 소용돌이 그림이 한 장씩 넘어가는 간격 (초).
         private const float MeteorAuraFrameTime = 0.08f;
+        // 천지 가르기 경계선의 두께 (유닛)와 색. 웨이브(밝은 보라)와 구분되게 어두운 보라로 긋는다.
+        private const float SwordLineWidth = 0.083f;
+        private static readonly Color SwordLineColor = new Color(0.28f, 0.05f, 0.42f, 0.9f);
+        // 첫 베기 뒤 내리친 자세로 머무는 시간 (초). 지나면 검을 다시 높이 들었다가 두 번째로 내리친다.
+        private const float SwordFollowThrough = 0.25f;
 
         private static readonly Collider2D[] StandBuffer = new Collider2D[4];
 
@@ -156,6 +161,8 @@ namespace ExplodeIt.Enemies
         // 천지 가르기 예고. 먼저 벨 쪽과 나중에 벨 쪽.
         [SerializeField] private HalfSlashWarning _halfFirst;
         [SerializeField] private HalfSlashWarning _halfSecond;
+        // 두 절반을 가르는 경계선(흰 사각형 그림). 어디를 넘어야 하는지 헷갈리지 않게 패턴 내내 보인다.
+        [SerializeField] private SpriteRenderer _swordLine;
         // 도약 중 바닥에 드리우는 그림자. 왕 발밑(루트 자식)에 두고 도약할 때만 켠다.
         [SerializeField] private SpriteRenderer _leapShadow;
         // 왕관 투하의 떨어질 자리 표시(큰 그림자, 금빛 범위 원과 채움). 왕이 걸어 다녀도 그 자리에 있어야 하므로 시작할 때 월드로 뗀다.
@@ -230,6 +237,7 @@ namespace ExplodeIt.Enemies
         private float _popCenterHeight;
         private float _auraBaseRate;
         private Vector3 _auraBaseScale;
+        private ParticleSystem.MinMaxGradient _auraBaseColor;
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
         // 지금 보이는 모습의 국면(1~3). 국면 전환 끝에 팍 커지는 순간 바뀐다.
@@ -275,6 +283,7 @@ namespace ExplodeIt.Enemies
             _leapShadowScale = _leapShadow.transform.localScale;
             _auraBaseRate = _transformAura.emission.rateOverTimeMultiplier;
             _auraBaseScale = _transformAura.shape.scale;
+            _auraBaseColor = _transformAura.main.startColor;
             _emberBaseColor = _rageEmbers.colorOverLifetime.color;
             SetRage(false);
             _leapShadow.enabled = false;
@@ -301,8 +310,11 @@ namespace ExplodeIt.Enemies
             _mapTint.enabled = false;
             _halfFirst.transform.SetParent(null);
             _halfSecond.transform.SetParent(null);
+            _swordLine.transform.SetParent(null);
+            _swordLine.enabled = false;
             _halfFirst.Hide();
             _halfSecond.Hide();
+            _swordLine.enabled = false;
             _meteorAura.enabled = false;
         }
 
@@ -385,6 +397,11 @@ namespace ExplodeIt.Enemies
                 Destroy(_halfSecond.gameObject);
             }
 
+            if (_swordLine != null)
+            {
+                Destroy(_swordLine.gameObject);
+            }
+
             if (_dropShadow != null)
             {
                 Destroy(_dropShadow.gameObject);
@@ -438,6 +455,7 @@ namespace ExplodeIt.Enemies
             TickTransform(0f);
             ZoomIn();
             SetAuraStrength(1f, 1f);
+            SetAuraColor(false);
             _transformAura.Play();
             AudioManager.Play(_data.TransformChargeSound);
         }
@@ -526,7 +544,7 @@ namespace ExplodeIt.Enemies
             }
             else if (isActing && _pattern == Pattern.Sword)
             {
-                pose = State == EnemyState.Attack && _step == Step.SwordSlash ? _swordAttackSprite : _swordChargeSprite;
+                pose = IsSwordStriking() ? _swordAttackSprite : _swordChargeSprite;
             }
 
             if (pose == null && _lookPhase >= 3)
@@ -1526,6 +1544,7 @@ namespace ExplodeIt.Enemies
             _aimDirection = _swordFirstDirection;
             _isSecondWaveShown = false;
             _isSecondSlashDone = false;
+            PlaceSwordLine(isHorizontal);
             ShowHalf(_halfFirst, _swordFirstDirection);
         }
 
@@ -1564,6 +1583,38 @@ namespace ExplodeIt.Enemies
             return _stepTime >= _data.SwordRecover;
         }
 
+        // 첫 베기 직후 잠깐과 두 번째 베기 뒤에는 내리친 자세, 두 베기 사이에는 검을 다시 높이 든 자세다.
+        private bool IsSwordStriking()
+        {
+            if (State != EnemyState.Attack || _step != Step.SwordSlash)
+            {
+                return false;
+            }
+
+            return _isSecondSlashDone || _stepTime < SwordFollowThrough;
+        }
+
+        // 좌·우로 가르면 세로선, 위·아래로 가르면 가로선을 왕이 선 자리를 지나 맵 끝까지 긋는다.
+        private void PlaceSwordLine(bool isHorizontalSplit)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            Bounds bounds = arena != null ? arena.Bounds : new Bounds(_swordOrigin, new Vector3(60f, 60f, 1f));
+            Transform line = _swordLine.transform;
+            float size = _swordLine.sprite != null ? _swordLine.sprite.bounds.size.x : 1f;
+            if (isHorizontalSplit)
+            {
+                line.position = new Vector3(_swordOrigin.x, bounds.center.y, 0f);
+                line.localScale = new Vector3(SwordLineWidth / size, bounds.size.y / size, 1f);
+            }
+            else
+            {
+                line.position = new Vector3(bounds.center.x, _swordOrigin.y, 0f);
+                line.localScale = new Vector3(bounds.size.x / size, SwordLineWidth / size, 1f);
+            }
+
+            _swordLine.color = SwordLineColor;
+        }
+
         private void ShowHalf(HalfSlashWarning half, Vector2 direction)
         {
             ArenaBounds arena = ArenaBounds.Current;
@@ -1587,6 +1638,7 @@ namespace ExplodeIt.Enemies
         private void TickPhase3Visuals(float deltaTime)
         {
             bool isMeteor = _pattern == Pattern.Meteor && (State == EnemyState.Telegraph || State == EnemyState.Attack);
+            _swordLine.enabled = _pattern == Pattern.Sword && State == EnemyState.Attack;
             _meteorAura.enabled = isMeteor && _meteorAuraFrames != null && _meteorAuraFrames.Length > 0;
             if (_meteorAura.enabled)
             {
@@ -1856,6 +1908,8 @@ namespace ExplodeIt.Enemies
                 _isShoutDone = true;
                 _visual.Jitter = RageJitter;
                 SetAuraStrength(_data.PhaseAuraRateMultiplier, _data.PhaseAuraRangeMultiplier);
+                // 3국면(보랏빛)으로 넘어가는 전환이면 불티도 보라색으로 튄다.
+                SetAuraColor(_hitsTaken + 1 >= 3);
                 _transformAura.Play();
                 GameEvents.RaiseBossLineRequested(_data.GetPhaseLine(_hitsTaken), returnStart - _data.PhaseLineDelay);
             }
@@ -1938,6 +1992,12 @@ namespace ExplodeIt.Enemies
             emission.rateOverTimeMultiplier = _auraBaseRate * rateMultiplier;
             ParticleSystem.ShapeModule shape = _transformAura.shape;
             shape.scale = _auraBaseScale * rangeMultiplier;
+        }
+
+        private void SetAuraColor(bool isPurple)
+        {
+            ParticleSystem.MainModule main = _transformAura.main;
+            main.startColor = isPurple ? new ParticleSystem.MinMaxGradient(_data.Phase3ShiftAuraMin, _data.Phase3ShiftAuraMax) : _auraBaseColor;
         }
 
         // ── 분노 오라: 2국면부터 몸 둘레에서 가는 불꽃이 짧게 일렁이다 꺼지고, 불티가 위로 날린다.

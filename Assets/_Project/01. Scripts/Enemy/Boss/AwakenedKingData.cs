@@ -288,6 +288,10 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Color _phase3EmberStart = new Color(0.9f, 0.6f, 1f, 1f);
         [SerializeField] private Color _phase3EmberEnd = new Color(0.55f, 0.15f, 0.9f, 1f);
 
+        [Tooltip("3국면으로 넘어가며 분노할 때 튀는 불티 색 (둘 사이에서 무작위). 1·2국면 전환은 원래 붉은색 그대로다")]
+        [SerializeField] private Color _phase3ShiftAuraMin = new Color(0.55f, 0.15f, 0.95f, 1f);
+        [SerializeField] private Color _phase3ShiftAuraMax = new Color(0.9f, 0.6f, 1f, 1f);
+
         [Header("사운드")]
         [SerializeField, Tooltip("떨기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
@@ -424,6 +428,8 @@ namespace ExplodeIt.Enemies
         public Color Phase3CrownColor => _phase3CrownColor;
         public Color Phase3EmberStart => _phase3EmberStart;
         public Color Phase3EmberEnd => _phase3EmberEnd;
+        public Color Phase3ShiftAuraMin => _phase3ShiftAuraMin;
+        public Color Phase3ShiftAuraMax => _phase3ShiftAuraMax;
         public SoundData MeteorCastSound => _meteorCastSound;
         public SoundData MeteorImpactSound => _meteorImpactSound;
         public SoundData SwordWaveSound => _swordWaveSound;
