@@ -16,7 +16,7 @@ MonoBehaviour:
   - _mood: 0
     _sprite: {fileID: 21300000, guid: 62e0af15a9cd841419083d85ba9ea31f, type: 3}
   - _mood: 1
-    _sprite: {fileID: 21300000, guid: 6c0692357f4b8ff46a47a84a1d808c11, type: 3}
+    _sprite: {fileID: 21300000, guid: 2f85c48e56b3bab45b2f2bc4f2b81b29, type: 3}
   - _mood: 2
     _sprite: {fileID: 21300000, guid: 8c19511e0d3f6e24eb5c462f1dac6912, type: 3}
   - _mood: 3

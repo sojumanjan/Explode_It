@@ -36,7 +36,7 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 0
-    _mood: 0
+    _mood: 7
     _text: ....
     _spawnBoss: 0
     _startEntrance: 0

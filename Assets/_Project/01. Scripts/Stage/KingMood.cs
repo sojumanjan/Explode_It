@@ -4,8 +4,8 @@ namespace ExplodeIt.Stage
     public enum KingMood
     {
         Smug,
-        // 삐침(king_pout). 처음엔 Annoyed(화남)이라 불렀다. 번호가 같아 저장된 대사는 그대로다.
-        Pout,
+        // 당황(king_embarrassed). 처음엔 Annoyed(화남), 그다음 Pout(삐침)이던 자리를 이어 쓴다. 번호가 같아 저장된 대사는 그대로다.
+        Embarrassed,
         Laugh,
         Cry,
         Lazy,

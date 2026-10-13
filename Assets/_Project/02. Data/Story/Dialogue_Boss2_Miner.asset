@@ -20,13 +20,13 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 0
-    _mood: 5
+    _mood: 0
     _text: "\uC774\uBC88\uC5D4 \uB545\uC18D\uC5D0\uC11C \uB110 \uB05D\uB0B4\uAE30
       \uC704\uD574\n\uB178\uC7A5 \uAD11\uBD80\uB97C \uBD88\uB800\uB2E4!!"
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 0
-    _mood: 2
+    _mood: 0
     _text: "\uC774 \uB178\uC7A5 \uAD11\uBD80\uB3C4 \uB3C8 \uAF64\uB098 \uC37C\uB2E4\uACE0?"
     _spawnBoss: 1
     _startEntrance: 0
@@ -46,3 +46,5 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 1
   _spawnPause: 1.3
+  _kingBecomesBoss: 0
+  _kingStandHeight: 0

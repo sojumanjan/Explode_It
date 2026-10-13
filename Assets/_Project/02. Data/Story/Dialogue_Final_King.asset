@@ -29,7 +29,7 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 1
-    _mood: 0
+    _mood: 8
     _text: "\uC870\uAE08\uB9CC \uB9DE\uC790."
     _spawnBoss: 1
     _startEntrance: 1

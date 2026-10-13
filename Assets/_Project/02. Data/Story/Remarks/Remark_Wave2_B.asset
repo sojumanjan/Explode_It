@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46db9384e0a322d47b969bf1a3c2608d, type: 3}
-  m_Name: Remark_Wave1
+  m_Name: Remark_Wave2_B
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.KingRemarkData
   _trigger: 0
-  _value: 1
-  _mood: 5
-  _text: "\uBCD1\uC0AC\uB4E4! \uBE68\uB9AC \uC800 \uCD08\uB85D\uC0C9 \uACE0\uBE14\uB9B0\uC744
-    \uC7A1\uC544\uB77C!!"
+  _value: 2
+  _mood: 1
+  _text: "\u3143..\uBE68\uB9AC...!\n\u3148..\uC800.. \uACE0\uBE14\uB9B0 \uC7A1\uC544\uC640\uB77C...!"
   _hold: 1.8

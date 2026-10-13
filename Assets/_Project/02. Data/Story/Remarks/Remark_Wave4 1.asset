@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46db9384e0a322d47b969bf1a3c2608d, type: 3}
+  m_Name: Remark_Wave4 1
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.KingRemarkData
+  _trigger: 0
+  _value: 4
+  _mood: 1
+  _text: "\uC5B4\uC5B4.\u3153.\uAC70\uC5B4\uAC71?!\n\uB3CC\uC9C4\uBCD1\uC774\uB77C\uB3C4
+    \uD22C\uC785\uD574\uB77C..!"
+  _hold: 1.8
