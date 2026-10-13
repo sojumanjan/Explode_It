@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using ExplodeIt.Bombs;
 using ExplodeIt.Core;
+using ExplodeIt.Enemies;
 using ExplodeIt.Player;
 using ExplodeIt.Progression;
 using ExplodeIt.Stage;
@@ -215,6 +216,21 @@ namespace ExplodeIt.UI
             {
                 _stageRunner.SkipToBoss(kinds * _stageRunner.BossLaps + 1);
             }
+
+            // 최종 보스와 싸우는 중에 국면을 바로 바꾼다. 개발 도구라 버튼을 누를 때만 찾는다.
+            GUILayout.BeginHorizontal();
+            for (int phase = 1; phase <= 3; phase++)
+            {
+                if (GUILayout.Button($"King P{phase}"))
+                {
+                    AwakenedKingBoss king = FindAnyObjectByType<AwakenedKingBoss>();
+                    if (king != null)
+                    {
+                        king.DebugJumpToPhase(phase);
+                    }
+                }
+            }
+            GUILayout.EndHorizontal();
         }
 
         private void DrawCheats()

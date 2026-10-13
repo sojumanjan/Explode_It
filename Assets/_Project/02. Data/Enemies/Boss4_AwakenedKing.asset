@@ -67,8 +67,8 @@ MonoBehaviour:
   _backstepDistance: 3
   _backstepDuration: 0.15
   _lungeAimTime: 0.6
-  _lungeLockTime: 0.25
-  _lungeSpeed: 28
+  _lungeLockTime: 0.3
+  _lungeSpeed: 27
   _lungeOvershoot: 3
   _lungeMaxDistance: 14
   _lungeWidth: 2.5
@@ -86,6 +86,8 @@ MonoBehaviour:
   _leapLockTime: 0.6
   _leapFallTime: 0.12
   _leapRadius: 2.2
+  _leapFlashColor: {r: 1, g: 0.25, b: 0.15, a: 0.22}
+  _leapFlashTime: 0.25
   _leapLandTime: 0.2
   _crownDropWindup: 0.5
   _crownDropThrowTime: 0.2
@@ -109,8 +111,22 @@ MonoBehaviour:
   _swordWaveTime: 0.35
   _swordWaveGap: 0.6
   _swordWait: 2
-  _swordSlashGap: 0.8
+  _swordSlashGap: 0.9
   _swordRecover: 0.6
+  _starRadius: 7
+  _starDrawTime: 1
+  _starTeleportInterval: 0.8
+  _starTeleportCount: 5
+  _starDashTime: 0.15
+  _shockSafeZoneDelay: 1
+  _shockFadeDelay: 1
+  _shockFadeIn: 2
+  _shockHold: 1
+  _shockFadeOut: 1
+  _safeZoneCount: 3
+  _safeZoneDistance: {x: 10, y: 12}
+  _safeZoneRadius: 2
+  _shockColor: {r: 0.82, g: 0.6, b: 1, a: 1}
   _phase3CrownColor: {r: 0.75, g: 0.45, b: 1, a: 1}
   _phase3EmberStart: {r: 0.9, g: 0.6, b: 1, a: 1}
   _phase3EmberEnd: {r: 0.55, g: 0.15, b: 0.9, a: 1}
@@ -133,14 +149,21 @@ MonoBehaviour:
   _meteorImpactSound: {fileID: 11400000, guid: ceb51ec362f39514380edc3005726baf, type: 2}
   _swordWaveSound: {fileID: 11400000, guid: 44c2a00060ac70c46ae051fdd0007e9b, type: 2}
   _swordSlashSound: {fileID: 11400000, guid: d877ad611f4f5dc4b912a49f0dafa52c, type: 2}
+  _starDrawSound: {fileID: 11400000, guid: 39d57ab3f9d4cb64e97f1a718f0392ac, type: 2}
+  _teleportSound: {fileID: 11400000, guid: a069a81ce776d0f478c31f0a8a9e9715, type: 2}
+  _shockChargeSound: {fileID: 11400000, guid: a20c090afed78274789fd1f6e1493179, type: 2}
+  _shockSound: {fileID: 11400000, guid: 4f3920bd6d4f9a149bb4e20310451024, type: 2}
   _phaseShiftSound: {fileID: 0}
   _transformFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
   _hurtFeedback: {fileID: 11400000, guid: c814bb79101123449b12c72ccb695a94, type: 2}
   _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
   _leapImpactFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
+  _leapFireFeedback: {fileID: 11400000, guid: daf501db46f9baf44b153bca43ec811d, type: 2}
   _crownDropImpactFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
   _meteorImpactFeedback: {fileID: 11400000, guid: 73d51ffe459e55643b64633db4838796, type: 2}
   _swordSlashFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
+  _teleportFeedback: {fileID: 0}
+  _shockFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
   _phaseShiftFeedback: {fileID: 11400000, guid: 945dab3355730634682ac0e6ebe18d02, type: 2}
   _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
   _immuneFlashColor: {r: 1, g: 0.9, b: 0.4, a: 1}

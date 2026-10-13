@@ -202,6 +202,12 @@ namespace ExplodeIt.Enemies
         [Tooltip("내려찍기 판정 반경 (유닛)")]
         [SerializeField, Min(0.1f)] private float _leapRadius = 2.2f;
 
+        [Tooltip("내려찍는 순간 화면 전체가 반짝이는 색 (불투명도까지 이 색을 쓴다). 은은하게 둔다")]
+        [SerializeField] private Color _leapFlashColor = new Color(1f, 0.25f, 0.15f, 0.22f);
+
+        [Tooltip("내려찍는 순간 화면이 반짝였다 사라지는 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _leapFlashTime = 0.25f;
+
         [Tooltip("착지한 뒤 멈춰 있는 시간 (초). 지나면 다음 도약을 하거나 패턴을 마친다")]
         [SerializeField, Min(0f)] private float _leapLandTime = 0.5f;
 
@@ -280,6 +286,49 @@ namespace ExplodeIt.Enemies
         [Tooltip("두 번째 베기 뒤 멈춰 있는 시간 (초)")]
         [SerializeField, Min(0f)] private float _swordRecover = 0.6f;
 
+        [Header("별의 의식 (3국면 공격 기회)")]
+        [Tooltip("맵 한가운데 그려지는 별의 크기 (유닛, 가운데에서 꼭짓점까지)")]
+        [SerializeField, Min(1f)] private float _starRadius = 7f;
+
+        [Tooltip("별이 한 획씩 그려지는 시간 (초). 왕관이 머리를 떠나는 순간부터 맞는다")]
+        [SerializeField, Min(0.1f)] private float _starDrawTime = 1f;
+
+        [Tooltip("별 끝을 옮겨 다니는 간격 (초). 다음에 나타날 끝이 이 시간만큼 먼저 빛난다. 폭탄 지연(1초)과 같게 두면 빛나는 순간 던진 폭탄이 나타나는 순간 터진다")]
+        [SerializeField, Min(0.2f)] private float _starTeleportInterval = 1f;
+
+        [Tooltip("별 끝을 옮겨 다니는 횟수 (번). 별을 그린 순서대로 옮겨 다닌다. 다 돌 때까지 못 맞히면 충격파")]
+        [SerializeField, Min(1)] private int _starTeleportCount = 5;
+
+        [Tooltip("별 끝에서 다음 끝으로 잔상을 남기며 질주하는 시간 (초). 다음 끝에 도착하는 순간이 곧 빛난 지 1초 되는 순간이다")]
+        [SerializeField, Min(0.02f)] private float _starDashTime = 0.15f;
+
+        [Tooltip("못 맞혀 가운데로 돌아온 뒤 안전지대가 생기기까지 (초)")]
+        [SerializeField, Min(0f)] private float _shockSafeZoneDelay = 1f;
+
+        [Tooltip("안전지대가 생긴 뒤 화면이 차오르기 시작하기까지 (초)")]
+        [SerializeField, Min(0f)] private float _shockFadeDelay = 1f;
+
+        [Tooltip("화면이 보라색으로 다 차오르는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _shockFadeIn = 2f;
+
+        [Tooltip("화면을 다 가린 채 있는 시간 (초). 끝나는 순간 충격파가 한 번 친다")]
+        [SerializeField, Min(0f)] private float _shockHold = 1f;
+
+        [Tooltip("충격파 뒤 화면이 걷히는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _shockFadeOut = 1f;
+
+        [Tooltip("안전지대 수 (개). 왕 둘레에 고르게 나눈 방향에 조금씩 흔들어 놓는다")]
+        [SerializeField, Range(1, 5)] private int _safeZoneCount = 3;
+
+        [Tooltip("안전지대가 생기는 거리 (유닛, 왕으로부터 최소~최대). 가까우면 너무 쉽고, 멀면 화면 반대편에서 못 간다")]
+        [SerializeField] private Vector2 _safeZoneDistance = new Vector2(6f, 10f);
+
+        [Tooltip("안전지대 반경 (유닛). 몸 중심이 이 원 안이면 충격파를 버틴다")]
+        [SerializeField, Min(0.3f)] private float _safeZoneRadius = 1.6f;
+
+        [Tooltip("충격파 때 화면을 덮는 색 (불투명도까지 이 색을 쓴다)")]
+        [SerializeField] private Color _shockColor = new Color(0.82f, 0.6f, 1f, 1f);
+
         [Header("3국면 모습")]
         [Tooltip("3국면 머리 위 왕관 색. 이 색과 밝은 색 사이를 맥동한다")]
         [SerializeField] private Color _phase3CrownColor = new Color(0.75f, 0.45f, 1f, 1f);
@@ -310,6 +359,10 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 효과음")] private SoundData _meteorImpactSound;
         [SerializeField, Tooltip("천지 가르기 예고 웨이브가 퍼지는 순간의 효과음")] private SoundData _swordWaveSound;
         [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 효과음")] private SoundData _swordSlashSound;
+        [SerializeField, Tooltip("별 낙인이 그려지기 시작하는 순간의 효과음")] private SoundData _starDrawSound;
+        [SerializeField, Tooltip("별 끝으로 순간이동하는 순간의 효과음")] private SoundData _teleportSound;
+        [SerializeField, Tooltip("화면이 차오르기 시작하는 순간의 효과음 (충격파 모으기)")] private SoundData _shockChargeSound;
+        [SerializeField, Tooltip("맵 전체 충격파가 치는 순간의 효과음")] private SoundData _shockSound;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 효과음. 비우면 왕관을 받는 효과음을 쓴다")] private SoundData _phaseShiftSound;
 
         [Header("연출")]
@@ -317,9 +370,12 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 연출")] private FeedbackData _hurtFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
         [SerializeField, Tooltip("도약 후 내려찍는 순간의 연출 (흔들림, 먼지). 착지 자리에서 터진다")] private FeedbackData _leapImpactFeedback;
+        [SerializeField, Tooltip("내려찍는 순간 함께 터지는 불꽃 연출. 착지 자리에서 터진다")] private FeedbackData _leapFireFeedback;
         [SerializeField, Tooltip("왕관이 땅에 박히는 순간의 연출 (흔들림, 먼지). 박힌 자리에서 터진다")] private FeedbackData _crownDropImpactFeedback;
         [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 연출. 떨어진 자리에서 터진다")] private FeedbackData _meteorImpactFeedback;
         [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 연출 (흔들림). 왕 자리에서 터진다")] private FeedbackData _swordSlashFeedback;
+        [SerializeField, Tooltip("순간이동으로 나타나는 순간의 연출. 나타난 자리에서 터진다")] private FeedbackData _teleportFeedback;
+        [SerializeField, Tooltip("맵 전체 충격파가 치는 순간의 연출 (흔들림)")] private FeedbackData _shockFeedback;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
@@ -399,6 +455,9 @@ namespace ExplodeIt.Enemies
         public SoundData LeapSound => _leapSound;
         public SoundData LeapImpactSound => _leapImpactSound;
         public FeedbackData LeapImpactFeedback => _leapImpactFeedback;
+        public FeedbackData LeapFireFeedback => _leapFireFeedback;
+        public Color LeapFlashColor => _leapFlashColor;
+        public float LeapFlashTime => _leapFlashTime;
         public float CrownDropWindup => _crownDropWindup;
         public float CrownDropThrowTime => _crownDropThrowTime;
         public float CrownDropTrackTime => _crownDropTrackTime;
@@ -429,6 +488,26 @@ namespace ExplodeIt.Enemies
         public Color Phase3EmberStart => _phase3EmberStart;
         public Color Phase3EmberEnd => _phase3EmberEnd;
         public Color Phase3ShiftAuraMin => _phase3ShiftAuraMin;
+        public float StarRadius => _starRadius;
+        public float StarDrawTime => _starDrawTime;
+        public float StarTeleportInterval => _starTeleportInterval;
+        public int StarTeleportCount => _starTeleportCount;
+        public float ShockSafeZoneDelay => _shockSafeZoneDelay;
+        public float ShockFadeDelay => _shockFadeDelay;
+        public float ShockFadeIn => _shockFadeIn;
+        public float ShockHold => _shockHold;
+        public float ShockFadeOut => _shockFadeOut;
+        public int SafeZoneCount => _safeZoneCount;
+        public Vector2 SafeZoneDistance => _safeZoneDistance;
+        public float StarDashTime => _starDashTime;
+        public float SafeZoneRadius => _safeZoneRadius;
+        public Color ShockColor => _shockColor;
+        public SoundData StarDrawSound => _starDrawSound;
+        public SoundData TeleportSound => _teleportSound;
+        public SoundData ShockChargeSound => _shockChargeSound;
+        public SoundData ShockSound => _shockSound;
+        public FeedbackData TeleportFeedback => _teleportFeedback;
+        public FeedbackData ShockFeedback => _shockFeedback;
         public Color Phase3ShiftAuraMax => _phase3ShiftAuraMax;
         public SoundData MeteorCastSound => _meteorCastSound;
         public SoundData MeteorImpactSound => _meteorImpactSound;

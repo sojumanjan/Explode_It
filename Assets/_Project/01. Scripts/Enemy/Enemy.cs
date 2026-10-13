@@ -487,6 +487,32 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 맵 전체를 한 번 치되, 안전지대(원) 안에 중심이 있는 대상은 뺀다. 화면 전체 공격(최종 보스 충격파)에 쓴다.
+        // 한 순간만 판정하므로, 그 순간 구르기 무적이면 피한다.
+        protected void HitAllOutside(Vector2[] safeCenters, int safeCount, float safeRadius)
+        {
+            int count = Physics2D.OverlapCircle(Body.position, 500f, _attackFilter, AttackBuffer);
+            float safeSqr = safeRadius * safeRadius;
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 target = AttackBuffer[i].bounds.center;
+                bool isSafe = false;
+                for (int j = 0; j < safeCount; j++)
+                {
+                    if ((target - safeCenters[j]).sqrMagnitude <= safeSqr)
+                    {
+                        isSafe = true;
+                        break;
+                    }
+                }
+
+                if (!isSafe && AttackBuffer[i].TryGetComponent(out IHittable hittable))
+                {
+                    hittable.ReceiveHit(new HitInfo(Body.position));
+                }
+            }
+        }
+
         // 부채꼴 근접 공격. 대상의 중심이 반경 안, 정면 기준 각도 안에 있고, 사이에 구조물이 없어야 맞는다.
         // 폭탄과 같은 규칙(중심 한 점, 구조물에 막힘)이라 플레이어가 결과를 같은 방식으로 읽는다.
         protected void HitInSector(Vector2 forward, float radius, float angle)

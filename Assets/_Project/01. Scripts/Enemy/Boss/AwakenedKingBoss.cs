@@ -8,7 +8,7 @@ namespace ExplodeIt.Enemies
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이고, 근처에 폭탄이 떨어지면 굴러서 피한다(쿨타임 없음).
     // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하,
-    // 3국면은 유성우 → 천지 가르기 → 왕관 투하(3국면 전용 공격 기회는 설계 전이라 임시)를 차례로 돈다.
+    // 3국면은 유성우 → 천지 가르기 → 별의 의식(왕관을 맵 가운데 띄우고 별 끝을 순간이동, 못 잡으면 맵 전체 충격파)을 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
     // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오면, 각성 때처럼 쏙 줄었다가 팍 커지며
@@ -61,6 +61,26 @@ namespace ExplodeIt.Enemies
         private static readonly Color SwordLineColor = new Color(0.28f, 0.05f, 0.42f, 0.9f);
         // 첫 베기 뒤 내리친 자세로 머무는 시간 (초). 지나면 검을 다시 높이 들었다가 두 번째로 내리친다.
         private const float SwordFollowThrough = 0.25f;
+        // 첫 베기 직전 "곧 내리친다" 기를 모으는 동작: 시작 시점 (첫 베기 몇 초 전), 뒤로 젖히는 각도 (도), 위로 늘어나는 비율, 떨림 폭 (유닛).
+        private const float SwordWindupTime = 0.75f;
+        private const float SwordWindupLean = -14f;
+        private const float SwordWindupStretch = 0.1f;
+        private const float SwordWindupJitter = 0.04f;
+        // 별 그림에서 가운데부터 꼭짓점까지가 그림 폭에서 차지하는 비율. 그림을 별 크기에 맞출 때 쓴다.
+        private const float StarSpriteTipRatio = 0.44f;
+        // 별 꼭대기에 걸친 왕관이 꼭짓점보다 위로 뜬 높이 (유닛).
+        private const float CrownOnStarHeight = 0.5f;
+        // 다음 끝 표시가 맥동하는 빠르기 (rad/초), 맵 밖까지 덮는 충격파 덮개의 여유 (유닛).
+        private const float StarTipPulseSpeed = 10f;
+        // 질주 잔상: 남기는 간격 (초), 사라지는 시간 (초), 색.
+        private const float AfterimageInterval = 0.02f;
+        private const float AfterimageFade = 0.3f;
+        private static readonly Color AfterimageColor = new Color(0.75f, 0.45f, 1f, 0.6f);
+        // 안전지대가 정해진 방향에서 흔들리는 폭 (도).
+        private const float SafeZoneJitter = 20f;
+        private const float ShockCoverMargin = 40f;
+        // 별 다섯 끝을 한붓그리기로 잇는 순서. 순간이동도 이 순서를 따라, 별 획을 보면 다음 자리를 미리 읽을 수 있다.
+        private static readonly int[] StarOrder = { 0, 2, 4, 1, 3 };
 
         private static readonly Collider2D[] StandBuffer = new Collider2D[4];
 
@@ -72,7 +92,8 @@ namespace ExplodeIt.Enemies
             Leap,
             CrownDrop,
             Meteor,
-            Sword
+            Sword,
+            Star
         }
 
         private enum Step
@@ -98,7 +119,10 @@ namespace ExplodeIt.Enemies
             MeteorCast,
             MeteorWait,
             SwordCharge,
-            SwordSlash
+            SwordSlash,
+            StarDraw,
+            StarTeleport,
+            StarShock
         }
 
         private enum DodgePhase
@@ -114,7 +138,7 @@ namespace ExplodeIt.Enemies
         {
             new[] { Pattern.Slash, Pattern.Lunge, Pattern.Crown },
             new[] { Pattern.Slash, Pattern.Leap, Pattern.CrownDrop },
-            new[] { Pattern.Meteor, Pattern.Sword, Pattern.CrownDrop }
+            new[] { Pattern.Meteor, Pattern.Sword, Pattern.Star }
         };
 
         [SerializeField] private AwakenedKingData _data;
@@ -163,6 +187,12 @@ namespace ExplodeIt.Enemies
         [SerializeField] private HalfSlashWarning _halfSecond;
         // 두 절반을 가르는 경계선(흰 사각형 그림). 어디를 넘어야 하는지 헷갈리지 않게 패턴 내내 보인다.
         [SerializeField] private SpriteRenderer _swordLine;
+        // 별의 의식: 별 낙인 선, 다섯 끝 표시, 안전지대들. 맵 가운데 고정이라 보스를 따라다니지 않게 시작할 때 월드로 뗀다.
+        [SerializeField] private SpriteRenderer _starSigil;
+        // 질주 잔상으로 돌려 쓰는 그림들. 몸 그림을 그 순간 그대로 베껴 보랏빛으로 흐려진다.
+        [SerializeField] private SpriteRenderer[] _afterimages;
+        [SerializeField] private SpriteRenderer[] _starTips;
+        [SerializeField] private SpriteRenderer[] _safeZones;
         // 도약 중 바닥에 드리우는 그림자. 왕 발밑(루트 자식)에 두고 도약할 때만 켠다.
         [SerializeField] private SpriteRenderer _leapShadow;
         // 왕관 투하의 떨어질 자리 표시(큰 그림자, 금빛 범위 원과 채움). 왕이 걸어 다녀도 그 자리에 있어야 하므로 시작할 때 월드로 뗀다.
@@ -256,6 +286,26 @@ namespace ExplodeIt.Enemies
         private bool _isSecondWaveShown;
         private bool _isSecondSlashDone;
 
+        private Vector2 _starCenter;
+        private readonly Vector2[] _starPoints = new Vector2[5];
+        private readonly Vector2[] _safeCenters = new Vector2[5];
+        private int _safeCount;
+        private int _teleportsDone;
+        private bool _isSafeZoneShown;
+        private bool _isShockCharging;
+        private bool _isShockDone;
+        private Vector3 _starTipScale;
+        private Vector2 _dashOrigin;
+        private int _dashSoundIndex;
+        private float _nextAfterimageTime;
+        private int _nextAfterimage;
+        private readonly float[] _afterimageTimes = new float[16];
+        private Vector2 _shockFrom;
+        private Vector2 _shockTo;
+        private bool _isShockArrived;
+        // 내려찍기 때 화면이 반짝인 뒤 지난 시간. 음수면 반짝이는 중이 아니다.
+        private float _screenFlashTime = -1f;
+
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
         private Vector3 _crownPositionLocal;
@@ -312,9 +362,29 @@ namespace ExplodeIt.Enemies
             _halfSecond.transform.SetParent(null);
             _swordLine.transform.SetParent(null);
             _swordLine.enabled = false;
+            _starSigil.transform.SetParent(null);
+            for (int i = 0; i < _afterimages.Length; i++)
+            {
+                _afterimages[i].transform.SetParent(null);
+                _afterimages[i].enabled = false;
+            }
+
+            _starTipScale = _starTips[0].transform.localScale;
+            for (int i = 0; i < _starTips.Length; i++)
+            {
+                _starTips[i].transform.SetParent(null);
+            }
+
+            for (int i = 0; i < _safeZones.Length; i++)
+            {
+                _safeZones[i].transform.SetParent(null);
+            }
+
+            HideStar();
             _halfFirst.Hide();
             _halfSecond.Hide();
             _swordLine.enabled = false;
+            HideStar();
             _meteorAura.enabled = false;
         }
 
@@ -402,6 +472,16 @@ namespace ExplodeIt.Enemies
                 Destroy(_swordLine.gameObject);
             }
 
+            if (_starSigil != null)
+            {
+                Destroy(_starSigil.gameObject);
+            }
+
+            DestroyAll(_afterimages);
+
+            DestroyAll(_starTips);
+            DestroyAll(_safeZones);
+
             if (_dropShadow != null)
             {
                 Destroy(_dropShadow.gameObject);
@@ -472,6 +552,40 @@ namespace ExplodeIt.Enemies
 
         public bool IsEntranceDone => _isEntranceDone;
 
+        // 개발자 패널용. 맞은 횟수를 그 국면에 맞추고 바로 그 국면 모습·패턴 순서로 넘어간다. 싸우는 중에만 동작한다.
+        // 국면 전환 연출은 건너뛰고, 잠깐 멈췄다가(기절) 새 국면의 첫 패턴부터 시작한다.
+        public void DebugJumpToPhase(int phase)
+        {
+            if (!_isFighting || State == EnemyState.Dead)
+            {
+                return;
+            }
+
+            int hits = Mathf.Clamp(phase - 1, 0, _data.CrownHits - 1);
+            _hitsTaken = hits;
+            HitReceiver.ResetHits(_data.CrownHits + 1 - hits);
+            _rotationIndex = 0;
+            _lookPhase = Mathf.Min(hits + 1, Rotations.Length);
+            _isGroggy = false;
+            _shiftTime = -1f;
+            _knockTime = -1f;
+            _crownDropTime = -1f;
+            _isCrownReturning = false;
+            _visual.Jitter = 0f;
+            SetShrink(1f);
+            ReleasePhaseCamera(0f);
+            HidePhase3Effects();
+            HideDropMarker();
+            EndLeapVisual();
+            _flyingCrown.gameObject.SetActive(false);
+            _flyingCrown.localScale = _flyingCrownScale;
+            SetCrown(true);
+            SetRage(_lookPhase >= 2);
+            _popCenterHeight = BodyCenterHeight();
+            _popTime = 0f;
+            Stun(0.3f);
+        }
+
         public void StartFight()
         {
             _isFighting = true;
@@ -507,6 +621,7 @@ namespace ExplodeIt.Enemies
             TickPop(deltaTime);
             TickRage(deltaTime);
             TickPhase3Visuals(deltaTime);
+            TickAfterimages();
             TickKnockback(deltaTime);
             TickCrownFall(deltaTime);
             if (_shiftTime >= 0f)
@@ -545,6 +660,11 @@ namespace ExplodeIt.Enemies
             else if (isActing && _pattern == Pattern.Sword)
             {
                 pose = IsSwordStriking() ? _swordAttackSprite : _swordChargeSprite;
+            }
+
+            else if (State == EnemyState.Attack && _pattern == Pattern.Star && _step == Step.StarShock)
+            {
+                pose = _meteorPoseSprite;
             }
 
             if (pose == null && _lookPhase >= 3)
@@ -789,6 +909,8 @@ namespace ExplodeIt.Enemies
                     return TickMeteor(deltaTime);
                 case Pattern.Sword:
                     return TickSword(deltaTime);
+                case Pattern.Star:
+                    return TickStar(deltaTime);
                 default:
                     return TickCrown(deltaTime);
             }
@@ -833,6 +955,10 @@ namespace ExplodeIt.Enemies
                     {
                         BeginSword();
                     }
+                    else if (_pattern == Pattern.Star)
+                    {
+                        BeginStar();
+                    }
                     else
                     {
                         ThrowCrown();
@@ -871,6 +997,13 @@ namespace ExplodeIt.Enemies
 
             _dodge = DodgePhase.None;
             HideTelegraphs();
+            // 별의 의식 도중 맞으면 별과 안전지대, 화면 덮개를 바로 걷는다.
+            if (state == EnemyState.Stunned)
+            {
+                HideStar();
+                _mapTint.enabled = false;
+            }
+
             // 도약 도중 끊기면(기절·사망) 떠 있던 그림과 그림자를 바로 내려놓는다.
             EndLeapVisual();
             _crownRaise = 0f;
@@ -1191,7 +1324,11 @@ namespace ExplodeIt.Enemies
             HitOverlapping(Body.position, _data.LeapRadius);
             _slashFill.SetColor(Color.white);
             FeedbackPlayer.Play(_data.LeapImpactFeedback, Body.position);
+            FeedbackPlayer.Play(_data.LeapFireFeedback, Body.position);
             AudioManager.Play(_data.LeapImpactSound);
+            // 화면 전체를 덮는 칸을 붉게 잠깐 반짝인다. 유성우 물들이기와 같은 칸이지만 두 패턴은 겹치지 않는다.
+            PlaceShockCover();
+            _screenFlashTime = 0f;
         }
 
         private void SetLeapHeight(float height)
@@ -1583,6 +1720,19 @@ namespace ExplodeIt.Enemies
             return _stepTime >= _data.SwordRecover;
         }
 
+        // 첫 베기 직전 0~1. 끝으로 갈수록 가파르게 뒤로 젖히며 위로 늘어나고 떨려, 곧 내리칠 것처럼 보인다. 베는 순간 원래대로 돌아온다.
+        private float SwordWindup()
+        {
+            if (_pattern != Pattern.Sword || State != EnemyState.Attack || _step != Step.SwordCharge)
+            {
+                return 0f;
+            }
+
+            float firstSlash = _data.SwordWaveGap + _data.SwordWaveTime + _data.SwordWait;
+            float t = Mathf.Clamp01(1f - (firstSlash - _stepTime) / SwordWindupTime);
+            return t * t;
+        }
+
         // 첫 베기 직후 잠깐과 두 번째 베기 뒤에는 내리친 자세, 두 베기 사이에는 검을 다시 높이 든 자세다.
         private bool IsSwordStriking()
         {
@@ -1646,6 +1796,11 @@ namespace ExplodeIt.Enemies
                 _meteorAura.sprite = _meteorAuraFrames[frame];
             }
 
+            if (_pattern == Pattern.Star && State == EnemyState.Attack && _step == Step.StarShock)
+            {
+                return;
+            }
+
             float target = isMeteor ? _data.MeteorTintAlpha : 0f;
             if (isMeteor && !_mapTint.enabled)
             {
@@ -1657,6 +1812,20 @@ namespace ExplodeIt.Enemies
             color.a = _tintAlpha;
             _mapTint.color = color;
             _mapTint.enabled = _tintAlpha > 0f;
+
+            if (_screenFlashTime >= 0f)
+            {
+                _screenFlashTime += deltaTime;
+                float fade = 1f - Mathf.Clamp01(_screenFlashTime / _data.LeapFlashTime);
+                Color flash = _data.LeapFlashColor;
+                flash.a *= fade;
+                _mapTint.color = flash;
+                _mapTint.enabled = fade > 0f;
+                if (fade <= 0f)
+                {
+                    _screenFlashTime = -1f;
+                }
+            }
         }
 
         // 맵은 전투 중 움직이지 않지만, 보스가 만들어질 때는 맵 범위가 아직 안 잡혀 있을 수 있어 쓸 때 맞춘다.
@@ -1673,6 +1842,366 @@ namespace ExplodeIt.Enemies
             tint.position = bounds.center;
             float size = _mapTint.sprite != null ? _mapTint.sprite.bounds.size.x : 1f;
             tint.localScale = new Vector3(bounds.size.x / size, bounds.size.y / size, 1f);
+        }
+
+        // ── 별의 의식: 왕관을 맵 가운데 공중에 띄우고 별 낙인을 그린 뒤, 별 끝을 그린 순서대로 1초마다 순간이동한다.
+        // 다음에 나타날 끝이 1초 먼저 빛나서, 빛나는 순간 그 끝에 던진 폭탄이 나타나는 순간 터진다. 왕관이 없는 동안 맞는다.
+        // 다 돌 때까지 못 맞히면 가운데로 돌아와 왕관을 쓰고, 안전지대를 띄운 뒤 화면을 보라색으로 덮으며 맵 전체를 한 번 친다.
+
+        private void BeginStar()
+        {
+            _step = Step.StarTeleport;
+            _stepTime = 0f;
+            _teleportsDone = 0;
+            _dashSoundIndex = -1;
+            _isSafeZoneShown = false;
+            _isShockCharging = false;
+            _isShockDone = false;
+            _dashOrigin = Body.position;
+            _starCenter = ArenaCenter();
+            for (int i = 0; i < 5; i++)
+            {
+                float angle = (90f + i * 72f) * Mathf.Deg2Rad;
+                _starPoints[i] = FindLandingPoint(_starCenter + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _data.StarRadius);
+                Transform tip = _starTips[i].transform;
+                tip.position = _starPoints[i];
+                tip.localScale = _starTipScale;
+                _starTips[i].enabled = true;
+                SetTipGlow(i, 0f);
+            }
+
+            // 별 그림을 별 크기에 맞춰 가운데에 깔고, 투명에서 서서히 나타나게 한다.
+            Transform sigil = _starSigil.transform;
+            sigil.position = _starCenter;
+            float spriteSize = _starSigil.sprite != null ? _starSigil.sprite.bounds.size.x : 1f;
+            float scale = _data.StarRadius / StarSpriteTipRatio / spriteSize;
+            sigil.localScale = new Vector3(scale, scale, 1f);
+            SetSigilAlpha(0f);
+            _starSigil.enabled = true;
+
+            // 왕관이 머리를 떠나 별 꼭대기에 걸친다. 첫 꼭짓점에 도착하기 전까지는 무적이다.
+            // 별이 나타나는 동안 가운데 서 있는 왕을 맞히면 "빛나는 끝을 노린다"는 공략을 건너뛰게 된다.
+            SetCrown(false);
+            HitReceiver.IsShielded = true;
+            _flyingCrown.position = StarCrownPoint();
+            _flyingCrown.rotation = Quaternion.identity;
+            _flyingCrown.localScale = _flyingCrownScale * BigCrownScale;
+            _flyingCrown.gameObject.SetActive(true);
+            AudioManager.Play(_data.StarDrawSound);
+        }
+
+        // 별이 나타난 뒤, 별을 그린 순서대로 끝에서 끝으로 잔상을 남기며 질주한다. 끝 j에 도착하는 시각은 별이 다 나타난 뒤 j번째 간격이다.
+        // 끝 j는 도착 1초(간격) 전부터 빛나서, 빛나는 순간 그 끝에 던진 폭탄이 도착하는 순간 터진다.
+        private bool TickStar(float deltaTime)
+        {
+            _flyingCrown.position = StarCrownPoint() + Vector2.up * (CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
+            if (_step == Step.StarShock)
+            {
+                return TickShock();
+            }
+
+            float time = _stepTime;
+            float draw = _data.StarDrawTime;
+            float interval = _data.StarTeleportInterval;
+            int count = _data.StarTeleportCount;
+            SetSigilAlpha(Mathf.Clamp01(time / draw));
+
+            if (time >= draw + (count - 1) * interval + interval)
+            {
+                BeginShock();
+                return false;
+            }
+
+            // 다음에 도착할 끝(도착 시각이 아직 안 지난 첫 끝).
+            int next = Mathf.Max(0, Mathf.CeilToInt((time - draw) / interval));
+            bool hasNext = next < count;
+            float arrival = draw + next * interval;
+            UpdateTipGlow(hasNext && arrival - time <= interval ? next : -1);
+
+            if (!hasNext)
+            {
+                Body.position = _starPoints[StarOrder[(count - 1) % 5]];
+                return false;
+            }
+
+            Vector2 from = next == 0 ? _dashOrigin : _starPoints[StarOrder[(next - 1) % 5]];
+            Vector2 to = _starPoints[StarOrder[next % 5]];
+            float dashStart = arrival - _data.StarDashTime;
+            if (time < dashStart)
+            {
+                Body.position = from;
+                return false;
+            }
+
+            if (_dashSoundIndex < next)
+            {
+                _dashSoundIndex = next;
+                _aimDirection = (to - from).sqrMagnitude > 0.0001f ? (to - from).normalized : _aimDirection;
+                AudioManager.Play(_data.TeleportSound);
+            }
+
+            float t = Mathf.Clamp01((time - dashStart) / _data.StarDashTime);
+            DashTo(from, to, t);
+            if (t >= 1f && _teleportsDone <= next)
+            {
+                _teleportsDone = next + 1;
+                FeedbackPlayer.Play(_data.TeleportFeedback, to);
+                // 첫 꼭짓점에 도착한 순간부터 맞는다.
+                HitReceiver.IsShielded = false;
+            }
+
+            return false;
+        }
+
+        // 아주 빠르게 미끄러지듯 옮겨 가며 지나간 자리에 잔상을 남긴다. 공중이 아니라 땅을 달리지만 너무 빨라 벽은 무시한다.
+        private void DashTo(Vector2 from, Vector2 to, float progress)
+        {
+            float eased = progress * progress * (3f - 2f * progress);
+            Vector2 point = Vector2.Lerp(from, to, eased);
+            Body.position = point;
+            transform.position = point;
+            if (progress < 1f && Time.time >= _nextAfterimageTime)
+            {
+                _nextAfterimageTime = Time.time + AfterimageInterval;
+                SpawnAfterimage();
+            }
+        }
+
+        private Vector2 StarCrownPoint()
+        {
+            return _starCenter + Vector2.up * (_data.StarRadius + CrownOnStarHeight);
+        }
+
+        private void SetSigilAlpha(float alpha)
+        {
+            Color color = _starSigil.color;
+            color.a = alpha;
+            _starSigil.color = color;
+        }
+
+        // order번째로 도착할 끝을 밝게 맥동시키고 나머지는 숨긴다. -1이면 모두 숨긴다. 별 그림에 이미 끝이 그려져 있어 빛나는 끝만 표시한다.
+        private void UpdateTipGlow(int order)
+        {
+            int lit = order >= 0 ? StarOrder[order % 5] : -1;
+            float pulse = 0.75f + 0.25f * Mathf.Sin(Time.time * StarTipPulseSpeed);
+            for (int i = 0; i < 5; i++)
+            {
+                SetTipGlow(i, i == lit ? pulse : 0f);
+                _starTips[i].transform.localScale = _starTipScale * (i == lit ? 1.4f : 1f);
+            }
+        }
+
+        private void SetTipGlow(int index, float alpha)
+        {
+            Color color = _starTips[index].color;
+            color.a = alpha;
+            _starTips[index].color = color;
+        }
+
+        // 몸 그림을 그 순간 그대로 베껴 보랏빛으로 남긴다. 잔상은 돌려 쓴다.
+        private void SpawnAfterimage()
+        {
+            if (_afterimages.Length == 0)
+            {
+                return;
+            }
+
+            int index = _nextAfterimage;
+            _nextAfterimage = (_nextAfterimage + 1) % _afterimages.Length;
+            SpriteRenderer ghost = _afterimages[index];
+            Transform body = _bodyRenderer.transform;
+            ghost.sprite = _bodyRenderer.sprite;
+            ghost.flipX = _bodyRenderer.flipX;
+            ghost.transform.SetPositionAndRotation(body.position, body.rotation);
+            ghost.transform.localScale = body.lossyScale;
+            ghost.color = AfterimageColor;
+            ghost.enabled = true;
+            _afterimageTimes[index % _afterimageTimes.Length] = Time.time;
+        }
+
+        private void TickAfterimages()
+        {
+            for (int i = 0; i < _afterimages.Length; i++)
+            {
+                SpriteRenderer ghost = _afterimages[i];
+                if (!ghost.enabled)
+                {
+                    continue;
+                }
+
+                float t = (Time.time - _afterimageTimes[i % _afterimageTimes.Length]) / AfterimageFade;
+                if (t >= 1f)
+                {
+                    ghost.enabled = false;
+                    continue;
+                }
+
+                Color color = AfterimageColor;
+                color.a *= 1f - t;
+                ghost.color = color;
+            }
+        }
+
+        // 못 맞혔다. 가운데로 질주해 돌아와 왕관을 다시 쓰고 충격파를 모은다. 다시 무적이다.
+        private void BeginShock()
+        {
+            _step = Step.StarShock;
+            _stepTime = 0f;
+            UpdateTipGlow(-1);
+            _shockFrom = Body.position;
+            _shockTo = FindLandingPoint(_starCenter);
+            _isShockArrived = false;
+            AudioManager.Play(_data.TeleportSound);
+            PlaceShockCover();
+        }
+
+        private bool TickShock()
+        {
+            if (!_isShockArrived)
+            {
+                float dash = Mathf.Clamp01(_stepTime / _data.StarDashTime);
+                DashTo(_shockFrom, _shockTo, dash);
+                if (dash < 1f)
+                {
+                    return false;
+                }
+
+                _isShockArrived = true;
+                _stepTime = 0f;
+                _flyingCrown.gameObject.SetActive(false);
+                _flyingCrown.localScale = _flyingCrownScale;
+                SetCrown(true);
+                _visual.Flash(_data.ImmuneFlashColor, 0.3f);
+            }
+
+            float t = _stepTime;
+            float safeAt = _data.ShockSafeZoneDelay;
+            float fadeAt = safeAt + _data.ShockFadeDelay;
+            float coveredAt = fadeAt + _data.ShockFadeIn;
+            float hitAt = coveredAt + _data.ShockHold;
+            float endAt = hitAt + _data.ShockFadeOut;
+
+            if (!_isSafeZoneShown && t >= safeAt)
+            {
+                _isSafeZoneShown = true;
+                ShowSafeZones();
+            }
+
+            if (!_isShockCharging && t >= fadeAt)
+            {
+                _isShockCharging = true;
+                AudioManager.Play(_data.ShockChargeSound);
+            }
+
+            if (!_isShockDone && t >= hitAt)
+            {
+                _isShockDone = true;
+                HitAllOutside(_safeCenters, _safeCount, _data.SafeZoneRadius);
+                FeedbackPlayer.Play(_data.ShockFeedback, Body.position);
+                AudioManager.Play(_data.ShockSound);
+                HideSafeZones();
+            }
+
+            float cover = 0f;
+            if (t >= fadeAt && t < coveredAt)
+            {
+                cover = (t - fadeAt) / _data.ShockFadeIn;
+            }
+            else if (t >= coveredAt && t < hitAt)
+            {
+                cover = 1f;
+            }
+            else if (t >= hitAt)
+            {
+                cover = 1f - Mathf.Clamp01((t - hitAt) / _data.ShockFadeOut);
+            }
+
+            Color color = _data.ShockColor;
+            color.a *= cover;
+            _mapTint.color = color;
+            _mapTint.enabled = cover > 0f;
+
+            if (t < endAt)
+            {
+                return false;
+            }
+
+            _mapTint.enabled = false;
+            HideStar();
+            return true;
+        }
+
+        // 화면을 다 가려야 하므로 맵보다 넉넉히 크게 덮는다.
+        private void PlaceShockCover()
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            Bounds bounds = arena != null ? arena.Bounds : new Bounds(_starCenter, new Vector3(60f, 60f, 1f));
+            Transform cover = _mapTint.transform;
+            cover.position = bounds.center;
+            float size = _mapTint.sprite != null ? _mapTint.sprite.bounds.size.x : 1f;
+            cover.localScale = new Vector3((bounds.size.x + ShockCoverMargin) / size, (bounds.size.y + ShockCoverMargin) / size, 1f);
+        }
+
+        // 왕 둘레에 고르게 나눈 방향으로, 데이터에 정한 거리 범위 안에 안전지대(보호막)를 띄운다. 방향은 매번 조금씩 흔든다.
+        private void ShowSafeZones()
+        {
+            _safeCount = Mathf.Min(Mathf.Min(_data.SafeZoneCount, _safeCenters.Length), _safeZones.Length);
+            Vector2 center = Body.position;
+            float baseAngle = Random.Range(0f, 360f);
+            for (int i = 0; i < _safeCount; i++)
+            {
+                float angle = (baseAngle + i * 360f / _safeCount + Random.Range(-SafeZoneJitter, SafeZoneJitter)) * Mathf.Deg2Rad;
+                float distance = Random.Range(_data.SafeZoneDistance.x, _data.SafeZoneDistance.y);
+                Vector2 point = FindLandingPoint(ClampToArena(center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance));
+                _safeCenters[i] = point;
+                Transform zone = _safeZones[i].transform;
+                zone.position = point;
+                float size = _safeZones[i].sprite != null ? _safeZones[i].sprite.bounds.size.x : 1f;
+                float scale = _data.SafeZoneRadius * 2f / size;
+                zone.localScale = new Vector3(scale, scale, 1f);
+                _safeZones[i].enabled = true;
+            }
+        }
+
+        private void HideSafeZones()
+        {
+            for (int i = 0; i < _safeZones.Length; i++)
+            {
+                _safeZones[i].enabled = false;
+            }
+        }
+
+        private void HideStar()
+        {
+            _starSigil.enabled = false;
+            for (int i = 0; i < _starTips.Length; i++)
+            {
+                _starTips[i].enabled = false;
+            }
+
+            HideSafeZones();
+        }
+
+        private Vector2 ArenaCenter()
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            return arena != null ? (Vector2)arena.Bounds.center : Body.position;
+        }
+
+        private static void DestroyAll(SpriteRenderer[] renderers)
+        {
+            if (renderers == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] != null)
+                {
+                    Destroy(renderers[i].gameObject);
+                }
+            }
         }
 
         private void HidePhase3Effects()
@@ -2154,8 +2683,14 @@ namespace ExplodeIt.Enemies
                     break;
                 default:
                     float pop = CurrentPopScale();
-                    _visual.ExtraScale = new Vector2(pop, pop) * (LeapSquash() * _shrinkSize);
-                    _visual.ExtraLean = 0f;
+                    float windup = SwordWindup();
+                    Vector2 stretch = new Vector2(1f - SwordWindupStretch * 0.5f * windup, 1f + SwordWindupStretch * windup);
+                    _visual.ExtraScale = new Vector2(pop, pop) * (LeapSquash() * _shrinkSize) * stretch;
+                    _visual.ExtraLean = SwordWindupLean * windup;
+                    if (_pattern == Pattern.Sword && State == EnemyState.Attack)
+                    {
+                        _visual.Jitter = SwordWindupJitter * windup;
+                    }
                     break;
             }
         }
