@@ -48,7 +48,7 @@ namespace ExplodeIt.Enemies
         [SerializeField, Min(0f)] private float _undergroundSpeed = 3f;
 
         [Header("구멍")]
-        [Tooltip("분출 반경 (유닛). 구멍마다 이 원 안의 플레이어를 친다")]
+        [Tooltip("분출 반경 (유닛). 구멍마다 이 원 안의 플레이어를 친다. 흙더미 몸통이 이 크기로 그려져 흙더미가 곧 범위다")]
         [SerializeField, Min(0f)] private float _holeRadius = 1.2f;
 
         [Tooltip("진짜 구멍 거리 (유닛, 최소~최대). 구멍이 보이는 순간 플레이어로부터 이 거리 안 무작위 방향에 놓인다")]
@@ -57,7 +57,7 @@ namespace ExplodeIt.Enemies
         [Tooltip("가짜 구멍 거리 (유닛, 최소~최대). 플레이어로부터 이 거리 안에 놓인다")]
         [SerializeField] private Vector2 _fakeHoleDistance = new Vector2(1.5f, 4.5f);
 
-        [Tooltip("구멍끼리 최소 간격 (유닛). 원이 겹쳐 진짜 구멍 표시가 가려지지 않게 한다")]
+        [Tooltip("구멍끼리 최소 간격 (유닛). 흙더미끼리 겹쳐 가운데 드릴·다이너마이트가 가려지지 않게, 분출 반경의 2배 이상으로 둔다")]
         [SerializeField, Min(0f)] private float _holeSpacing = 2.6f;
 
         [Header("다이너마이트 (가짜 구멍)")]

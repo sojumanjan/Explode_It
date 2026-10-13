@@ -20,7 +20,7 @@ MonoBehaviour:
   _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
-  _telegraphDuration: 1
+  _telegraphDuration: 1.8
   _recoverDuration: 1
   _deathDuration: 1
   _tiers:
@@ -29,19 +29,19 @@ MonoBehaviour:
   - _holeCount: 6
   _heatToOverheat: 3
   _groggyDuration: 5
-  _overheatTint: {r: 1, g: 0.35, b: 0.25, a: 1}
+  _overheatTint: {r: 0.93207544, g: 0.5300943, b: 0.46955496, a: 1}
   _moundVisibleTime: 1
   _moundFadeTime: 1
   _hiddenTime: 1
   _undergroundSpeed: 3
-  _holeRadius: 3.2
+  _holeRadius: 2.2
   _realHoleDistance: {x: 4, y: 5}
   _fakeHoleDistance: {x: 4, y: 5}
-  _holeSpacing: 3
-  _dynamiteCount: {x: 4, y: 5}
+  _holeSpacing: 4
+  _dynamiteCount: {x: 3, y: 4}
   _dynamiteDelayRange: {x: 0.85, y: 1.3}
   _dynamiteDistance: {x: 2, y: 7}
-  _dynamiteRadiusRatio: 0.83
+  _dynamiteRadiusRatio: 1
   _dynamiteArcHeight: 0.8
   _emergeHopHeight: 0.8
   _emergeHopDuration: 0.35
