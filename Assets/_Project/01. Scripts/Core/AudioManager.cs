@@ -11,6 +11,8 @@ namespace ExplodeIt.Core
     {
         private const string SfxVolumeKey = "Audio.SfxVolume";
         private const string BgmVolumeKey = "Audio.BgmVolume";
+        // 슬로모션이 끝나 효과음 높낮이가 되돌아가는 빠르기 (배율/초, 실제 시간).
+        private const float PitchRecoverSpeed = 4f;
 
         private static AudioManager _current;
 
@@ -20,6 +22,10 @@ namespace ExplodeIt.Core
         private AudioSource[] _voices;
         private SoundData[] _voiceData;
         private int[] _voicePlayIds;
+        // 소리마다 처음 정한 높낮이. 슬로모션 배율을 바꿀 때 이 값에 곱한다.
+        private float[] _voiceBasePitches;
+        private float _sfxPitchScale = 1f;
+        private float _sfxPitchTarget = 1f;
         private int _nextPlayId = 1;
         private int _nextVoice;
         private readonly Dictionary<SoundData, float> _lastPlayTimes = new Dictionary<SoundData, float>();
@@ -85,6 +91,7 @@ namespace ExplodeIt.Core
             _voices = new AudioSource[_sfxVoices];
             _voiceData = new SoundData[_sfxVoices];
             _voicePlayIds = new int[_sfxVoices];
+            _voiceBasePitches = new float[_sfxVoices];
             for (int i = 0; i < _sfxVoices; i++)
             {
                 _voices[i] = CreateSource("Sfx");
@@ -133,6 +140,44 @@ namespace ExplodeIt.Core
             }
         }
 
+        // 슬로모션 동안 효과음을 낮고 느리게 늘인다(배경음은 그대로). 낮출 때는 바로, 되돌릴 때는 짧게 미끄러지듯 올라가
+        // 지금 울리는 소리(보스를 잡은 마지막 폭발음 등)가 뚝 끊기듯 바뀌지 않게 한다.
+        public static void SetSfxPitchScale(float scale)
+        {
+            if (_current == null)
+            {
+                return;
+            }
+
+            _current._sfxPitchTarget = scale;
+            if (scale < _current._sfxPitchScale)
+            {
+                _current.ApplySfxPitch(scale);
+            }
+        }
+
+        private void Update()
+        {
+            if (Mathf.Approximately(_sfxPitchScale, _sfxPitchTarget))
+            {
+                return;
+            }
+
+            ApplySfxPitch(Mathf.MoveTowards(_sfxPitchScale, _sfxPitchTarget, PitchRecoverSpeed * Time.unscaledDeltaTime));
+        }
+
+        private void ApplySfxPitch(float scale)
+        {
+            _sfxPitchScale = scale;
+            for (int i = 0; i < _voices.Length; i++)
+            {
+                if (_voices[i].isPlaying)
+                {
+                    _voices[i].pitch = _voiceBasePitches[i] * scale;
+                }
+            }
+        }
+
         public static void PlayBgm(BgmData bgm)
         {
             if (_current != null && bgm != null)
@@ -168,7 +213,8 @@ namespace ExplodeIt.Core
 
             voice.clip = sound.PickClip();
             voice.volume = sound.Volume * _sfxVolume;
-            voice.pitch = pitch;
+            _voiceBasePitches[index] = pitch;
+            voice.pitch = pitch * _sfxPitchScale;
             voice.Play();
             _voiceData[index] = sound;
             _lastPlayTimes[sound] = now;

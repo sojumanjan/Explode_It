@@ -32,6 +32,11 @@ MonoBehaviour:
   _recoverScale: {x: 1.05, y: 0.93}
   _stunnedScale: {x: 1, y: 1}
   _stunnedLean: 0
+  _stunnedImpactScale: {x: 1.25, y: 0.75}
+  _stunnedBreath: 0.05
+  _stunnedBreathRate: 1.5
+  _stunnedSway: 4
+  _stunnedSwayRate: 0.8
   _deathKnockDistance: 0.6
   _deathKnockEnd: 0.3
   _deathPopPeak: 0.6
@@ -39,4 +44,5 @@ MonoBehaviour:
   _deathWobble: 0.25
   _deathWobbleRate: 4
   _deathEndFeedback: {fileID: 11400000, guid: 4c23af869d8b15f49bf7d0b27e73df65, type: 2}
+  _deathEndSound: {fileID: 11400000, guid: 7901870020ff6214fae0ef57569c9974, type: 2}
   _deathAlpha: 0.9

@@ -453,6 +453,7 @@ namespace ExplodeIt.Enemies
             {
                 _hasPlayedDeathEnd = true;
                 FeedbackPlayer.Play(_motion.DeathEndFeedback, _body.position);
+                AudioManager.Play(_motion.DeathEndSound);
             }
         }
 

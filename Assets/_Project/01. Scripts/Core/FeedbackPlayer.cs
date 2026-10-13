@@ -24,6 +24,7 @@ namespace ExplodeIt.Core
         private const int MaxHitStops = 4;
         private readonly float[] _stopEnds = new float[MaxHitStops];
         private readonly float[] _stopScales = new float[MaxHitStops];
+        private readonly float[] _stopPitches = new float[MaxHitStops];
 
         private bool _isPlaying;
         private bool _isHitStopping;
@@ -101,16 +102,20 @@ namespace ExplodeIt.Core
         {
             float now = Time.unscaledTime;
             float scale = 1f;
+            float pitch = 1f;
             bool isActive = false;
             for (int i = 0; i < MaxHitStops; i++)
             {
                 if (now < _stopEnds[i])
                 {
                     scale = Mathf.Min(scale, _stopScales[i]);
+                    pitch = Mathf.Min(pitch, _stopPitches[i]);
                     isActive = true;
                 }
             }
 
+            // 소리 늘어짐은 게임 속도와 따로 데이터로 정한다. 게임 속도(0.2배)만큼 낮추면 소리가 알아듣기 힘들게 뭉개진다.
+            AudioManager.SetSfxPitchScale(pitch);
             if (!isActive)
             {
                 _isHitStopping = false;
@@ -132,7 +137,7 @@ namespace ExplodeIt.Core
 
             if (HitStopEnabled && _isPlaying && data.HitStopDuration > 0f)
             {
-                StartHitStop(data.HitStopDuration, data.HitStopTimeScale);
+                StartHitStop(data.HitStopDuration, data.HitStopTimeScale, data.HitStopSoundPitch);
             }
 
             if (EffectsEnabled && data.Effect != null)
@@ -143,7 +148,7 @@ namespace ExplodeIt.Core
         }
 
         // 처음 걸릴 때의 속도만 기억해 두고, 칸이 모자라면 가장 먼저 끝나는 칸을 덮어쓴다.
-        private void StartHitStop(float duration, float timeScale)
+        private void StartHitStop(float duration, float timeScale, float soundPitch)
         {
             float now = Time.unscaledTime;
             if (!_isHitStopping)
@@ -167,6 +172,7 @@ namespace ExplodeIt.Core
 
             _stopEnds[slot] = now + duration;
             _stopScales[slot] = timeScale;
+            _stopPitches[slot] = soundPitch;
             ApplyHitStops();
         }
 

@@ -15,5 +15,6 @@ MonoBehaviour:
   _shakeForce: 0.5
   _hitStopDuration: 1.75
   _hitStopTimeScale: 0.2
+  _hitStopSoundPitch: 0.5
   _effect: {fileID: 6604623163150555832, guid: 65a1bce0c9fb8244ea883c0790e7c7d8, type: 3}
   _effectScale: 2.5

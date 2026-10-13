@@ -18,6 +18,9 @@ namespace ExplodeIt.Core
         [Tooltip("히트스톱 중 게임 속도 배율. 0에 가까울수록 확 멈춘다")]
         [SerializeField, Range(0f, 1f)] private float _hitStopTimeScale = 0.05f;
 
+        [Tooltip("히트스톱 동안 울리는 효과음의 높낮이·빠르기 배율. 1이면 소리는 그대로, 낮을수록 소리도 슬로모션처럼 낮고 느리게 늘어진다 (보스 처치 슬로모션에서 마지막 폭발음을 늘어지게 할 때). 짧은 멈칫에는 1로 둔다")]
+        [SerializeField, Range(0.2f, 1f)] private float _hitStopSoundPitch = 1f;
+
         [Header("파티클")]
         [Tooltip("사건 위치에 띄울 이펙트 프리팹. 비워 두면 띄우지 않는다")]
         [SerializeField] private PooledEffect _effect;
@@ -28,6 +31,7 @@ namespace ExplodeIt.Core
         public float ShakeForce => _shakeForce;
         public float HitStopDuration => _hitStopDuration;
         public float HitStopTimeScale => _hitStopTimeScale;
+        public float HitStopSoundPitch => _hitStopSoundPitch;
         public PooledEffect Effect => _effect;
         public float EffectScale => _effectScale;
     }

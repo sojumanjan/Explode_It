@@ -111,6 +111,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("사망 연출이 끝나 사라지는 순간의 연출 (터지는 이펙트, 흔들림). 비워 두면 그냥 사라진다")]
         [SerializeField] private ExplodeIt.Core.FeedbackData _deathEndFeedback;
 
+        [Tooltip("사망 연출이 끝나 사라지는 순간의 효과음 (보스가 '쏙' 사라질 때 등). 비워 두면 소리 없이 사라진다")]
+        [SerializeField] private ExplodeIt.Core.SoundData _deathEndSound;
+
         [Tooltip("죽는 순간 바뀌는 투명도 (0 = 완전 투명, 1 = 불투명). 사라질 때까지 유지한다")]
         [SerializeField, Range(0f, 1f)] private float _deathAlpha = 0.5f;
 
@@ -147,5 +150,6 @@ namespace ExplodeIt.Enemies
         public float DeathWobble => _deathWobble;
         public float DeathWobbleRate => _deathWobbleRate;
         public ExplodeIt.Core.FeedbackData DeathEndFeedback => _deathEndFeedback;
+        public ExplodeIt.Core.SoundData DeathEndSound => _deathEndSound;
     }
 }
