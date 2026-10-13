@@ -152,7 +152,7 @@ MonoBehaviour:
   _starDrawSound: {fileID: 11400000, guid: 39d57ab3f9d4cb64e97f1a718f0392ac, type: 2}
   _teleportSound: {fileID: 11400000, guid: a069a81ce776d0f478c31f0a8a9e9715, type: 2}
   _shockChargeSound: {fileID: 11400000, guid: a20c090afed78274789fd1f6e1493179, type: 2}
-  _shockSound: {fileID: 11400000, guid: 4f3920bd6d4f9a149bb4e20310451024, type: 2}
+  _shockSound: {fileID: 11400000, guid: 044fd5aa335ed344bab56dd4cd91ac2a, type: 2}
   _phaseShiftSound: {fileID: 0}
   _transformFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
   _hurtFeedback: {fileID: 11400000, guid: c814bb79101123449b12c72ccb695a94, type: 2}
