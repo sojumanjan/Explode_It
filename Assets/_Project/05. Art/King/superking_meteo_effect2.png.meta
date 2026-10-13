@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 7c621cccc8676574592a8c445327255b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1309689146487905322
+    second: superking_meteo_effect2_0
+  - first:
+      213: -2920166533264786523
+    second: superking_meteo_effect2_1
+  - first:
+      213: -7786674205202006380
+    second: superking_meteo_effect2_2
+  - first:
+      213: -5991318210029750653
+    second: superking_meteo_effect2_3
+  - first:
+      213: 5444915185376838577
+    second: superking_meteo_effect2_4
+  - first:
+      213: -7512540217077420579
+    second: superking_meteo_effect2_5
+  - first:
+      213: 8262628516702238082
+    second: superking_meteo_effect2_6
+  - first:
+      213: -3595380006603906577
+    second: superking_meteo_effect2_7
+  - first:
+      213: 1961253049610788138
+    second: superking_meteo_effect2_8
+  - first:
+      213: 5371116543129193959
+    second: superking_meteo_effect2_9
+  - first:
+      213: -4068784866997132268
+    second: superking_meteo_effect2_10
+  - first:
+      213: 5264696894618341568
+    second: superking_meteo_effect2_11
+  - first:
+      213: 190749764841592809
+    second: superking_meteo_effect2_12
+  - first:
+      213: -3961213825364451684
+    second: superking_meteo_effect2_13
+  - first:
+      213: -653469523506342973
+    second: superking_meteo_effect2_14
+  - first:
+      213: 8036996672942327371
+    second: superking_meteo_effect2_15
+  - first:
+      213: -7108408825340604915
+    second: superking_meteo_effect2_16
+  - first:
+      213: -952994714105379016
+    second: superking_meteo_effect2_17
+  - first:
+      213: 3668929293834175409
+    second: superking_meteo_effect2_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 7
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 300
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: superking_meteo_effect2_0
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 464
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d3676909ac03dde0800000000000000
+      internalID: -1309689146487905322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_1
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 446
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5abb4cb720c7977d0800000000000000
+      internalID: -2920166533264786523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_2
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 467
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49ebc31e01d20f390800000000000000
+      internalID: -7786674205202006380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 390
+        width: 45
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 386f8d2d4df8adca0800000000000000
+      internalID: -5991318210029750653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_4
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 452
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b344804389309b40800000000000000
+      internalID: 5444915185376838577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_5
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 444
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddda348c9781eb790800000000000000
+      internalID: -7512540217077420579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_6
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 446
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 285bc01dbd0caa270800000000000000
+      internalID: 8262628516702238082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_7
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 451
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe125d1eee4aa1ec0800000000000000
+      internalID: -3595380006603906577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_8
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 443
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2dd3b8e145c73b10800000000000000
+      internalID: 1961253049610788138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_9
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 433
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ed8070e90a0a8a40800000000000000
+      internalID: 5371116543129193959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_10
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 431
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 414a62788b5c887c0800000000000000
+      internalID: -4068784866997132268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_11
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 403
+        width: 15
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c014dd9ee5ff0940800000000000000
+      internalID: 5264696894618341568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_12
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 380
+        width: 73
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e75f5686eda5a200800000000000000
+      internalID: 190749764841592809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_13
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 424
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9e19c36301f609c0800000000000000
+      internalID: -3961213825364451684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_14
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 12
+        width: 446
+        height: 418
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c35cdb3ee86ee6f0800000000000000
+      internalID: -653469523506342973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_15
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 408
+        width: 23
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4649b764e5298f60800000000000000
+      internalID: 8036996672942327371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_16
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 85
+        width: 172
+        height: 310
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0e4257d5dbd95d90800000000000000
+      internalID: -7108408825340604915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_17
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 325
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8378ce05b5846c2f0800000000000000
+      internalID: -952994714105379016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: superking_meteo_effect2_18
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 274
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b3c20101c7aae230800000000000000
+      internalID: 3668929293834175409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      superking_meteo_effect2_0: -1309689146487905322
+      superking_meteo_effect2_1: -2920166533264786523
+      superking_meteo_effect2_10: -4068784866997132268
+      superking_meteo_effect2_11: 5264696894618341568
+      superking_meteo_effect2_12: 190749764841592809
+      superking_meteo_effect2_13: -3961213825364451684
+      superking_meteo_effect2_14: -653469523506342973
+      superking_meteo_effect2_15: 8036996672942327371
+      superking_meteo_effect2_16: -7108408825340604915
+      superking_meteo_effect2_17: -952994714105379016
+      superking_meteo_effect2_18: 3668929293834175409
+      superking_meteo_effect2_2: -7786674205202006380
+      superking_meteo_effect2_3: -5991318210029750653
+      superking_meteo_effect2_4: 5444915185376838577
+      superking_meteo_effect2_5: -7512540217077420579
+      superking_meteo_effect2_6: 8262628516702238082
+      superking_meteo_effect2_7: -3595380006603906577
+      superking_meteo_effect2_8: 1961253049610788138
+      superking_meteo_effect2_9: 5371116543129193959
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -236,6 +236,58 @@ namespace ExplodeIt.Enemies
         [Tooltip("달리기 시작한 뒤 이 시간 (초) 안에 못 주우면 왕관이 스스로 날아 돌아온다")]
         [SerializeField, Min(0.1f)] private float _crownRetrieveTimeout = 4f;
 
+        [Header("유성우 (3국면부터, 왕관을 쓴 채라 무적)")]
+        [Tooltip("한 번에 떨어지는 유성 수 (개). 맵 전체에 흩어진다")]
+        [SerializeField, Min(1)] private int _meteorCount = 45;
+
+        [Tooltip("유성을 다 불러내는 데 걸리는 시간 (초). 이 동안 일정한 간격으로 하나씩 떨어질 자리가 생긴다")]
+        [SerializeField, Min(0.1f)] private float _meteorCastTime = 3f;
+
+        [Tooltip("떨어질 자리가 생긴 뒤 유성이 떨어지기까지 (초). 이 동안 보라 원이 차오른다")]
+        [SerializeField, Min(0.2f)] private float _meteorFallTime = 1f;
+
+        [Tooltip("유성 하나의 판정 반경 (유닛)")]
+        [SerializeField, Min(0.1f)] private float _meteorRadius = 1.5f;
+
+        [Tooltip("유성 중 그 순간 플레이어 자리에 떨어지는 수 (개). 가만히 서서 다 피하지 못하게 한다. 소환 시간에 고르게 나눠 떨어진다")]
+        [SerializeField, Min(0)] private int _meteorTargetedCount = 3;
+
+        [Tooltip("유성이 맵 가장자리에서 떨어지는 거리 (유닛). 원이 맵 밖으로 잘리지 않게 한다")]
+        [SerializeField, Min(0f)] private float _meteorEdgeMargin = 1f;
+
+        [Tooltip("유성우 동안 맵이 물드는 색 (불투명도는 아래 칸으로 정한다)")]
+        [SerializeField] private Color _meteorTintColor = new Color(0.45f, 0.15f, 0.75f, 1f);
+
+        [Tooltip("유성우 동안 맵이 물드는 진하기 (0~1). 진하면 예고 원이 묻힌다")]
+        [SerializeField, Range(0f, 1f)] private float _meteorTintAlpha = 0.25f;
+
+        [Tooltip("맵이 물들고 돌아오는 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _meteorTintFadeTime = 0.5f;
+
+        [Header("천지 가르기 (3국면부터, 왕관을 쓴 채라 무적)")]
+        [Tooltip("벨 쪽으로 보라 웨이브가 맵 끝까지 퍼지는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _swordWaveTime = 0.35f;
+
+        [Tooltip("첫 번째 웨이브 뒤 반대쪽 웨이브가 시작되기까지 (초). 웨이브 순서가 곧 베는 순서다")]
+        [SerializeField, Min(0f)] private float _swordWaveGap = 0.6f;
+
+        [Tooltip("두 웨이브가 다 퍼진 뒤 첫 베기까지 (초)")]
+        [SerializeField, Min(0f)] private float _swordWait = 2f;
+
+        [Tooltip("첫 베기와 두 번째 베기 사이 (초). 이 안에 왕이 선 경계선을 넘어 이미 벤 쪽으로 건너가야 한다")]
+        [SerializeField, Min(0.1f)] private float _swordSlashGap = 0.8f;
+
+        [Tooltip("두 번째 베기 뒤 멈춰 있는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _swordRecover = 0.6f;
+
+        [Header("3국면 모습")]
+        [Tooltip("3국면 머리 위 왕관 색. 이 색과 밝은 색 사이를 맥동한다")]
+        [SerializeField] private Color _phase3CrownColor = new Color(0.75f, 0.45f, 1f, 1f);
+
+        [Tooltip("3국면 불티 색 (처음 → 사라질 때)")]
+        [SerializeField] private Color _phase3EmberStart = new Color(0.9f, 0.6f, 1f, 1f);
+        [SerializeField] private Color _phase3EmberEnd = new Color(0.55f, 0.15f, 0.9f, 1f);
+
         [Header("사운드")]
         [SerializeField, Tooltip("떨기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
@@ -250,6 +302,10 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("도약해 솟구치는 순간의 효과음")] private SoundData _leapSound;
         [SerializeField, Tooltip("내려찍는 순간의 효과음")] private SoundData _leapImpactSound;
         [SerializeField, Tooltip("던져 올린 왕관이 땅에 박히는 순간의 효과음")] private SoundData _crownDropImpactSound;
+        [SerializeField, Tooltip("유성우를 부르기 시작하는 순간의 효과음")] private SoundData _meteorCastSound;
+        [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 효과음")] private SoundData _meteorImpactSound;
+        [SerializeField, Tooltip("천지 가르기 예고 웨이브가 퍼지는 순간의 효과음")] private SoundData _swordWaveSound;
+        [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 효과음")] private SoundData _swordSlashSound;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 효과음. 비우면 왕관을 받는 효과음을 쓴다")] private SoundData _phaseShiftSound;
 
         [Header("연출")]
@@ -258,6 +314,8 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
         [SerializeField, Tooltip("도약 후 내려찍는 순간의 연출 (흔들림, 먼지). 착지 자리에서 터진다")] private FeedbackData _leapImpactFeedback;
         [SerializeField, Tooltip("왕관이 땅에 박히는 순간의 연출 (흔들림, 먼지). 박힌 자리에서 터진다")] private FeedbackData _crownDropImpactFeedback;
+        [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 연출. 떨어진 자리에서 터진다")] private FeedbackData _meteorImpactFeedback;
+        [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 연출 (흔들림). 왕 자리에서 터진다")] private FeedbackData _swordSlashFeedback;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
@@ -349,6 +407,29 @@ namespace ExplodeIt.Enemies
         public float CrownRetrieveTimeout => _crownRetrieveTimeout;
         public SoundData CrownDropImpactSound => _crownDropImpactSound;
         public FeedbackData CrownDropImpactFeedback => _crownDropImpactFeedback;
+        public int MeteorCount => _meteorCount;
+        public float MeteorCastTime => _meteorCastTime;
+        public float MeteorFallTime => _meteorFallTime;
+        public float MeteorRadius => _meteorRadius;
+        public int MeteorTargetedCount => _meteorTargetedCount;
+        public float MeteorEdgeMargin => _meteorEdgeMargin;
+        public Color MeteorTintColor => _meteorTintColor;
+        public float MeteorTintAlpha => _meteorTintAlpha;
+        public float MeteorTintFadeTime => _meteorTintFadeTime;
+        public float SwordWaveTime => _swordWaveTime;
+        public float SwordWaveGap => _swordWaveGap;
+        public float SwordWait => _swordWait;
+        public float SwordSlashGap => _swordSlashGap;
+        public float SwordRecover => _swordRecover;
+        public Color Phase3CrownColor => _phase3CrownColor;
+        public Color Phase3EmberStart => _phase3EmberStart;
+        public Color Phase3EmberEnd => _phase3EmberEnd;
+        public SoundData MeteorCastSound => _meteorCastSound;
+        public SoundData MeteorImpactSound => _meteorImpactSound;
+        public SoundData SwordWaveSound => _swordWaveSound;
+        public SoundData SwordSlashSound => _swordSlashSound;
+        public FeedbackData MeteorImpactFeedback => _meteorImpactFeedback;
+        public FeedbackData SwordSlashFeedback => _swordSlashFeedback;
         public SoundData TransformSound => _transformSound;
         public SoundData DodgeSound => _dodgeSound;
         public SoundData SlashSound => _slashSound;

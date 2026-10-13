@@ -7,7 +7,8 @@ namespace ExplodeIt.Enemies
 {
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이고, 근처에 폭탄이 떨어지면 굴러서 피한다(쿨타임 없음).
-    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면부터는 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하를 차례로 돈다.
+    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하,
+    // 3국면은 유성우 → 천지 가르기 → 왕관 투하(3국면 전용 공격 기회는 설계 전이라 임시)를 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
     // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오면, 각성 때처럼 쏙 줄었다가 팍 커지며
@@ -53,6 +54,8 @@ namespace ExplodeIt.Enemies
         private const float CrownRaiseHeight = 1f;
         private const float BigCrownScale = 2f;
         private const float CrownPickupDistance = 0.6f;
+        // 유성우를 부르는 동안 왕 주위 보라 소용돌이 그림이 한 장씩 넘어가는 간격 (초).
+        private const float MeteorAuraFrameTime = 0.08f;
 
         private static readonly Collider2D[] StandBuffer = new Collider2D[4];
 
@@ -62,7 +65,9 @@ namespace ExplodeIt.Enemies
             Lunge,
             Crown,
             Leap,
-            CrownDrop
+            CrownDrop,
+            Meteor,
+            Sword
         }
 
         private enum Step
@@ -84,7 +89,11 @@ namespace ExplodeIt.Enemies
             DropLock,
             DropStagger,
             DropRetrieve,
-            DropReturn
+            DropReturn,
+            MeteorCast,
+            MeteorWait,
+            SwordCharge,
+            SwordSlash
         }
 
         private enum DodgePhase
@@ -99,7 +108,8 @@ namespace ExplodeIt.Enemies
         private static readonly Pattern[][] Rotations =
         {
             new[] { Pattern.Slash, Pattern.Lunge, Pattern.Crown },
-            new[] { Pattern.Slash, Pattern.Leap, Pattern.CrownDrop }
+            new[] { Pattern.Slash, Pattern.Leap, Pattern.CrownDrop },
+            new[] { Pattern.Meteor, Pattern.Sword, Pattern.CrownDrop }
         };
 
         [SerializeField] private AwakenedKingData _data;
@@ -131,6 +141,21 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _rageIdleSprite;
         [SerializeField] private Sprite _rageSlashReadySprite;
         [SerializeField] private Sprite[] _rageSlashFrames;
+        // 3국면 모습(보랏빛). 기본 자세와 패턴 자세.
+        [SerializeField] private Sprite _phase3IdleSprite;
+        [SerializeField] private Sprite _meteorPoseSprite;
+        [SerializeField] private Sprite _swordChargeSprite;
+        [SerializeField] private Sprite _swordAttackSprite;
+        // 유성우를 부르는 동안 왕 주위에 번갈아 보이는 보라 소용돌이 그림들. 그림(Body) 자식이라 몸을 따라 움직인다.
+        [SerializeField] private SpriteRenderer _meteorAura;
+        [SerializeField] private Sprite[] _meteorAuraFrames;
+        // 유성 하나(원이 차오르다 떨어짐). 오브젝트 피커가 컴포넌트 타입 칸에 프리팹을 띄우지 않아 GameObject로 받는다.
+        [SerializeField] private GameObject _meteorPrefab;
+        // 유성우 동안 맵 전체를 보랏빛으로 덮는 반투명 칸(흰 사각형 그림). 맵 크기에 맞춰 월드에 깐다.
+        [SerializeField] private SpriteRenderer _mapTint;
+        // 천지 가르기 예고. 먼저 벨 쪽과 나중에 벨 쪽.
+        [SerializeField] private HalfSlashWarning _halfFirst;
+        [SerializeField] private HalfSlashWarning _halfSecond;
         // 도약 중 바닥에 드리우는 그림자. 왕 발밑(루트 자식)에 두고 도약할 때만 켠다.
         [SerializeField] private SpriteRenderer _leapShadow;
         // 왕관 투하의 떨어질 자리 표시(큰 그림자, 금빛 범위 원과 채움). 왕이 걸어 다녀도 그 자리에 있어야 하므로 시작할 때 월드로 뗀다.
@@ -207,6 +232,21 @@ namespace ExplodeIt.Enemies
         private Vector3 _auraBaseScale;
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
+        // 지금 보이는 모습의 국면(1~3). 국면 전환 끝에 팍 커지는 순간 바뀐다.
+        private int _lookPhase = 1;
+        // 2국면 불티 색. 3국면에서 보라로 바꿨다가, 보스를 다시 쓸 때 되돌린다.
+        private ParticleSystem.MinMaxGradient _emberBaseColor;
+
+        private Meteor[] _meteors;
+        private System.Action<Meteor> _onMeteorImpact;
+        private int _meteorsLaunched;
+        private int _meteorsLanded;
+        private float _tintAlpha;
+
+        private Vector2 _swordOrigin;
+        private Vector2 _swordFirstDirection;
+        private bool _isSecondWaveShown;
+        private bool _isSecondSlashDone;
 
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
@@ -219,6 +259,7 @@ namespace ExplodeIt.Enemies
         protected override bool RequiresLineOfSight => false;
         public override Vector2 AimDirection =>
             State == EnemyState.Telegraph || State == EnemyState.Attack ? _aimDirection : DirectionToTarget();
+        // 유성우·천지 가르기는 예고 상태에서 자세만 잡고, 실제 예고(원, 웨이브)는 공격 단계 안에서 보인다.
         public override float TelegraphDuration =>
             _pattern == Pattern.Crown ? _data.CrownWindup : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
 
@@ -234,6 +275,7 @@ namespace ExplodeIt.Enemies
             _leapShadowScale = _leapShadow.transform.localScale;
             _auraBaseRate = _transformAura.emission.rateOverTimeMultiplier;
             _auraBaseScale = _transformAura.shape.scale;
+            _emberBaseColor = _rageEmbers.colorOverLifetime.color;
             SetRage(false);
             _leapShadow.enabled = false;
             _standFilter.useTriggers = false;
@@ -246,6 +288,22 @@ namespace ExplodeIt.Enemies
             _dropRange.transform.SetParent(null);
             _dropFill.transform.SetParent(null);
             HideDropMarker();
+
+            _meteors = new Meteor[_data.MeteorCount];
+            _onMeteorImpact = OnMeteorImpact;
+            for (int i = 0; i < _meteors.Length; i++)
+            {
+                _meteors[i] = Instantiate(_meteorPrefab).GetComponent<Meteor>();
+                _meteors[i].Hide();
+            }
+
+            _mapTint.transform.SetParent(null);
+            _mapTint.enabled = false;
+            _halfFirst.transform.SetParent(null);
+            _halfSecond.transform.SetParent(null);
+            _halfFirst.Hide();
+            _halfSecond.Hide();
+            _meteorAura.enabled = false;
         }
 
         protected override void OnEnable()
@@ -275,6 +333,11 @@ namespace ExplodeIt.Enemies
                 HideDropMarker();
             }
 
+            if (_mapTint != null)
+            {
+                HidePhase3Effects();
+            }
+
             // 변신 도중 사라지면(개발자 패널 전멸 등) 확대된 채 남지 않게 바로 되돌린다.
             if (_isZoomed)
             {
@@ -296,6 +359,32 @@ namespace ExplodeIt.Enemies
             }
 
             // 월드로 떼어 둔 표시들은 보스와 함께 사라지지 않으므로 직접 지운다.
+            if (_meteors != null)
+            {
+                for (int i = 0; i < _meteors.Length; i++)
+                {
+                    if (_meteors[i] != null)
+                    {
+                        Destroy(_meteors[i].gameObject);
+                    }
+                }
+            }
+
+            if (_mapTint != null)
+            {
+                Destroy(_mapTint.gameObject);
+            }
+
+            if (_halfFirst != null)
+            {
+                Destroy(_halfFirst.gameObject);
+            }
+
+            if (_halfSecond != null)
+            {
+                Destroy(_halfSecond.gameObject);
+            }
+
             if (_dropShadow != null)
             {
                 Destroy(_dropShadow.gameObject);
@@ -332,6 +421,7 @@ namespace ExplodeIt.Enemies
             _isCrownReturning = false;
             _visual.Jitter = 0f;
             _shrinkSize = 1f;
+            _lookPhase = 1;
             SetRage(false);
             // 왕관 횟수만큼은 맞아도 버티고, 그로기 때의 한 방에 쓰러진다.
             HitReceiver.ResetHits(_data.CrownHits + 1);
@@ -398,6 +488,7 @@ namespace ExplodeIt.Enemies
 
             TickPop(deltaTime);
             TickRage(deltaTime);
+            TickPhase3Visuals(deltaTime);
             TickKnockback(deltaTime);
             TickCrownFall(deltaTime);
             if (_shiftTime >= 0f)
@@ -428,7 +519,21 @@ namespace ExplodeIt.Enemies
             }
 
             // 기본 자세는 그림(Body)에 넣어 둔 1국면 그림이라, 2국면에서는 붉어진 기본 그림을 자세 그림으로 덮어 쓴다.
-            if (pose == null && _isRaging)
+            bool isActing = State == EnemyState.Telegraph || State == EnemyState.Attack;
+            if (isActing && _pattern == Pattern.Meteor)
+            {
+                pose = _meteorPoseSprite;
+            }
+            else if (isActing && _pattern == Pattern.Sword)
+            {
+                pose = State == EnemyState.Attack && _step == Step.SwordSlash ? _swordAttackSprite : _swordChargeSprite;
+            }
+
+            if (pose == null && _lookPhase >= 3)
+            {
+                pose = _phase3IdleSprite;
+            }
+            else if (pose == null && _isRaging)
             {
                 pose = _rageIdleSprite;
             }
@@ -592,7 +697,9 @@ namespace ExplodeIt.Enemies
         private void TickCrownFloat()
         {
             float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 6f);
-            _crown.color = Color.Lerp(new Color(1f, 0.85f, 0.4f, 1f), Color.white, pulse);
+            Color baseColor = _lookPhase >= 3 ? _data.Phase3CrownColor : new Color(1f, 0.85f, 0.4f, 1f);
+            Color brightColor = _lookPhase >= 3 ? Color.Lerp(_data.Phase3CrownColor, Color.white, 0.6f) : Color.white;
+            _crown.color = Color.Lerp(baseColor, brightColor, pulse);
             _crown.transform.localScale = _crownScale * (1f + 0.06f * pulse);
             _crown.transform.localPosition = _crownPositionLocal + Vector3.up * (_leapHeight + _crownRaise + CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
         }
@@ -660,6 +767,10 @@ namespace ExplodeIt.Enemies
                     return TickLeap(deltaTime);
                 case Pattern.CrownDrop:
                     return TickCrownDrop(deltaTime);
+                case Pattern.Meteor:
+                    return TickMeteor(deltaTime);
+                case Pattern.Sword:
+                    return TickSword(deltaTime);
                 default:
                     return TickCrown(deltaTime);
             }
@@ -696,6 +807,14 @@ namespace ExplodeIt.Enemies
                     {
                         BeginCrownDrop();
                     }
+                    else if (_pattern == Pattern.Meteor)
+                    {
+                        BeginMeteor();
+                    }
+                    else if (_pattern == Pattern.Sword)
+                    {
+                        BeginSword();
+                    }
                     else
                     {
                         ThrowCrown();
@@ -722,6 +841,7 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Dead:
                     _crown.enabled = false;
+                    HidePhase3Effects();
                     // 불꽃만 끄고 붉어진 모습은 그대로 둔 채 쓰러진다.
                     _rageFlames.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                     _rageEmbers.Stop(true, ParticleSystemStopBehavior.StopEmitting);
@@ -1312,6 +1432,214 @@ namespace ExplodeIt.Enemies
             _dropFill.Visible = false;
         }
 
+        // ── 유성우: 보라 소용돌이 속에서 두 손을 들면 맵이 보랏빛으로 물들고, 맵 전체에 유성이 하나씩 떨어진다.
+        // 떨어질 자리마다 원이 차오르다 떨어진다. 그중 몇 개는 그 순간 플레이어 자리에 떨어져, 가만히 서서 다 피하지 못하게 한다.
+
+        private void BeginMeteor()
+        {
+            _step = Step.MeteorCast;
+            _stepTime = 0f;
+            _meteorsLaunched = 0;
+            _meteorsLanded = 0;
+            AudioManager.Play(_data.MeteorCastSound);
+        }
+
+        private bool TickMeteor(float deltaTime)
+        {
+            int count = _meteors.Length;
+            if (_step == Step.MeteorCast)
+            {
+                float interval = _data.MeteorCastTime / count;
+                while (_meteorsLaunched < count && _stepTime >= _meteorsLaunched * interval)
+                {
+                    LaunchMeteor(_meteorsLaunched);
+                    _meteorsLaunched++;
+                }
+
+                if (_meteorsLaunched >= count)
+                {
+                    _step = Step.MeteorWait;
+                }
+
+                return false;
+            }
+
+            return _meteorsLanded >= _meteorsLaunched;
+        }
+
+        private void LaunchMeteor(int index)
+        {
+            Vector2 point = IsTargetedMeteor(index) ? TargetPosition : RandomArenaPoint(_data.MeteorEdgeMargin);
+            _meteors[index].Launch(point, _data.MeteorFallTime, _data.MeteorRadius, _onMeteorImpact);
+        }
+
+        // 조준 유성은 소환 시간 전체에 고르게 나눠, 처음부터 끝까지 한곳에 서 있을 수 없게 한다.
+        private bool IsTargetedMeteor(int index)
+        {
+            int targeted = Mathf.Min(_data.MeteorTargetedCount, _meteors.Length);
+            for (int k = 0; k < targeted; k++)
+            {
+                if (index == Mathf.RoundToInt((k + 1f) * _meteors.Length / (targeted + 1f)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // 유성은 하늘에서 떨어지므로 구조물과 상관없이 맵 안 어디든 떨어진다.
+        private Vector2 RandomArenaPoint(float margin)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena == null)
+            {
+                return TargetPosition + Random.insideUnitCircle * 10f;
+            }
+
+            Bounds bounds = arena.Bounds;
+            return new Vector2(
+                Random.Range(bounds.min.x + margin, bounds.max.x - margin),
+                Random.Range(bounds.min.y + margin, bounds.max.y - margin));
+        }
+
+        private void OnMeteorImpact(Meteor meteor)
+        {
+            _meteorsLanded++;
+            HitOverlapping(meteor.Position, meteor.Radius);
+            FeedbackPlayer.Play(_data.MeteorImpactFeedback, meteor.Position);
+            AudioManager.Play(_data.MeteorImpactSound);
+        }
+
+        // ── 천지 가르기: 두 손으로 검을 높이 들고, 왕이 선 줄을 경계로 맵을 좌·우 또는 위·아래 절반으로 나눠 차례로 벤다.
+        // 먼저 벨 쪽으로 보라 웨이브가 퍼지고, 조금 뒤 반대쪽으로 퍼진다. 웨이브 순서가 곧 베는 순서다.
+        // 공략: 첫 베기 동안 반대쪽에 있다가, 두 베기 사이에 경계선을 넘어 이미 벤 쪽으로 건너간다. 벽과 상관없이 절반 전체를 벤다.
+
+        private void BeginSword()
+        {
+            _step = Step.SwordCharge;
+            _stepTime = 0f;
+            _swordOrigin = Body.position;
+            bool isHorizontal = Random.value < 0.5f;
+            float sign = Random.value < 0.5f ? 1f : -1f;
+            _swordFirstDirection = isHorizontal ? new Vector2(sign, 0f) : new Vector2(0f, sign);
+            _aimDirection = _swordFirstDirection;
+            _isSecondWaveShown = false;
+            _isSecondSlashDone = false;
+            ShowHalf(_halfFirst, _swordFirstDirection);
+        }
+
+        private bool TickSword(float deltaTime)
+        {
+            if (_step == Step.SwordCharge)
+            {
+                if (!_isSecondWaveShown && _stepTime >= _data.SwordWaveGap)
+                {
+                    _isSecondWaveShown = true;
+                    ShowHalf(_halfSecond, -_swordFirstDirection);
+                }
+
+                if (_stepTime >= _data.SwordWaveGap + _data.SwordWaveTime + _data.SwordWait)
+                {
+                    _step = Step.SwordSlash;
+                    _stepTime = 0f;
+                    SlashHalf(_halfFirst, _swordFirstDirection);
+                }
+
+                return false;
+            }
+
+            if (!_isSecondSlashDone)
+            {
+                if (_stepTime >= _data.SwordSlashGap)
+                {
+                    _isSecondSlashDone = true;
+                    _stepTime = 0f;
+                    SlashHalf(_halfSecond, -_swordFirstDirection);
+                }
+
+                return false;
+            }
+
+            return _stepTime >= _data.SwordRecover;
+        }
+
+        private void ShowHalf(HalfSlashWarning half, Vector2 direction)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            Bounds bounds = arena != null ? arena.Bounds : new Bounds(_swordOrigin, new Vector3(60f, 60f, 1f));
+            half.Show(bounds, _swordOrigin, direction, _data.SwordWaveTime);
+            AudioManager.Play(_data.SwordWaveSound);
+        }
+
+        // 경계선에서 그쪽 맵 끝까지, 맵 전체 폭으로 벤다.
+        private void SlashHalf(HalfSlashWarning half, Vector2 direction)
+        {
+            _aimDirection = direction;
+            half.Slash();
+            const float Reach = 200f;
+            HitInBox(direction, Reach, Reach * 2f, true);
+            FeedbackPlayer.Play(_data.SwordSlashFeedback, Body.position);
+            AudioManager.Play(_data.SwordSlashSound);
+        }
+
+        // 유성우 동안 맵이 보랏빛으로 물들고, 왕 주위에 보라 소용돌이가 돈다.
+        private void TickPhase3Visuals(float deltaTime)
+        {
+            bool isMeteor = _pattern == Pattern.Meteor && (State == EnemyState.Telegraph || State == EnemyState.Attack);
+            _meteorAura.enabled = isMeteor && _meteorAuraFrames != null && _meteorAuraFrames.Length > 0;
+            if (_meteorAura.enabled)
+            {
+                int frame = (int)(Time.time / MeteorAuraFrameTime) % _meteorAuraFrames.Length;
+                _meteorAura.sprite = _meteorAuraFrames[frame];
+            }
+
+            float target = isMeteor ? _data.MeteorTintAlpha : 0f;
+            if (isMeteor && !_mapTint.enabled)
+            {
+                PlaceMapTint();
+            }
+
+            _tintAlpha = Mathf.MoveTowards(_tintAlpha, target, _data.MeteorTintAlpha / _data.MeteorTintFadeTime * deltaTime);
+            Color color = _data.MeteorTintColor;
+            color.a = _tintAlpha;
+            _mapTint.color = color;
+            _mapTint.enabled = _tintAlpha > 0f;
+        }
+
+        // 맵은 전투 중 움직이지 않지만, 보스가 만들어질 때는 맵 범위가 아직 안 잡혀 있을 수 있어 쓸 때 맞춘다.
+        private void PlaceMapTint()
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena == null)
+            {
+                return;
+            }
+
+            Bounds bounds = arena.Bounds;
+            Transform tint = _mapTint.transform;
+            tint.position = bounds.center;
+            float size = _mapTint.sprite != null ? _mapTint.sprite.bounds.size.x : 1f;
+            tint.localScale = new Vector3(bounds.size.x / size, bounds.size.y / size, 1f);
+        }
+
+        private void HidePhase3Effects()
+        {
+            if (_meteors != null)
+            {
+                for (int i = 0; i < _meteors.Length; i++)
+                {
+                    _meteors[i].Hide();
+                }
+            }
+
+            _halfFirst.Hide();
+            _halfSecond.Hide();
+            _meteorAura.enabled = false;
+            _tintAlpha = 0f;
+            _mapTint.enabled = false;
+        }
+
         // ── 왕관 부메랑: 왕관이 벽을 뚫고 날아갔다가 돌아온다. 날아가 있는 동안 왕은 무적이 아니다.
 
         private void ThrowCrown()
@@ -1582,6 +1910,7 @@ namespace ExplodeIt.Enemies
             SetShrink(1f);
             _popCenterHeight = center;
             _popTime = 0f;
+            _lookPhase = Mathf.Min(_hitsTaken + 1, Rotations.Length);
             SetRage(true);
             FeedbackPlayer.Play(_data.PhaseShiftFeedback, Body.position + Vector2.up * center);
             AudioManager.Play(_data.PhaseShiftSound != null ? _data.PhaseShiftSound : _data.CrownCatchSound);
@@ -1618,8 +1947,29 @@ namespace ExplodeIt.Enemies
         private void SetRage(bool isOn)
         {
             _isRaging = isOn;
-            SetRageEmitter(_rageFlames, isOn, _data.RageFlameRate);
+            // 3국면은 보랏빛이라 붉은 불꽃은 끄고, 불티만 보라색으로 날린다.
+            bool isPurple = isOn && _lookPhase >= 3;
+            SetRageEmitter(_rageFlames, isOn && !isPurple, _data.RageFlameRate);
             SetRageEmitter(_rageEmbers, isOn, _data.RageEmberRate);
+            if (isPurple)
+            {
+                SetEmberColor(_data.Phase3EmberStart, _data.Phase3EmberEnd);
+            }
+            else
+            {
+                ParticleSystem.ColorOverLifetimeModule colorOverLifetime = _rageEmbers.colorOverLifetime;
+                colorOverLifetime.color = _emberBaseColor;
+            }
+        }
+
+        private void SetEmberColor(Color start, Color end)
+        {
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new[] { new GradientColorKey(start, 0f), new GradientColorKey(end, 1f) },
+                new[] { new GradientAlphaKey(0f, 0f), new GradientAlphaKey(1f, 0.15f), new GradientAlphaKey(0f, 1f) });
+            ParticleSystem.ColorOverLifetimeModule colorOverLifetime = _rageEmbers.colorOverLifetime;
+            colorOverLifetime.color = new ParticleSystem.MinMaxGradient(gradient);
         }
 
         private static void SetRageEmitter(ParticleSystem particles, bool isOn, float rate)
