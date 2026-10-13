@@ -10,7 +10,8 @@ namespace ExplodeIt.Enemies
     // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면부터는 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하를 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
-    // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오는 연출을 거친다.
+    // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오면, 각성 때처럼 쏙 줄었다가 팍 커지며
+    // 몸 둘레에 가는 불꽃과 불티가 일렁이는 분노 오라가 켜진다.
     // 예측 과제: 왕관이 날아가 있는 짧은 시간 동안 걸어오는 왕의 1초 뒤 자리에 폭탄을 두고, 돌아오는 왕관도 피한다.
     public class AwakenedKingBoss : Enemy, IBoss
     {
@@ -109,6 +110,11 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SpriteRenderer _chibi;
         // 변신하며 떠는 동안 튀는 불티.
         [SerializeField] private ParticleSystem _transformAura;
+        // 각성 모습 그림. 국면 전환에서 줄었다 커질 때 그림 한가운데를 잡는 데 쓴다.
+        [SerializeField] private SpriteRenderer _bodyRenderer;
+        // 2국면부터 켜지는 분노 오라: 몸 둘레에서 일렁이는 가는 불꽃과 위로 날리는 불티.
+        [SerializeField] private ParticleSystem _rageFlames;
+        [SerializeField] private ParticleSystem _rageEmbers;
         [SerializeField] private ExplosionShape _slashRange;
         [SerializeField] private ExplosionShape _slashFill;
         [SerializeField] private TelegraphLine _aimLine;
@@ -190,6 +196,14 @@ namespace ExplodeIt.Enemies
         private Vector3 _dropShadowScale;
         private Vector3 _crownReturnFromScale;
 
+        // 국면 전환 끝에 쏙 줄어드는 정도 (1 = 원래 크기). 줄고 커질 때 기준이 되는 그림 한가운데 높이 (유닛).
+        private float _shrinkSize = 1f;
+        private float _popCenterHeight;
+        private float _auraBaseRate;
+        private Vector3 _auraBaseScale;
+        // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
+        private bool _isRaging;
+
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
         private Vector3 _crownPositionLocal;
@@ -214,6 +228,9 @@ namespace ExplodeIt.Enemies
             _crownPositionLocal = _crown.transform.localPosition;
             _crownScale = _crown.transform.localScale;
             _leapShadowScale = _leapShadow.transform.localScale;
+            _auraBaseRate = _transformAura.emission.rateOverTimeMultiplier;
+            _auraBaseScale = _transformAura.shape.scale;
+            SetRage(false);
             _leapShadow.enabled = false;
             _standFilter.useTriggers = false;
             _standFilter.SetLayerMask(ObstacleMask);
@@ -310,6 +327,8 @@ namespace ExplodeIt.Enemies
             _crownDropTime = -1f;
             _isCrownReturning = false;
             _visual.Jitter = 0f;
+            _shrinkSize = 1f;
+            SetRage(false);
             // 왕관 횟수만큼은 맞아도 버티고, 그로기 때의 한 방에 쓰러진다.
             HitReceiver.ResetHits(_data.CrownHits + 1);
             HitReceiver.IsShielded = true;
@@ -324,6 +343,7 @@ namespace ExplodeIt.Enemies
             _zoomHoldTime = -1f;
             TickTransform(0f);
             ZoomIn();
+            SetAuraStrength(1f, 1f);
             _transformAura.Play();
             AudioManager.Play(_data.TransformChargeSound);
         }
@@ -373,6 +393,7 @@ namespace ExplodeIt.Enemies
             }
 
             TickPop(deltaTime);
+            TickRage(deltaTime);
             TickKnockback(deltaTime);
             TickCrownFall(deltaTime);
             if (_shiftTime >= 0f)
@@ -456,6 +477,7 @@ namespace ExplodeIt.Enemies
             _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
             _visual.Alpha = 1f;
+            _popCenterHeight = ChibiCenterHeight();
             _popTime = 0f;
             _zoomHoldTime = 0f;
             FeedbackPlayer.Play(_data.TransformFeedback, center);
@@ -502,7 +524,7 @@ namespace ExplodeIt.Enemies
             _popTime += deltaTime;
             float size = CurrentPopScale();
             // 0에서 커지는 동안 2등신이 사라진 한가운데에서 솟아나게 그림을 들어 올렸다가 내려놓는다.
-            _visual.Lift = ChibiCenterHeight() * (1f - size);
+            _visual.Lift = _popCenterHeight * (1f - size);
             if (_popTime >= PopDuration)
             {
                 _popTime = -1f;
@@ -684,6 +706,7 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Dead:
                     _crown.enabled = false;
+                    SetRage(false);
                     _flyingCrown.gameObject.SetActive(false);
                     FeedbackPlayer.Play(_data.DefeatFeedback, Body.position);
                     GameEvents.RaiseBossDefeated(_bossNumber);
@@ -1476,12 +1499,15 @@ namespace ExplodeIt.Enemies
         private void TickPhaseShift(float deltaTime)
         {
             _shiftTime += deltaTime;
-            float returnStart = _data.PhaseShiftDuration - _data.CrownReturnTime;
+            // 끝에서부터: 쏙 줄어드는 시간, 그 앞이 왕관이 돌아오는 시간이다. 다 줄어든 순간 팍 커지며 다시 싸운다.
+            float returnEnd = _data.PhaseShiftDuration - ShrinkDuration;
+            float returnStart = returnEnd - _data.CrownReturnTime;
 
             if (!_isShoutDone && _shiftTime >= _data.PhaseLineDelay)
             {
                 _isShoutDone = true;
                 _visual.Jitter = RageJitter;
+                SetAuraStrength(_data.PhaseAuraRateMultiplier, _data.PhaseAuraRangeMultiplier);
                 _transformAura.Play();
                 GameEvents.RaiseBossLineRequested(_data.GetPhaseLine(_hitsTaken), returnStart - _data.PhaseLineDelay);
             }
@@ -1498,7 +1524,20 @@ namespace ExplodeIt.Enemies
                 _crownDropTime = -1f;
                 _crownReturnFromScale = _flyingCrown.localScale;
                 _visual.Jitter = 0f;
-                _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
+
+            // 왕관이 머리에 닿으면 각성 때처럼 그림 한가운데로 쏙 줄어든다.
+            if (_shiftTime >= returnEnd)
+            {
+                _flyingCrown.gameObject.SetActive(false);
+                float shrink = Mathf.Clamp01((_shiftTime - returnEnd) / ShrinkDuration);
+                SetShrink(1f - shrink * shrink);
+                if (shrink >= 1f)
+                {
+                    FinishPhaseShift();
+                }
+
+                return;
             }
 
             float t = Mathf.Clamp01((_shiftTime - returnStart) / _data.CrownReturnTime);
@@ -1506,10 +1545,6 @@ namespace ExplodeIt.Enemies
             _flyingCrown.position = Vector2.Lerp(_crownGround, HeadCrownPosition(), ease) + Vector2.up * (4f * CrownReturnArc * t * (1f - t));
             _flyingCrown.localScale = Vector3.Lerp(_crownReturnFromScale, _flyingCrownScale, ease);
             _flyingCrown.Rotate(0f, 0f, -900f * deltaTime);
-            if (t >= 1f)
-            {
-                FinishPhaseShift();
-            }
         }
 
         private void FinishPhaseShift()
@@ -1522,10 +1557,77 @@ namespace ExplodeIt.Enemies
             _flyingCrown.gameObject.SetActive(false);
             _flyingCrown.localScale = _flyingCrownScale;
             SetCrown(true);
-            _visual.Flash(_data.ImmuneFlashColor, 0.3f);
-            FeedbackPlayer.Play(_data.PhaseShiftFeedback, Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f));
+            // 쏙 줄었던 자리에서 팍 커지며(각성 때와 같은 넘침) 분노 오라가 켜진다.
+            float center = BodyCenterHeight();
+            SetShrink(1f);
+            _popCenterHeight = center;
+            _popTime = 0f;
+            SetRage(true);
+            FeedbackPlayer.Play(_data.PhaseShiftFeedback, Body.position + Vector2.up * center);
             AudioManager.Play(_data.PhaseShiftSound != null ? _data.PhaseShiftSound : _data.CrownCatchSound);
             ReleasePhaseCamera(_data.ZoomOutTime);
+        }
+
+        // 그림 피벗이 발밑이라, 줄어드는 만큼 들어 올려 그림 한가운데를 기준으로 줄어들게 한다.
+        private void SetShrink(float size)
+        {
+            _shrinkSize = size;
+            _visual.Lift = BodyCenterHeight() * (1f - size);
+        }
+
+        // 각성 모습 그림 한가운데가 발밑에서 얼마나 위인지 (유닛).
+        private float BodyCenterHeight()
+        {
+            Sprite sprite = _bodyRenderer.sprite;
+            return sprite != null ? sprite.bounds.center.y * _bodyRenderer.transform.localScale.y : 0f;
+        }
+
+        // 변신·국면 전환에서 떠는 동안 튀는 불티의 양과 범위. 처음 각성 기준(1배)에 곱한다.
+        private void SetAuraStrength(float rateMultiplier, float rangeMultiplier)
+        {
+            ParticleSystem.EmissionModule emission = _transformAura.emission;
+            emission.rateOverTimeMultiplier = _auraBaseRate * rateMultiplier;
+            ParticleSystem.ShapeModule shape = _transformAura.shape;
+            shape.scale = _auraBaseScale * rangeMultiplier;
+        }
+
+        // ── 분노 오라: 2국면부터 몸 둘레에서 가는 불꽃이 짧게 일렁이다 꺼지고, 불티가 위로 날린다.
+        // 바닥에는 아무것도 깔지 않는다. 바닥의 빨간 원은 공격 예고만의 언어로 남긴다.
+        // 도약해 공중에 있는 동안은 왕이 화면 밖이므로 끈다(그림자만 남아야 착지 자리가 또렷하다).
+
+        private void SetRage(bool isOn)
+        {
+            _isRaging = isOn;
+            SetRageEmitter(_rageFlames, isOn, _data.RageFlameRate);
+            SetRageEmitter(_rageEmbers, isOn, _data.RageEmberRate);
+        }
+
+        private static void SetRageEmitter(ParticleSystem particles, bool isOn, float rate)
+        {
+            if (isOn)
+            {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.rateOverTimeMultiplier = rate;
+                emission.enabled = true;
+                particles.Play();
+                return;
+            }
+
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+
+        private void TickRage(float deltaTime)
+        {
+            if (!_isRaging)
+            {
+                return;
+            }
+
+            bool isVisible = _leapHeight <= 0f;
+            ParticleSystem.EmissionModule flames = _rageFlames.emission;
+            flames.enabled = isVisible;
+            ParticleSystem.EmissionModule embers = _rageEmbers.emission;
+            embers.enabled = isVisible;
         }
 
         private void ReleasePhaseCamera(float blendDuration)
@@ -1622,7 +1724,7 @@ namespace ExplodeIt.Enemies
                     break;
                 default:
                     float pop = CurrentPopScale();
-                    _visual.ExtraScale = new Vector2(pop, pop) * LeapSquash();
+                    _visual.ExtraScale = new Vector2(pop, pop) * (LeapSquash() * _shrinkSize);
                     _visual.ExtraLean = 0f;
                     break;
             }

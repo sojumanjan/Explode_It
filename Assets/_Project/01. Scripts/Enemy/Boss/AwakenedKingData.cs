@@ -50,6 +50,19 @@ namespace ExplodeIt.Enemies
         [Tooltip("국면 전환 동안 플레이어 조작을 막는다. 끄면 연출 중에도 움직일 수 있다(왕은 그래도 무적)")]
         [SerializeField] private bool _locksPlayerOnPhaseShift = true;
 
+        [Tooltip("국면 전환에서 분노하며 떠는 동안 튀는 불티 개수 배율. 처음 각성할 때(1배)보다 많게 둔다")]
+        [SerializeField, Min(0f)] private float _phaseAuraRateMultiplier = 2f;
+
+        [Tooltip("국면 전환에서 불티가 튀는 범위 배율. 처음 각성할 때(1배) 범위에 곱한다")]
+        [SerializeField, Min(0.1f)] private float _phaseAuraRangeMultiplier = 1.5f;
+
+        [Header("분노 오라 (2국면부터)")]
+        [Tooltip("몸 둘레에서 일렁이며 피어오르는 가는 불꽃 수 (개/초)")]
+        [SerializeField, Min(0f)] private float _rageFlameRate = 18f;
+
+        [Tooltip("몸 둘레에서 위로 날리는 불티 수 (개/초)")]
+        [SerializeField, Min(0f)] private float _rageEmberRate = 30f;
+
         [Header("등장")]
         [Tooltip("2등신 왕이 불티 속에서 떠는 시간 (초). 끝나면 쏙 줄어들었다가 팍 커지며 각성 모습으로 바뀐다. 보스가 나타나는 대화 줄의 멈춤 시간보다 짧게 둔다")]
         [SerializeField, Min(0.1f)] private float _transformDuration = 1.4f;
@@ -261,6 +274,10 @@ namespace ExplodeIt.Enemies
         public float PhaseZoom => _phaseZoom;
         public float PhaseZoomInTime => _phaseZoomInTime;
         public bool LocksPlayerOnPhaseShift => _locksPlayerOnPhaseShift;
+        public float PhaseAuraRateMultiplier => _phaseAuraRateMultiplier;
+        public float PhaseAuraRangeMultiplier => _phaseAuraRangeMultiplier;
+        public float RageFlameRate => _rageFlameRate;
+        public float RageEmberRate => _rageEmberRate;
         public SoundData PhaseShiftSound => _phaseShiftSound;
         public FeedbackData PhaseShiftFeedback => _phaseShiftFeedback;
 
