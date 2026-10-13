@@ -167,6 +167,62 @@ namespace ExplodeIt.Enemies
         [Tooltip("왕관이 날아가 있는 동안 왕이 플레이어 쪽으로 걷는 속도 (유닛/초). 0이면 제자리에 선다")]
         [SerializeField, Min(0f)] private float _crownlessWalkSpeed = 1.2f;
 
+        [Header("도약 내려찍기 (2국면부터, 왕관을 쓴 채라 무적)")]
+        [Tooltip("한 번 패턴에 연달아 뛰는 횟수 (번)")]
+        [SerializeField, Min(1)] private int _leapCount = 2;
+
+        [Tooltip("땅을 박차고 화면 위로 솟구치는 시간 (초). 이때 바닥에 그림자가 생긴다")]
+        [SerializeField, Min(0.05f)] private float _leapRiseTime = 0.35f;
+
+        [Tooltip("공중에서 그림자가 플레이어를 따라가는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _leapTrackTime = 0.8f;
+
+        [Tooltip("그림자가 플레이어를 따라가는 속도 (유닛/초). 플레이어 이동 속도보다 느리면 계속 걸어 따돌릴 수 있다")]
+        [SerializeField, Min(0f)] private float _leapTrackSpeed = 9f;
+
+        [Tooltip("그림자가 멈춘 뒤 착지까지 (초). 이 동안 빨간 원이 차오르고, 다 차는 순간 내려찍는다. 폭탄 지연(1초)과 같게 두면 멈춘 순간 그 자리에 던진 폭탄이 착지에 맞춰 터진다")]
+        [SerializeField, Min(0.1f)] private float _leapLockTime = 1f;
+
+        [Tooltip("원이 다 차기 직전 하늘에서 떨어지는 시간 (초). 고정 시간 안에 포함된다")]
+        [SerializeField, Min(0.01f)] private float _leapFallTime = 0.12f;
+
+        [Tooltip("내려찍기 판정 반경 (유닛)")]
+        [SerializeField, Min(0.1f)] private float _leapRadius = 2.2f;
+
+        [Tooltip("착지한 뒤 멈춰 있는 시간 (초). 지나면 다음 도약을 하거나 패턴을 마친다")]
+        [SerializeField, Min(0f)] private float _leapLandTime = 0.5f;
+
+        [Header("왕관 투하 (2국면부터, 유일한 공격 기회)")]
+        [Tooltip("왕관을 머리 위로 높이 들어 올리는 예고 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _crownDropWindup = 0.5f;
+
+        [Tooltip("왕관을 하늘로 던져 올리는 시간 (초). 던지는 순간부터 왕관이 없어 맞는다")]
+        [SerializeField, Min(0.05f)] private float _crownDropThrowTime = 0.3f;
+
+        [Tooltip("떨어질 자리(큰 그림자)가 플레이어를 따라가는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _crownDropTrackTime = 0.5f;
+
+        [Tooltip("떨어질 자리가 플레이어를 따라가는 속도 (유닛/초)")]
+        [SerializeField, Min(0f)] private float _crownDropTrackSpeed = 10f;
+
+        [Tooltip("떨어질 자리가 멈춘 뒤 왕관이 박히기까지 (초). 이 동안 금빛 원이 차오른다")]
+        [SerializeField, Min(0.1f)] private float _crownDropLockTime = 1f;
+
+        [Tooltip("원이 다 차기 직전 왕관이 하늘에서 떨어지는 시간 (초). 고정 시간 안에 포함된다")]
+        [SerializeField, Min(0.01f)] private float _crownDropFallTime = 0.2f;
+
+        [Tooltip("왕관이 박히는 판정 반경 (유닛)")]
+        [SerializeField, Min(0.1f)] private float _crownDropRadius = 2.5f;
+
+        [Tooltip("왕관이 박힌 뒤 왕이 휘청이다가 주우러 달리기 시작하기까지 (초)")]
+        [SerializeField, Min(0f)] private float _crownDropStagger = 0.3f;
+
+        [Tooltip("왕관을 주우러 달리는 속도 (유닛/초). 가장 짧은 길로 달려가므로, 느릴수록 맞힐 시간이 길다")]
+        [SerializeField, Min(0.1f)] private float _crownRetrieveSpeed = 6f;
+
+        [Tooltip("달리기 시작한 뒤 이 시간 (초) 안에 못 주우면 왕관이 스스로 날아 돌아온다")]
+        [SerializeField, Min(0.1f)] private float _crownRetrieveTimeout = 4f;
+
         [Header("사운드")]
         [SerializeField, Tooltip("떨기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
@@ -178,12 +234,17 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 효과음")] private SoundData _hurtSound;
         [SerializeField, Tooltip("그로기에 빠지는 순간의 효과음")] private SoundData _groggySound;
         [SerializeField, Tooltip("왕관에 막힌 순간의 효과음")] private SoundData _immuneSound;
+        [SerializeField, Tooltip("도약해 솟구치는 순간의 효과음")] private SoundData _leapSound;
+        [SerializeField, Tooltip("내려찍는 순간의 효과음")] private SoundData _leapImpactSound;
+        [SerializeField, Tooltip("던져 올린 왕관이 땅에 박히는 순간의 효과음")] private SoundData _crownDropImpactSound;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 효과음. 비우면 왕관을 받는 효과음을 쓴다")] private SoundData _phaseShiftSound;
 
         [Header("연출")]
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 연출 (흔들림, 히트스톱, 폭발). 그림 한가운데서 터진다")] private FeedbackData _transformFeedback;
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 연출")] private FeedbackData _hurtFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
+        [SerializeField, Tooltip("도약 후 내려찍는 순간의 연출 (흔들림, 먼지). 착지 자리에서 터진다")] private FeedbackData _leapImpactFeedback;
+        [SerializeField, Tooltip("왕관이 땅에 박히는 순간의 연출 (흔들림, 먼지). 박힌 자리에서 터진다")] private FeedbackData _crownDropImpactFeedback;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
@@ -248,6 +309,29 @@ namespace ExplodeIt.Enemies
         public float CrownHangTime => _crownHangTime;
         public float CrownHitRadius => _crownHitRadius;
         public float CrownlessWalkSpeed => _crownlessWalkSpeed;
+        public int LeapCount => _leapCount;
+        public float LeapRiseTime => _leapRiseTime;
+        public float LeapTrackTime => _leapTrackTime;
+        public float LeapTrackSpeed => _leapTrackSpeed;
+        public float LeapLockTime => _leapLockTime;
+        public float LeapFallTime => _leapFallTime;
+        public float LeapRadius => _leapRadius;
+        public float LeapLandTime => _leapLandTime;
+        public SoundData LeapSound => _leapSound;
+        public SoundData LeapImpactSound => _leapImpactSound;
+        public FeedbackData LeapImpactFeedback => _leapImpactFeedback;
+        public float CrownDropWindup => _crownDropWindup;
+        public float CrownDropThrowTime => _crownDropThrowTime;
+        public float CrownDropTrackTime => _crownDropTrackTime;
+        public float CrownDropTrackSpeed => _crownDropTrackSpeed;
+        public float CrownDropLockTime => _crownDropLockTime;
+        public float CrownDropFallTime => _crownDropFallTime;
+        public float CrownDropRadius => _crownDropRadius;
+        public float CrownDropStagger => _crownDropStagger;
+        public float CrownRetrieveSpeed => _crownRetrieveSpeed;
+        public float CrownRetrieveTimeout => _crownRetrieveTimeout;
+        public SoundData CrownDropImpactSound => _crownDropImpactSound;
+        public FeedbackData CrownDropImpactFeedback => _crownDropImpactFeedback;
         public SoundData TransformSound => _transformSound;
         public SoundData DodgeSound => _dodgeSound;
         public SoundData SlashSound => _slashSound;

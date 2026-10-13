@@ -7,7 +7,8 @@ namespace ExplodeIt.Enemies
 {
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이고, 근처에 폭탄이 떨어지면 굴러서 피한다(쿨타임 없음).
-    // 패턴은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑을 차례로 돈다. 왕관 부메랑으로 왕관이 날아가 있는 동안만 맞는다.
+    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면부터는 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하를 차례로 돈다.
+    // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
     // 국면이 바뀔 때는 밀려나며 왕관을 떨어뜨리고, 분노 대사를 외친 뒤 왕관이 머리로 날아 돌아오는 연출을 거친다.
     // 예측 과제: 왕관이 날아가 있는 짧은 시간 동안 걸어오는 왕의 1초 뒤 자리에 폭탄을 두고, 돌아오는 왕관도 피한다.
@@ -39,6 +40,18 @@ namespace ExplodeIt.Enemies
         private const float CrownReturnArc = 1.5f;
         // 분노 대사를 외치는 동안 몸이 떠는 폭 (유닛).
         private const float RageJitter = 0.05f;
+        // 도약할 때 그림이 솟구치는 높이 (유닛). 화면 밖으로 사라질 만큼 높게 둔다.
+        private const float LeapHeight = 14f;
+        // 착지 자리가 구조물에 걸리면 설 수 있는 자리를 찾는 간격과 최대 거리 (유닛), 방향 수.
+        private const float LandSearchStep = 0.25f;
+        private const float LandSearchMax = 3f;
+        private const int LandSearchDirections = 16;
+        // 공중에서 그림자가 가장 작을 때의 크기 비율. 왕이 내려올수록 원래 크기로 커진다.
+        private const float LeapShadowMinScale = 0.55f;
+        // 왕관 투하 예고 때 왕관이 머리 위로 올라가는 높이 (유닛), 던진 왕관이 커지는 배율, 왕관을 주웠다고 보는 거리 (유닛).
+        private const float CrownRaiseHeight = 1f;
+        private const float BigCrownScale = 2f;
+        private const float CrownPickupDistance = 0.6f;
 
         private static readonly Collider2D[] StandBuffer = new Collider2D[4];
 
@@ -46,7 +59,9 @@ namespace ExplodeIt.Enemies
         {
             Slash,
             Lunge,
-            Crown
+            Crown,
+            Leap,
+            CrownDrop
         }
 
         private enum Step
@@ -58,7 +73,17 @@ namespace ExplodeIt.Enemies
             Dash,
             CrownOut,
             CrownHang,
-            CrownBack
+            CrownBack,
+            LeapRise,
+            LeapTrack,
+            LeapLock,
+            LeapLand,
+            DropThrow,
+            DropTrack,
+            DropLock,
+            DropStagger,
+            DropRetrieve,
+            DropReturn
         }
 
         private enum DodgePhase
@@ -68,7 +93,13 @@ namespace ExplodeIt.Enemies
             Roll
         }
 
-        private static readonly Pattern[] Rotation = { Pattern.Slash, Pattern.Lunge, Pattern.Crown };
+        // 국면별 패턴 순서. 맞을 때마다 다음 국면으로 넘어가고, 마지막 국면 순서를 그 뒤로도 쓴다.
+        // 각 국면의 마지막 패턴이 왕관이 머리를 떠나는(맞을 수 있는) 유일한 기회다.
+        private static readonly Pattern[][] Rotations =
+        {
+            new[] { Pattern.Slash, Pattern.Lunge, Pattern.Crown },
+            new[] { Pattern.Slash, Pattern.Leap, Pattern.CrownDrop }
+        };
 
         [SerializeField] private AwakenedKingData _data;
         [SerializeField] private EnemyVisual _visual;
@@ -88,6 +119,14 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _slashReadySprite;
         [SerializeField] private Sprite[] _slashFrames;
         [SerializeField] private Sprite _thrustSprite;
+        // 도약해 공중에 있는 동안의 그림. 비워 두면 기본 그림이다.
+        [SerializeField] private Sprite _leapSprite;
+        // 도약 중 바닥에 드리우는 그림자. 왕 발밑(루트 자식)에 두고 도약할 때만 켠다.
+        [SerializeField] private SpriteRenderer _leapShadow;
+        // 왕관 투하의 떨어질 자리 표시(큰 그림자, 금빛 범위 원과 채움). 왕이 걸어 다녀도 그 자리에 있어야 하므로 시작할 때 월드로 뗀다.
+        [SerializeField] private SpriteRenderer _dropShadow;
+        [SerializeField] private ExplosionShape _dropRange;
+        [SerializeField] private ExplosionShape _dropFill;
 
         private int _bossNumber;
         private bool _isFighting;
@@ -138,6 +177,19 @@ namespace ExplodeIt.Enemies
         private Vector2 _crownDropFrom;
         private Vector2 _crownGround;
 
+        // 도약으로 그림이 떠 있는 높이 (유닛). 머리 위 왕관도 같이 띄운다.
+        private float _leapHeight;
+        private Vector3 _leapShadowScale;
+
+        // 왕관 투하 예고로 머리 위 왕관을 들어 올린 높이 (유닛).
+        private float _crownRaise;
+        // 왕관이 떨어질(떨어진) 자리와, 아직 하늘에 있는지.
+        private Vector2 _dropPoint;
+        private bool _isCrownAirborne;
+        private Vector3 _flyingCrownScale;
+        private Vector3 _dropShadowScale;
+        private Vector3 _crownReturnFromScale;
+
         private Vector3 _chibiPosition;
         private Vector3 _chibiScale;
         private Vector3 _crownPositionLocal;
@@ -149,7 +201,8 @@ namespace ExplodeIt.Enemies
         protected override bool RequiresLineOfSight => false;
         public override Vector2 AimDirection =>
             State == EnemyState.Telegraph || State == EnemyState.Attack ? _aimDirection : DirectionToTarget();
-        public override float TelegraphDuration => _pattern == Pattern.Crown ? _data.CrownWindup : _data.PatternStartup;
+        public override float TelegraphDuration =>
+            _pattern == Pattern.Crown ? _data.CrownWindup : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
 
         private bool IsDodging => _dodge != DodgePhase.None;
 
@@ -160,10 +213,18 @@ namespace ExplodeIt.Enemies
             _chibiScale = _chibi.transform.localScale;
             _crownPositionLocal = _crown.transform.localPosition;
             _crownScale = _crown.transform.localScale;
+            _leapShadowScale = _leapShadow.transform.localScale;
+            _leapShadow.enabled = false;
             _standFilter.useTriggers = false;
             _standFilter.SetLayerMask(ObstacleMask);
             _flyingCrown.SetParent(null);
             _flyingCrown.gameObject.SetActive(false);
+            _flyingCrownScale = _flyingCrown.localScale;
+            _dropShadowScale = _dropShadow.transform.localScale;
+            _dropShadow.transform.SetParent(null);
+            _dropRange.transform.SetParent(null);
+            _dropFill.transform.SetParent(null);
+            HideDropMarker();
         }
 
         protected override void OnEnable()
@@ -188,6 +249,11 @@ namespace ExplodeIt.Enemies
                 _flyingCrown.gameObject.SetActive(false);
             }
 
+            if (_dropShadow != null)
+            {
+                HideDropMarker();
+            }
+
             // 변신 도중 사라지면(개발자 패널 전멸 등) 확대된 채 남지 않게 바로 되돌린다.
             if (_isZoomed)
             {
@@ -206,6 +272,22 @@ namespace ExplodeIt.Enemies
             if (_flyingCrown != null)
             {
                 Destroy(_flyingCrown.gameObject);
+            }
+
+            // 월드로 떼어 둔 표시들은 보스와 함께 사라지지 않으므로 직접 지운다.
+            if (_dropShadow != null)
+            {
+                Destroy(_dropShadow.gameObject);
+            }
+
+            if (_dropRange != null)
+            {
+                Destroy(_dropRange.gameObject);
+            }
+
+            if (_dropFill != null)
+            {
+                Destroy(_dropFill.gameObject);
             }
         }
 
@@ -292,7 +374,7 @@ namespace ExplodeIt.Enemies
 
             TickPop(deltaTime);
             TickKnockback(deltaTime);
-            TickCrownDrop(deltaTime);
+            TickCrownFall(deltaTime);
             if (_shiftTime >= 0f)
             {
                 TickPhaseShift(deltaTime);
@@ -314,6 +396,10 @@ namespace ExplodeIt.Enemies
             else if (State == EnemyState.Attack && _pattern == Pattern.Lunge && _step == Step.Dash)
             {
                 pose = _thrustSprite;
+            }
+            else if (State == EnemyState.Attack && _pattern == Pattern.Leap && _step != Step.LeapLand)
+            {
+                pose = _leapSprite;
             }
 
             _visual.PoseSprite = pose;
@@ -470,7 +556,7 @@ namespace ExplodeIt.Enemies
             float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 6f);
             _crown.color = Color.Lerp(new Color(1f, 0.85f, 0.4f, 1f), Color.white, pulse);
             _crown.transform.localScale = _crownScale * (1f + 0.06f * pulse);
-            _crown.transform.localPosition = _crownPositionLocal + Vector3.up * (CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
+            _crown.transform.localPosition = _crownPositionLocal + Vector3.up * (_leapHeight + _crownRaise + CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
         }
 
         // 패턴 사이에는 일정 거리까지 다가온다. 구르는 중이면 구르기만 한다.
@@ -502,6 +588,14 @@ namespace ExplodeIt.Enemies
         // 왕관 부메랑은 던질 방향을 따라가다 마지막에 고정한다.
         protected override void TickTelegraph(float deltaTime)
         {
+            // 왕관 투하는 왕관을 머리 위로 천천히 들어 올리는 것이 예고다.
+            if (_pattern == Pattern.CrownDrop)
+            {
+                float t = Mathf.Clamp01(StateTime / _data.CrownDropWindup);
+                _crownRaise = CrownRaiseHeight * t * t * (3f - 2f * t);
+                return;
+            }
+
             if (_pattern != Pattern.Crown)
             {
                 return;
@@ -524,6 +618,10 @@ namespace ExplodeIt.Enemies
                     return TickSlash(deltaTime);
                 case Pattern.Lunge:
                     return TickLunge(deltaTime);
+                case Pattern.Leap:
+                    return TickLeap(deltaTime);
+                case Pattern.CrownDrop:
+                    return TickCrownDrop(deltaTime);
                 default:
                     return TickCrown(deltaTime);
             }
@@ -534,8 +632,9 @@ namespace ExplodeIt.Enemies
             switch (state)
             {
                 case EnemyState.Telegraph:
-                    _pattern = Rotation[_rotationIndex];
-                    _rotationIndex = (_rotationIndex + 1) % Rotation.Length;
+                    Pattern[] rotation = CurrentRotation();
+                    _pattern = rotation[_rotationIndex % rotation.Length];
+                    _rotationIndex = (_rotationIndex + 1) % rotation.Length;
                     _aimDirection = DirectionToTarget();
                     HideTelegraphs();
                     return;
@@ -550,6 +649,14 @@ namespace ExplodeIt.Enemies
                     else if (_pattern == Pattern.Lunge)
                     {
                         BeginBackstep();
+                    }
+                    else if (_pattern == Pattern.Leap)
+                    {
+                        BeginLeap();
+                    }
+                    else if (_pattern == Pattern.CrownDrop)
+                    {
+                        BeginCrownDrop();
                     }
                     else
                     {
@@ -585,6 +692,15 @@ namespace ExplodeIt.Enemies
 
             _dodge = DodgePhase.None;
             HideTelegraphs();
+            // 도약 도중 끊기면(기절·사망) 떠 있던 그림과 그림자를 바로 내려놓는다.
+            EndLeapVisual();
+            _crownRaise = 0f;
+            _isCrownAirborne = false;
+        }
+
+        private Pattern[] CurrentRotation()
+        {
+            return Rotations[Mathf.Min(_hitsTaken, Rotations.Length - 1)];
         }
 
         // ── 왕검 연속 베기: 플레이어에게 일직선으로 파고들어 벨 거리에서 멈추고, 부채꼴이 차오르면 벤다. 이를 정해진 횟수만큼.
@@ -790,6 +906,371 @@ namespace ExplodeIt.Enemies
             return _dashRemaining <= 0.0001f;
         }
 
+        // ── 도약 내려찍기: 화면 위로 솟구쳐 사라지고, 바닥의 그림자가 플레이어를 따라가다 멈춘다. 멈춘 자리에 빨간 원이 차오르고
+        // 다 차는 순간 내려찍는다. 멈춘 순간 그 자리에 폭탄을 던지면 착지에 맞춰 터지는 "1초 뒤 예측" 시험이다(왕관을 쓰고 있어 맞지는 않는다).
+        // 공중에 있는 동안 몸(판정 위치)은 그림자와 함께 움직이고 그림만 높이 떠 있다. 공중이라 벽을 넘어 따라간다.
+
+        private void BeginLeap()
+        {
+            _step = Step.LeapRise;
+            _stepTime = 0f;
+            _leapShadow.enabled = true;
+            AudioManager.Play(_data.LeapSound);
+        }
+
+        private bool TickLeap(float deltaTime)
+        {
+            switch (_step)
+            {
+                case Step.LeapRise:
+                    float rise = Mathf.Clamp01(_stepTime / _data.LeapRiseTime);
+                    SetLeapHeight(LeapHeight * rise * rise);
+                    if (rise >= 1f)
+                    {
+                        _step = Step.LeapTrack;
+                        _stepTime = 0f;
+                    }
+
+                    return false;
+
+                case Step.LeapTrack:
+                    TrackLeapTarget(deltaTime);
+                    if (_stepTime >= _data.LeapTrackTime)
+                    {
+                        LockLeap();
+                    }
+
+                    return false;
+
+                case Step.LeapLock:
+                    float fill = Mathf.Clamp01(_stepTime / _data.LeapLockTime);
+                    _slashFill.SetRadius(_data.LeapRadius * fill);
+                    // 원이 다 차는 순간 땅에 닿도록, 고정 시간의 마지막 구간에 떨어진다.
+                    float fallStart = _data.LeapLockTime - _data.LeapFallTime;
+                    float fall = Mathf.Clamp01((_stepTime - fallStart) / _data.LeapFallTime);
+                    SetLeapHeight(LeapHeight * (1f - fall * fall));
+                    if (fill >= 1f)
+                    {
+                        LandLeap();
+                    }
+
+                    return false;
+
+                default:
+                    if (_stepTime < _data.LeapLandTime)
+                    {
+                        return false;
+                    }
+
+                    HideTelegraphs();
+                    _count++;
+                    if (_count >= _data.LeapCount)
+                    {
+                        return true;
+                    }
+
+                    BeginLeap();
+                    return false;
+            }
+        }
+
+        // 공중이라 구조물을 무시하고 따라가되, 맵 밖으로는 나가지 않는다.
+        private void TrackLeapTarget(float deltaTime)
+        {
+            Vector2 toTarget = TargetPosition - Body.position;
+            float step = Mathf.Min(_data.LeapTrackSpeed * deltaTime, toTarget.magnitude);
+            if (step <= 0.0001f)
+            {
+                return;
+            }
+
+            Body.MovePosition(ClampToArena(Body.position + toTarget.normalized * step));
+        }
+
+        // 그림자를 멈추고 착지 범위를 깐다. 구조물에 걸리는 자리면 가장 가까운 설 수 있는 자리로 옮긴 뒤 고정한다.
+        private void LockLeap()
+        {
+            _step = Step.LeapLock;
+            _stepTime = 0f;
+            Vector2 land = FindLandingPoint(Body.position);
+            Body.position = land;
+            transform.position = land;
+            _slashRange.BuildCircle(_data.LeapRadius);
+            _slashFill.CopyLimits(_slashRange);
+            _slashFill.SetRadius(0f);
+            _slashRange.ResetColor();
+            _slashFill.ResetColor();
+            _slashRange.Visible = true;
+            _slashFill.Visible = true;
+        }
+
+        private void LandLeap()
+        {
+            _step = Step.LeapLand;
+            _stepTime = 0f;
+            EndLeapVisual();
+            HitOverlapping(Body.position, _data.LeapRadius);
+            _slashFill.SetColor(Color.white);
+            FeedbackPlayer.Play(_data.LeapImpactFeedback, Body.position);
+            AudioManager.Play(_data.LeapImpactSound);
+        }
+
+        private void SetLeapHeight(float height)
+        {
+            _leapHeight = height;
+            _visual.Lift = height;
+            float t = 1f - Mathf.Clamp01(height / LeapHeight);
+            _leapShadow.transform.localScale = _leapShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, t);
+        }
+
+        private void EndLeapVisual()
+        {
+            if (_leapHeight <= 0f && !_leapShadow.enabled)
+            {
+                return;
+            }
+
+            _leapHeight = 0f;
+            _visual.Lift = 0f;
+            _leapShadow.enabled = false;
+            _leapShadow.transform.localScale = _leapShadowScale;
+        }
+
+        private Vector2 FindLandingPoint(Vector2 point)
+        {
+            if (CanStandAt(point))
+            {
+                return point;
+            }
+
+            for (float distance = LandSearchStep; distance <= LandSearchMax; distance += LandSearchStep)
+            {
+                for (int i = 0; i < LandSearchDirections; i++)
+                {
+                    float angle = i * (360f / LandSearchDirections) * Mathf.Deg2Rad;
+                    Vector2 candidate = point + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance;
+                    if (CanStandAt(candidate))
+                    {
+                        return candidate;
+                    }
+                }
+            }
+
+            return point;
+        }
+
+        private Vector2 ClampToArena(Vector2 point)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena == null)
+            {
+                return point;
+            }
+
+            float radius = BodyRadius;
+            Bounds bounds = arena.Bounds;
+            point.x = Mathf.Clamp(point.x, bounds.min.x + radius, bounds.max.x - radius);
+            point.y = Mathf.Clamp(point.y, bounds.min.y + radius, bounds.max.y - radius);
+            return point;
+        }
+
+        // ── 왕관 투하: 왕관을 하늘로 던져 올리면 큰 그림자가 플레이어를 따라가다 멈추고, 금빛 원이 다 차는 순간 왕관이 박힌다.
+        // 그 뒤 왕은 박힌 왕관으로 가장 짧은 길을 달려가 줍는다. 던진 순간부터 주울 때까지 왕관이 없어 맞는다.
+        // 예측 과제: 목적지(왕관)가 보이는 달리기라, 왕이 1초 뒤 어디쯤 있을지 경로 위에 폭탄을 둔다.
+
+        private void BeginCrownDrop()
+        {
+            _step = Step.DropThrow;
+            _stepTime = 0f;
+            Vector2 start = (Vector2)_crown.transform.position;
+            _crownRaise = 0f;
+            SetCrown(false);
+            _isCrownAirborne = true;
+            _crownPosition = start;
+            _flyingCrown.position = start;
+            _flyingCrown.localScale = _flyingCrownScale * BigCrownScale;
+            _flyingCrown.gameObject.SetActive(true);
+            AudioManager.Play(_data.CrownThrowSound);
+        }
+
+        private bool TickCrownDrop(float deltaTime)
+        {
+            switch (_step)
+            {
+                case Step.DropThrow:
+                    // 왕관이 하늘에 있는 동안 왕은 천천히 다가와, 서 있는 과녁이 되지 않게 한다.
+                    WalkCrownless(deltaTime);
+                    float rise = Mathf.Clamp01(_stepTime / _data.CrownDropThrowTime);
+                    _flyingCrown.position = _crownPosition + Vector2.up * (LeapHeight * rise * rise);
+                    _flyingCrown.Rotate(0f, 0f, -900f * deltaTime);
+                    if (rise >= 1f)
+                    {
+                        _step = Step.DropTrack;
+                        _stepTime = 0f;
+                        _dropPoint = ClampToArena(TargetPosition);
+                        _dropShadow.enabled = true;
+                        PlaceDropShadow(0f);
+                    }
+
+                    return false;
+
+                case Step.DropTrack:
+                    WalkCrownless(deltaTime);
+                    Vector2 toTarget = TargetPosition - _dropPoint;
+                    float step = Mathf.Min(_data.CrownDropTrackSpeed * deltaTime, toTarget.magnitude);
+                    if (step > 0.0001f)
+                    {
+                        _dropPoint = ClampToArena(_dropPoint + toTarget.normalized * step);
+                    }
+
+                    PlaceDropShadow(0f);
+                    if (_stepTime >= _data.CrownDropTrackTime)
+                    {
+                        LockCrownDrop();
+                    }
+
+                    return false;
+
+                case Step.DropLock:
+                    WalkCrownless(deltaTime);
+                    float fill = Mathf.Clamp01(_stepTime / _data.CrownDropLockTime);
+                    _dropFill.SetRadius(_data.CrownDropRadius * fill);
+                    float fallStart = _data.CrownDropLockTime - _data.CrownDropFallTime;
+                    float fall = Mathf.Clamp01((_stepTime - fallStart) / _data.CrownDropFallTime);
+                    _flyingCrown.position = _dropPoint + Vector2.up * (LeapHeight * (1f - fall * fall));
+                    _flyingCrown.rotation = Quaternion.identity;
+                    PlaceDropShadow(fall);
+                    if (fill >= 1f)
+                    {
+                        ImpactCrownDrop();
+                    }
+
+                    return false;
+
+                case Step.DropStagger:
+                    if (_stepTime >= _data.CrownDropStagger)
+                    {
+                        HideDropMarker();
+                        _step = Step.DropRetrieve;
+                        _stepTime = 0f;
+                    }
+
+                    return false;
+
+                case Step.DropRetrieve:
+                    if (RunToCrown(deltaTime))
+                    {
+                        PickUpCrown();
+                        return true;
+                    }
+
+                    if (_stepTime >= _data.CrownRetrieveTimeout)
+                    {
+                        _step = Step.DropReturn;
+                        _stepTime = 0f;
+                        _crownReturnFromScale = _flyingCrown.localScale;
+                    }
+
+                    return false;
+
+                default:
+                    // 못 주운 왕관이 포물선을 그리며 스스로 머리로 돌아온다.
+                    float t = Mathf.Clamp01(_stepTime / _data.CrownReturnTime);
+                    float ease = t * t * (3f - 2f * t);
+                    _flyingCrown.position = Vector2.Lerp(_dropPoint, HeadCrownPosition(), ease) + Vector2.up * (4f * CrownReturnArc * t * (1f - t));
+                    _flyingCrown.localScale = Vector3.Lerp(_crownReturnFromScale, _flyingCrownScale, ease);
+                    _flyingCrown.Rotate(0f, 0f, -900f * deltaTime);
+                    if (t >= 1f)
+                    {
+                        PickUpCrown();
+                        return true;
+                    }
+
+                    return false;
+            }
+        }
+
+        private void WalkCrownless(float deltaTime)
+        {
+            if (_data.CrownlessWalkSpeed > 0f)
+            {
+                MoveTowardTarget(_data.CrownlessWalkSpeed, deltaTime);
+            }
+        }
+
+        // 떨어질 자리를 멈춘다. 왕이 주우러 가야 하므로 구조물에 걸리는 자리면 가장 가까운 설 수 있는 자리로 옮긴다.
+        private void LockCrownDrop()
+        {
+            _step = Step.DropLock;
+            _stepTime = 0f;
+            _dropPoint = FindLandingPoint(_dropPoint);
+            PlaceDropShadow(0f);
+            _dropRange.transform.position = _dropPoint;
+            _dropFill.transform.position = _dropPoint;
+            _dropRange.BuildCircle(_data.CrownDropRadius);
+            _dropFill.CopyLimits(_dropRange);
+            _dropFill.SetRadius(0f);
+            _dropRange.ResetColor();
+            _dropFill.ResetColor();
+            _dropRange.Visible = true;
+            _dropFill.Visible = true;
+        }
+
+        private void ImpactCrownDrop()
+        {
+            _step = Step.DropStagger;
+            _stepTime = 0f;
+            _isCrownAirborne = false;
+            _dropShadow.enabled = false;
+            _flyingCrown.position = _dropPoint;
+            _flyingCrown.rotation = Quaternion.Euler(0f, 0f, CrownRestAngle);
+            HitOverlapping(_dropPoint, _data.CrownDropRadius);
+            _dropFill.SetColor(Color.white);
+            FeedbackPlayer.Play(_data.CrownDropImpactFeedback, _dropPoint);
+            AudioManager.Play(_data.CrownDropImpactSound);
+        }
+
+        // 가장 짧은 길로 달려간다. 왕관 자리가 직선으로 보이면 곧장 간다. 닿으면 true.
+        private bool RunToCrown(float deltaTime)
+        {
+            Vector2 toCrown = _dropPoint - Body.position;
+            float distance = toCrown.magnitude;
+            if (distance <= CrownPickupDistance)
+            {
+                return true;
+            }
+
+            FlowField field = FlowField.Current;
+            Vector2 direction = field != null ? field.GetDirectionTo(_dropPoint, Body.position) : toCrown / distance;
+            float step = Mathf.Min(_data.CrownRetrieveSpeed * deltaTime, distance);
+            Body.MovePosition(Body.position + direction * ClearDistance(direction, step, BodyRadius));
+            return false;
+        }
+
+        private void PickUpCrown()
+        {
+            HideDropMarker();
+            _flyingCrown.localScale = _flyingCrownScale;
+            _flyingCrown.rotation = Quaternion.identity;
+            CatchCrown();
+            _visual.Flash(_data.ImmuneFlashColor, 0.2f);
+        }
+
+        // 그림자는 왕관이 내려올수록 커지고 진해진다.
+        private void PlaceDropShadow(float fall)
+        {
+            Transform shadow = _dropShadow.transform;
+            shadow.position = _dropPoint;
+            shadow.localScale = _dropShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, fall);
+        }
+
+        private void HideDropMarker()
+        {
+            _dropShadow.enabled = false;
+            _dropRange.Visible = false;
+            _dropFill.Visible = false;
+        }
+
         // ── 왕관 부메랑: 왕관이 벽을 뚫고 날아갔다가 돌아온다. 날아가 있는 동안 왕은 무적이 아니다.
 
         private void ThrowCrown()
@@ -863,6 +1344,8 @@ namespace ExplodeIt.Enemies
         private void RegainCrown()
         {
             _flyingCrown.gameObject.SetActive(false);
+            _flyingCrown.localScale = _flyingCrownScale;
+            HideDropMarker();
             SetCrown(true);
             _visual.Flash(_data.ImmuneFlashColor, 0.2f);
         }
@@ -931,7 +1414,11 @@ namespace ExplodeIt.Enemies
 
         private void DropCrown()
         {
-            _crownDropFrom = _flyingCrown.gameObject.activeSelf ? (Vector2)_flyingCrown.position : HeadCrownPosition();
+            HideDropMarker();
+            // 왕관 투하로 하늘에 있던 왕관은 떨어질 자리 바로 위에서 툭 떨어진다.
+            Vector2 airborneFrom = _dropPoint + Vector2.up * CrownDropFall;
+            _crownDropFrom = _isCrownAirborne ? airborneFrom : _flyingCrown.gameObject.activeSelf ? (Vector2)_flyingCrown.position : HeadCrownPosition();
+            _isCrownAirborne = false;
             _crownGround = _crownDropFrom + Vector2.down * CrownDropFall;
             _crownDropTime = 0f;
             _isCrownReturning = false;
@@ -940,7 +1427,7 @@ namespace ExplodeIt.Enemies
         }
 
         // 한 번 통 튀었다가 바닥에 비스듬히 눕는다. 돌던 왕관이 힘을 잃고 떨어진 느낌을 준다.
-        private void TickCrownDrop(float deltaTime)
+        private void TickCrownFall(float deltaTime)
         {
             if (_crownDropTime < 0f || _isCrownReturning)
             {
@@ -969,6 +1456,8 @@ namespace ExplodeIt.Enemies
         {
             _shiftTime = 0f;
             _isShoutDone = false;
+            // 새 국면은 첫 패턴(베기)부터 돈다. 전환 연출 직후 바로 맞을 기회가 오지 않게 한다.
+            _rotationIndex = 0;
             Stun(_data.PhaseShiftDuration);
 
             // 밀려난 뒤의 자리(몸과 머리 사이)를 미리 바라본다.
@@ -1007,6 +1496,7 @@ namespace ExplodeIt.Enemies
             {
                 _isCrownReturning = true;
                 _crownDropTime = -1f;
+                _crownReturnFromScale = _flyingCrown.localScale;
                 _visual.Jitter = 0f;
                 _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             }
@@ -1014,6 +1504,7 @@ namespace ExplodeIt.Enemies
             float t = Mathf.Clamp01((_shiftTime - returnStart) / _data.CrownReturnTime);
             float ease = t * t * (3f - 2f * t);
             _flyingCrown.position = Vector2.Lerp(_crownGround, HeadCrownPosition(), ease) + Vector2.up * (4f * CrownReturnArc * t * (1f - t));
+            _flyingCrown.localScale = Vector3.Lerp(_crownReturnFromScale, _flyingCrownScale, ease);
             _flyingCrown.Rotate(0f, 0f, -900f * deltaTime);
             if (t >= 1f)
             {
@@ -1029,6 +1520,7 @@ namespace ExplodeIt.Enemies
             _visual.Jitter = 0f;
             _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             _flyingCrown.gameObject.SetActive(false);
+            _flyingCrown.localScale = _flyingCrownScale;
             SetCrown(true);
             _visual.Flash(_data.ImmuneFlashColor, 0.3f);
             FeedbackPlayer.Play(_data.PhaseShiftFeedback, Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f));
@@ -1056,7 +1548,8 @@ namespace ExplodeIt.Enemies
         private void OnHitBlocked(HitInfo hit)
         {
             // 국면 전환 중에는 왕관이 머리에 없으므로 "팅"으로 튕겨 내는 반응도 없다.
-            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy || _shiftTime >= 0f)
+            // 도약해 공중에 있을 때 그림자에 떨어진 폭탄도 반응하지 않는다(왕은 화면 밖에 있다).
+            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy || _shiftTime >= 0f || _leapHeight > 0f)
             {
                 return;
             }
@@ -1129,10 +1622,32 @@ namespace ExplodeIt.Enemies
                     break;
                 default:
                     float pop = CurrentPopScale();
-                    _visual.ExtraScale = new Vector2(pop, pop);
+                    _visual.ExtraScale = new Vector2(pop, pop) * LeapSquash();
                     _visual.ExtraLean = 0f;
                     break;
             }
+        }
+
+        // 도약 직전 웅크리고, 착지한 순간 납작하게 눌렸다 돌아온다.
+        private Vector2 LeapSquash()
+        {
+            if (_pattern != Pattern.Leap)
+            {
+                return Vector2.one;
+            }
+
+            if (State == EnemyState.Telegraph)
+            {
+                return new Vector2(1.2f, 0.75f);
+            }
+
+            if (State == EnemyState.Attack && _step == Step.LeapLand)
+            {
+                float t = Mathf.Clamp01(_stepTime / 0.15f);
+                return Vector2.Lerp(new Vector2(1.3f, 0.65f), Vector2.one, t);
+            }
+
+            return Vector2.one;
         }
 
         private void HideTelegraphs()
