@@ -129,6 +129,10 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("다 과열돼 드릴이 멈추는 순간의 효과음")] private SoundData _overheatSound;
         [SerializeField, Tooltip("그로기에 빠지는 순간의 효과음 (보스 공용)")] private SoundData _groggySound;
         [SerializeField, Tooltip("노출 외 시간(도약 등)에 폭탄이 막혔을 때의 효과음")] private SoundData _immuneSound;
+        [SerializeField, Tooltip("구멍(흙더미)들이 솟아나는 순간의 효과음. 여러 개가 동시에 나와도 한 번만 낸다")] private SoundData _moundPopSound;
+        [SerializeField, Tooltip("구멍 예고 동안의 땅울림. 점점 커지다 끝나는 순간 분출하도록 소리 길이를 예고 시간과 같게 만든다")] private SoundData _rumbleSound;
+        [SerializeField, Tooltip("가짜 구멍에서 다이너마이트가 흩어지는 순간의 심지 타는 소리. 한 번 분출에 한 번만 낸다")] private SoundData _fuseSound;
+        [SerializeField, Tooltip("플레이어 반대쪽으로 도약해 도망가는 순간의 효과음")] private SoundData _leapSound;
 
         [Header("연출")]
         [SerializeField, Tooltip("분출 순간의 연출 (흔들림, 흙 파편). 구멍마다 띄운다")] private FeedbackData _burstFeedback;
@@ -181,6 +185,10 @@ namespace ExplodeIt.Enemies
         public SoundData OverheatSound => _overheatSound;
         public SoundData GroggySound => _groggySound;
         public SoundData ImmuneSound => _immuneSound;
+        public SoundData MoundPopSound => _moundPopSound;
+        public SoundData RumbleSound => _rumbleSound;
+        public SoundData FuseSound => _fuseSound;
+        public SoundData LeapSound => _leapSound;
         public FeedbackData BurstFeedback => _burstFeedback;
         public FeedbackData DigFeedback => _digFeedback;
         public FeedbackData DigDirtFeedback => _digDirtFeedback;

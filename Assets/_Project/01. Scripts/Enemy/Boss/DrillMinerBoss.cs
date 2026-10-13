@@ -66,6 +66,8 @@ namespace ExplodeIt.Enemies
         private Dynamite[] _dynamites;
         private System.Action<Dynamite> _onDynamiteExplode;
         private SoundHandle _diggingMoveHandle = SoundHandle.None;
+        // 예고 땅울림. 분출 전에 끊기면(사망 등) 같이 멈춘다.
+        private SoundHandle _rumbleHandle = SoundHandle.None;
         // 구멍에서 튀어나온 뒤 지난 시간. 음수면 튀어나오는 중이 아니다.
         private float _emergeTime = -1f;
 
@@ -330,6 +332,7 @@ namespace ExplodeIt.Enemies
             _visual.Lift = 0f;
             _emergeTime = 0f;
 
+            _rumbleHandle = SoundHandle.None;
             int nextDynamite = 0;
             for (int i = 0; i < _holeCount; i++)
             {
@@ -342,6 +345,11 @@ namespace ExplodeIt.Enemies
             }
 
             AudioManager.Play(_data.BurstSound);
+            if (_holeCount > 1)
+            {
+                AudioManager.Play(_data.FuseSound);
+            }
+
             // 흙더미는 바로 지우지 않고 쏙 꺼지게 해, 광부가 그 자리에서 솟는 것과 이어 보이게 한다.
             for (int i = 0; i < _holeCount; i++)
             {
@@ -365,6 +373,9 @@ namespace ExplodeIt.Enemies
                     SetMoundAlpha(0f);
                     StopDiggingMoveSound();
                     PlaceHoles();
+                    // 범위 표시가 없으므로, 점점 커지는 땅울림이 흙더미 떨림과 함께 터질 때를 알려 준다.
+                    AudioManager.Play(_data.MoundPopSound);
+                    _rumbleHandle = AudioManager.Play(_data.RumbleSound);
                     break;
 
                 case EnemyState.Recover:
@@ -385,6 +396,8 @@ namespace ExplodeIt.Enemies
                     HideHoles();
                     HideDynamites();
                     StopDiggingMoveSound();
+                    AudioManager.Stop(_rumbleHandle);
+                    _rumbleHandle = SoundHandle.None;
                     SetMoundAlpha(0f);
                     _visual.Alpha = 1f;
                     ResetDigPose();
@@ -439,6 +452,7 @@ namespace ExplodeIt.Enemies
             _leapStart = Body.position;
             _leapEnd = PickLandingPoint();
             _visual.Alpha = 1f;
+            AudioManager.Play(_data.LeapSound);
         }
 
         private void BeginDig()

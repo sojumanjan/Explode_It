@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f55d79f71ff91d4591091dcab66b225, type: 3}
-  m_Name: Sfx_miner_dynamite
+  m_Name: Sfx_miner_rumble
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
-  - {fileID: 8300000, guid: 1e603ab44848cdd4f938fc04f3c3645d, type: 3}
-  _volume: 1
-  _pitchMin: 0.92
-  _pitchMax: 1.08
-  _maxInstances: 4
-  _minInterval: 0.02
+  - {fileID: 8300000, guid: 9d107c9cbfae33a42b1803b497391741, type: 3}
+  _volume: 0.8
+  _pitchMin: 1
+  _pitchMax: 1
+  _maxInstances: 1
+  _minInterval: 0.03

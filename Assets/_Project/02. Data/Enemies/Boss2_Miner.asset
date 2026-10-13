@@ -35,9 +35,9 @@ MonoBehaviour:
   _hiddenTime: 1
   _undergroundSpeed: 3
   _holeRadius: 2.2
-  _realHoleDistance: {x: 4, y: 5}
-  _fakeHoleDistance: {x: 4, y: 5}
-  _holeSpacing: 4
+  _realHoleDistance: {x: 2, y: 5}
+  _fakeHoleDistance: {x: 2, y: 5}
+  _holeSpacing: 3.5
   _dynamiteCount: {x: 3, y: 4}
   _dynamiteDelayRange: {x: 0.85, y: 1.3}
   _dynamiteDistance: {x: 2, y: 7}
@@ -64,6 +64,10 @@ MonoBehaviour:
   _overheatSound: {fileID: 0}
   _groggySound: {fileID: 11400000, guid: 6ba6b1de2933bef459a86c99e2de5f74, type: 2}
   _immuneSound: {fileID: 11400000, guid: fa720ffa722e7004284913aa1c1e4138, type: 2}
+  _moundPopSound: {fileID: 11400000, guid: bf7cb4cb18b4a3c4a9faab17825bf0f0, type: 2}
+  _rumbleSound: {fileID: 11400000, guid: 4c8f60dbe2ff0d246b8642f1b7855467, type: 2}
+  _fuseSound: {fileID: 11400000, guid: b22a1d260682b834da20ad22a52db976, type: 2}
+  _leapSound: {fileID: 11400000, guid: 34b6ed27999d70c438543083466666a0, type: 2}
   _burstFeedback: {fileID: 11400000, guid: 73d51ffe459e55643b64633db4838796, type: 2}
   _digFeedback: {fileID: 11400000, guid: fedb6ebc10c1f97419f90d4785c904b5, type: 2}
   _digDirtFeedback: {fileID: 11400000, guid: 5e03354aef6e9664f83c91100365d7a4, type: 2}
