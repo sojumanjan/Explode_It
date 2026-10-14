@@ -9,6 +9,9 @@ namespace ExplodeIt.UI
     public class SpeechBubble : MonoBehaviour
     {
         [SerializeField] private RectTransform _box;
+        // 꼬리 테두리. 상자 뒤에 깔린 검은 꼬리라 상자 밖으로 나온 부분만 보인다. 상자 위의 흰 꼬리가 이음매를 덮는다.
+        // 위치·크기는 씬에 배치한 그대로 쓰고, 상자가 뽀잉 커지는 비율만 따라간다.
+        [SerializeField] private RectTransform _tailBack;
         [SerializeField] private TMP_Text _text;
         // 한 줄이 이 폭(캔버스 단위)을 넘으면 줄을 바꾼다.
         [SerializeField, Min(10f)] private float _maxTextWidth = 420f;
@@ -28,9 +31,22 @@ namespace ExplodeIt.UI
         private Vector2 _nextMarkHome;
         private float _nextMarkTime;
         private bool _waitsForClick = true;
+        // 씬에 배치한 상자 크기·위치와 꼬리 테두리 크기·위치. 뽀잉 연출은 이 크기까지 커지고, 꼬리 테두리는 같은 비율로 따라간다.
+        private Vector3 _boxScale;
+        private Vector3 _boxPosition;
+        private Vector3 _tailBackPosition;
+        private Vector3 _tailBackScale;
 
         private void Awake()
         {
+            _boxScale = _box.localScale;
+            _boxPosition = _box.localPosition;
+            if (_tailBack != null)
+            {
+                _tailBackPosition = _tailBack.localPosition;
+                _tailBackScale = _tailBack.localScale;
+            }
+
             if (_nextMark != null)
             {
                 _nextMarkHome = _nextMark.anchoredPosition;
@@ -57,8 +73,8 @@ namespace ExplodeIt.UI
             SetNextMark(false);
 
             _pop?.Kill();
-            _box.localScale = Vector3.one * 0.6f;
-            _pop = _box.DOScale(1f, _popDuration).SetEase(Ease.OutBack).SetUpdate(_useUnscaledTime).SetLink(gameObject);
+            _box.localScale = _boxScale * 0.6f;
+            _pop = _box.DOScale(_boxScale, _popDuration).SetEase(Ease.OutBack).SetUpdate(_useUnscaledTime).SetLink(gameObject);
         }
 
         public void CompleteTyping()
@@ -71,6 +87,19 @@ namespace ExplodeIt.UI
         {
             _pop?.Kill();
             gameObject.SetActive(false);
+        }
+
+        // 상자가 뽀잉 커지는 동안에도 뒤에 깐 꼬리 테두리가 흰 꼬리와 정확히 겹치게 맞춘다.
+        private void LateUpdate()
+        {
+            if (_tailBack == null || _boxScale.x == 0f)
+            {
+                return;
+            }
+
+            float ratio = _box.localScale.x / _boxScale.x;
+            _tailBack.localPosition = _boxPosition + (_tailBackPosition - _boxPosition) * ratio;
+            _tailBack.localScale = _tailBackScale * ratio;
         }
 
         private void Update()
