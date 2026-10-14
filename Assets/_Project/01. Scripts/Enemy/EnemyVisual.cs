@@ -129,6 +129,11 @@ namespace ExplodeIt.Enemies
 
             if (state == EnemyState.Dead)
             {
+                if (HoldsDeath)
+                {
+                    _stateTime = Mathf.Min(_stateTime, _motion.DeathKnockEnd * _enemy.DeathDuration);
+                }
+
                 TickDeath();
                 return;
             }
@@ -222,6 +227,13 @@ namespace ExplodeIt.Enemies
 
         // 좌우로 빠르게 떠는 폭 (유닛). 드릴 진동처럼 그림만 떨게 할 때 쓴다. 0이면 떨지 않는다.
         public float Jitter { get; set; }
+
+        // 사망 연출을 "밀려난 모습"에서 멈춰 둔다. 끄면 그 자리부터 부풀었다 쏙 사라지는 나머지 연출을 이어 간다.
+        // 처치 대화 동안 쓰러진 모습을 보여 주는 보스(최종 보스)가 쓴다.
+        public bool HoldsDeath { get; set; }
+
+        // 사라지는 순간의 연출·소리를 내지 않는다. 이미 다른 모습으로 바뀌어 화면에서 빠진 보스(2등신으로 돌아간 최종 보스)가 쓴다.
+        public bool SkipsDeathEnd { get; set; }
 
         private Color RestingColor
         {
@@ -449,7 +461,7 @@ namespace ExplodeIt.Enemies
             ApplyPose(offset, scale, 0f);
 
             // 사라지기 직전에 터트린다. 풀 반환과 같은 프레임에 겹치면 놓칠 수 있어 끝을 조금 남겨 둔다.
-            if (!_hasPlayedDeathEnd && t >= DeathEndPoint)
+            if (!_hasPlayedDeathEnd && !SkipsDeathEnd && t >= DeathEndPoint)
             {
                 _hasPlayedDeathEnd = true;
                 FeedbackPlayer.Play(_motion.DeathEndFeedback, _body.position);

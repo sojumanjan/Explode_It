@@ -231,6 +231,27 @@ namespace ExplodeIt.UI
                 }
             }
             GUILayout.EndHorizontal();
+
+            // 최종 보스 마무리 연출: 그로기(한 방이면 쓰러짐), 또는 바로 쓰러뜨려 처치 대화·엔딩까지.
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("King Groggy"))
+            {
+                AwakenedKingBoss king = FindAnyObjectByType<AwakenedKingBoss>();
+                if (king != null)
+                {
+                    king.DebugGroggy();
+                }
+            }
+
+            if (GUILayout.Button("King Defeat"))
+            {
+                AwakenedKingBoss king = FindAnyObjectByType<AwakenedKingBoss>();
+                if (king != null)
+                {
+                    king.DebugDefeat();
+                }
+            }
+            GUILayout.EndHorizontal();
         }
 
         private void DrawCheats()

@@ -399,6 +399,8 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("맵 전체 충격파가 치는 순간의 연출 (흔들림)")] private FeedbackData _shockFeedback;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
+        [SerializeField, Tooltip("쓰러뜨린 순간 카메라가 왕에게 다가가는 확대 배율. 1이면 평소, 작을수록 가까이"), Range(0.3f, 1f)] private float _defeatZoom = 0.7f;
+        [SerializeField, Tooltip("쓰러뜨린 순간 카메라가 왕에게 다가가는 시간 (초)"), Min(0f)] private float _defeatZoomTime = 0.4f;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
         [SerializeField, Min(0f), Tooltip("번쩍임 시간 (초)")] private float _immuneFlashDuration = 0.2f;
 
@@ -556,6 +558,8 @@ namespace ExplodeIt.Enemies
         public FeedbackData HurtFeedback => _hurtFeedback;
         public FeedbackData ImmuneFeedback => _immuneFeedback;
         public FeedbackData DefeatFeedback => _defeatFeedback;
+        public float DefeatZoom => _defeatZoom;
+        public float DefeatZoomTime => _defeatZoomTime;
         public Color ImmuneFlashColor => _immuneFlashColor;
         public float ImmuneFlashDuration => _immuneFlashDuration;
     }

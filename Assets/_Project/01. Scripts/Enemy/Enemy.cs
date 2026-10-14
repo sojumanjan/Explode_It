@@ -56,6 +56,8 @@ namespace ExplodeIt.Enemies
         protected virtual bool RequiresLineOfSight => true;
         // 블랙홀 같은 외부 힘에 끌려가는지. 보스처럼 자리를 지켜야 하는 적은 끈다.
         protected virtual bool CanBePulled => true;
+        // 죽은 뒤에도 쓰러진 몸을 남겨 둘지. 처치 대화가 이어지는 보스(최종 보스)가 대화 동안 쓰러진 모습을 보여 줄 때 쓴다.
+        protected virtual bool HoldsBodyAfterDeath => false;
 
         // 벽·구조물 검사에 쓰는 이동 반경. 이동용 콜라이더가 있으면 그 크기, 없으면 피격 콜라이더 크기.
         protected float BodyRadius => _moveCollider != null ? MoveColliderRadius() : HitRadius;
@@ -141,6 +143,12 @@ namespace ExplodeIt.Enemies
             float deltaTime = Time.fixedDeltaTime;
             if (_state == EnemyState.Dead)
             {
+                // 몸을 남겨 두는 동안은 사망 시간을 세지 않는다. 놓아주면 그때부터 사망 연출 시간을 다 채운 뒤 사라진다.
+                if (HoldsBodyAfterDeath)
+                {
+                    return;
+                }
+
                 _stateTime += deltaTime;
                 if (_stateTime >= Data.DeathDuration)
                 {

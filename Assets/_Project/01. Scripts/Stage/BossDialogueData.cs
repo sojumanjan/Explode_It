@@ -26,11 +26,19 @@ namespace ExplodeIt.Stage
             [Tooltip("이 줄을 다 읽고 클릭해 넘기는 순간 보스 등장 동작(화염 영역 전개, 땅 파고들기 등)을 시작한다. 마지막 줄에 체크하면 대화가 끝나며 시작한다. 어느 줄에도 체크하지 않아도 대화가 끝난 뒤 시작한다")]
             [SerializeField] private bool _startEntrance;
 
+            [Tooltip("처치 대화용. 이 줄이 시작될 때 쓰러진 보스의 그림을 이 그림으로 바꾼다(무릎 꿇기 등). 비우면 그대로 둔다")]
+            [SerializeField] private Sprite _bossSprite;
+
+            [Tooltip("처치 대화용. 이 줄이 시작될 때 쓰러진 각성 왕이 펑 하고 2등신 왕으로 돌아간다. 그 뒤 왕 줄은 2등신 왕이 표정과 함께 말하고, 대화가 끝나면 스티커처럼 떼어지며 퇴장한다")]
+            [SerializeField] private bool _revertToKing;
+
             public DialogueSpeaker Speaker => _speaker;
             public KingMood Mood => _mood;
             public string Text => _text;
             public bool SpawnBoss => _spawnBoss;
             public bool StartEntrance => _startEntrance;
+            public Sprite BossSprite => _bossSprite;
+            public bool RevertToKing => _revertToKing;
         }
 
         [Tooltip("위에서부터 차례로 말한다")]
@@ -45,9 +53,13 @@ namespace ExplodeIt.Stage
         [Tooltip("왕이 곧 보스일 때 왕이 서는 높이 (유닛, 보스 자리 기준). 보스 프리팹의 2등신 그림(Chibi) 높이와 같게 두어야 보스로 바뀌는 순간 발 위치가 튀지 않는다")]
         [SerializeField] private float _kingStandHeight;
 
+        [Tooltip("처치 대화에서 2등신으로 돌아가는 줄이 시작된 뒤 그 줄을 띄우기까지 (초). 펑 하고 바뀌는 연출에 눈이 가도록 잠깐 말없이 둔다")]
+        [SerializeField, Min(0f)] private float _revertPause = 0.6f;
+
         public float SpawnPause => _spawnPause;
         public bool KingBecomesBoss => _kingBecomesBoss;
         public float KingStandHeight => _kingStandHeight;
+        public float RevertPause => _revertPause;
 
         public int LineCount => _lines != null ? _lines.Length : 0;
 

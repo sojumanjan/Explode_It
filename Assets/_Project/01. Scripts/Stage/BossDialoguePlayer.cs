@@ -37,6 +37,11 @@ namespace ExplodeIt.Stage
 
         private BossDialogueData _data;
         private Transform _boss;
+        // 처치 대화에서 고블린 말풍선을 띄울 플레이어. 등장 대화에서는 비어 있다.
+        private Transform _player;
+        // 처치 대화에서 쓰러진 각성 왕이 2등신 왕으로 돌아왔는지. 돌아온 뒤에는 2등신 왕 그림이 말하고 스티커처럼 퇴장한다.
+        private bool _isReverted;
+        private TweenCallback _onRevertEnd;
         private Vector2 _bossPoint;
         private float _bossTopOffset;
         private int _line;
@@ -62,6 +67,7 @@ namespace ExplodeIt.Stage
             _kingScale = _king.transform.localScale;
             _onPauseEnd = ShowCurrentLine;
             _onShoutEnd = HideShout;
+            _onRevertEnd = ShowRevertedKing;
             if (_skipButton != null)
             {
                 _skipScale = _skipButton.localScale;
@@ -117,6 +123,8 @@ namespace ExplodeIt.Stage
 
             _data = data;
             _boss = null;
+            _player = null;
+            _isReverted = false;
             _bossPoint = bossPoint;
             _bossTopOffset = _emptyBossHeight;
             _line = -1;
@@ -163,6 +171,49 @@ namespace ExplodeIt.Stage
             _skipButton.DOKill();
             _skipButton.localScale = Vector3.zero;
             _skipButton.DOScale(_skipScale, _appearDuration).SetDelay(_startDelay).SetEase(Ease.OutBack).SetLink(_skipButton.gameObject);
+        }
+
+        // 최종 보스를 쓰러뜨린 뒤의 대화. 왕 그림 없이 쓰러진 보스 머리 위(왕 줄)와 플레이어 머리 위(고블린 줄)에 말풍선이 뜬다.
+        public void PlayDefeat(BossDialogueData data, Transform boss, Transform player)
+        {
+            if (data == null || data.LineCount == 0 || boss == null)
+            {
+                return;
+            }
+
+            _data = data;
+            _boss = boss;
+            _player = player;
+            _isReverted = false;
+            _bossPoint = boss.position;
+            _bossTopOffset = TopOf(boss) - boss.position.y;
+            _line = -1;
+            _isTalking = false;
+            IsPlaying = true;
+            _sequence?.Kill();
+            _punch?.Kill();
+            _king.gameObject.SetActive(false);
+
+            Vector2 bossPoint = boss.position;
+            Vector2 playerPoint = player != null ? (Vector2)player.position : bossPoint;
+            float top = Mathf.Max(TopOf(boss), player != null ? TopOf(player) : bossPoint.y);
+            ShowSkipButtonAt(new Vector2((bossPoint.x + playerPoint.x) * 0.5f, top + _skipButtonGap));
+            NextLine();
+        }
+
+        private void ShowSkipButtonAt(Vector2 point)
+        {
+            if (_skipButton == null)
+            {
+                return;
+            }
+
+            _skipButton.position = new Vector3(point.x, point.y, 0f);
+            _skipButton.gameObject.SetActive(true);
+            _isSkipHovered = false;
+            _skipButton.DOKill();
+            _skipButton.localScale = Vector3.zero;
+            _skipButton.DOScale(_skipScale, _appearDuration).SetEase(Ease.OutBack).SetLink(_skipButton.gameObject);
         }
 
         // 보스가 내려앉은 뒤 불린다. 머리 높이는 이때 한 번만 잰다. 대화 동안 보스는 제자리에 있다.
@@ -237,6 +288,21 @@ namespace ExplodeIt.Stage
 
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = false;
+            if (line.BossSprite != null && !_isReverted)
+            {
+                GameEvents.RaiseBossPoseRequested(line.BossSprite);
+            }
+
+            // 처치 대화: 쓰러진 각성 왕이 펑 하고 2등신으로 돌아간 뒤, 그 자리에 2등신 왕이 뽀잉 나타나 이 줄을 말한다.
+            if (line.RevertToKing && !_isReverted && _boss != null)
+            {
+                _isReverted = true;
+                GameEvents.RaiseBossRevertRequested();
+                _pause?.Kill();
+                _pause = DOVirtual.DelayedCall(_data.RevertPause, _onRevertEnd).SetLink(gameObject);
+                return;
+            }
+
             // 왕이 곧 보스인 대화는 표시한 줄에서만 보스(변신)를 부른다. 표시가 없으면 대화가 끝난 뒤 부른다.
             if (line.SpawnBoss || (_line == 0 && !_data.HasSpawnLine && !_data.KingBecomesBoss))
             {
@@ -257,7 +323,12 @@ namespace ExplodeIt.Stage
         {
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = true;
-            if (UsesKingBubble(line))
+            if (line.Speaker == DialogueSpeaker.Player && _player != null)
+            {
+                _kingBubble.transform.position = new Vector3(_player.position.x, TopOf(_player) + _bubbleGap, 0f);
+                _kingBubble.Show(line.Text);
+            }
+            else if (UsesKingBubble(line))
             {
                 // 표정이 바뀔 때마다 뽀잉 하고 튀어서 대사보다 표정이 먼저 읽히게 한다.
                 _king.sprite = _kingSprites.Get(line.Mood);
@@ -306,14 +377,33 @@ namespace ExplodeIt.Stage
             Leave();
         }
 
+        // 2등신 왕을 쓰러진 보스 자리에 뽀잉 띄우고 이 줄을 말한다. 왕이 보스 왼쪽·오른쪽 어느 쪽으로 젖혀 떠날지는 플레이어 쪽을 본다.
+        private void ShowRevertedKing()
+        {
+            Transform king = _king.transform;
+            Vector2 boss = _boss.position;
+            king.position = boss + Vector2.up * _data.KingStandHeight;
+            _side = _player != null && _player.position.x < boss.x ? -1f : 1f;
+            _king.sprite = _kingSprites.Get(_data.GetLine(_line).Mood);
+            _king.color = Color.white;
+            king.localRotation = Quaternion.identity;
+            king.localScale = Vector3.zero;
+            _king.gameObject.SetActive(true);
+            _sequence?.Kill();
+            _sequence = DOTween.Sequence()
+                .Append(king.DOScale(_kingScale, _appearDuration).SetEase(Ease.OutBack))
+                .SetLink(gameObject);
+            ShowCurrentLine();
+        }
+
         // 스티커가 떼어지듯 젖혀지며 납작해져 사라진다.
         private void Leave()
         {
             _isTalking = false;
             HideSkipButton();
             _punch?.Kill();
-            // 왕이 곧 보스면 떼어지지 않고 그 자리에서 바로 보스 몸으로 바뀐다.
-            if (_data.KingBecomesBoss)
+            // 왕이 곧 보스면 떼어지지 않고 그 자리에서 바로 보스 몸으로 바뀐다. 처치 대화에서 2등신으로 돌아온 왕은 스티커처럼 떠난다.
+            if (_data.KingBecomesBoss && !_isReverted)
             {
                 _sequence?.Kill();
                 Finish();
@@ -355,13 +445,20 @@ namespace ExplodeIt.Stage
 
         private SpeechBubble CurrentBubble()
         {
-            return UsesKingBubble(_data.GetLine(_line)) ? _kingBubble : _bossBubble;
+            BossDialogueData.Line line = _data.GetLine(_line);
+            return UsesKingBubble(line) || (line.Speaker == DialogueSpeaker.Player && _player != null) ? _kingBubble : _bossBubble;
         }
 
         // 왕이 보스로 바뀐 뒤의 왕 대사는 보스 머리 위에 띄운다.
+        // 처치 대화의 왕 줄은 쓰러진 보스 머리 위에 띄운다(왕 그림이 없다).
         private bool UsesKingBubble(BossDialogueData.Line line)
         {
-            return line.Speaker == DialogueSpeaker.King && !(_data.KingBecomesBoss && _boss != null);
+            if (line.Speaker != DialogueSpeaker.King)
+            {
+                return false;
+            }
+
+            return _isReverted || (!(_data.KingBecomesBoss && _boss != null) && _player == null);
         }
 
         private KingMood FirstKingMood()

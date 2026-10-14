@@ -172,6 +172,8 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite[] _rageSlashFrames;
         // 3국면 모습(보랏빛). 기본 자세와 패턴 자세.
         [SerializeField] private Sprite _phase3IdleSprite;
+        // 그로기로 주저앉은 그림. 쓰러짐 그림은 표시 컴포넌트(EnemyVisual)의 사망 그림 칸에 둔다.
+        [SerializeField] private Sprite _stunSprite;
         [SerializeField] private Sprite _meteorPoseSprite;
         [SerializeField] private Sprite _swordChargeSprite;
         [SerializeField] private Sprite _swordAttackSprite;
@@ -273,6 +275,7 @@ namespace ExplodeIt.Enemies
         private ParticleSystem.MinMaxGradient _auraBaseColor;
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
+        private bool _isHoldingBody;
         // 각성 파동이 퍼지기 시작한 뒤 지난 시간 (음수면 없음), 파동이 닿을 가장 먼 거리, 맵 어두움 정도 (0~1)와 목표.
         private float _awakenWaveTime = -1f;
         private float _awakenWaveReach;
@@ -323,6 +326,8 @@ namespace ExplodeIt.Enemies
 
         protected override EnemyData Data => _data;
         protected override bool CanBePulled => false;
+        // 처치 대화 동안 쓰러진 모습을 남겨 둔다. 대화가 끝나 작별 이벤트가 오면 사라진다.
+        protected override bool HoldsBodyAfterDeath => _isHoldingBody;
         protected override bool RequiresLineOfSight => false;
         public override Vector2 AimDirection =>
             State == EnemyState.Telegraph || State == EnemyState.Attack ? _aimDirection : DirectionToTarget();
@@ -408,6 +413,9 @@ namespace ExplodeIt.Enemies
             base.OnEnable();
             HitReceiver.Damaged += OnDamaged;
             HitReceiver.Blocked += OnHitBlocked;
+            GameEvents.BossFarewellRequested += OnFarewell;
+            GameEvents.BossPoseRequested += OnPoseRequested;
+            GameEvents.BossRevertRequested += OnRevertRequested;
             GameEvents.BombLanded += OnBombLanded;
             HideTelegraphs();
         }
@@ -417,6 +425,9 @@ namespace ExplodeIt.Enemies
             base.OnDisable();
             HitReceiver.Damaged -= OnDamaged;
             HitReceiver.Blocked -= OnHitBlocked;
+            GameEvents.BossFarewellRequested -= OnFarewell;
+            GameEvents.BossPoseRequested -= OnPoseRequested;
+            GameEvents.BossRevertRequested -= OnRevertRequested;
             GameEvents.BombLanded -= OnBombLanded;
             if (_flyingCrown != null)
             {
@@ -547,6 +558,10 @@ namespace ExplodeIt.Enemies
             _visual.Jitter = 0f;
             _shrinkSize = 1f;
             _lookPhase = 1;
+            _isHoldingBody = false;
+            _visual.HoldsDeath = false;
+            _visual.SkipsDeathEnd = false;
+            _bodyRenderer.enabled = true;
             SetRage(false);
             // 왕관 횟수만큼은 맞아도 버티고, 그로기 때의 한 방에 쓰러진다.
             HitReceiver.ResetHits(_data.CrownHits + 1);
@@ -581,6 +596,36 @@ namespace ExplodeIt.Enemies
         }
 
         public bool IsEntranceDone => _isEntranceDone;
+
+        // 개발자 패널용. 3국면까지 다 맞은 것으로 치고 바로 그로기에 빠진다. 이때 한 방 맞히면 처치 연출로 넘어간다.
+        public void DebugGroggy()
+        {
+            if (!_isFighting || State == EnemyState.Dead)
+            {
+                return;
+            }
+
+            DebugJumpToPhase(Rotations.Length);
+            _hitsTaken = _data.CrownHits;
+            HitReceiver.ResetHits(1);
+            _isGroggy = true;
+            _hasCrown = false;
+            _crown.enabled = false;
+            HitReceiver.IsShielded = false;
+            Stun(_data.GroggyDuration);
+            AudioManager.Play(_data.GroggySound);
+        }
+
+        // 개발자 패널용. 그 자리에서 바로 쓰러뜨려 처치 연출(슬로모션 → 처치 대화 → 엔딩)을 본다.
+        public void DebugDefeat()
+        {
+            if (!_isFighting || State == EnemyState.Dead)
+            {
+                return;
+            }
+
+            HitReceiver.Kill();
+        }
 
         // 개발자 패널용. 맞은 횟수를 그 국면에 맞추고 바로 그 국면 모습·패턴 순서로 넘어간다. 싸우는 중에만 동작한다.
         // 국면 전환 연출은 건너뛰고, 잠깐 멈췄다가(기절) 새 국면의 첫 패턴부터 시작한다.
@@ -669,6 +714,13 @@ namespace ExplodeIt.Enemies
         // 조준하는 동안은 기본 자세로 서 있어야 찌르는 그림이 "지금 온다"는 신호로 읽힌다.
         private void UpdatePoseSprite()
         {
+            // 그로기로 주저앉아 있는 동안은 다른 자세를 고르지 않는다.
+            if (_isGroggy && State == EnemyState.Stunned && _stunSprite != null)
+            {
+                _visual.PoseSprite = _stunSprite;
+                return;
+            }
+
             Sprite pose = null;
             if (State == EnemyState.Attack && _pattern == Pattern.Slash)
             {
@@ -784,6 +836,44 @@ namespace ExplodeIt.Enemies
             {
                 BeginSummon();
             }
+        }
+
+        // 처치 대화 줄이 쓰러진 모습을 바꾼다(무릎 꿇기 등). 죽은 뒤에는 표시 컴포넌트가 그림을 고르지 않아 직접 바꾼다.
+        private void OnPoseRequested(Sprite sprite)
+        {
+            if (_isHoldingBody && sprite != null)
+            {
+                _bodyRenderer.sprite = sprite;
+            }
+        }
+
+        // 각성이 풀린다. 펑 하고 사라지고, 그 자리에는 대화가 2등신 왕을 띄운다. 나중에 사라질 때 연출은 내지 않는다.
+        private void OnRevertRequested()
+        {
+            if (!_isHoldingBody)
+            {
+                return;
+            }
+
+            Vector2 center = Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f);
+            FeedbackPlayer.Play(_data.PhaseShiftFeedback, center);
+            AudioManager.Play(_data.PhaseShiftSound);
+            _bodyRenderer.enabled = false;
+            _visual.SkipsDeathEnd = true;
+            _rageEmbers.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            _rageFlames.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        // 처치 대화가 끝났다. 멈춰 둔 사망 연출을 이어 가 부풀었다 쏙 사라진다(사라짐 연출·소리는 움직임 데이터에 있다).
+        private void OnFarewell()
+        {
+            if (!_isHoldingBody)
+            {
+                return;
+            }
+
+            _isHoldingBody = false;
+            _visual.HoldsDeath = false;
         }
 
         // ── 각성 파동과 어두워지는 맵: 진짜 보스로 바뀌는 순간 왕에게서 고리가 맵 끝까지 퍼지고, 그 뒤로 맵이 어둑해진다.
@@ -1082,6 +1172,12 @@ namespace ExplodeIt.Enemies
                     break;
 
                 case EnemyState.Dead:
+                    // 쓰러진 모습을 남겨 두고, 카메라가 왕에게 다가간 채 슬로모션이 걸린다. 처치 대화는 진행 흐름이 연다.
+                    _isHoldingBody = true;
+                    _visual.HoldsDeath = true;
+                    _isZoomed = true;
+                    GameEvents.RaiseCameraFocusRequested(Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f), _data.DefeatZoomTime);
+                    GameEvents.RaiseCameraZoomRequested(_data.DefeatZoom, _data.DefeatZoomTime);
                     _crown.enabled = false;
                     _darkenTarget = 0f;
                     HidePhase3Effects();

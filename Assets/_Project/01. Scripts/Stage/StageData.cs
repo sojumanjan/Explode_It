@@ -74,6 +74,15 @@ namespace ExplodeIt.Stage
         [Tooltip("최종 보스 등장 대화")]
         [SerializeField] private BossDialogueData _finalBossDialogue;
 
+        [Tooltip("최종 보스를 쓰러뜨린 뒤의 대화. 쓰러진 왕(머리 위)과 고블린(플레이어 머리 위)이 말한다. 비워 두면 대화 없이 바로 끝난다")]
+        [SerializeField] private BossDialogueData _finalBossDefeatDialogue;
+
+        [Tooltip("최종 보스가 쓰러진 뒤 처치 대화가 시작되기까지 (초, 실제 시간). 처치 슬로모션이 끝난 뒤로 둔다")]
+        [SerializeField, Min(0f)] private float _defeatDialogueDelay = 2f;
+
+        [Tooltip("처치 대화가 끝나 왕이 사라진 뒤 스테이지가 끝나기까지 (초)")]
+        [SerializeField, Min(0f)] private float _defeatEndDelay = 1.5f;
+
         [Tooltip("보스가 내려앉는 순간의 연출 (흔들림 등). 비워 두면 연출 없이 나타난다")]
         [SerializeField] private FeedbackData _bossLandFeedback;
 
@@ -114,6 +123,10 @@ namespace ExplodeIt.Stage
         }
 
         // 스토리 대화는 첫 바퀴에만 있다. 같은 보스가 다시 나오는 바퀴(무한 모드)에는 대화를 붙이지 않는다.
+        public BossDialogueData FinalBossDefeatDialogue => _finalBossDefeatDialogue;
+        public float DefeatDialogueDelay => _defeatDialogueDelay;
+        public float DefeatEndDelay => _defeatEndDelay;
+
         public BossDialogueData GetBossDialogue(int bossNumber)
         {
             if (bossNumber == FinalBossNumber)

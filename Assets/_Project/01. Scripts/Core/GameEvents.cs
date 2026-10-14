@@ -62,6 +62,27 @@ namespace ExplodeIt.Core
         public static event Action<float, float> CameraZoomRequested;
         // 싸우는 도중 보스가 외치는 대사와 띄워 둘 시간(초). 클릭 없이 시간이 지나면 사라진다.
         public static event Action<string, float> BossLineRequested;
+        // 처치 대화가 끝나 쓰러진 채 남아 있던 보스가 사라질 차례. 대화 동안 몸을 남겨 두는 보스(최종 보스)가 듣는다.
+        public static event Action BossFarewellRequested;
+        // 처치 대화 줄이 쓰러진 보스의 그림을 바꾸라고 알린다(무릎 꿇기 등).
+        public static event Action<Sprite> BossPoseRequested;
+        // 처치 대화 줄이 쓰러진 각성 왕을 2등신으로 되돌리라고 알린다. 보스는 펑 하고 사라지고, 대화가 2등신 왕을 그 자리에 띄운다.
+        public static event Action BossRevertRequested;
+
+        public static void RaiseBossPoseRequested(Sprite sprite)
+        {
+            BossPoseRequested?.Invoke(sprite);
+        }
+
+        public static void RaiseBossRevertRequested()
+        {
+            BossRevertRequested?.Invoke();
+        }
+
+        public static void RaiseBossFarewellRequested()
+        {
+            BossFarewellRequested?.Invoke();
+        }
 
         public static void RaiseBossLineRequested(string text, float duration)
         {

@@ -6963,7 +6963,7 @@ MonoBehaviour:
   _motion: {fileID: 11400000, guid: 63da58c2d46d2ef458d60ba6cd9e9c33, type: 2}
   _attackSprite: {fileID: 0}
   _stunnedSprite: {fileID: 0}
-  _deathSprite: {fileID: 21300000, guid: a4ed1fc916e29554181e6749201417f3, type: 3}
+  _deathSprite: {fileID: 21300000, guid: d1177e1851be9f44a9f050e880dd0665, type: 3}
 --- !u!114 &2656955896382719035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7006,6 +7006,7 @@ MonoBehaviour:
   _rageSlashFrames:
   - {fileID: 21300000, guid: 6340304905dd47144a5e9837b3436c4f, type: 3}
   _phase3IdleSprite: {fileID: 21300000, guid: 4461296ea6a124e428cd058fe9a1b353, type: 3}
+  _stunSprite: {fileID: 21300000, guid: 4f2c50f141902954e91f1e52d3789500, type: 3}
   _meteorPoseSprite: {fileID: 21300000, guid: 54cdbc15bad7d6a4992b8dd8c9a40000, type: 3}
   _swordChargeSprite: {fileID: 21300000, guid: 19ddd669d370cda42afd1e2f03d6e676, type: 3}
   _swordAttackSprite: {fileID: 21300000, guid: f3b7d1694dd31e64bb6509fd83c559e8, type: 3}

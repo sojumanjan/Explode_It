@@ -20,7 +20,9 @@ namespace ExplodeIt.Stage
             BossDialogue,
             // 보스가 내려앉은 뒤: 멈춤 → 보스 등장 동작 → 조작 복귀·카메라 복귀 → 보스 행동 시작.
             BossEntrance,
-            Boss
+            Boss,
+            // 최종 보스를 쓰러뜨린 뒤: 슬로모션 → 처치 대화 → 왕이 사라짐 → 스테이지 끝.
+            BossDefeat
         }
 
         private readonly struct SpawnEvent
@@ -79,6 +81,10 @@ namespace ExplodeIt.Stage
         private BossSpawnPoints[] _bossSpawnPointSets = Array.Empty<BossSpawnPoints>();
         private float _releaseTime;
         private Enemy _bossEnemy;
+        // 최종 보스 처치 흐름: 쓰러진 실제 시각, 대화를 열었는지, 왕을 보낸 실제 시각(음수면 아직).
+        private float _defeatStartTime;
+        private bool _isDefeatTalking;
+        private float _farewellTime = -1f;
         private System.Action _onDialogueSpawnBoss;
         private System.Action _onDialogueEntrance;
 
@@ -251,8 +257,19 @@ namespace ExplodeIt.Stage
                 case Phase.Boss:
                     if (_isBossDefeated)
                     {
-                        FinishBoss();
+                        if (_bossNumber >= _stage.FinalBossNumber)
+                        {
+                            BeginDefeat();
+                        }
+                        else
+                        {
+                            FinishBoss();
+                        }
                     }
+                    break;
+
+                case Phase.BossDefeat:
+                    TickDefeat();
                     break;
             }
         }
@@ -360,6 +377,65 @@ namespace ExplodeIt.Stage
             _isControlReleased = true;
             GameEvents.RaisePlayerControlLockChanged(false);
             GameEvents.RaiseCameraFocusReleased(_stage.BossCameraBlend);
+        }
+
+        // 최종 보스를 쓰러뜨렸다. 슬로모션이 끝나도록 실제 시간으로 기다린 뒤 처치 대화를 연다. 대화가 없으면 바로 왕을 보내고 끝낸다.
+        private void BeginDefeat()
+        {
+            EnterPhase(Phase.BossDefeat);
+            _defeatStartTime = Time.unscaledTime;
+            _isDefeatTalking = false;
+            _farewellTime = -1f;
+            GameEvents.RaisePlayerControlLockChanged(true);
+            _isControlReleased = false;
+            BossDialogueData dialogue = _stage.FinalBossDefeatDialogue;
+            if (dialogue == null || _dialoguePlayer == null || _bossEnemy == null)
+            {
+                SendFarewell();
+            }
+        }
+
+        private void TickDefeat()
+        {
+            if (_farewellTime >= 0f)
+            {
+                if (Time.unscaledTime - _farewellTime >= _stage.DefeatEndDelay)
+                {
+                    ReleaseEntrance();
+                    FinishBoss();
+                }
+
+                return;
+            }
+
+            if (!_isDefeatTalking)
+            {
+                if (Time.unscaledTime - _defeatStartTime < _stage.DefeatDialogueDelay)
+                {
+                    return;
+                }
+
+                // 쓰러진 왕과 고블린이 함께 보이게 둘 사이를 비춘다.
+                _isDefeatTalking = true;
+                Transform player = _spawner.Target;
+                Vector2 boss = _bossEnemy.transform.position;
+                Vector2 middle = player != null ? (boss + (Vector2)player.position) * 0.5f : boss;
+                GameEvents.RaiseCameraZoomRequested(1f, _stage.BossCameraBlend);
+                GameEvents.RaiseCameraFocusRequested(middle, _stage.BossCameraBlend);
+                _dialoguePlayer.PlayDefeat(_stage.FinalBossDefeatDialogue, _bossEnemy.transform, player);
+                return;
+            }
+
+            if (!_dialoguePlayer.IsPlaying)
+            {
+                SendFarewell();
+            }
+        }
+
+        private void SendFarewell()
+        {
+            _farewellTime = Time.unscaledTime;
+            GameEvents.RaiseBossFarewellRequested();
         }
 
         private void FinishBoss()

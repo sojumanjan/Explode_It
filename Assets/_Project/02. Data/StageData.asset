@@ -40,4 +40,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0bddd7fc46170c14d8c706e681a73e13, type: 2}
   - {fileID: 11400000, guid: 950231a7178169e4f854b3d40aab41c0, type: 2}
   _finalBossDialogue: {fileID: 11400000, guid: 1e6f40ea633444a459e614ee6da9708c, type: 2}
+  _finalBossDefeatDialogue: {fileID: 11400000, guid: 43df911393f36ef45a53947b0cfc2713, type: 2}
+  _defeatDialogueDelay: 2
+  _defeatEndDelay: 1.5
   _bossLandFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}
