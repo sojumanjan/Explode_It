@@ -76,6 +76,24 @@ namespace ExplodeIt.Enemies
         [Tooltip("각성 모습으로 바뀐 뒤 확대한 채 머무는 시간 (초)")]
         [SerializeField, Min(0f)] private float _zoomHoldTime = 0.4f;
 
+        [Tooltip("최종 보스전 배경음. 각성 모습으로 바뀌는 순간 바뀐다")]
+        [SerializeField] private BgmData _bossBgm;
+
+        [Tooltip("2등신 왕이 떨기 시작할 때 원래 배경음이 사라지는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _bgmFadeOutTime = 1.2f;
+
+        [Tooltip("각성하는 순간 왕에게서 맵 끝까지 파동이 퍼지는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _awakenWaveTime = 0.7f;
+
+        [Tooltip("파동 색 (불투명도까지 이 색을 쓴다)")]
+        [SerializeField] private Color _awakenWaveColor = new Color(1f, 0.55f, 0.4f, 0.9f);
+
+        [Tooltip("각성한 뒤 맵 전체가 어두워지는 색 (불투명도가 곧 어두운 정도). 보스를 쓰러뜨리면 걷힌다")]
+        [SerializeField] private Color _darkenColor = new Color(0.04f, 0f, 0.08f, 0.35f);
+
+        [Tooltip("맵이 어두워지고 걷히는 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _darkenFadeTime = 1f;
+
         [Tooltip("확대를 풀고 원래 화면으로 스윽 돌아가는 시간 (초)")]
         [SerializeField, Min(0f)] private float _zoomOutTime = 1f;
 
@@ -416,6 +434,12 @@ namespace ExplodeIt.Enemies
         public float ZoomHoldTime => _zoomHoldTime;
         public float ZoomOutTime => _zoomOutTime;
         public SoundData TransformChargeSound => _transformChargeSound;
+        public BgmData BossBgm => _bossBgm;
+        public float BgmFadeOutTime => _bgmFadeOutTime;
+        public float AwakenWaveTime => _awakenWaveTime;
+        public Color AwakenWaveColor => _awakenWaveColor;
+        public Color DarkenColor => _darkenColor;
+        public float DarkenFadeTime => _darkenFadeTime;
         public float PreferredDistance => _preferredDistance;
         public float PatternInterval => _patternInterval;
         public float PatternStartup => _patternStartup;

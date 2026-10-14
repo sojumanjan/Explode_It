@@ -15,7 +15,7 @@ MonoBehaviour:
   _lines:
   - _speaker: 0
     _mood: 3
-    _text: "\uC9D0\uC758 \uBCD1\uC0AC\uB3C4, \uC6A9\uBCD1\uB3C4, \uC560\uC644\uB3D9\uBB3C\uAE4C\uC9C0..."
+    _text: "\uC9D0\uC758 \uBCD1\uC0AC\uB3C4, \uC6A9\uBCD1\uB3C4,\n\uC560\uC644\uB3D9\uBB3C\uAE4C\uC9C0..."
     _spawnBoss: 0
     _startEntrance: 0
   - _speaker: 0

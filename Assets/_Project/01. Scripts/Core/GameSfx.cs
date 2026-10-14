@@ -12,17 +12,26 @@ namespace ExplodeIt.Core
         private bool _hasWeaponPitch;
         private float _pitchMin;
         private float _pitchMax;
+        // 폭발음을 빼라고 알려 온 프레임. 같은 프레임의 폭발음만 뺀다.
+        private int _suppressedFrame = -1;
 
         private void OnEnable()
         {
             GameEvents.BombExploded += OnBombExploded;
             GameEvents.ExplosionPitchChanged += OnExplosionPitchChanged;
+            GameEvents.ExplosionSoundSuppressed += OnExplosionSoundSuppressed;
         }
 
         private void OnDisable()
         {
             GameEvents.BombExploded -= OnBombExploded;
             GameEvents.ExplosionPitchChanged -= OnExplosionPitchChanged;
+            GameEvents.ExplosionSoundSuppressed -= OnExplosionSoundSuppressed;
+        }
+
+        private void OnExplosionSoundSuppressed()
+        {
+            _suppressedFrame = Time.frameCount;
         }
 
         private void OnExplosionPitchChanged(float min, float max)
@@ -34,6 +43,11 @@ namespace ExplodeIt.Core
 
         private void OnBombExploded(Vector2 position, float radius, int hitCount)
         {
+            if (_suppressedFrame == Time.frameCount)
+            {
+                return;
+            }
+
             if (_hasWeaponPitch)
             {
                 AudioManager.Play(_bombExplode, Random.Range(_pitchMin, _pitchMax));

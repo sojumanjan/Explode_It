@@ -233,6 +233,22 @@ namespace ExplodeIt.Core
             }
         }
 
+        // 지금 배경음을 서서히 줄여 끈다. 다음 곡은 따로 정할 때까지 나오지 않는다(보스가 각성하는 순간 새 곡으로 바꾸려고 미리 비울 때).
+        public static void FadeOutBgm(float duration)
+        {
+            if (_current == null)
+            {
+                return;
+            }
+
+            _current._currentBgm = null;
+            AudioSource front = _current._bgmFront;
+            front.DOKill();
+            DOTween.To(() => front.volume, v => front.volume = v, 0f, Mathf.Max(duration, 0.01f))
+                .SetTarget(front).SetUpdate(true)
+                .OnComplete(front.Stop);
+        }
+
         public static void PlayBgm(BgmData bgm)
         {
             if (_current != null && bgm != null)

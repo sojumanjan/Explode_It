@@ -22,6 +22,14 @@ namespace ExplodeIt.Core
         public static event Action BombThrown;
         // 장착한 무기의 폭발음 피치 범위(최소, 최대). 무기를 바꿀 때마다 발행해, 효과음 쪽이 무기 코드를 몰라도 되게 한다.
         public static event Action<float, float> ExplosionPitchChanged;
+        // 이번 프레임의 폭탄 폭발음을 내지 않는다. 맞은 쪽이 더 큰 자기 소리로 대신할 때(최종 보스 피격) 쓴다.
+        // 폭발 판정이 폭발 이벤트보다 먼저 일어나므로, 맞는 순간 이걸 알리면 같은 프레임의 폭발음이 빠진다.
+        public static event Action ExplosionSoundSuppressed;
+
+        public static void RaiseExplosionSoundSuppressed()
+        {
+            ExplosionSoundSuppressed?.Invoke();
+        }
 
         public static void RaiseExplosionPitchChanged(float min, float max)
         {

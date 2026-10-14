@@ -182,6 +182,9 @@ namespace ExplodeIt.Enemies
         [SerializeField] private GameObject _meteorPrefab;
         // 유성우 동안 맵 전체를 보랏빛으로 덮는 반투명 칸(흰 사각형 그림). 맵 크기에 맞춰 월드에 깐다.
         [SerializeField] private SpriteRenderer _mapTint;
+        // 각성하는 순간 왕에게서 맵 끝까지 퍼지는 파동(고리 그림)과, 그 뒤 싸우는 내내 맵을 어둡게 덮는 칸(흰 사각형 그림).
+        [SerializeField] private SpriteRenderer _awakenWave;
+        [SerializeField] private SpriteRenderer _mapDarken;
         // 천지 가르기 예고. 먼저 벨 쪽과 나중에 벨 쪽.
         [SerializeField] private HalfSlashWarning _halfFirst;
         [SerializeField] private HalfSlashWarning _halfSecond;
@@ -270,6 +273,11 @@ namespace ExplodeIt.Enemies
         private ParticleSystem.MinMaxGradient _auraBaseColor;
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
+        // 각성 파동이 퍼지기 시작한 뒤 지난 시간 (음수면 없음), 파동이 닿을 가장 먼 거리, 맵 어두움 정도 (0~1)와 목표.
+        private float _awakenWaveTime = -1f;
+        private float _awakenWaveReach;
+        private float _darken;
+        private float _darkenTarget;
         private SoundHandle _transformChargeHandle = SoundHandle.None;
         // 지금 보이는 모습의 국면(1~3). 국면 전환 끝에 팍 커지는 순간 바뀐다.
         private int _lookPhase = 1;
@@ -359,6 +367,10 @@ namespace ExplodeIt.Enemies
 
             _mapTint.transform.SetParent(null);
             _mapTint.enabled = false;
+            _awakenWave.transform.SetParent(null);
+            _awakenWave.enabled = false;
+            _mapDarken.transform.SetParent(null);
+            _mapDarken.enabled = false;
             _halfFirst.transform.SetParent(null);
             _halfSecond.transform.SetParent(null);
             _swordLine.transform.SetParent(null);
@@ -419,6 +431,11 @@ namespace ExplodeIt.Enemies
             if (_mapTint != null)
             {
                 HidePhase3Effects();
+                _awakenWaveTime = -1f;
+                _awakenWave.enabled = false;
+                _darken = 0f;
+                _darkenTarget = 0f;
+                _mapDarken.enabled = false;
             }
 
             // 변신 도중 사라지면(개발자 패널 전멸 등) 확대된 채 남지 않게 바로 되돌린다.
@@ -456,6 +473,16 @@ namespace ExplodeIt.Enemies
             if (_mapTint != null)
             {
                 Destroy(_mapTint.gameObject);
+            }
+
+            if (_awakenWave != null)
+            {
+                Destroy(_awakenWave.gameObject);
+            }
+
+            if (_mapDarken != null)
+            {
+                Destroy(_mapDarken.gameObject);
             }
 
             if (_halfFirst != null)
@@ -539,6 +566,8 @@ namespace ExplodeIt.Enemies
             SetAuraColor(false);
             _transformAura.Play();
             _transformChargeHandle = AudioManager.Play(_data.TransformChargeSound);
+            // 떨기 시작하면 원래 곡을 줄여, 각성하는 순간 보스 곡이 조용한 데서 터지게 한다.
+            AudioManager.FadeOutBgm(_data.BgmFadeOutTime);
         }
 
         // 변신이 아직이면 끝나는 대로 왕관을 부른다.
@@ -621,6 +650,8 @@ namespace ExplodeIt.Enemies
 
             TickPop(deltaTime);
             TickRage(deltaTime);
+            TickAwakenWave(deltaTime);
+            TickDarken(deltaTime);
             TickPhase3Visuals(deltaTime);
             TickAfterimages();
             TickKnockback(deltaTime);
@@ -745,11 +776,74 @@ namespace ExplodeIt.Enemies
             _zoomHoldTime = 0f;
             FeedbackPlayer.Play(_data.TransformFeedback, center);
             AudioManager.Play(_data.TransformSound);
+            AudioManager.PlayBgm(_data.BossBgm);
+            BeginAwakenWave(center);
+            _darkenTarget = 1f;
 
             if (_isEntranceRequested)
             {
                 BeginSummon();
             }
+        }
+
+        // ── 각성 파동과 어두워지는 맵: 진짜 보스로 바뀌는 순간 왕에게서 고리가 맵 끝까지 퍼지고, 그 뒤로 맵이 어둑해진다.
+        // 파동은 가장 먼 맵 모서리까지 닿도록 크기를 정한다. 어두움은 쓰러질 때까지 남아 최종 보스전 분위기를 만든다.
+
+        private void BeginAwakenWave(Vector2 center)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            Bounds bounds = arena != null ? arena.Bounds : new Bounds(center, new Vector3(60f, 60f, 1f));
+            float reach = 0f;
+            Vector3 min = bounds.min;
+            Vector3 max = bounds.max;
+            reach = Mathf.Max(reach, Vector2.Distance(center, new Vector2(min.x, min.y)));
+            reach = Mathf.Max(reach, Vector2.Distance(center, new Vector2(min.x, max.y)));
+            reach = Mathf.Max(reach, Vector2.Distance(center, new Vector2(max.x, min.y)));
+            reach = Mathf.Max(reach, Vector2.Distance(center, new Vector2(max.x, max.y)));
+            _awakenWaveReach = reach;
+            _awakenWaveTime = 0f;
+            _awakenWave.transform.position = center;
+            _awakenWave.enabled = true;
+            TickAwakenWave(0f);
+
+            // 어두운 칸은 화면을 다 덮도록 맵보다 넉넉히 깐다.
+            Transform darken = _mapDarken.transform;
+            darken.position = bounds.center;
+            float size = _mapDarken.sprite != null ? _mapDarken.sprite.bounds.size.x : 1f;
+            darken.localScale = new Vector3((bounds.size.x + ShockCoverMargin) / size, (bounds.size.y + ShockCoverMargin) / size, 1f);
+        }
+
+        private void TickAwakenWave(float deltaTime)
+        {
+            if (_awakenWaveTime < 0f)
+            {
+                return;
+            }
+
+            _awakenWaveTime += deltaTime;
+            float t = Mathf.Clamp01(_awakenWaveTime / _data.AwakenWaveTime);
+            // 처음엔 빠르게 터져 나가고 끝에서 느려진다. 고리 그림의 테두리가 그림 폭의 90% 자리라 그만큼 크게 잡는다.
+            float radius = _awakenWaveReach * (1f - (1f - t) * (1f - t));
+            float size = _awakenWave.sprite != null ? _awakenWave.sprite.bounds.size.x * 0.45f : 0.5f;
+            float scale = Mathf.Max(radius, 0.01f) / size;
+            _awakenWave.transform.localScale = new Vector3(scale, scale, 1f);
+            Color color = _data.AwakenWaveColor;
+            color.a *= 1f - t * t;
+            _awakenWave.color = color;
+            if (t >= 1f)
+            {
+                _awakenWaveTime = -1f;
+                _awakenWave.enabled = false;
+            }
+        }
+
+        private void TickDarken(float deltaTime)
+        {
+            _darken = Mathf.MoveTowards(_darken, _darkenTarget, deltaTime / _data.DarkenFadeTime);
+            Color color = _data.DarkenColor;
+            color.a *= _darken;
+            _mapDarken.color = color;
+            _mapDarken.enabled = _darken > 0f;
         }
 
         // 변신에 눈이 가도록 카메라가 왕 한가운데로 다가간다.
@@ -989,6 +1083,7 @@ namespace ExplodeIt.Enemies
 
                 case EnemyState.Dead:
                     _crown.enabled = false;
+                    _darkenTarget = 0f;
                     HidePhase3Effects();
                     // 불꽃만 끄고 붉어진 모습은 그대로 둔 채 쓰러진다.
                     _rageFlames.Stop(true, ParticleSystemStopBehavior.StopEmitting);
@@ -2320,6 +2415,8 @@ namespace ExplodeIt.Enemies
             Knockback(hit.SourcePosition);
             DropCrown();
             FeedbackPlayer.Play(_data.HurtFeedback, Body.position);
+            // 맞힌 폭탄의 폭발음은 빼고 피격음만 크게 들리게 한다.
+            GameEvents.RaiseExplosionSoundSuppressed();
             AudioManager.Play(_data.HurtSound);
             _visual.Flash(_data.HurtFlashColor, _data.HurtFlashDuration);
 
