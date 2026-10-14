@@ -18,13 +18,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f03576ff17ae57043adf22f2fa331b02, type: 3}
   - {fileID: 21300000, guid: 7b57aba56b00cfe488464d261dff1dbf, type: 3}
   _panelLines:
-  - "(\uCC38 \uD3C9\uD654\uB86D\uACE0 \uB290\uC2A8\uD55C \uACE0\uBE14\uB9B0 \uB9C8\uC744\uC774\uB124\uC694.)"
+  - "(\uCC38 \uD3C9\uD654\uB86D\uACE0 \uB290\uC2A8\uD55C\n\uACE0\uBE14\uB9B0 \uB9C8\uC744\uC774\uB124\uC694.)"
   - "\uD558\uC544~~ \uC624\uB79C\uB9CC\uC5D0 \uCC45\uC774\uB098 \uC77D\uC5B4\uBCFC\uAE4C??"
   - "\uC5B4, \uC5B4\uC5B4?!"
   - "\uC73C\uC544\uC544\uC544\uC544\u314F\u314F\u314F\u314F\u314F\u314F\u314F!!!!"
   _panelPopTime: 0.35
   _captionCharsPerSecond: 20
-  _panelHoldTime: 1.6
   _panelSound: {fileID: 11400000, guid: bf7cb4cb18b4a3c4a9faab17825bf0f0, type: 2}
   _whiteFadeTime: 0.35
   _gardenZoom: 0.7
@@ -35,7 +34,8 @@ MonoBehaviour:
   _popSpins: 2
   _afterPopWait: 0.4
   _bookGlowSound: {fileID: 11400000, guid: d866eb20f9b171146b546dec7f94983f, type: 2}
-  _popSound: {fileID: 11400000, guid: 7901870020ff6214fae0ef57569c9974, type: 2}
+  _popSound: {fileID: 11400000, guid: 4ad63484fb3d3bc4bb7a379c52008cf4, type: 2}
+  _landSound: {fileID: 11400000, guid: 44c2a00060ac70c46ae051fdd0007e9b, type: 2}
   _lines:
   - _speaker: 0
     _mood: 4
@@ -52,6 +52,11 @@ MonoBehaviour:
     _text: "\uC5B4\uC5B4\u2026!!!"
     _callsSoldiers: 0
     _popsGoblinBefore: 1
+  - _speaker: 2
+    _mood: 0
+    _text: "\uC5EC, \uC5EC\uAE34 \uC5B4\uB514\uC57C?!"
+    _callsSoldiers: 0
+    _popsGoblinBefore: 0
   - _speaker: 0
     _mood: 6
     _text: "\u3141...\uBB34..\uBB50\uC57C!!! \uACE0\uBE14\uB9B0\uC774\uB2E4!!!"
@@ -60,11 +65,6 @@ MonoBehaviour:
   - _speaker: 0
     _mood: 1
     _text: "\uAC11\uC790\uAE30 \uBAAC\uC2A4\uD130\uAC00 \uC65C \uC5EC\uAE30\uC5D0\u2026!!!"
-    _callsSoldiers: 0
-    _popsGoblinBefore: 0
-  - _speaker: 2
-    _mood: 0
-    _text: "\uC5EC, \uC5EC\uAE34 \uC5B4\uB514\uC57C?!"
     _callsSoldiers: 0
     _popsGoblinBefore: 0
   - _speaker: 0

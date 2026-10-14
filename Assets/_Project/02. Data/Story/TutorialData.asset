@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5687cf602d9a76409fb17ac7eb66dfb, type: 3}
+  m_Name: TutorialData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.TutorialData
+  _moveTask: "<color=#FFD54A>WASD</color>\uB85C \uC774\uB3D9\uD558\uAE30"
+  _throwTask: "<color=#FFD54A>\uC88C\uD074\uB9AD</color>\uC73C\uB85C \uD3ED\uD0C4
+    \uB358\uC9C0\uAE30"
+  _dashTask: "<color=#FFD54A>Space</color>\uB85C \uB300\uC2DC\uD558\uAE30"
+  _dashDoneText: "\uB300\uC2DC\uD558\uB294 \uB3D9\uC548\uC740 <color=#FFD54A>\uBB34\uC801</color>\uC785\uB2C8\uB2E4!"
+  _abilityTask: "<color=#FFD54A>\uC6B0\uD074\uB9AD</color>\uC73C\uB85C \uAC15\uB825\uD55C
+    \uC2A4\uD0AC \uC0AC\uC6A9\uD558\uAE30"
+  _gaugeText: "\uAC8C\uC774\uC9C0 \uD55C \uCE78\uC774 \uAC00\uB4DD \uCC28\uBA74 \uC2A4\uD0AC\uC744
+    \uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\uC801\uC744 \uCC98\uCE58\uD574
+    \uAC8C\uC774\uC9C0\uB97C \uC313\uC544 \uC2A4\uD0AC\uC744 \uC0AC\uC6A9\uD558\uC138\uC694!"
+  _startDelay: 0.4
+  _moveDistance: 2.5
+  _taskCompleteHold: 0.9
+  _dashDoneHold: 2
+  _gaugeFocusDelay: 0.8
+  _gaugeFocusTime: 4

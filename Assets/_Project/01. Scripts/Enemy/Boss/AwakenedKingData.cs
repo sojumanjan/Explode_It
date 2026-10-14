@@ -38,6 +38,12 @@ namespace ExplodeIt.Enemies
         [Tooltip("국면이 바뀔 때 왕이 외치는 대사. 첫 번째 칸은 처음 맞았을 때, 두 번째 칸은 두 번째로 맞았을 때. 비워 두면 대사 없이 넘어간다")]
         [SerializeField, TextArea(1, 2)] private string[] _phaseLines = { "감히 짐의 왕관을…!", "이 무엄한 고블린 녀석이!!" };
 
+        [Tooltip("1국면에서 패턴 한 바퀴가 다 돌도록 한 대도 못 때리면, 우측 하단 컷인에 고블린이 나와 하는 힌트. 비워 두면 힌트를 주지 않는다")]
+        [SerializeField, TextArea(1, 2)] private string _crownHintText = "저 왕관이 떨어질 때를 노려야 할 것 같은데...";
+
+        [Tooltip("힌트가 떠 있는 시간 (초, 실제 시간). 글자가 다 나온 뒤부터 센다")]
+        [SerializeField, Min(0.5f)] private float _crownHintHold = 3f;
+
         [Tooltip("국면 전환 끝에 바닥에 떨어진 왕관이 머리 위로 날아 돌아오는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _crownReturnTime = 0.45f;
 
@@ -529,6 +535,8 @@ namespace ExplodeIt.Enemies
         public float SwordWait => _swordWait;
         public float SwordSlashGap => _swordSlashGap;
         public float SwordRecover => _swordRecover;
+        public string CrownHintText => _crownHintText;
+        public float CrownHintHold => _crownHintHold;
         public float SwordFollowupWait => _swordFollowupWait;
         public float SwordStageGap => _swordStageGap;
         public int StripeCount => _stripeCount;

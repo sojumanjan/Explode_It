@@ -331,6 +331,7 @@ namespace ExplodeIt.Stage
                 _player.localRotation = Quaternion.identity;
                 _player.localScale = _playerScale;
                 Teleport(to);
+                AudioManager.Play(_data.LandSound);
             });
         }
 

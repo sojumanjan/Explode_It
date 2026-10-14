@@ -34,6 +34,9 @@ MonoBehaviour:
   _phaseLines:
   - "\uAC10\uD788 \uC9D0\uC758 \uBAB8\uC5D0 \uC0DD\uCC44\uAE30\uB97C \uB0B4\uB2E4\uB2C8..!"
   - "\uC774 \uBB34\uC5C4\uD55C \uACE0\uBE14\uB9B0 \uB140\uC11D\uC774!!"
+  _crownHintText: "\uC800 \uC655\uAD00\uC774 \uB5A8\uC5B4\uC9C8 \uB54C\uB97C \uB178\uB824\uC57C
+    \uD560 \uAC83 \uAC19\uC740\uB370..."
+  _crownHintHold: 3
   _crownReturnTime: 0.45
   _phaseZoom: 0.8
   _phaseZoomInTime: 0.3
@@ -123,6 +126,7 @@ MonoBehaviour:
   _swordFollowupWait: 1.2
   _swordStageGap: 0.5
   _stripeCount: 10
+  _stripeDangerRatio: 0.7
   _swordRecover: 0.6
   _starRadius: 7
   _starDrawTime: 1

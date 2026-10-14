@@ -24,6 +24,7 @@ namespace ExplodeIt.Stage
             GameEvents.BombExploded += OnBombExploded;
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.StageStarted += OnStageStarted;
+            GameEvents.StageTimerStopped += OnStageTimerStopped;
         }
 
         private void OnDisable()
@@ -32,6 +33,13 @@ namespace ExplodeIt.Stage
             GameEvents.BombExploded -= OnBombExploded;
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.StageStarted -= OnStageStarted;
+            GameEvents.StageTimerStopped -= OnStageTimerStopped;
+        }
+
+        // 최종 보스를 쓰러뜨린 순간의 시간이 이번 판 기록이다.
+        private void OnStageTimerStopped()
+        {
+            _hasStarted = false;
         }
 
         private void OnStageStarted(bool isStoryMode)

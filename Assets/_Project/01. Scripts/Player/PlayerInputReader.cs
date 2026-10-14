@@ -22,12 +22,15 @@ namespace ExplodeIt.Player
         // 누르고 있으면 연사 간격마다 계속 던지도록 눌림 상태로 읽는다.
         public bool ThrowHeld => !IsLocked && !PointerBlocked && _throwAction.action.IsPressed();
         // 게이지가 차는 순간 누르고 있던 버튼으로 바로 나가지 않도록, 누른 프레임만 읽는다.
-        public bool AbilityPressed => !IsLocked && !PointerBlocked && _abilityAction.action.WasPressedThisFrame();
+        public bool AbilityPressed => !IsLocked && !PointerBlocked && !IsAbilityBlocked && _abilityAction.action.WasPressedThisFrame();
         // 키보드 입력이라 패널 위 커서와 무관하게 받는다.
         public bool DodgePressed => !IsLocked && _dodgeAction.action.WasPressedThisFrame();
 
         // 커서가 개발자 패널 같은 화면 UI 위에 있을 때, 슬라이더를 누르는 클릭이 투척으로 새지 않게 막는다.
         public bool PointerBlocked { get; set; }
+
+        // 튜토리얼이 스킬 차례가 오기 전에 게이지를 써 버리지 않게 막을 때 쓴다.
+        public bool IsAbilityBlocked { get; set; }
 
         private void OnEnable()
         {

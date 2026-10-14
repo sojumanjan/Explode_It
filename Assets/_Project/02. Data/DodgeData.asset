@@ -17,3 +17,4 @@ MonoBehaviour:
   _invulnerableDuration: 0.25
   _cooldown: 1.25
   _sound: {fileID: 11400000, guid: a069a81ce776d0f478c31f0a8a9e9715, type: 2}
+  _evadeFeedback: {fileID: 11400000, guid: 0b86ca4afe9c0074c9f120e75d234410, type: 2}

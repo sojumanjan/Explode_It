@@ -64,6 +64,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private BossDialoguePlayer _dialoguePlayer;
         // 첫 판 오프닝 연출. 끝날 때까지 첫 웨이브를 미뤄야 해서 직접 참조한다. 비워 두면 바로 시작한다.
         [SerializeField] private IntroSequence _intro;
+        // 첫 판 조작 튜토리얼. 오프닝을 본 판에만 이어서 하고, 끝나야 첫 웨이브를 연다. 비워 두면 바로 시작한다.
+        [SerializeField] private TutorialSequence _tutorial;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
@@ -95,9 +97,10 @@ namespace ExplodeIt.Stage
         private float _walkStartTime = -1f;
         // 처치 대화 때 고블린이 설 왕 옆자리.
         private Vector2 _talkPoint;
-        // 오프닝이 끝나기를 기다리는 중. 그동안은 웨이브 시계를 돌리지 않는다.
+        // 오프닝·튜토리얼이 끝나기를 기다리는 중. 그동안은 웨이브 시계를 돌리지 않는다.
         private bool _isWaitingIntro;
         private System.Action _onIntroFinished;
+        private System.Action _onTutorialFinished;
         private System.Action _onDialogueSpawnBoss;
         private System.Action _onDialogueEntrance;
 
@@ -167,6 +170,25 @@ namespace ExplodeIt.Stage
         }
 
         private void OnIntroFinished()
+        {
+            StartTutorialOrStage();
+        }
+
+        private void StartTutorialOrStage()
+        {
+            if (_tutorial != null && _tutorial.CanPlay)
+            {
+                _isWaitingIntro = true;
+                _onTutorialFinished ??= OnTutorialFinished;
+                _tutorial.PlayBasics(_onTutorialFinished);
+                return;
+            }
+
+            _isWaitingIntro = false;
+            BeginStage();
+        }
+
+        private void OnTutorialFinished()
         {
             _isWaitingIntro = false;
             BeginStage();
@@ -416,6 +438,7 @@ namespace ExplodeIt.Stage
         private void BeginDefeat()
         {
             EnterPhase(Phase.BossDefeat);
+            GameEvents.RaiseStageTimerStopped();
             _defeatStartTime = Time.unscaledTime;
             _isDefeatTalking = false;
             _farewellTime = -1f;

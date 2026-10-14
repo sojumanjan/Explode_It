@@ -216,6 +216,9 @@ namespace ExplodeIt.Enemies
         private bool _isGroggy;
         private int _hitsTaken;
         private int _rotationIndex;
+        // 1국면에서 시작한 패턴 수와, 왕관을 노리라는 힌트를 이미 줬는지.
+        private int _firstPhasePatterns;
+        private bool _isCrownHintShown;
         private Pattern _pattern;
         private float _moveTimer;
 
@@ -1192,12 +1195,32 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 1국면 패턴 한 바퀴(왕관 부메랑까지)가 다 지나도록 한 대도 못 때렸으면, 다음 패턴이 시작될 때 한 번만 힌트를 준다.
+        // 왕관이 없을 때만 맞는다는 규칙을 모르고 계속 피하기만 하는 경우를 돕는다.
+        private void TryShowCrownHint(int rotationLength)
+        {
+            if (_hitsTaken != 0 || _isCrownHintShown)
+            {
+                return;
+            }
+
+            _firstPhasePatterns++;
+            if (_firstPhasePatterns <= rotationLength)
+            {
+                return;
+            }
+
+            _isCrownHintShown = true;
+            GameEvents.RaisePlayerHintRequested(_data.CrownHintText, _data.CrownHintHold);
+        }
+
         protected override void OnEnterState(EnemyState state)
         {
             switch (state)
             {
                 case EnemyState.Telegraph:
                     Pattern[] rotation = CurrentRotation();
+                    TryShowCrownHint(rotation.Length);
                     _pattern = rotation[_rotationIndex % rotation.Length];
                     _rotationIndex = (_rotationIndex + 1) % rotation.Length;
                     _aimDirection = DirectionToTarget();

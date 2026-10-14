@@ -23,10 +23,14 @@ namespace ExplodeIt.Player
         [Tooltip("구르기 효과음. 비워 두면 소리 없이 구른다")]
         [SerializeField] private SoundData _sound;
 
+        [Tooltip("구르기 무적으로 공격을 흘려 낸 순간의 연출(슬로모션 시간·배속 등). 구르기 한 번에 한 번만 나온다. 비워 두면 연출 없음")]
+        [SerializeField] private FeedbackData _evadeFeedback;
+
         public float Distance => _distance;
         public float Duration => _duration;
         public float InvulnerableDuration => _invulnerableDuration;
         public float Cooldown => _cooldown;
         public SoundData Sound => _sound;
+        public FeedbackData EvadeFeedback => _evadeFeedback;
     }
 }

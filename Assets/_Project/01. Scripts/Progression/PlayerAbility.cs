@@ -81,6 +81,7 @@ namespace ExplodeIt.Progression
             _charge -= _data.KillsToCharge;
             _isActive = true;
             RaiseChargeChanged();
+            GameEvents.RaiseAbilityUsed();
 
             WeaponStats weapon = _launcher.Stats;
             _blackHole.transform.position = transform.position;
@@ -106,6 +107,7 @@ namespace ExplodeIt.Progression
         {
             _blackHole.gameObject.SetActive(false);
             _isActive = false;
+            GameEvents.RaiseAbilityFinished();
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)

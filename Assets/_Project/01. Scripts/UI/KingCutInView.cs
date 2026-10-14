@@ -17,6 +17,8 @@ namespace ExplodeIt.UI
         [SerializeField] private Image _king;
         [SerializeField] private SpeechBubble _bubble;
         [SerializeField] private KingRemarkData[] _remarks;
+        // 고블린이 혼잣말로 힌트를 줄 때 왕 대신 보여 줄 그림.
+        [SerializeField] private Sprite _playerPortrait;
         // 다중 처치는 자주 터지므로 이 시간(초) 안에는 다시 나오지 않는다. 나머지 상황은 정해진 순간에 한 번씩이라 막지 않는다.
         [SerializeField, Min(0f)] private float _multiKillCooldown = 8f;
         // 패널이 숨어 있을 때와 나와 있을 때의 높이(캔버스 단위), 오르내리는 시간(초), 표정 바뀔 때 뽀잉 세기(비율).
@@ -34,7 +36,8 @@ namespace ExplodeIt.UI
         private float _lastMultiKillTime = float.NegativeInfinity;
         private float _holdTimer;
         private KingRemarkData _last;
-        private KingRemarkData _current;
+        private string _currentText;
+        private float _currentHold;
         private Sequence _sequence;
         private Tween _punch;
         private TweenCallback _onSlidIn;
@@ -68,6 +71,7 @@ namespace ExplodeIt.UI
             GameEvents.BossDefeated += OnBossDefeated;
             GameEvents.PlayerDied += OnPlayerDied;
             GameEvents.PlayerControlLockChanged += OnControlLockChanged;
+            GameEvents.PlayerHintRequested += OnPlayerHintRequested;
         }
 
         private void OnDisable()
@@ -79,6 +83,7 @@ namespace ExplodeIt.UI
             GameEvents.BossDefeated -= OnBossDefeated;
             GameEvents.PlayerDied -= OnPlayerDied;
             GameEvents.PlayerControlLockChanged -= OnControlLockChanged;
+            GameEvents.PlayerHintRequested -= OnPlayerHintRequested;
             _sequence?.Kill();
             _punch?.Kill();
         }
@@ -206,12 +211,29 @@ namespace ExplodeIt.UI
             }
         }
 
-        // 이미 나와 있으면 내려가지 않고 표정만 바꿔 바로 다음 말을 한다.
+        // 연출로 조작이 막힌 동안에는 띄우지 않는다(보스 대화가 주인공이다).
+        private void OnPlayerHintRequested(string text, float hold)
+        {
+            if (_isLocked || string.IsNullOrEmpty(text) || _playerPortrait == null)
+            {
+                return;
+            }
+
+            ShowLine(_playerPortrait, text, hold);
+        }
+
         private void Show(KingRemarkData remark)
         {
             _last = remark;
-            _current = remark;
-            _king.sprite = _kingSprites.Get(remark.Mood);
+            ShowLine(_kingSprites.Get(remark.Mood), remark.Text, remark.Hold);
+        }
+
+        // 이미 나와 있으면 내려가지 않고 그림만 바꿔 바로 다음 말을 한다.
+        private void ShowLine(Sprite sprite, string text, float hold)
+        {
+            _currentText = text;
+            _currentHold = hold;
+            _king.sprite = sprite;
             _king.enabled = true;
             FitKingSize();
             _bubble.Hide();
@@ -238,8 +260,8 @@ namespace ExplodeIt.UI
             _punch?.Kill();
             _king.rectTransform.localScale = Vector3.one;
             _punch = _king.rectTransform.DOPunchScale(Vector3.one * _moodPunch, 0.25f, 6).SetUpdate(true).SetLink(gameObject);
-            _bubble.Show(_current.Text);
-            _holdTimer = _current.Hold;
+            _bubble.Show(_currentText);
+            _holdTimer = _currentHold;
             _isTalking = true;
         }
 

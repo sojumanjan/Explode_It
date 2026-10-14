@@ -18,6 +18,9 @@ namespace ExplodeIt.Player
         private float _dodgeEndTime;
         private float _readyTime;
         private bool _canDodge = true;
+        // 이번 구르기의 무적이 끝나는 시각과, 그동안 공격을 흘려 낸 연출을 이미 냈는지.
+        private float _evadeUntil;
+        private bool _hasEvaded;
 
         public bool IsDodging => Time.time < _dodgeEndTime;
 
@@ -30,11 +33,13 @@ namespace ExplodeIt.Player
         private void OnEnable()
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
+            _hitReceiver.Blocked += OnBlocked;
         }
 
         private void OnDisable()
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
+            _hitReceiver.Blocked -= OnBlocked;
         }
 
         private void Update()
@@ -66,7 +71,23 @@ namespace ExplodeIt.Player
             _dodgeEndTime = Time.time + _data.Duration;
             _readyTime = Time.time + _data.Cooldown;
             _hitReceiver.GrantInvulnerability(_data.InvulnerableDuration);
+            _evadeUntil = Time.time + _data.InvulnerableDuration;
+            _hasEvaded = false;
             AudioManager.Play(_data.Sound);
+            GameEvents.RaisePlayerDodged();
+        }
+
+        // 구르기 무적이 공격을 막아 냈다. 치트 무적이나 보스 실드로 막힌 것은 빼고, 구르기 한 번에 한 번만 잠깐 느려진다.
+        // 아슬아슬하게 피했다는 손맛을 주기 위해서다.
+        private void OnBlocked(HitInfo hit)
+        {
+            if (_hasEvaded || Time.time >= _evadeUntil || _hitReceiver.CheatInvulnerable)
+            {
+                return;
+            }
+
+            _hasEvaded = true;
+            FeedbackPlayer.Play(_data.EvadeFeedback, transform.position);
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)

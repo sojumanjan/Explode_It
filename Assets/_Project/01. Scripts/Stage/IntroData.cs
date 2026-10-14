@@ -46,9 +46,6 @@ namespace ExplodeIt.Stage
         [Tooltip("컷 대사가 나오는 빠르기 (초당 글자 수)")]
         [SerializeField, Min(1f)] private float _captionCharsPerSecond = 20f;
 
-        [Tooltip("컷 대사가 다 나온 뒤 클릭이 없어도 다음 컷으로 넘어가기까지 (초)")]
-        [SerializeField, Min(0f)] private float _panelHoldTime = 1.6f;
-
         [Tooltip("컷이 튀어나올 때 소리")]
         [SerializeField] private SoundData _panelSound;
 
@@ -82,6 +79,9 @@ namespace ExplodeIt.Stage
 
         [Tooltip("고블린이 튀어나올 때 소리")]
         [SerializeField] private SoundData _popSound;
+
+        [Tooltip("고블린이 튀어나와 땅에 착지할 때 소리")]
+        [SerializeField] private SoundData _landSound;
 
         [Tooltip("정원 대사. 클릭해서 넘긴다. 마지막 줄을 넘기면 고블린이 아래로 도망친다")]
         [SerializeField] private Line[] _lines;
@@ -123,7 +123,6 @@ namespace ExplodeIt.Stage
         public string GetPanelLine(int index) => _panelLines[index];
         public float PanelPopTime => _panelPopTime;
         public float CaptionCharsPerSecond => _captionCharsPerSecond;
-        public float PanelHoldTime => _panelHoldTime;
         public SoundData PanelSound => _panelSound;
         public float WhiteFadeTime => _whiteFadeTime;
         public float GardenZoom => _gardenZoom;
@@ -135,6 +134,7 @@ namespace ExplodeIt.Stage
         public float AfterPopWait => _afterPopWait;
         public SoundData BookGlowSound => _bookGlowSound;
         public SoundData PopSound => _popSound;
+        public SoundData LandSound => _landSound;
         public int LineCount => _lines != null ? _lines.Length : 0;
         public Line GetLine(int index) => _lines[index];
         public SoundData ClickSound => _clickSound;

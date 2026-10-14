@@ -79,6 +79,46 @@ namespace ExplodeIt.Core
             PlayerWalkCancelled?.Invoke();
         }
 
+        // 판 시간을 멈춘다. 최종 보스를 쓰러뜨린 순간 기록 시간이 처치 대화·엔딩 동안 늘지 않게 한다.
+        public static event Action StageTimerStopped;
+
+        public static void RaiseStageTimerStopped()
+        {
+            StageTimerStopped?.Invoke();
+        }
+
+        // 우측 하단 컷인에 왕 대신 고블린이 나와 혼잣말로 힌트를 준다. 글과 떠 있는 시간(초, 실제 시간).
+        public static event Action<string, float> PlayerHintRequested;
+
+        public static void RaisePlayerHintRequested(string text, float hold)
+        {
+            PlayerHintRequested?.Invoke(text, hold);
+        }
+
+        // 플레이어가 대시(구르기)를 시작했다. 튜토리얼이 대시 과제를 확인하는 데 쓴다.
+        public static event Action PlayerDodged;
+
+        public static void RaisePlayerDodged()
+        {
+            PlayerDodged?.Invoke();
+        }
+
+        // 플레이어가 특수 능력(블랙홀)을 썼다. 튜토리얼이 스킬 안내를 거두는 데 쓴다.
+        public static event Action AbilityUsed;
+
+        public static void RaiseAbilityUsed()
+        {
+            AbilityUsed?.Invoke();
+        }
+
+        // 던진 특수 능력(블랙홀)이 터지고 사라졌다. 튜토리얼이 다음 설명으로 넘어가는 데 쓴다.
+        public static event Action AbilityFinished;
+
+        public static void RaiseAbilityFinished()
+        {
+            AbilityFinished?.Invoke();
+        }
+
         // 플레이어 그림이 커서 대신 이 지점을 바라보게 한다(처치 대화 동안 쓰러진 보스 쪽). 조작이 돌아오면 다시 커서를 본다.
         public static event Action<Vector2> PlayerLookRequested;
 

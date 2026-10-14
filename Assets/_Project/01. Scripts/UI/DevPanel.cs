@@ -254,6 +254,7 @@ namespace ExplodeIt.UI
             GUILayout.EndHorizontal();
 
             // 첫 판 오프닝은 한 번 보면 기록돼 다시 안 나온다. 기록을 지우고 판을 처음부터 다시 연다.
+            // 조작 튜토리얼은 오프닝 바로 뒤에만 나오므로 함께 다시 본다.
             if (GUILayout.Button("Replay Intro"))
             {
                 IntroSequence.ClearSeen();
