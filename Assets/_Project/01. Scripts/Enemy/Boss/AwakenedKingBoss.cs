@@ -2011,6 +2011,17 @@ namespace ExplodeIt.Enemies
                 return false;
             }
 
+            // 지금까지 도착한 끝 수는 시간으로 센다. 질주가 딱 끝나는 프레임을 기다리면, 도착 시각을 넘는 순간 계산이
+            // 다음 끝으로 넘어가 버려 도착(무적 해제)을 놓친다.
+            int arrived = time >= draw ? Mathf.Min(count, Mathf.FloorToInt((time - draw) / interval) + 1) : 0;
+            if (arrived > _teleportsDone)
+            {
+                _teleportsDone = arrived;
+                FeedbackPlayer.Play(_data.TeleportFeedback, _starPoints[StarOrder[(arrived - 1) % 5]]);
+                // 첫 꼭짓점에 도착한 순간부터 맞는다.
+                HitReceiver.IsShielded = false;
+            }
+
             // 다음에 도착할 끝(도착 시각이 아직 안 지난 첫 끝).
             int next = Mathf.Max(0, Mathf.CeilToInt((time - draw) / interval));
             bool hasNext = next < count;
@@ -2041,14 +2052,6 @@ namespace ExplodeIt.Enemies
 
             float t = Mathf.Clamp01((time - dashStart) / _data.StarDashTime);
             DashTo(from, to, t);
-            if (t >= 1f && _teleportsDone <= next)
-            {
-                _teleportsDone = next + 1;
-                FeedbackPlayer.Play(_data.TeleportFeedback, to);
-                // 첫 꼭짓점에 도착한 순간부터 맞는다.
-                HitReceiver.IsShielded = false;
-            }
-
             return false;
         }
 
