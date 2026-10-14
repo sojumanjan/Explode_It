@@ -283,6 +283,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("첫 베기와 두 번째 베기 사이 (초). 이 안에 왕이 선 경계선을 넘어 이미 벤 쪽으로 건너가야 한다")]
         [SerializeField, Min(0.1f)] private float _swordSlashGap = 0.8f;
 
+        [Tooltip("첫 베기 뒤 검을 내리친 자세로 머무는 시간 (초). 베기 사이 시간 중 이만큼은 내려놓고, 나머지 동안 검을 다시 높이 들었다가 두 번째로 내리친다. 베기 사이 시간보다 짧게 둔다")]
+        [SerializeField, Min(0f)] private float _swordFollowThrough = 0.7f;
+
         [Tooltip("두 번째 베기 뒤 멈춰 있는 시간 (초)")]
         [SerializeField, Min(0f)] private float _swordRecover = 0.6f;
 
@@ -357,7 +360,7 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("던져 올린 왕관이 땅에 박히는 순간의 효과음")] private SoundData _crownDropImpactSound;
         [SerializeField, Tooltip("유성우를 부르기 시작하는 순간의 효과음")] private SoundData _meteorCastSound;
         [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 효과음")] private SoundData _meteorImpactSound;
-        [SerializeField, Tooltip("천지 가르기 예고 웨이브가 퍼지는 순간의 효과음")] private SoundData _swordWaveSound;
+        [SerializeField, Tooltip("천지 가르기 예고 웨이브가 퍼지는 순간의 효과음 (웨이브마다)")] private SoundData _swordWaveSound;
         [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 효과음")] private SoundData _swordSlashSound;
         [SerializeField, Tooltip("별 낙인이 그려지기 시작하는 순간의 효과음")] private SoundData _starDrawSound;
         [SerializeField, Tooltip("별 끝으로 순간이동하는 순간의 효과음")] private SoundData _teleportSound;
@@ -484,6 +487,7 @@ namespace ExplodeIt.Enemies
         public float SwordWait => _swordWait;
         public float SwordSlashGap => _swordSlashGap;
         public float SwordRecover => _swordRecover;
+        public float SwordFollowThrough => _swordFollowThrough;
         public Color Phase3CrownColor => _phase3CrownColor;
         public Color Phase3EmberStart => _phase3EmberStart;
         public Color Phase3EmberEnd => _phase3EmberEnd;

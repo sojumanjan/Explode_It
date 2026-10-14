@@ -19,6 +19,8 @@ namespace ExplodeIt.Enemies
         // 그림 전용 연출 값이라 데이터로 빼지 않는다.
         // 다 떤 뒤 2등신이 0으로 줄어드는 시간 (초).
         private const float ShrinkDuration = 0.1f;
+        // 떨림이 끝날 때 떨림 소리를 줄여 끊는 시간 (초).
+        private const float TransformChargeFadeOut = 0.1f;
         // 각성 모습이 0에서 팍 커지는 시간 (초)과 넘쳤다 돌아오는 세기(OutBack 계수, 1.7이면 약 10% 넘침).
         private const float PopDuration = 0.25f;
         private const float PopOvershoot = 1.7f;
@@ -59,8 +61,6 @@ namespace ExplodeIt.Enemies
         // 천지 가르기 경계선의 두께 (유닛)와 색. 웨이브(밝은 보라)와 구분되게 어두운 보라로 긋는다.
         private const float SwordLineWidth = 0.083f;
         private static readonly Color SwordLineColor = new Color(0.28f, 0.05f, 0.42f, 0.9f);
-        // 첫 베기 뒤 내리친 자세로 머무는 시간 (초). 지나면 검을 다시 높이 들었다가 두 번째로 내리친다.
-        private const float SwordFollowThrough = 0.25f;
         // 첫 베기 직전 "곧 내리친다" 기를 모으는 동작: 시작 시점 (첫 베기 몇 초 전), 뒤로 젖히는 각도 (도), 위로 늘어나는 비율, 떨림 폭 (유닛).
         private const float SwordWindupTime = 0.75f;
         private const float SwordWindupLean = -14f;
@@ -270,6 +270,7 @@ namespace ExplodeIt.Enemies
         private ParticleSystem.MinMaxGradient _auraBaseColor;
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
+        private SoundHandle _transformChargeHandle = SoundHandle.None;
         // 지금 보이는 모습의 국면(1~3). 국면 전환 끝에 팍 커지는 순간 바뀐다.
         private int _lookPhase = 1;
         // 2국면 불티 색. 3국면에서 보라로 바꿨다가, 보스를 다시 쓸 때 되돌린다.
@@ -537,7 +538,7 @@ namespace ExplodeIt.Enemies
             SetAuraStrength(1f, 1f);
             SetAuraColor(false);
             _transformAura.Play();
-            AudioManager.Play(_data.TransformChargeSound);
+            _transformChargeHandle = AudioManager.Play(_data.TransformChargeSound);
         }
 
         // 변신이 아직이면 끝나는 대로 왕관을 부른다.
@@ -714,6 +715,9 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
+            // 떨림이 끝나는 순간 떨림 소리도 짧게 줄여 끊는다. 소리가 떨림보다 길어 각성한 뒤에도 남지 않게 한다.
+            AudioManager.FadeOut(_transformChargeHandle, TransformChargeFadeOut);
+            _transformChargeHandle = SoundHandle.None;
             float shrink = Mathf.Clamp01((_transformTime - _data.TransformDuration) / ShrinkDuration);
             float size = (1f - shrink * shrink) * 1.12f;
             chibi.localScale = _chibiScale * size;
@@ -1741,7 +1745,7 @@ namespace ExplodeIt.Enemies
                 return false;
             }
 
-            return _isSecondSlashDone || _stepTime < SwordFollowThrough;
+            return _isSecondSlashDone || _stepTime < _data.SwordFollowThrough;
         }
 
         // 좌·우로 가르면 세로선, 위·아래로 가르면 가로선을 왕이 선 자리를 지나 맵 끝까지 긋는다.

@@ -25,9 +25,18 @@ namespace ExplodeIt.Core
         [Tooltip("최소 재생 간격 (초). 직전 재생 후 이 시간 안의 요청은 무시한다. 같은 순간 여러 번 요청돼도 한 번만 들리게 한다")]
         [SerializeField, Min(0f)] private float _minInterval = 0.03f;
 
+        [Tooltip("최대 재생 간격 (초). 최소 간격보다 크면, 재생할 때마다 최소~최대 사이에서 다음 간격을 무작위로 정한다. 연달아 터지는 소리(유성우 등)가 기계처럼 일정한 박자로 들리지 않게 한다. 최소 간격 이하면 최소 간격 고정")]
+        [SerializeField, Min(0f)] private float _maxInterval;
+
         public float Volume => _volume;
         public int MaxInstances => _maxInstances;
         public float MinInterval => _minInterval;
+
+        // 이번 재생 뒤 다음 재생까지 비워 둘 간격.
+        public float PickInterval()
+        {
+            return _maxInterval > _minInterval ? Random.Range(_minInterval, _maxInterval) : _minInterval;
+        }
 
         public bool HasClip => _clips != null && _clips.Length > 0;
 

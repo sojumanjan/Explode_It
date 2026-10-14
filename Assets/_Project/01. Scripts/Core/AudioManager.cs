@@ -25,10 +25,15 @@ namespace ExplodeIt.Core
         // 소리마다 처음 정한 높낮이. 슬로모션 배율을 바꿀 때 이 값에 곱한다.
         private float[] _voiceBasePitches;
         private float _sfxPitchScale = 1f;
+        // 소리마다 서서히 줄여 끊는 중인지: 시작한 실제 시각, 걸리는 시간, 줄이기 시작한 음량. 시간이 음수면 줄이는 중이 아니다.
+        private float[] _voiceFadeStart;
+        private float[] _voiceFadeDuration;
+        private float[] _voiceFadeVolume;
         private float _sfxPitchTarget = 1f;
         private int _nextPlayId = 1;
         private int _nextVoice;
-        private readonly Dictionary<SoundData, float> _lastPlayTimes = new Dictionary<SoundData, float>();
+        // 소리마다 다음에 다시 울릴 수 있는 시각. 재생할 때 간격을 무작위로 뽑아 정해 둔다.
+        private readonly Dictionary<SoundData, float> _nextPlayTimes = new Dictionary<SoundData, float>();
 
         private AudioSource _bgmFront;
         private AudioSource _bgmBack;
@@ -92,6 +97,13 @@ namespace ExplodeIt.Core
             _voiceData = new SoundData[_sfxVoices];
             _voicePlayIds = new int[_sfxVoices];
             _voiceBasePitches = new float[_sfxVoices];
+            _voiceFadeStart = new float[_sfxVoices];
+            _voiceFadeDuration = new float[_sfxVoices];
+            _voiceFadeVolume = new float[_sfxVoices];
+            for (int i = 0; i < _sfxVoices; i++)
+            {
+                _voiceFadeStart[i] = -1f;
+            }
             for (int i = 0; i < _sfxVoices; i++)
             {
                 _voices[i] = CreateSource("Sfx");
@@ -126,6 +138,26 @@ namespace ExplodeIt.Core
             return SoundHandle.None;
         }
 
+        // 뚝 끊으면 튀는 소리가 나는 긴 소리를 짧게 줄이며 끊는다. 이미 끝났거나 다른 소리로 바뀐 표면 아무것도 안 한다.
+        public static void FadeOut(SoundHandle handle, float duration)
+        {
+            if (_current == null || handle.Voice < 0 || handle.PlayId <= 0 || _current._voicePlayIds[handle.Voice] != handle.PlayId)
+            {
+                return;
+            }
+
+            AudioSource voice = _current._voices[handle.Voice];
+            if (duration <= 0f)
+            {
+                voice.Stop();
+                return;
+            }
+
+            _current._voiceFadeStart[handle.Voice] = Time.unscaledTime;
+            _current._voiceFadeDuration[handle.Voice] = duration;
+            _current._voiceFadeVolume[handle.Voice] = voice.volume;
+        }
+
         public static void Stop(SoundHandle handle)
         {
             // 재생 번호는 1부터 매기므로, 0인 표는 기본값으로 만들어진 빈 표다.
@@ -158,12 +190,35 @@ namespace ExplodeIt.Core
 
         private void Update()
         {
+            TickFades();
             if (Mathf.Approximately(_sfxPitchScale, _sfxPitchTarget))
             {
                 return;
             }
 
             ApplySfxPitch(Mathf.MoveTowards(_sfxPitchScale, _sfxPitchTarget, PitchRecoverSpeed * Time.unscaledDeltaTime));
+        }
+
+        private void TickFades()
+        {
+            float now = Time.unscaledTime;
+            for (int i = 0; i < _voices.Length; i++)
+            {
+                if (_voiceFadeStart[i] < 0f)
+                {
+                    continue;
+                }
+
+                float t = (now - _voiceFadeStart[i]) / _voiceFadeDuration[i];
+                if (t >= 1f || !_voices[i].isPlaying)
+                {
+                    _voices[i].Stop();
+                    _voiceFadeStart[i] = -1f;
+                    continue;
+                }
+
+                _voices[i].volume = _voiceFadeVolume[i] * (1f - t);
+            }
         }
 
         private void ApplySfxPitch(float scale)
@@ -195,7 +250,7 @@ namespace ExplodeIt.Core
 
             // 일시정지 중 버튼 소리 등도 막히지 않게 실제 시간으로 잰다.
             float now = Time.unscaledTime;
-            if (_lastPlayTimes.TryGetValue(sound, out float last) && now - last < sound.MinInterval)
+            if (_nextPlayTimes.TryGetValue(sound, out float next) && now < next)
             {
                 return SoundHandle.None;
             }
@@ -214,10 +269,11 @@ namespace ExplodeIt.Core
             voice.clip = sound.PickClip();
             voice.volume = sound.Volume * _sfxVolume;
             _voiceBasePitches[index] = pitch;
+            _voiceFadeStart[index] = -1f;
             voice.pitch = pitch * _sfxPitchScale;
             voice.Play();
             _voiceData[index] = sound;
-            _lastPlayTimes[sound] = now;
+            _nextPlayTimes[sound] = now + sound.PickInterval();
 
             int playId = _nextPlayId++;
             _voicePlayIds[index] = playId;
