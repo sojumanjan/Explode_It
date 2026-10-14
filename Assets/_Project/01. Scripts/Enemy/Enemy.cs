@@ -500,6 +500,26 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 맵 위 정해진 직사각형(축 정렬) 안을 친다. 구조물과 상관없다. 몸 중심이 칸 안이어야 맞는다(폭탄과 같은 규칙).
+        protected void HitInWorldRect(Vector2 center, Vector2 size)
+        {
+            int count = Physics2D.OverlapBox(center, size, 0f, _attackFilter, AttackBuffer);
+            Vector2 half = size * 0.5f;
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 target = AttackBuffer[i].bounds.center;
+                if (Mathf.Abs(target.x - center.x) > half.x || Mathf.Abs(target.y - center.y) > half.y)
+                {
+                    continue;
+                }
+
+                if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
+                {
+                    hittable.ReceiveHit(new HitInfo(center));
+                }
+            }
+        }
+
         // 맵 전체를 한 번 치되, 안전지대(원) 안에 중심이 있는 대상은 뺀다. 화면 전체 공격(최종 보스 충격파)에 쓴다.
         // 한 순간만 판정하므로, 그 순간 구르기 무적이면 피한다.
         protected void HitAllOutside(Vector2[] safeCenters, int safeCount, float safeRadius)

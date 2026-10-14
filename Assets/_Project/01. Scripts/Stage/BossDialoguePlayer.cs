@@ -10,7 +10,7 @@ namespace ExplodeIt.Stage
     // 스토리 보스전 등장 대화. 보스보다 왕이 먼저 보스 자리 옆에 스티커처럼 찰싹 붙어 나와 말하고,
     // 데이터에 표시한 줄이 시작될 때 보스를 불러내고(BossSpawnRequested), 표시한 줄을 넘길 때 보스 등장 동작을 시작시킨다(EntranceRequested).
     // 줄은 클릭해야 넘어간다. 글자가 다 나오면 말풍선에 ▼가 통통 튀어 클릭을 유도한다.
-    // 두 캐릭터 사이 위쪽의 스킵 버튼을 누르면 남은 대사를 건너뛰고, 등장 동작을 표시한 줄을 넘긴 것처럼 바로 등장 동작을 시작한다.
+    // 화면 오른쪽 위 건너뛰기 버튼을 길게 누르면(또는 스페이스를 길게 누르면) 남은 대사를 건너뛰고, 등장 동작을 표시한 줄을 넘긴 것처럼 바로 등장 동작을 시작한다.
     public class BossDialoguePlayer : MonoBehaviour
     {
         [SerializeField] private KingSpriteSet _kingSprites;
@@ -28,12 +28,12 @@ namespace ExplodeIt.Stage
         [SerializeField, Min(0f)] private float _appearDuration = 0.25f;
         [SerializeField, Min(0f)] private float _leaveDuration = 0.3f;
         [SerializeField, Min(0f)] private float _moodPunch = 0.25f;
-        // 스킵 버튼. 말풍선과 같은 월드 캔버스에 두고, 클릭은 대사 넘기기와 같이 마우스로 직접 판정한다.
+        // 건너뛰기 버튼. 화면 UI 캔버스 오른쪽 위에 고정해 두고, 마우스 판정은 대사 넘기기와 같이 직접 한다.
         [SerializeField] private RectTransform _skipButton;
-        // 두 캐릭터 머리 중 높은 쪽에서 스킵 버튼까지의 높이 (유닛). 말풍선과 겹치지 않게 말풍선보다 위에 둔다.
-        [SerializeField, Min(0f)] private float _skipButtonGap = 1.8f;
-        // 처치 대화에서 스킵 버튼을 더 올리는 높이 (유닛). 두 사람 머리 위에 말풍선이 번갈아 떠서 그 위로 피한다.
-        [SerializeField, Min(0f)] private float _defeatSkipExtraHeight = 1.6f;
+        // 길게 누르는 동안 버튼 바탕이 왼쪽부터 차오르는 칸(Filled 이미지). 다 차면 건너뛴다.
+        [SerializeField] private UnityEngine.UI.Image _skipFill;
+        // 건너뛰려면 누르고 있어야 하는 시간(초). 대사를 넘기려고 연타하다 실수로 건너뛰지 않게 한다.
+        [SerializeField, Min(0.1f)] private float _skipHoldTime = 0.8f;
 
         [Header("엔딩 연출 (처치 대화)")]
         // 왕이 던지는 스티커 책. 바닥에 놓여 고블린이 뛰어든다.
@@ -66,6 +66,8 @@ namespace ExplodeIt.Stage
         // 처치 대화에서 쓰러진 각성 왕이 2등신 왕으로 돌아왔는지. 돌아온 뒤에는 2등신 왕 그림이 말하고 스티커처럼 퇴장한다.
         private bool _isReverted;
         private Vector3 _bookScale;
+        // 씬에 배치한 왕 말풍선 크기. 빨려 들어가며 줄었다가 이 크기로 되돌린다.
+        private Vector3 _kingBubbleScale = Vector3.one;
         private Vector3 _playerScale;
         private Tween _action;
         private TweenCallback _onAdvanceLine;
@@ -87,6 +89,8 @@ namespace ExplodeIt.Stage
         private TweenCallback _onShoutEnd;
         private Vector3 _skipScale;
         private bool _isSkipHovered;
+        // 건너뛰기를 누르고 있은 시간(초). 손을 떼면 빠르게 줄어든다.
+        private float _skipHold;
 
         public bool IsPlaying { get; private set; }
 
@@ -99,6 +103,7 @@ namespace ExplodeIt.Stage
             _onPauseEnd = ShowCurrentLine;
             _onShoutEnd = HideShout;
             _onRevertEnd = ShowRevertedKing;
+            _kingBubbleScale = _kingBubble.transform.localScale;
             _onAdvanceLine = AdvanceLine;
             _onShowLine = ShowCurrentLine;
             if (_book != null)
@@ -190,26 +195,33 @@ namespace ExplodeIt.Stage
                 .Join(_king.DOFade(1f, _appearDuration * 0.5f))
                 .OnComplete(NextLine)
                 .SetLink(gameObject);
-            ShowSkipButton(bossPoint, offset);
+            ShowSkipButton(_startDelay);
         }
 
         // 왕과 보스 자리의 가운데, 둘 중 높은 머리보다 위에 띄운다. 왕이 곧 보스면 그 한 명의 머리 위다.
-        private void ShowSkipButton(Vector2 bossPoint, Vector2 kingOffset)
+        // 건너뛰기는 화면 오른쪽 위에 고정이다. 말풍선·캐릭터와 다른 층이라 위치와 상관없이 겹치지 않는다.
+        private void ShowSkipButton(float delay)
         {
             if (_skipButton == null)
             {
                 return;
             }
 
-            float kingTop = bossPoint.y + kingOffset.y + (_king.sprite != null ? _king.sprite.bounds.max.y * _kingScale.y : 0f);
-            float bossTop = bossPoint.y + _emptyBossHeight;
-            float x = bossPoint.x + kingOffset.x * 0.5f;
-            _skipButton.position = new Vector3(x, Mathf.Max(kingTop, bossTop) + _skipButtonGap, 0f);
             _skipButton.gameObject.SetActive(true);
             _isSkipHovered = false;
+            _skipHold = 0f;
+            SetSkipFill(0f);
             _skipButton.DOKill();
             _skipButton.localScale = Vector3.zero;
-            _skipButton.DOScale(_skipScale, _appearDuration).SetDelay(_startDelay).SetEase(Ease.OutBack).SetLink(_skipButton.gameObject);
+            _skipButton.DOScale(_skipScale, _appearDuration).SetDelay(delay).SetEase(Ease.OutBack).SetUpdate(true).SetLink(_skipButton.gameObject);
+        }
+
+        private void SetSkipFill(float amount)
+        {
+            if (_skipFill != null)
+            {
+                _skipFill.fillAmount = amount;
+            }
         }
 
         // 최종 보스를 쓰러뜨린 뒤의 대화. 왕 그림 없이 쓰러진 보스 머리 위(왕 줄)와 플레이어 머리 위(고블린 줄)에 말풍선이 뜬다.
@@ -238,27 +250,10 @@ namespace ExplodeIt.Stage
             _punch?.Kill();
             _king.gameObject.SetActive(false);
 
-            Vector2 bossPoint = boss.position;
-            Vector2 playerPoint = player != null ? (Vector2)player.position : bossPoint;
-            float top = Mathf.Max(TopOf(boss), player != null ? TopOf(player) : bossPoint.y);
-            ShowSkipButtonAt(new Vector2((bossPoint.x + playerPoint.x) * 0.5f, top + _skipButtonGap + _defeatSkipExtraHeight));
+            ShowSkipButton(0f);
             NextLine();
         }
 
-        private void ShowSkipButtonAt(Vector2 point)
-        {
-            if (_skipButton == null)
-            {
-                return;
-            }
-
-            _skipButton.position = new Vector3(point.x, point.y, 0f);
-            _skipButton.gameObject.SetActive(true);
-            _isSkipHovered = false;
-            _skipButton.DOKill();
-            _skipButton.localScale = Vector3.zero;
-            _skipButton.DOScale(_skipScale, _appearDuration).SetEase(Ease.OutBack).SetLink(_skipButton.gameObject);
-        }
 
         // 보스가 내려앉은 뒤 불린다. 머리 높이는 이때 한 번만 잰다. 대화 동안 보스는 제자리에 있다.
         public void SetBoss(Transform boss)
@@ -286,15 +281,14 @@ namespace ExplodeIt.Stage
             TickAutoSuck();
             bool isOverSkip = IsPointerOverSkip();
             UpdateSkipHover(isOverSkip);
-            if (!Mouse.current.leftButton.wasPressedThisFrame)
+            if (TickSkipHold(isOverSkip))
             {
                 return;
             }
 
-            // 스킵 버튼을 누른 클릭이 대사까지 넘기지 않게 먼저 가로챈다.
-            if (isOverSkip)
+            // 건너뛰기 버튼을 누르는 클릭은 대사를 넘기지 않는다.
+            if (!Mouse.current.leftButton.wasPressedThisFrame || isOverSkip)
             {
-                Skip();
                 return;
             }
 
@@ -448,10 +442,34 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 화면 UI 캔버스(Overlay)에 둔 버튼이라 카메라 없이 화면 좌표로 판정한다.
         private bool IsPointerOverSkip()
         {
             return _skipButton != null && _skipButton.gameObject.activeSelf
-                && RectTransformUtility.RectangleContainsScreenPoint(_skipButton, Mouse.current.position.ReadValue(), Camera.main);
+                && RectTransformUtility.RectangleContainsScreenPoint(_skipButton, Mouse.current.position.ReadValue(), null);
+        }
+
+        // 버튼 위에서 마우스를 누르고 있거나 스페이스를 누르고 있으면 차오른다. 다 차면 건너뛴다.
+        private bool TickSkipHold(bool isOverSkip)
+        {
+            if (_skipButton == null || !_skipButton.gameObject.activeSelf)
+            {
+                return false;
+            }
+
+            bool isHolding = (isOverSkip && Mouse.current.leftButton.isPressed)
+                || (Keyboard.current != null && Keyboard.current.spaceKey.isPressed);
+            float deltaTime = Time.unscaledDeltaTime;
+            _skipHold = isHolding ? _skipHold + deltaTime : Mathf.Max(0f, _skipHold - deltaTime * 3f);
+            SetSkipFill(_skipHold / _skipHoldTime);
+            if (_skipHold < _skipHoldTime)
+            {
+                return false;
+            }
+
+            _skipHold = 0f;
+            Skip();
+            return true;
         }
 
         private void UpdateSkipHover(bool isOver)
@@ -605,7 +623,7 @@ namespace ExplodeIt.Stage
                         // 말풍선은 고블린을 따라 붙은 채, 고블린보다 조금 더 크게 휘돌며 줄어든다.
                         bubble.position = (Vector2)_player.position + (Vector2)(Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased) * bubbleOffset) * (1f - eased);
                         bubble.localRotation = Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased);
-                        bubble.localScale = Vector3.one * (1f - eased);
+                        bubble.localScale = _kingBubbleScale * (1f - eased);
                     }
                 }).SetEase(Ease.Linear))
                 .AppendCallback(ResetBubbleTransform)
@@ -657,13 +675,13 @@ namespace ExplodeIt.Stage
         {
             _kingBubble.Hide();
             _kingBubble.transform.localRotation = Quaternion.identity;
-            _kingBubble.transform.localScale = Vector3.one;
+            _kingBubble.transform.localScale = _kingBubbleScale;
         }
 
         private void HideAll()
         {
             _kingBubble.transform.localRotation = Quaternion.identity;
-            _kingBubble.transform.localScale = Vector3.one;
+            _kingBubble.transform.localScale = _kingBubbleScale;
             HideSkipButton();
             _king.gameObject.SetActive(false);
             _kingBubble.Hide();

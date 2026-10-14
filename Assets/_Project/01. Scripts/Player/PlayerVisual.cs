@@ -27,6 +27,9 @@ namespace ExplodeIt.Player
         private Vector3 _baseLocalPosition;
         private Vector3 _baseLocalScale;
         private bool _facesRight = true;
+        // 커서 대신 바라볼 지점이 있는지. 처치 대화처럼 조작이 막힌 연출 동안만 켠다.
+        private bool _isLookingAt;
+        private Vector2 _lookPoint;
         private float _time;
         private float _hopPhase;
         private float _hopWeight;
@@ -50,12 +53,30 @@ namespace ExplodeIt.Player
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.BombThrown += OnBombThrown;
+            GameEvents.PlayerLookRequested += OnLookRequested;
+            GameEvents.PlayerControlLockChanged += OnControlLockChanged;
         }
 
         private void OnDisable()
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.BombThrown -= OnBombThrown;
+            GameEvents.PlayerLookRequested -= OnLookRequested;
+            GameEvents.PlayerControlLockChanged -= OnControlLockChanged;
+        }
+
+        private void OnLookRequested(Vector2 point)
+        {
+            _isLookingAt = true;
+            _lookPoint = point;
+        }
+
+        private void OnControlLockChanged(bool isLocked)
+        {
+            if (!isLocked)
+            {
+                _isLookingAt = false;
+            }
         }
 
         private void LateUpdate()
@@ -63,7 +84,8 @@ namespace ExplodeIt.Player
             float deltaTime = Time.deltaTime;
             _time += deltaTime;
 
-            float faceX = _camera.ScreenToWorldPoint(_input.Aim).x - transform.position.x;
+            float lookX = _isLookingAt ? _lookPoint.x : _camera.ScreenToWorldPoint(_input.Aim).x;
+            float faceX = lookX - transform.position.x;
             if (Mathf.Abs(faceX) > TurnThreshold)
             {
                 _facesRight = faceX > 0f;

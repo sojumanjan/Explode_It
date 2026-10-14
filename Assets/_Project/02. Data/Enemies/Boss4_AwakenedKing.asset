@@ -32,7 +32,7 @@ MonoBehaviour:
   _phaseShiftDuration: 2.2
   _phaseLineDelay: 0.35
   _phaseLines:
-  - "\uAC10\uD788 \uC9D0\uC758 \uC655\uAD00\uC744\u2026!"
+  - "\uAC10\uD788 \uC9D0\uC758 \uBAB8\uC5D0 \uC0DD\uCC44\uAE30\uB97C \uB0B4\uB2E4\uB2C8..!"
   - "\uC774 \uBB34\uC5C4\uD55C \uACE0\uBE14\uB9B0 \uB140\uC11D\uC774!!"
   _crownReturnTime: 0.45
   _phaseZoom: 0.8
@@ -47,6 +47,7 @@ MonoBehaviour:
   _zoomInTime: 0.8
   _zoomHoldTime: 0.4
   _bossBgm: {fileID: 11400000, guid: 3dad64264adf1df44a7b4d8472daf3ca, type: 2}
+  _bgmTapeStopTime: 1.2
   _bgmFadeOutTime: 1.2
   _awakenWaveTime: 0.7
   _awakenWaveColor: {r: 1, g: 0.55, b: 0.4, a: 0.9}
@@ -116,9 +117,12 @@ MonoBehaviour:
   _meteorTintFadeTime: 0.5
   _swordWaveTime: 0.35
   _swordWaveGap: 0.6
-  _swordWait: 2
+  _swordWait: 1.8
   _swordSlashGap: 0.9
   _swordFollowThrough: 0.7
+  _swordFollowupWait: 1.2
+  _swordStageGap: 0.5
+  _stripeCount: 10
   _swordRecover: 0.6
   _starRadius: 7
   _starDrawTime: 1
@@ -173,5 +177,7 @@ MonoBehaviour:
   _shockFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
   _phaseShiftFeedback: {fileID: 11400000, guid: 945dab3355730634682ac0e6ebe18d02, type: 2}
   _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
+  _defeatZoom: 0.7
+  _defeatZoomTime: 0.4
   _immuneFlashColor: {r: 1, g: 0.9, b: 0.4, a: 1}
   _immuneFlashDuration: 0.2

@@ -11,6 +11,10 @@ namespace ExplodeIt.Stage
     // 시간이 되면 앞에서부터 꺼낸다. 전투 중에는 목록을 읽기만 하므로 할당이 없다.
     public class StageRunner : MonoBehaviour
     {
+        // 처치 대화 옆자리에 다 왔다고 보는 거리, 옆자리가 비어 있는지 볼 반지름 (유닛). 연출용 값이다.
+        private const float TalkArriveDistance = 0.35f;
+        private const float TalkPointClearance = 0.4f;
+
         public enum Phase
         {
             Rest,
@@ -87,6 +91,8 @@ namespace ExplodeIt.Stage
         private float _farewellTime = -1f;
         // 고블린이 쓰러진 왕 쪽으로 걸어가기 시작한 실제 시각. 음수면 걷는 중이 아니다.
         private float _walkStartTime = -1f;
+        // 처치 대화 때 고블린이 설 왕 옆자리.
+        private Vector2 _talkPoint;
         private System.Action _onDialogueSpawnBoss;
         private System.Action _onDialogueEntrance;
 
@@ -391,6 +397,11 @@ namespace ExplodeIt.Stage
             _walkStartTime = -1f;
             GameEvents.RaisePlayerControlLockChanged(true);
             _isControlReleased = false;
+            if (_bossEnemy != null)
+            {
+                GameEvents.RaisePlayerLookRequested(_bossEnemy.transform.position);
+            }
+
             BossDialogueData dialogue = _stage.FinalBossDefeatDialogue;
             if (dialogue == null || _dialoguePlayer == null || _bossEnemy == null)
             {
@@ -441,6 +452,8 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 고블린이 쓰러진 왕 옆자리에 나란히 선다. 지금 있는 쪽 옆자리를 먼저 고르고, 그쪽이 막혀 있으면 반대쪽으로 간다.
+        // 막혀서 못 가면 시간이 지나 그 자리에서 대화한다.
         private bool IsCloseEnoughToTalk()
         {
             Transform player = _spawner.Target;
@@ -449,29 +462,58 @@ namespace ExplodeIt.Stage
                 return true;
             }
 
-            Vector2 boss = _bossEnemy.transform.position;
-            Vector2 offset = (Vector2)player.position - boss;
-            float talk = _stage.DefeatTalkDistance;
+            Vector2 position = player.position;
             if (_walkStartTime < 0f)
             {
-                if (offset.magnitude <= talk + 0.5f)
+                _talkPoint = PickTalkPoint(position);
+                if ((position - _talkPoint).magnitude <= TalkArriveDistance)
                 {
                     return true;
                 }
 
                 _walkStartTime = Time.unscaledTime;
-                Vector2 direction = offset.sqrMagnitude > 0.0001f ? offset.normalized : Vector2.right;
-                GameEvents.RaisePlayerWalkRequested(boss + direction * talk);
+                GameEvents.RaisePlayerWalkRequested(_talkPoint);
                 return false;
             }
 
-            if (offset.magnitude <= talk + 0.3f || Time.unscaledTime - _walkStartTime >= _stage.DefeatWalkTimeout)
+            if ((position - _talkPoint).magnitude <= TalkArriveDistance || Time.unscaledTime - _walkStartTime >= _stage.DefeatWalkTimeout)
             {
                 GameEvents.RaisePlayerWalkCancelled();
                 return true;
             }
 
             return false;
+        }
+
+        private Vector2 PickTalkPoint(Vector2 player)
+        {
+            Vector2 boss = _bossEnemy.transform.position;
+            float side = player.x >= boss.x ? 1f : -1f;
+            Vector2 near = boss + new Vector2(side * _stage.DefeatTalkDistance, _stage.DefeatTalkHeight);
+            if (!IsTalkPointBlocked(boss, near))
+            {
+                return near;
+            }
+
+            Vector2 far = boss + new Vector2(-side * _stage.DefeatTalkDistance, _stage.DefeatTalkHeight);
+            return IsTalkPointBlocked(boss, far) ? near : far;
+        }
+
+        // 맵 밖이거나, 그 자리에 구조물이 있거나, 왕과 그 자리 사이를 구조물이 가로막으면 막힌 자리다.
+        private bool IsTalkPointBlocked(Vector2 boss, Vector2 point)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena != null)
+            {
+                Bounds bounds = arena.Bounds;
+                if (point.x < bounds.min.x + TalkPointClearance || point.x > bounds.max.x - TalkPointClearance
+                    || point.y < bounds.min.y + TalkPointClearance || point.y > bounds.max.y - TalkPointClearance)
+                {
+                    return true;
+                }
+            }
+
+            return Physics2D.OverlapCircle(point, TalkPointClearance, _obstacleMask) || Physics2D.Linecast(boss, point, _obstacleMask);
         }
 
         private void SendFarewell()

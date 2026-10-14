@@ -62,6 +62,26 @@ namespace ExplodeIt.Enemies
             Place(0f);
         }
 
+        // 정해진 직사각형 한 칸(줄무늬 가르기의 한 줄). origin은 칸의 한쪽 끝 가운데, direction은 웨이브가 퍼지는 쪽,
+        // length는 퍼지는 거리, span은 칸의 폭이다.
+        public void ShowRect(Vector2 origin, Vector2 direction, float length, float span, float sweepTime)
+        {
+            _origin = origin;
+            _direction = direction;
+            _sweepTime = Mathf.Max(sweepTime, 0.01f);
+            _length = Mathf.Max(length, 0f);
+            _span = span;
+            _time = 0f;
+            _flashStart = -1f;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            _fill.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            _front.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            _fill.enabled = true;
+            _front.enabled = true;
+            gameObject.SetActive(true);
+            Place(0f);
+        }
+
         // 그 절반을 벤 순간. 칸이 밝게 번쩍였다가 사라진다.
         public void Slash()
         {

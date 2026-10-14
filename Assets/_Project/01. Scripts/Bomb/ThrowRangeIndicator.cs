@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Bombs
@@ -15,6 +16,36 @@ namespace ExplodeIt.Bombs
             _line = GetComponent<LineRenderer>();
             _line.useWorldSpace = false;
             _line.loop = true;
+        }
+
+        // 보스를 쓰러뜨린 뒤 처치 대화·엔딩 연출 동안은 사거리 원이 몰입을 깨서 숨긴다. 다음 웨이브나 새 판이 시작되면 다시 보인다.
+        private void OnEnable()
+        {
+            GameEvents.BossDefeated += OnBossDefeated;
+            GameEvents.WaveStarted += OnWaveStarted;
+            GameEvents.StageStarted += OnStageStarted;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.BossDefeated -= OnBossDefeated;
+            GameEvents.WaveStarted -= OnWaveStarted;
+            GameEvents.StageStarted -= OnStageStarted;
+        }
+
+        private void OnBossDefeated(int bossNumber)
+        {
+            _line.enabled = false;
+        }
+
+        private void OnWaveStarted(int wave)
+        {
+            _line.enabled = true;
+        }
+
+        private void OnStageStarted(bool isStoryMode)
+        {
+            _line.enabled = true;
         }
 
         // 사거리가 바뀔 때만 호출한다. 매 프레임 다시 그리지 않는다.

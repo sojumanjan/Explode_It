@@ -78,6 +78,14 @@ namespace ExplodeIt.Core
         {
             PlayerWalkCancelled?.Invoke();
         }
+
+        // 플레이어 그림이 커서 대신 이 지점을 바라보게 한다(처치 대화 동안 쓰러진 보스 쪽). 조작이 돌아오면 다시 커서를 본다.
+        public static event Action<Vector2> PlayerLookRequested;
+
+        public static void RaisePlayerLookRequested(Vector2 point)
+        {
+            PlayerLookRequested?.Invoke(point);
+        }
         // 처치 대화 줄이 쓰러진 보스의 그림을 바꾸라고 알린다(무릎 꿇기 등).
         public static event Action<Sprite> BossPoseRequested;
         // 처치 대화 줄이 쓰러진 각성 왕을 2등신으로 되돌리라고 알린다. 보스는 펑 하고 사라지고, 대화가 2등신 왕을 그 자리에 띄운다.

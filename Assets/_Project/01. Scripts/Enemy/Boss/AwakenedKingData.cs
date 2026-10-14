@@ -307,6 +307,18 @@ namespace ExplodeIt.Enemies
         [Tooltip("첫 베기 뒤 검을 내리친 자세로 머무는 시간 (초). 베기 사이 시간 중 이만큼은 내려놓고, 나머지 동안 검을 다시 높이 들었다가 두 번째로 내리친다. 베기 사이 시간보다 짧게 둔다")]
         [SerializeField, Min(0f)] private float _swordFollowThrough = 0.7f;
 
+        [Tooltip("축을 바꿔 다시 가를 때(두 번째 묶음)와 줄무늬 가르기 때, 예고가 다 퍼진 뒤 첫 베기까지 (초). 첫 묶음보다 짧게 둬 몰아친다")]
+        [SerializeField, Min(0f)] private float _swordFollowupWait = 1.2f;
+
+        [Tooltip("한 묶음의 두 번째 베기 뒤 다음 묶음 예고가 시작되기까지 (초)")]
+        [SerializeField, Min(0f)] private float _swordStageGap = 0.5f;
+
+        [Tooltip("마지막 줄무늬 가르기에서 맵을 나누는 칸 수 (세로·가로 각각, 위험 + 안전). 위험·안전이 번갈아 오고, 세로·가로 모두 안전한 칸이 늘 남는다. 줄무늬 전체는 매번 무작위로 밀려 칸 위치가 달라진다")]
+        [SerializeField, Min(2)] private int _stripeCount = 10;
+
+        [Tooltip("줄무늬 가르기에서 이웃한 위험 칸 + 안전 칸 한 쌍 중 위험 칸이 차지하는 비율 (0~1). 0.7이면 위험 7 : 안전 3. 세로·가로 모두 같다")]
+        [SerializeField, Range(0.1f, 0.9f)] private float _stripeDangerRatio = 0.7f;
+
         [Tooltip("두 번째 베기 뒤 멈춰 있는 시간 (초)")]
         [SerializeField, Min(0f)] private float _swordRecover = 0.6f;
 
@@ -517,6 +529,10 @@ namespace ExplodeIt.Enemies
         public float SwordWait => _swordWait;
         public float SwordSlashGap => _swordSlashGap;
         public float SwordRecover => _swordRecover;
+        public float SwordFollowupWait => _swordFollowupWait;
+        public float SwordStageGap => _swordStageGap;
+        public int StripeCount => _stripeCount;
+        public float StripeDangerRatio => _stripeDangerRatio;
         public float SwordFollowThrough => _swordFollowThrough;
         public Color Phase3CrownColor => _phase3CrownColor;
         public Color Phase3EmberStart => _phase3EmberStart;

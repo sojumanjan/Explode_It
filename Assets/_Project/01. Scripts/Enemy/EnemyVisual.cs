@@ -232,6 +232,19 @@ namespace ExplodeIt.Enemies
         // 처치 대화 동안 쓰러진 모습을 보여 주는 보스(최종 보스)가 쓴다.
         public bool HoldsDeath { get; set; }
 
+        // 이 x 좌표 쪽을 보게 돌린다. 쓰러진 뒤처럼 방향을 스스로 고르지 않는 동안 보스가 직접 정할 때 쓴다.
+        // artFacesRight는 지금 그림이 원래 오른쪽을 보고 그려졌는지다. 자세 그림마다 그려진 방향이 달라 보스가 알려 준다.
+        public void FaceToward(float x, bool artFacesRight)
+        {
+            float faceX = x - _sprite.transform.position.x;
+            if (Mathf.Abs(faceX) > TurnThreshold)
+            {
+                _facesRight = faceX > 0f;
+            }
+
+            _sprite.flipX = _facesRight != artFacesRight;
+        }
+
         // 사라지는 순간의 연출·소리를 내지 않는다. 이미 다른 모습으로 바뀌어 화면에서 빠진 보스(2등신으로 돌아간 최종 보스)가 쓴다.
         public bool SkipsDeathEnd { get; set; }
 

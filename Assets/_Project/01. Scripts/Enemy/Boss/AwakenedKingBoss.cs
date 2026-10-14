@@ -175,6 +175,9 @@ namespace ExplodeIt.Enemies
         // 그로기로 주저앉은 그림. 쓰러짐 그림은 표시 컴포넌트(EnemyVisual)의 사망 그림 칸에 둔다.
         [SerializeField] private Sprite _stunSprite;
         [SerializeField] private Sprite _meteorPoseSprite;
+        // 쓰러진 뒤 그림 중 오른쪽을 보고 그려진 것(무릎 꿇기 등). 나머지(기절·쓰러짐)는 왼쪽을 보고 그려졌다.
+        // 쓰러진 뒤에는 이 기준으로 뒤집어 고블린을 보게 한다.
+        [SerializeField] private Sprite[] _rightFacingPoseSprites;
         [SerializeField] private Sprite _swordChargeSprite;
         [SerializeField] private Sprite _swordAttackSprite;
         // 유성우를 부르는 동안 왕 주위에 번갈아 보이는 보라 소용돌이 그림들. 그림(Body) 자식이라 몸을 따라 움직인다.
@@ -190,6 +193,8 @@ namespace ExplodeIt.Enemies
         // 천지 가르기 예고. 먼저 벨 쪽과 나중에 벨 쪽.
         [SerializeField] private HalfSlashWarning _halfFirst;
         [SerializeField] private HalfSlashWarning _halfSecond;
+        // 줄무늬 가르기 예고. 세로 위험 칸과 가로 위험 칸을 하나씩 맡는다(칸 수의 절반씩, 넉넉히 둔다).
+        [SerializeField] private HalfSlashWarning[] _stripeWarnings;
         // 두 절반을 가르는 경계선(흰 사각형 그림). 어디를 넘어야 하는지 헷갈리지 않게 패턴 내내 보인다.
         [SerializeField] private SpriteRenderer _swordLine;
         // 별의 의식: 별 낙인 선, 다섯 끝 표시, 안전지대들. 맵 가운데 고정이라 보스를 따라다니지 않게 시작할 때 월드로 뗀다.
@@ -297,8 +302,21 @@ namespace ExplodeIt.Enemies
 
         private Vector2 _swordOrigin;
         private Vector2 _swordFirstDirection;
+        // 천지 가르기 묶음: 0 = 반쪽 가르기, 1 = 축을 바꾼 반쪽 가르기, 2 = 줄무늬 가르기.
+        private int _swordStage;
+        private bool _isFirstSplitHorizontal;
         private bool _isSecondWaveShown;
+        private bool _isFirstSlashDone;
         private bool _isSecondSlashDone;
+        private float _secondSlashAt;
+        // 이 묶음에서 마지막으로 벤 시각(묶음 시작 기준). 음수면 아직 안 벴다. 내리친 자세를 잠깐 유지하는 데 쓴다.
+        private float _lastSlashAt = -1f;
+        // 줄무늬 가르기에서 세로·가로 각각 줄무늬를 밀어 둔 정도 (위험 + 안전 한 쌍 폭 기준 0~1). 안전한 칸이 늘 같은 자리(왕 둘레)에 생기지 않게 한다.
+        private float _verticalOffset;
+        private float _horizontalOffset;
+        // 줄무늬 가르기 경계선. 반쪽 가르기의 경계선을 복제해 앞 절반은 세로선, 뒤 절반은 가로선으로 쓴다.
+        private SpriteRenderer[] _gridLines;
+        private bool _isGridShown;
 
         private Vector2 _starCenter;
         private readonly Vector2[] _starPoints = new Vector2[5];
@@ -380,8 +398,22 @@ namespace ExplodeIt.Enemies
             _mapDarken.enabled = false;
             _halfFirst.transform.SetParent(null);
             _halfSecond.transform.SetParent(null);
+            for (int i = 0; i < _stripeWarnings.Length; i++)
+            {
+                _stripeWarnings[i].transform.SetParent(null);
+                _stripeWarnings[i].Hide();
+            }
             _swordLine.transform.SetParent(null);
             _swordLine.enabled = false;
+            // 전투 중 생성을 피하려고 칸 수만큼(세로·가로 각각 칸 수 + 1개) 미리 만들어 둔다.
+            _gridLines = new SpriteRenderer[(StripePairCount() + 1) * 4];
+            for (int i = 0; i < _gridLines.Length; i++)
+            {
+                _gridLines[i] = Instantiate(_swordLine);
+                _gridLines[i].name = "GridLine" + i;
+                _gridLines[i].enabled = false;
+            }
+
             _starSigil.transform.SetParent(null);
             for (int i = 0; i < _afterimages.Length; i++)
             {
@@ -508,9 +540,31 @@ namespace ExplodeIt.Enemies
                 Destroy(_halfSecond.gameObject);
             }
 
+            if (_stripeWarnings != null)
+            {
+                for (int i = 0; i < _stripeWarnings.Length; i++)
+                {
+                    if (_stripeWarnings[i] != null)
+                    {
+                        Destroy(_stripeWarnings[i].gameObject);
+                    }
+                }
+            }
+
             if (_swordLine != null)
             {
                 Destroy(_swordLine.gameObject);
+            }
+
+            if (_gridLines != null)
+            {
+                for (int i = 0; i < _gridLines.Length; i++)
+                {
+                    if (_gridLines[i] != null)
+                    {
+                        Destroy(_gridLines[i].gameObject);
+                    }
+                }
             }
 
             if (_starSigil != null)
@@ -674,6 +728,12 @@ namespace ExplodeIt.Enemies
         private void Update()
         {
             float deltaTime = Time.deltaTime;
+            // 쓰러진 뒤 고블린이 반대쪽 옆자리로 걸어가도 계속 고블린 쪽을 본다.
+            if (_isHoldingBody && _bodyRenderer.enabled)
+            {
+                FaceTargetWhileHeld();
+            }
+
             if (_transformTime >= 0f)
             {
                 TickTransform(deltaTime);
@@ -849,7 +909,15 @@ namespace ExplodeIt.Enemies
             if (_isHoldingBody && sprite != null)
             {
                 _bodyRenderer.sprite = sprite;
+                FaceTargetWhileHeld();
             }
+        }
+
+        // 쓰러진 뒤에는 방향을 스스로 고르지 않으므로, 쓰러지는 순간과 자세가 바뀔 때마다 고블린 쪽을 보게 돌린다.
+        private void FaceTargetWhileHeld()
+        {
+            bool artFacesRight = System.Array.IndexOf(_rightFacingPoseSprites, _bodyRenderer.sprite) >= 0;
+            _visual.FaceToward(TargetPosition.x, artFacesRight);
         }
 
         // 각성이 풀린다. 펑 하고 사라지고, 그 자리에는 대화가 2등신 왕을 띄운다. 나중에 사라질 때 연출은 내지 않는다.
@@ -1207,6 +1275,7 @@ namespace ExplodeIt.Enemies
                     _rageEmbers.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                     _flyingCrown.gameObject.SetActive(false);
                     FeedbackPlayer.Play(_data.DefeatFeedback, Body.position);
+                    FaceTargetWhileHeld();
                     GameEvents.RaiseBossDefeated(_bossNumber);
                     break;
             }
@@ -1882,40 +1951,85 @@ namespace ExplodeIt.Enemies
             AudioManager.Play(_data.MeteorImpactSound);
         }
 
-        // ── 천지 가르기: 두 손으로 검을 높이 들고, 왕이 선 줄을 경계로 맵을 좌·우 또는 위·아래 절반으로 나눠 차례로 벤다.
-        // 먼저 벨 쪽으로 보라 웨이브가 퍼지고, 조금 뒤 반대쪽으로 퍼진다. 웨이브 순서가 곧 베는 순서다.
-        // 공략: 첫 베기 동안 반대쪽에 있다가, 두 베기 사이에 경계선을 넘어 이미 벤 쪽으로 건너간다. 벽과 상관없이 절반 전체를 벤다.
+        // ── 천지 가르기: 두 손으로 검을 높이 들고 맵을 크게 세 번에 걸쳐 가른다. 한 묶음마다 예고 두 개를 먼저 보여 주고 그 순서대로 두 번 벤다.
+        //   ① 왕이 선 줄을 경계로 좌·우(또는 위·아래) 절반을 차례로 벤다.
+        //   ② 축을 바꿔 위·아래(또는 좌·우) 절반을 차례로 벤다.
+        //   ③ 맵을 세로·가로 각각 여러 칸으로 나눠 한 칸씩 걸러 벤다(세로 줄무늬 다음 가로 줄무늬). 두 번 다 안전한 칸이 늘 남는다.
+        // 한 번에 기억할 예고는 늘 두 개뿐이라, 횟수가 늘어도 헷갈리지 않는다. 벽과 상관없이 벤다.
 
         private void BeginSword()
         {
             _step = Step.SwordCharge;
+            _isFirstSplitHorizontal = Random.value < 0.5f;
+            BeginSwordStage(0);
+        }
+
+        private void BeginSwordStage(int stage)
+        {
+            _swordStage = stage;
             _stepTime = 0f;
-            _swordOrigin = Body.position;
-            bool isHorizontal = Random.value < 0.5f;
-            float sign = Random.value < 0.5f ? 1f : -1f;
-            _swordFirstDirection = isHorizontal ? new Vector2(sign, 0f) : new Vector2(0f, sign);
-            _aimDirection = _swordFirstDirection;
             _isSecondWaveShown = false;
+            _isFirstSlashDone = false;
             _isSecondSlashDone = false;
-            PlaceSwordLine(isHorizontal);
-            ShowHalf(_halfFirst, _swordFirstDirection);
+            _lastSlashAt = -1f;
+            _swordOrigin = Body.position;
+            if (stage < 2)
+            {
+                bool isHorizontal = stage == 0 ? _isFirstSplitHorizontal : !_isFirstSplitHorizontal;
+                float sign = Random.value < 0.5f ? 1f : -1f;
+                _swordFirstDirection = isHorizontal ? new Vector2(sign, 0f) : new Vector2(0f, sign);
+                _aimDirection = _swordFirstDirection;
+                PlaceSwordLine(isHorizontal);
+                ShowHalf(_halfFirst, _swordFirstDirection);
+                return;
+            }
+
+            _verticalOffset = Random.value;
+            _horizontalOffset = Random.value;
+            ShowStripes(true);
+        }
+
+        private float SwordStageWait()
+        {
+            return _swordStage == 0 ? _data.SwordWait : _data.SwordFollowupWait;
+        }
+
+        private float FirstSlashAt()
+        {
+            return _data.SwordWaveGap + _data.SwordWaveTime + SwordStageWait();
         }
 
         private bool TickSword(float deltaTime)
         {
-            if (_step == Step.SwordCharge)
+            float time = _stepTime;
+            if (!_isSecondWaveShown && time >= _data.SwordWaveGap)
             {
-                if (!_isSecondWaveShown && _stepTime >= _data.SwordWaveGap)
+                _isSecondWaveShown = true;
+                if (_swordStage < 2)
                 {
-                    _isSecondWaveShown = true;
                     ShowHalf(_halfSecond, -_swordFirstDirection);
                 }
-
-                if (_stepTime >= _data.SwordWaveGap + _data.SwordWaveTime + _data.SwordWait)
+                else
                 {
+                    ShowStripes(false);
+                }
+            }
+
+            if (!_isFirstSlashDone)
+            {
+                if (time >= FirstSlashAt())
+                {
+                    _isFirstSlashDone = true;
+                    _lastSlashAt = time;
                     _step = Step.SwordSlash;
-                    _stepTime = 0f;
-                    SlashHalf(_halfFirst, _swordFirstDirection);
+                    if (_swordStage < 2)
+                    {
+                        SlashHalf(_halfFirst, _swordFirstDirection);
+                    }
+                    else
+                    {
+                        SlashStripes(true);
+                    }
                 }
 
                 return false;
@@ -1923,48 +2037,70 @@ namespace ExplodeIt.Enemies
 
             if (!_isSecondSlashDone)
             {
-                if (_stepTime >= _data.SwordSlashGap)
+                if (time >= FirstSlashAt() + _data.SwordSlashGap)
                 {
                     _isSecondSlashDone = true;
-                    _stepTime = 0f;
-                    SlashHalf(_halfSecond, -_swordFirstDirection);
+                    _lastSlashAt = time;
+                    _secondSlashAt = time;
+                    if (_swordStage < 2)
+                    {
+                        SlashHalf(_halfSecond, -_swordFirstDirection);
+                    }
+                    else
+                    {
+                        SlashStripes(false);
+                    }
                 }
 
                 return false;
             }
 
-            return _stepTime >= _data.SwordRecover;
+            if (_swordStage < 2)
+            {
+                if (time >= _secondSlashAt + _data.SwordStageGap)
+                {
+                    _step = Step.SwordCharge;
+                    BeginSwordStage(_swordStage + 1);
+                }
+
+                return false;
+            }
+
+            return time >= _secondSlashAt + _data.SwordRecover;
         }
 
-        // 첫 베기 직전 0~1. 끝으로 갈수록 가파르게 뒤로 젖히며 위로 늘어나고 떨려, 곧 내리칠 것처럼 보인다. 베는 순간 원래대로 돌아온다.
+        // 각 묶음의 첫 베기 직전 0~1. 끝으로 갈수록 가파르게 뒤로 젖히며 위로 늘어나고 떨려, 곧 내리칠 것처럼 보인다.
         private float SwordWindup()
         {
-            if (_pattern != Pattern.Sword || State != EnemyState.Attack || _step != Step.SwordCharge)
+            if (_pattern != Pattern.Sword || State != EnemyState.Attack || _isFirstSlashDone)
             {
                 return 0f;
             }
 
-            float firstSlash = _data.SwordWaveGap + _data.SwordWaveTime + _data.SwordWait;
-            float t = Mathf.Clamp01(1f - (firstSlash - _stepTime) / SwordWindupTime);
+            float t = Mathf.Clamp01(1f - (FirstSlashAt() - _stepTime) / SwordWindupTime);
             return t * t;
         }
 
-        // 첫 베기 직후 잠깐과 두 번째 베기 뒤에는 내리친 자세, 두 베기 사이에는 검을 다시 높이 든 자세다.
+        // 벤 직후 잠깐은 내리친 자세, 그 밖에는 검을 높이 든 자세다. 마지막 베기 뒤에는 내리친 채 끝난다.
         private bool IsSwordStriking()
         {
-            if (State != EnemyState.Attack || _step != Step.SwordSlash)
+            if (State != EnemyState.Attack || _lastSlashAt < 0f)
             {
                 return false;
             }
 
-            return _isSecondSlashDone || _stepTime < _data.SwordFollowThrough;
+            if (_swordStage == 2 && _isSecondSlashDone)
+            {
+                return true;
+            }
+
+            return _stepTime - _lastSlashAt < _data.SwordFollowThrough;
         }
 
         // 좌·우로 가르면 세로선, 위·아래로 가르면 가로선을 왕이 선 자리를 지나 맵 끝까지 긋는다.
         private void PlaceSwordLine(bool isHorizontalSplit)
         {
-            ArenaBounds arena = ArenaBounds.Current;
-            Bounds bounds = arena != null ? arena.Bounds : new Bounds(_swordOrigin, new Vector3(60f, 60f, 1f));
+            Bounds bounds = SwordArena();
             Transform line = _swordLine.transform;
             float size = _swordLine.sprite != null ? _swordLine.sprite.bounds.size.x : 1f;
             if (isHorizontalSplit)
@@ -1981,11 +2117,15 @@ namespace ExplodeIt.Enemies
             _swordLine.color = SwordLineColor;
         }
 
-        private void ShowHalf(HalfSlashWarning half, Vector2 direction)
+        private Bounds SwordArena()
         {
             ArenaBounds arena = ArenaBounds.Current;
-            Bounds bounds = arena != null ? arena.Bounds : new Bounds(_swordOrigin, new Vector3(60f, 60f, 1f));
-            half.Show(bounds, _swordOrigin, direction, _data.SwordWaveTime);
+            return arena != null ? arena.Bounds : new Bounds(_swordOrigin, new Vector3(60f, 60f, 1f));
+        }
+
+        private void ShowHalf(HalfSlashWarning half, Vector2 direction)
+        {
+            half.Show(SwordArena(), _swordOrigin, direction, _data.SwordWaveTime);
             AudioManager.Play(_data.SwordWaveSound);
         }
 
@@ -2000,11 +2140,155 @@ namespace ExplodeIt.Enemies
             AudioManager.Play(_data.SwordSlashSound);
         }
 
+        // 줄무늬 한 벌의 위험한 칸들에 예고를 깐다. 세로 줄무늬는 아래에서 위로, 가로 줄무늬는 왼쪽에서 오른쪽으로 퍼진다.
+        // 세로 줄무늬는 예고 칸 배열의 앞 절반, 가로 줄무늬는 뒤 절반을 쓴다. 밀린 줄무늬는 양 끝 칸이 잘려 한 칸 더 생길 수 있다.
+        private void ShowStripes(bool isVertical)
+        {
+            Bounds bounds = SwordArena();
+            float offset = isVertical ? _verticalOffset : _horizontalOffset;
+            float size = isVertical ? bounds.size.x : bounds.size.y;
+            int slot = isVertical ? 0 : _stripeWarnings.Length / 2;
+            int slotEnd = isVertical ? _stripeWarnings.Length / 2 : _stripeWarnings.Length;
+            int lineSlot = isVertical ? 0 : _gridLines.Length / 2;
+            int lineEnd = isVertical ? _gridLines.Length / 2 : _gridLines.Length;
+            for (int i = 0; i <= StripePairCount(); i++)
+            {
+                if (!TryGetDangerStripe(i, offset, size, out float start, out float width))
+                {
+                    continue;
+                }
+
+                if (slot < slotEnd)
+                {
+                    if (isVertical)
+                    {
+                        _stripeWarnings[slot].ShowRect(new Vector2(bounds.min.x + start + width * 0.5f, bounds.min.y), Vector2.up, bounds.size.y, width, _data.SwordWaveTime);
+                    }
+                    else
+                    {
+                        _stripeWarnings[slot].ShowRect(new Vector2(bounds.min.x, bounds.min.y + start + width * 0.5f), Vector2.right, bounds.size.x, width, _data.SwordWaveTime);
+                    }
+
+                    slot++;
+                }
+
+                // 위험한 칸 양쪽 가장자리에 반쪽 가르기와 같은 경계선을 맵 끝까지 긋는다.
+                if (lineSlot + 1 < lineEnd)
+                {
+                    PlaceGridLine(_gridLines[lineSlot++], bounds, isVertical, start);
+                    PlaceGridLine(_gridLines[lineSlot++], bounds, isVertical, start + width);
+                }
+            }
+
+            _isGridShown = true;
+            AudioManager.Play(_data.SwordWaveSound);
+        }
+
+        private void PlaceGridLine(SpriteRenderer line, Bounds bounds, bool isVertical, float at)
+        {
+            float size = _swordLine.sprite != null ? _swordLine.sprite.bounds.size.x : 1f;
+            if (isVertical)
+            {
+                line.transform.position = new Vector3(bounds.min.x + at, bounds.center.y, 0f);
+                line.transform.localScale = new Vector3(SwordLineWidth / size, bounds.size.y / size, 1f);
+            }
+            else
+            {
+                line.transform.position = new Vector3(bounds.center.x, bounds.min.y + at, 0f);
+                line.transform.localScale = new Vector3(bounds.size.x / size, SwordLineWidth / size, 1f);
+            }
+
+            line.color = SwordLineColor;
+            line.enabled = true;
+        }
+
+        private void HideGridLines()
+        {
+            _isGridShown = false;
+            if (_gridLines == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _gridLines.Length; i++)
+            {
+                _gridLines[i].enabled = false;
+            }
+        }
+
+        // 위험 + 안전 한 쌍이 맵에 몇 번 들어가는지.
+        private int StripePairCount()
+        {
+            return Mathf.Max(1, _data.StripeCount / 2);
+        }
+
+        // index번(0 ~ 쌍 수) 위험 칸의 시작 위치(맵 왼쪽·아래 끝 기준)와 폭. 줄무늬를 offset만큼 밀고 맵 밖으로 나간 부분은 잘라 낸다.
+        // 맵 안에 남는 부분이 없으면 false.
+        private bool TryGetDangerStripe(int index, float offset, float arenaSize, out float start, out float width)
+        {
+            float period = arenaSize / StripePairCount();
+            float from = (offset - 1f + index) * period;
+            float to = from + period * _data.StripeDangerRatio;
+            start = Mathf.Max(from, 0f);
+            width = Mathf.Min(to, arenaSize) - start;
+            return width > 0.05f;
+        }
+
+        private void SlashStripes(bool isVertical)
+        {
+            Bounds bounds = SwordArena();
+            float offset = isVertical ? _verticalOffset : _horizontalOffset;
+            float size = isVertical ? bounds.size.x : bounds.size.y;
+            for (int i = 0; i <= StripePairCount(); i++)
+            {
+                if (!TryGetDangerStripe(i, offset, size, out float start, out float width))
+                {
+                    continue;
+                }
+
+                float center = start + width * 0.5f;
+                if (isVertical)
+                {
+                    HitInWorldRect(new Vector2(bounds.min.x + center, bounds.center.y), new Vector2(width, bounds.size.y));
+                }
+                else
+                {
+                    HitInWorldRect(new Vector2(bounds.center.x, bounds.min.y + center), new Vector2(bounds.size.x, width));
+                }
+            }
+
+            int first = isVertical ? 0 : _stripeWarnings.Length / 2;
+            int last = isVertical ? _stripeWarnings.Length / 2 : _stripeWarnings.Length;
+            for (int i = first; i < last; i++)
+            {
+                if (_stripeWarnings[i].gameObject.activeSelf)
+                {
+                    _stripeWarnings[i].Slash();
+                }
+            }
+
+            // 벤 줄무늬의 경계선도 예고와 함께 걷어 낸다. 남은 쪽 경계선만 보여 다음에 피할 곳이 헷갈리지 않는다.
+            int lineFirst = isVertical ? 0 : _gridLines.Length / 2;
+            int lineLast = isVertical ? _gridLines.Length / 2 : _gridLines.Length;
+            for (int i = lineFirst; i < lineLast; i++)
+            {
+                _gridLines[i].enabled = false;
+            }
+
+            _aimDirection = isVertical ? Vector2.down : Vector2.right;
+            FeedbackPlayer.Play(_data.SwordSlashFeedback, Body.position);
+            AudioManager.Play(_data.SwordSlashSound);
+        }
+
         // 유성우 동안 맵이 보랏빛으로 물들고, 왕 주위에 보라 소용돌이가 돈다.
         private void TickPhase3Visuals(float deltaTime)
         {
             bool isMeteor = _pattern == Pattern.Meteor && (State == EnemyState.Telegraph || State == EnemyState.Attack);
-            _swordLine.enabled = _pattern == Pattern.Sword && State == EnemyState.Attack;
+            _swordLine.enabled = _pattern == Pattern.Sword && State == EnemyState.Attack && _swordStage < 2;
+            if (_isGridShown && !(_pattern == Pattern.Sword && State == EnemyState.Attack && _swordStage == 2))
+            {
+                HideGridLines();
+            }
             _meteorAura.enabled = isMeteor && _meteorAuraFrames != null && _meteorAuraFrames.Length > 0;
             if (_meteorAura.enabled)
             {
@@ -2435,6 +2719,12 @@ namespace ExplodeIt.Enemies
 
             _halfFirst.Hide();
             _halfSecond.Hide();
+            for (int i = 0; i < _stripeWarnings.Length; i++)
+            {
+                _stripeWarnings[i].Hide();
+            }
+
+            HideGridLines();
             _meteorAura.enabled = false;
             _tintAlpha = 0f;
             _mapTint.enabled = false;
