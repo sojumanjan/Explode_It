@@ -235,6 +235,9 @@ namespace ExplodeIt.Enemies
         // 사라지는 순간의 연출·소리를 내지 않는다. 이미 다른 모습으로 바뀌어 화면에서 빠진 보스(2등신으로 돌아간 최종 보스)가 쓴다.
         public bool SkipsDeathEnd { get; set; }
 
+        // 사망 연출 크기에 곱하는 배율. 쓰러진 보스가 쏙 줄어들어 다른 모습으로 바뀔 때 쓴다.
+        public float DeathScale { get; set; } = 1f;
+
         private Color RestingColor
         {
             get
@@ -451,14 +454,15 @@ namespace ExplodeIt.Enemies
 
             // 뽀잉: 가로·세로가 번갈아 늘었다 줄며 출렁이다 끝으로 갈수록 잦아든다. 0이면 일반 적처럼 출렁이지 않는다.
             Vector2 scale = new Vector2(size, size);
-            if (_motion.DeathWobble > 0f)
+            // 사망 연출을 멈춰 둔 동안은 출렁이지 않는다. 시간이 멈춘 지점의 출렁임 값에 고정돼 그림이 한쪽으로 늘어난 채 남는다.
+            if (_motion.DeathWobble > 0f && !HoldsDeath)
             {
                 float wobble = Mathf.Sin(_stateTime * _motion.DeathWobbleRate * 2f * Mathf.PI) * _motion.DeathWobble * (1f - t);
                 scale.x *= 1f + wobble;
                 scale.y *= 1f - wobble;
             }
 
-            ApplyPose(offset, scale, 0f);
+            ApplyPose(offset, scale * DeathScale, 0f);
 
             // 사라지기 직전에 터트린다. 풀 반환과 같은 프레임에 겹치면 놓칠 수 있어 끝을 조금 남겨 둔다.
             if (!_hasPlayedDeathEnd && !SkipsDeathEnd && t >= DeathEndPoint)

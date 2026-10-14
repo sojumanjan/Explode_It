@@ -85,6 +85,8 @@ namespace ExplodeIt.Stage
         private float _defeatStartTime;
         private bool _isDefeatTalking;
         private float _farewellTime = -1f;
+        // 고블린이 쓰러진 왕 쪽으로 걸어가기 시작한 실제 시각. 음수면 걷는 중이 아니다.
+        private float _walkStartTime = -1f;
         private System.Action _onDialogueSpawnBoss;
         private System.Action _onDialogueEntrance;
 
@@ -386,6 +388,7 @@ namespace ExplodeIt.Stage
             _defeatStartTime = Time.unscaledTime;
             _isDefeatTalking = false;
             _farewellTime = -1f;
+            _walkStartTime = -1f;
             GameEvents.RaisePlayerControlLockChanged(true);
             _isControlReleased = false;
             BossDialogueData dialogue = _stage.FinalBossDefeatDialogue;
@@ -415,6 +418,12 @@ namespace ExplodeIt.Stage
                     return;
                 }
 
+                // 멀리 있으면 고블린이 쓰러진 왕 쪽으로 걸어가 말할 거리까지 다가간다. 막혀서 못 가면 시간이 지나 그 자리에서 대화한다.
+                if (!IsCloseEnoughToTalk())
+                {
+                    return;
+                }
+
                 // 쓰러진 왕과 고블린이 함께 보이게 둘 사이를 비춘다.
                 _isDefeatTalking = true;
                 Transform player = _spawner.Target;
@@ -430,6 +439,39 @@ namespace ExplodeIt.Stage
             {
                 SendFarewell();
             }
+        }
+
+        private bool IsCloseEnoughToTalk()
+        {
+            Transform player = _spawner.Target;
+            if (player == null)
+            {
+                return true;
+            }
+
+            Vector2 boss = _bossEnemy.transform.position;
+            Vector2 offset = (Vector2)player.position - boss;
+            float talk = _stage.DefeatTalkDistance;
+            if (_walkStartTime < 0f)
+            {
+                if (offset.magnitude <= talk + 0.5f)
+                {
+                    return true;
+                }
+
+                _walkStartTime = Time.unscaledTime;
+                Vector2 direction = offset.sqrMagnitude > 0.0001f ? offset.normalized : Vector2.right;
+                GameEvents.RaisePlayerWalkRequested(boss + direction * talk);
+                return false;
+            }
+
+            if (offset.magnitude <= talk + 0.3f || Time.unscaledTime - _walkStartTime >= _stage.DefeatWalkTimeout)
+            {
+                GameEvents.RaisePlayerWalkCancelled();
+                return true;
+            }
+
+            return false;
         }
 
         private void SendFarewell()

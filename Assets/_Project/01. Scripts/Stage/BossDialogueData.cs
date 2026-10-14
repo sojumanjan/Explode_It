@@ -32,6 +32,12 @@ namespace ExplodeIt.Stage
             [Tooltip("처치 대화용. 이 줄이 시작될 때 쓰러진 각성 왕이 펑 하고 2등신 왕으로 돌아간다. 그 뒤 왕 줄은 2등신 왕이 표정과 함께 말하고, 대화가 끝나면 스티커처럼 떼어지며 퇴장한다")]
             [SerializeField] private bool _revertToKing;
 
+            [Tooltip("이 줄이 시작될 때 먼저 보여 줄 연출. 연출이 끝난 뒤 이 줄의 말풍선이 뜬다")]
+            [SerializeField] private DialogueAction _startAction;
+
+            [Tooltip("이 줄을 다 읽고 넘길 때 보여 줄 연출. 연출이 끝난 뒤 다음 줄로 넘어간다. 마지막 줄이면 연출 뒤 대화가 끝난다")]
+            [SerializeField] private DialogueAction _endAction;
+
             public DialogueSpeaker Speaker => _speaker;
             public KingMood Mood => _mood;
             public string Text => _text;
@@ -39,6 +45,8 @@ namespace ExplodeIt.Stage
             public bool StartEntrance => _startEntrance;
             public Sprite BossSprite => _bossSprite;
             public bool RevertToKing => _revertToKing;
+            public DialogueAction StartAction => _startAction;
+            public DialogueAction EndAction => _endAction;
         }
 
         [Tooltip("위에서부터 차례로 말한다")]

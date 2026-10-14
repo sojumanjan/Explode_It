@@ -32,6 +32,26 @@ namespace ExplodeIt.Stage
         [SerializeField] private RectTransform _skipButton;
         // 두 캐릭터 머리 중 높은 쪽에서 스킵 버튼까지의 높이 (유닛). 말풍선과 겹치지 않게 말풍선보다 위에 둔다.
         [SerializeField, Min(0f)] private float _skipButtonGap = 1.8f;
+        // 처치 대화에서 스킵 버튼을 더 올리는 높이 (유닛). 두 사람 머리 위에 말풍선이 번갈아 떠서 그 위로 피한다.
+        [SerializeField, Min(0f)] private float _defeatSkipExtraHeight = 1.6f;
+
+        [Header("엔딩 연출 (처치 대화)")]
+        // 왕이 던지는 스티커 책. 바닥에 놓여 고블린이 뛰어든다.
+        [SerializeField] private SpriteRenderer _book;
+        // 책이 날아가 떨어지는 시간(초)과 포물선 높이(유닛), 왕이 하늘로 날아가는 시간(초)과 높이(유닛).
+        [SerializeField, Min(0.05f)] private float _throwDuration = 0.6f;
+        [SerializeField, Min(0f)] private float _throwArc = 2f;
+        [SerializeField, Min(0.05f)] private float _flyAwayDuration = 0.5f;
+        [SerializeField, Min(0f)] private float _flyAwayHeight = 14f;
+        // 고블린이 책으로 뛰어드는 시간(초)과 포물선 높이(유닛), 빨려 들어가는 시간(초)과 도는 바퀴 수.
+        [SerializeField, Min(0.05f)] private float _jumpDuration = 0.6f;
+        [SerializeField, Min(0f)] private float _jumpArc = 2f;
+        [SerializeField, Min(0.05f)] private float _suckDuration = 1.2f;
+        [SerializeField, Min(0f)] private float _suckSpins = 3f;
+        [SerializeField] private SoundData _bookLandSound;
+        [SerializeField] private SoundData _flyAwaySound;
+        [SerializeField] private SoundData _jumpSound;
+        [SerializeField] private SoundData _suckSound;
         // 마우스를 올렸을 때 스킵 버튼이 커지는 배율.
         [SerializeField, Min(1f)] private float _skipHoverScale = 1.12f;
 
@@ -41,6 +61,11 @@ namespace ExplodeIt.Stage
         private Transform _player;
         // 처치 대화에서 쓰러진 각성 왕이 2등신 왕으로 돌아왔는지. 돌아온 뒤에는 2등신 왕 그림이 말하고 스티커처럼 퇴장한다.
         private bool _isReverted;
+        private Vector3 _bookScale;
+        private Vector3 _playerScale;
+        private Tween _action;
+        private TweenCallback _onAdvanceLine;
+        private TweenCallback _onShowLine;
         private TweenCallback _onRevertEnd;
         private Vector2 _bossPoint;
         private float _bossTopOffset;
@@ -68,6 +93,13 @@ namespace ExplodeIt.Stage
             _onPauseEnd = ShowCurrentLine;
             _onShoutEnd = HideShout;
             _onRevertEnd = ShowRevertedKing;
+            _onAdvanceLine = AdvanceLine;
+            _onShowLine = ShowCurrentLine;
+            if (_book != null)
+            {
+                _bookScale = _book.transform.localScale;
+                _book.enabled = false;
+            }
             if (_skipButton != null)
             {
                 _skipScale = _skipButton.localScale;
@@ -88,6 +120,7 @@ namespace ExplodeIt.Stage
             _punch?.Kill();
             _pause?.Kill();
             _shoutHide?.Kill();
+            _action?.Kill();
         }
 
         // 싸우는 도중 보스가 외치는 대사. 등장 대화와 같은 보스 말풍선을 쓰고, 클릭 없이 시간이 지나면 사라진다.
@@ -185,6 +218,11 @@ namespace ExplodeIt.Stage
             _boss = boss;
             _player = player;
             _isReverted = false;
+            _playerScale = player != null ? player.localScale : Vector3.one;
+            if (_book != null)
+            {
+                _book.enabled = false;
+            }
             _bossPoint = boss.position;
             _bossTopOffset = TopOf(boss) - boss.position.y;
             _line = -1;
@@ -197,7 +235,7 @@ namespace ExplodeIt.Stage
             Vector2 bossPoint = boss.position;
             Vector2 playerPoint = player != null ? (Vector2)player.position : bossPoint;
             float top = Mathf.Max(TopOf(boss), player != null ? TopOf(player) : bossPoint.y);
-            ShowSkipButtonAt(new Vector2((bossPoint.x + playerPoint.x) * 0.5f, top + _skipButtonGap));
+            ShowSkipButtonAt(new Vector2((bossPoint.x + playerPoint.x) * 0.5f, top + _skipButtonGap + _defeatSkipExtraHeight));
             NextLine();
         }
 
@@ -277,6 +315,21 @@ namespace ExplodeIt.Stage
                 EntranceRequested?.Invoke();
             }
 
+            // 이 줄을 넘길 때의 연출이 있으면 말풍선을 닫고 연출을 다 보여 준 뒤 다음 줄로 간다.
+            if (_line >= 0 && _data.GetLine(_line).EndAction != DialogueAction.None)
+            {
+                _isTalking = false;
+                _kingBubble.Hide();
+                _bossBubble.Hide();
+                PlayAction(_data.GetLine(_line).EndAction, _onAdvanceLine);
+                return;
+            }
+
+            AdvanceLine();
+        }
+
+        private void AdvanceLine()
+        {
             _line++;
             _kingBubble.Hide();
             _bossBubble.Hide();
@@ -300,6 +353,13 @@ namespace ExplodeIt.Stage
                 GameEvents.RaiseBossRevertRequested();
                 _pause?.Kill();
                 _pause = DOVirtual.DelayedCall(_data.RevertPause, _onRevertEnd).SetLink(gameObject);
+                return;
+            }
+
+            // 이 줄이 시작될 때의 연출이 있으면 다 보여 준 뒤 말풍선을 띄운다.
+            if (line.StartAction != DialogueAction.None)
+            {
+                PlayAction(line.StartAction, _onShowLine);
                 return;
             }
 
@@ -369,6 +429,7 @@ namespace ExplodeIt.Stage
         private void Skip()
         {
             _pause?.Kill();
+            _action?.Kill();
             _isTalking = false;
             _kingBubble.Hide();
             _bossBubble.Hide();
@@ -396,6 +457,103 @@ namespace ExplodeIt.Stage
             ShowCurrentLine();
         }
 
+        // ── 엔딩 연출: 줄의 시작·끝 연출. 다 끝나면 done을 부른다.
+
+        private void PlayAction(DialogueAction action, TweenCallback done)
+        {
+            _action?.Kill();
+            switch (action)
+            {
+                case DialogueAction.ThrowBook:
+                    _action = ThrowBook().OnComplete(done);
+                    break;
+                case DialogueAction.KingFlyAway:
+                    _action = FlyAway().OnComplete(done);
+                    break;
+                case DialogueAction.PlayerJumpToBook:
+                    _action = JumpToBook().OnComplete(done);
+                    break;
+                case DialogueAction.PlayerSuckedIn:
+                    _action = SuckIntoBook().OnComplete(done);
+                    break;
+                default:
+                    done();
+                    return;
+            }
+
+            _action.SetLink(gameObject);
+        }
+
+        // 왕 손에서 왕과 고블린 사이 바닥으로 포물선을 그리며 빙글 돌아 떨어진다. 닿는 순간 납작하게 눌렸다 돌아온다.
+        private Tween ThrowBook()
+        {
+            Transform book = _book.transform;
+            Vector2 from = _king.gameObject.activeSelf ? (Vector2)_king.bounds.center : (Vector2)_boss.position;
+            Vector2 king = _king.gameObject.activeSelf ? (Vector2)_king.transform.position : (Vector2)_boss.position;
+            Vector2 to = _player != null ? Vector2.Lerp(king, _player.position, 0.5f) : king + Vector2.right * 2f;
+            _book.enabled = true;
+            book.position = from;
+            book.localScale = _bookScale * 0.4f;
+            book.localRotation = Quaternion.identity;
+            return DOTween.Sequence()
+                .Append(DOVirtual.Float(0f, 1f, _throwDuration, t =>
+                {
+                    book.position = Vector2.Lerp(from, to, t) + Vector2.up * (4f * _throwArc * t * (1f - t));
+                    book.localScale = _bookScale * Mathf.Lerp(0.4f, 1f, t);
+                    book.localRotation = Quaternion.Euler(0f, 0f, -360f * t);
+                }).SetEase(Ease.Linear))
+                .AppendCallback(() => AudioManager.Play(_bookLandSound))
+                .Append(book.DOPunchScale(new Vector3(0.2f, -0.2f, 0f) * _bookScale.x, 0.25f, 6));
+        }
+
+        // 2등신 왕이 살짝 웅크렸다가 하늘로 쏜살같이 솟구쳐 사라진다.
+        private Tween FlyAway()
+        {
+            Transform king = _king.transform;
+            Vector3 start = king.position;
+            AudioManager.Play(_flyAwaySound);
+            return DOTween.Sequence()
+                .Append(king.DOScale(new Vector3(_kingScale.x * 1.2f, _kingScale.y * 0.75f, _kingScale.z), 0.12f))
+                .Append(king.DOScale(new Vector3(_kingScale.x * 0.8f, _kingScale.y * 1.3f, _kingScale.z), 0.08f))
+                .Append(king.DOMove(start + Vector3.up * _flyAwayHeight, _flyAwayDuration).SetEase(Ease.InQuad))
+                .Join(king.DOLocalRotate(new Vector3(0f, 0f, 20f * _side), _flyAwayDuration))
+                .AppendCallback(() => _king.gameObject.SetActive(false));
+        }
+
+        // 고블린이 책 한가운데로 포물선 점프해 탁 착지한다.
+        private Tween JumpToBook()
+        {
+            Vector2 from = _player.position;
+            Vector2 to = _book.transform.position;
+            AudioManager.Play(_jumpSound);
+            return DOTween.Sequence()
+                .Append(DOVirtual.Float(0f, 1f, _jumpDuration, t =>
+                {
+                    _player.position = Vector2.Lerp(from, to, t) + Vector2.up * (4f * _jumpArc * t * (1f - t));
+                }).SetEase(Ease.Linear))
+                .AppendCallback(() => AudioManager.Play(_bookLandSound))
+                .Append(_player.DOPunchScale(new Vector3(0.25f, -0.25f, 0f) * _playerScale.x, 0.25f, 6));
+        }
+
+        // 책이 번쩍이며 부풀고, 고블린이 빙글빙글 돌며 작아져 책 한가운데로 빨려 들어간다.
+        private Tween SuckIntoBook()
+        {
+            Vector2 from = _player.position;
+            Vector2 to = _book.transform.position;
+            AudioManager.Play(_suckSound);
+            return DOTween.Sequence()
+                .Append(_book.transform.DOPunchScale(_bookScale * 0.15f, 0.4f, 4))
+                .Join(_book.DOColor(new Color(1f, 1f, 0.75f, 1f), 0.2f).SetLoops(2, LoopType.Yoyo))
+                .Append(DOVirtual.Float(0f, 1f, _suckDuration, t =>
+                {
+                    float eased = t * t;
+                    _player.position = Vector2.Lerp(from, to, eased);
+                    _player.localScale = _playerScale * (1f - eased);
+                    _player.localRotation = Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased);
+                }).SetEase(Ease.Linear))
+                .Append(_book.transform.DOPunchScale(_bookScale * 0.2f, 0.3f, 6));
+        }
+
         // 스티커가 떼어지듯 젖혀지며 납작해져 사라진다.
         private void Leave()
         {
@@ -403,7 +561,8 @@ namespace ExplodeIt.Stage
             HideSkipButton();
             _punch?.Kill();
             // 왕이 곧 보스면 떼어지지 않고 그 자리에서 바로 보스 몸으로 바뀐다. 처치 대화에서 2등신으로 돌아온 왕은 스티커처럼 떠난다.
-            if (_data.KingBecomesBoss && !_isReverted)
+            // 이미 하늘로 날아가 사라진 왕은 떼어 낼 것이 없다.
+            if ((_data.KingBecomesBoss && !_isReverted) || !_king.gameObject.activeSelf)
             {
                 _sequence?.Kill();
                 Finish();

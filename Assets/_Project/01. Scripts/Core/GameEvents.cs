@@ -64,6 +64,20 @@ namespace ExplodeIt.Core
         public static event Action<string, float> BossLineRequested;
         // 처치 대화가 끝나 쓰러진 채 남아 있던 보스가 사라질 차례. 대화 동안 몸을 남겨 두는 보스(최종 보스)가 듣는다.
         public static event Action BossFarewellRequested;
+        // 연출 중 플레이어를 정한 자리까지 저절로 걷게 한다(조작이 잠긴 동안). 도착하면 저절로 멈춘다.
+        public static event Action<Vector2> PlayerWalkRequested;
+        // 저절로 걷던 플레이어를 그 자리에 세운다(막혀서 못 가는 경우 등).
+        public static event Action PlayerWalkCancelled;
+
+        public static void RaisePlayerWalkRequested(Vector2 target)
+        {
+            PlayerWalkRequested?.Invoke(target);
+        }
+
+        public static void RaisePlayerWalkCancelled()
+        {
+            PlayerWalkCancelled?.Invoke();
+        }
         // 처치 대화 줄이 쓰러진 보스의 그림을 바꾸라고 알린다(무릎 꿇기 등).
         public static event Action<Sprite> BossPoseRequested;
         // 처치 대화 줄이 쓰러진 각성 왕을 2등신으로 되돌리라고 알린다. 보스는 펑 하고 사라지고, 대화가 2등신 왕을 그 자리에 띄운다.

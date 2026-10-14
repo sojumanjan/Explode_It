@@ -276,6 +276,8 @@ namespace ExplodeIt.Enemies
         // 분노 오라가 켜진 뒤 지난 시간. 음수면 꺼져 있다.
         private bool _isRaging;
         private bool _isHoldingBody;
+        // 2등신으로 돌아가며 쏙 줄어든 뒤 지난 시간. 음수면 줄어드는 중이 아니다.
+        private float _revertShrinkTime = -1f;
         // 각성 파동이 퍼지기 시작한 뒤 지난 시간 (음수면 없음), 파동이 닿을 가장 먼 거리, 맵 어두움 정도 (0~1)와 목표.
         private float _awakenWaveTime = -1f;
         private float _awakenWaveReach;
@@ -561,6 +563,8 @@ namespace ExplodeIt.Enemies
             _isHoldingBody = false;
             _visual.HoldsDeath = false;
             _visual.SkipsDeathEnd = false;
+            _visual.DeathScale = 1f;
+            _revertShrinkTime = -1f;
             _bodyRenderer.enabled = true;
             SetRage(false);
             // 왕관 횟수만큼은 맞아도 버티고, 그로기 때의 한 방에 쓰러진다.
@@ -696,6 +700,7 @@ namespace ExplodeIt.Enemies
             TickPop(deltaTime);
             TickRage(deltaTime);
             TickAwakenWave(deltaTime);
+            TickRevertShrink(deltaTime);
             TickDarken(deltaTime);
             TickPhase3Visuals(deltaTime);
             TickAfterimages();
@@ -855,13 +860,28 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
-            Vector2 center = Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f);
-            FeedbackPlayer.Play(_data.PhaseShiftFeedback, center);
-            AudioManager.Play(_data.PhaseShiftSound);
-            _bodyRenderer.enabled = false;
+            // 파티클 없이 그 자리에서 쏙 줄어들어 사라진다. 2등신 왕은 대화가 그 자리에 뿅 띄운다.
+            _revertShrinkTime = 0f;
             _visual.SkipsDeathEnd = true;
             _rageEmbers.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             _rageFlames.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        private void TickRevertShrink(float deltaTime)
+        {
+            if (_revertShrinkTime < 0f)
+            {
+                return;
+            }
+
+            _revertShrinkTime += deltaTime;
+            float t = Mathf.Clamp01(_revertShrinkTime / ShrinkDuration);
+            _visual.DeathScale = 1f - t * t;
+            if (t >= 1f)
+            {
+                _revertShrinkTime = -1f;
+                _bodyRenderer.enabled = false;
+            }
         }
 
         // 처치 대화가 끝났다. 멈춰 둔 사망 연출을 이어 가 부풀었다 쏙 사라진다(사라짐 연출·소리는 움직임 데이터에 있다).

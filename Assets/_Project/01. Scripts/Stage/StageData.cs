@@ -80,6 +80,12 @@ namespace ExplodeIt.Stage
         [Tooltip("최종 보스가 쓰러진 뒤 처치 대화가 시작되기까지 (초, 실제 시간). 처치 슬로모션이 끝난 뒤로 둔다")]
         [SerializeField, Min(0f)] private float _defeatDialogueDelay = 2f;
 
+        [Tooltip("처치 대화를 시작할 때 고블린과 쓰러진 왕 사이 거리 (유닛). 이보다 멀면 고블린이 왕 쪽으로 이 거리까지 걸어간 뒤 대화한다")]
+        [SerializeField, Min(0.5f)] private float _defeatTalkDistance = 3f;
+
+        [Tooltip("고블린이 왕 쪽으로 걸어가는 최대 시간 (초, 실제 시간). 소품에 막혀 못 가도 이 시간이 지나면 그 자리에서 대화한다")]
+        [SerializeField, Min(0f)] private float _defeatWalkTimeout = 4f;
+
         [Tooltip("처치 대화가 끝나 왕이 사라진 뒤 스테이지가 끝나기까지 (초)")]
         [SerializeField, Min(0f)] private float _defeatEndDelay = 1.5f;
 
@@ -126,6 +132,8 @@ namespace ExplodeIt.Stage
         public BossDialogueData FinalBossDefeatDialogue => _finalBossDefeatDialogue;
         public float DefeatDialogueDelay => _defeatDialogueDelay;
         public float DefeatEndDelay => _defeatEndDelay;
+        public float DefeatTalkDistance => _defeatTalkDistance;
+        public float DefeatWalkTimeout => _defeatWalkTimeout;
 
         public BossDialogueData GetBossDialogue(int bossNumber)
         {
