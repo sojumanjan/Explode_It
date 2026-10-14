@@ -17,6 +17,7 @@ namespace ExplodeIt.Enemies
 
         // 씬에 직접 배치해 테스트할 때만 인스펙터로 넣는다. 스폰 시에는 Initialize로 주입한다.
         [SerializeField] private Transform _target;
+        private Collider2D _targetCollider;
         [SerializeField] private LayerMask _attackMask;
         [SerializeField] private LayerMask _obstacleMask;
         // 벽·구조물에 부딪히는 발 판정. 꺼 둔 원 콜라이더로 크기(반경)만 읽고 물리에는 참여하지 않는다.
@@ -68,7 +69,10 @@ namespace ExplodeIt.Enemies
 
         // 표시 컴포넌트가 읽는 값. 상태를 바꾸는 건 여전히 이 클래스만 한다.
         public EnemyState CurrentState => _state;
-        public Vector2 TargetPosition => _target != null ? (Vector2)_target.position : Body.position;
+        // 플레이어 오브젝트 위치가 아니라 실제 피격 판정(콜라이더) 한가운데를 노린다. 판정이 그림 아래쪽에 있어
+        // 오브젝트 위치를 노리면 조준·추적이 몸통보다 위로 치우쳐, 위로 피할 때만 불리해졌다.
+        public Vector2 TargetPosition => _target == null ? Body.position
+            : _targetCollider != null && _targetCollider.enabled ? (Vector2)_targetCollider.bounds.center : (Vector2)_target.position;
         // 패턴마다 예고 길이가 다른 적(여러 기술을 쓰는 보스)은 지금 쓰는 패턴의 길이로 바꾼다.
         public virtual float TelegraphDuration => Data.TelegraphDuration;
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
@@ -117,6 +121,7 @@ namespace ExplodeIt.Enemies
         public void Initialize(Transform target, Action<Enemy> died, Action<Enemy> release)
         {
             _target = target;
+            _targetCollider = target != null ? target.GetComponent<Collider2D>() : null;
             _died = died;
             _release = release;
         }
@@ -434,13 +439,13 @@ namespace ExplodeIt.Enemies
         // 폭탄·화살과 같은 물리 기준으로 판단한다. 사거리 안일 때만 불리므로 호출 수가 적다.
         private bool CanSeeTarget()
         {
-            return Physics2D.Linecast(Body.position, _target.position, _obstacleFilter, CastBuffer) == 0;
+            return Physics2D.Linecast(Body.position, TargetPosition, _obstacleFilter, CastBuffer) == 0;
         }
 
         // 목표와 겹쳐 방향이 없을 때도 공격이 멈추지 않도록 기본 방향을 준다.
         protected Vector2 DirectionToTarget()
         {
-            Vector2 toTarget = (Vector2)_target.position - Body.position;
+            Vector2 toTarget = TargetPosition - Body.position;
             return toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : Vector2.right;
         }
 
@@ -471,7 +476,7 @@ namespace ExplodeIt.Enemies
 
         protected bool IsTargetWithin(float range)
         {
-            return ((Vector2)_target.position - Body.position).sqrMagnitude <= range * range;
+            return (TargetPosition - Body.position).sqrMagnitude <= range * range;
         }
 
         // 공격 상태에서만 호출한다. 이동 중 몸통 접촉은 예고 없는 공격이 되므로 피해를 주지 않는다.

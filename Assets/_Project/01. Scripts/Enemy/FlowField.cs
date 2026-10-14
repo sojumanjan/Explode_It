@@ -42,6 +42,7 @@ namespace ExplodeIt.Enemies
 
         private int _targetCell = -1;
         private Vector2 _targetPosition;
+        private Collider2D _targetCollider;
 
         public static FlowField Current { get; private set; }
 
@@ -63,16 +64,31 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 적이 노리는 점과 같게, 플레이어 오브젝트 위치가 아니라 피격 판정 한가운데를 목적지로 삼는다.
+        private Vector2 TargetPoint
+        {
+            get
+            {
+                if (_targetCollider == null)
+                {
+                    _targetCollider = _target.GetComponent<Collider2D>();
+                }
+
+                return _targetCollider != null && _targetCollider.enabled ? (Vector2)_targetCollider.bounds.center : (Vector2)_target.position;
+            }
+        }
+
         private void FixedUpdate()
         {
-            int cell = CellIndexAt(_target.position);
+            Vector2 target = TargetPoint;
+            int cell = CellIndexAt(target);
             if (cell == _targetCell)
             {
                 return;
             }
 
             _targetCell = cell;
-            _targetPosition = _target.position;
+            _targetPosition = target;
             if (cell >= 0)
             {
                 Recompute();
@@ -82,7 +98,7 @@ namespace ExplodeIt.Enemies
         // 적이 이번 스텝에 움직일 방향. 플레이어가 보이면 직진, 가려져 있으면 흐름을 따른다.
         public Vector2 GetDirection(Vector2 position)
         {
-            Vector2 toTarget = (Vector2)_target.position - position;
+            Vector2 toTarget = TargetPoint - position;
             Vector2 direct = toTarget.sqrMagnitude > Epsilon ? toTarget.normalized : Vector2.zero;
             if (_targetCell < 0)
             {
