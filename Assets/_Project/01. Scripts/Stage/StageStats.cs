@@ -8,6 +8,8 @@ namespace ExplodeIt.Stage
     public class StageStats : MonoBehaviour
     {
         private bool _isPlaying;
+        // 판이 시작됐는지. 첫 판 오프닝 동안은 상태가 Playing이어도 시간을 세지 않는다.
+        private bool _hasStarted;
 
         public int Kills { get; private set; }
         public float Elapsed { get; private set; }
@@ -21,6 +23,7 @@ namespace ExplodeIt.Stage
             GameEvents.EnemyKilled += OnEnemyKilled;
             GameEvents.BombExploded += OnBombExploded;
             GameEvents.GameStateChanged += OnGameStateChanged;
+            GameEvents.StageStarted += OnStageStarted;
         }
 
         private void OnDisable()
@@ -28,12 +31,18 @@ namespace ExplodeIt.Stage
             GameEvents.EnemyKilled -= OnEnemyKilled;
             GameEvents.BombExploded -= OnBombExploded;
             GameEvents.GameStateChanged -= OnGameStateChanged;
+            GameEvents.StageStarted -= OnStageStarted;
+        }
+
+        private void OnStageStarted(bool isStoryMode)
+        {
+            _hasStarted = true;
         }
 
         // 일시정지·사망·클리어 동안에는 시간을 세지 않는다.
         private void Update()
         {
-            if (_isPlaying)
+            if (_isPlaying && _hasStarted)
             {
                 Elapsed += Time.deltaTime;
             }

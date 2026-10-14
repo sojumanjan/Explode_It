@@ -24,6 +24,7 @@ namespace ExplodeIt.Bombs
             GameEvents.BossDefeated += OnBossDefeated;
             GameEvents.WaveStarted += OnWaveStarted;
             GameEvents.StageStarted += OnStageStarted;
+            GameEvents.PlayerControlLockChanged += OnControlLockChanged;
         }
 
         private void OnDisable()
@@ -31,6 +32,7 @@ namespace ExplodeIt.Bombs
             GameEvents.BossDefeated -= OnBossDefeated;
             GameEvents.WaveStarted -= OnWaveStarted;
             GameEvents.StageStarted -= OnStageStarted;
+            GameEvents.PlayerControlLockChanged -= OnControlLockChanged;
         }
 
         private void OnBossDefeated(int bossNumber)
@@ -46,6 +48,12 @@ namespace ExplodeIt.Bombs
         private void OnStageStarted(bool isStoryMode)
         {
             _line.enabled = true;
+        }
+
+        // 오프닝·보스 대화처럼 조작이 막힌 연출 동안도 숨긴다. 쓰러진 보스 대화는 조작이 끝까지 막혀 있어 다시 보이지 않는다.
+        private void OnControlLockChanged(bool isLocked)
+        {
+            _line.enabled = !isLocked;
         }
 
         // 사거리가 바뀔 때만 호출한다. 매 프레임 다시 그리지 않는다.

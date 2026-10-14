@@ -62,6 +62,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private LayerMask _obstacleMask;
         // 스토리 보스전 등장 대화 연출. 보스 등장 동작을 대화가 끝날 때까지 미뤄야 해서 직접 참조한다. 비워 두면 대화 없이 진행한다.
         [SerializeField] private BossDialoguePlayer _dialoguePlayer;
+        // 첫 판 오프닝 연출. 끝날 때까지 첫 웨이브를 미뤄야 해서 직접 참조한다. 비워 두면 바로 시작한다.
+        [SerializeField] private IntroSequence _intro;
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
@@ -93,6 +95,9 @@ namespace ExplodeIt.Stage
         private float _walkStartTime = -1f;
         // 처치 대화 때 고블린이 설 왕 옆자리.
         private Vector2 _talkPoint;
+        // 오프닝이 끝나기를 기다리는 중. 그동안은 웨이브 시계를 돌리지 않는다.
+        private bool _isWaitingIntro;
+        private System.Action _onIntroFinished;
         private System.Action _onDialogueSpawnBoss;
         private System.Action _onDialogueEntrance;
 
@@ -150,13 +155,33 @@ namespace ExplodeIt.Stage
             _spawner.Prepare(CollectEnemyPrefabs());
             PrepareBosses();
             SetMarker(false, 0f);
+            if (_intro != null && _stage.IsStoryMode && _intro.ShouldPlay)
+            {
+                _isWaitingIntro = true;
+                _onIntroFinished ??= OnIntroFinished;
+                _intro.Play(_onIntroFinished);
+                return;
+            }
+
+            BeginStage();
+        }
+
+        private void OnIntroFinished()
+        {
+            _isWaitingIntro = false;
+            BeginStage();
+        }
+
+        // 판 시간과 웨이브 시계는 여기서부터 센다. 오프닝은 판 시간에 들어가지 않는다.
+        private void BeginStage()
+        {
             GameEvents.RaiseStageStarted(_stage.IsStoryMode);
             BeginRest(_stage.FirstWaveDelay);
         }
 
         private void Update()
         {
-            if (!_isRunning || IsPaused)
+            if (!_isRunning || IsPaused || _isWaitingIntro)
             {
                 return;
             }
