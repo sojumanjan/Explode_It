@@ -83,6 +83,9 @@ namespace ExplodeIt.Stage
         [Tooltip("고블린이 튀어나와 땅에 착지할 때 소리")]
         [SerializeField] private SoundData _landSound;
 
+        [Tooltip("고블린이 착지할 때 화면 흔들림·흙먼지. 비워 두면 흔들지 않는다. 오프닝은 판 진행 중이 아니라서 히트스톱은 걸리지 않는다")]
+        [SerializeField] private FeedbackData _landFeedback;
+
         [Tooltip("정원 대사. 클릭해서 넘긴다. 마지막 줄을 넘기면 고블린이 아래로 도망친다")]
         [SerializeField] private Line[] _lines;
 
@@ -135,6 +138,7 @@ namespace ExplodeIt.Stage
         public SoundData BookGlowSound => _bookGlowSound;
         public SoundData PopSound => _popSound;
         public SoundData LandSound => _landSound;
+        public FeedbackData LandFeedback => _landFeedback;
         public int LineCount => _lines != null ? _lines.Length : 0;
         public Line GetLine(int index) => _lines[index];
         public SoundData ClickSound => _clickSound;

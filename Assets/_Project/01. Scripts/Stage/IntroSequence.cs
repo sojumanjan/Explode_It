@@ -24,6 +24,12 @@ namespace ExplodeIt.Stage
         // 말하는 쪽 머리 위와 말풍선 사이 간격(유닛), 표정이 바뀔 때 뽀잉 세기(비율).
         private const float BubbleGap = 0.15f;
         private const float MoodPunch = 0.25f;
+        // 착지 순간 고블린이 납작해지는 비율과 원래 모양으로 튕겨 돌아오는 시간(초). 무게감을 주는 그림 연출 값이다.
+        private const float LandSquash = 0.35f;
+        private const float LandSquashTime = 0.06f;
+        private const float LandRecoverTime = 0.35f;
+        // 쿵 소리에 낮잠 자던 왕이 위로 움찔하는 세기(비율).
+        private const float KingJolt = 0.2f;
         // 건너뛰기 칸이 손을 뗐을 때 줄어드는 빠르기(누를 때의 배수).
         private const float SkipDrainRate = 3f;
 
@@ -289,7 +295,9 @@ namespace ExplodeIt.Stage
                 .Join(_book.DOColor(new Color(1f, 1f, 0.7f, 1f), _data.BookGlowTime * 0.25f).SetLoops(4, LoopType.Yoyo))
                 .AppendCallback(() => AudioManager.Play(_data.PopSound))
                 .Append(PopOutOfBook())
+                .AppendCallback(PlayLandImpact)
                 .Append(_book.transform.DOPunchScale(_bookScale * 0.2f, 0.3f, 6))
+                .Join(LandSquashTween())
                 .AppendInterval(_data.AfterPopWait)
                 .AppendCallback(OnPopped)
                 .SetLink(gameObject);
@@ -333,6 +341,24 @@ namespace ExplodeIt.Stage
                 Teleport(to);
                 AudioManager.Play(_data.LandSound);
             });
+        }
+
+        // 쿵: 화면이 흔들리고 흙먼지가 튀며, 왕이 소리에 움찔한다. 왕의 움찔은 표정 뽀잉과 같은 트윈 칸을 써서 다음 대사가 뜨면 깔끔하게 끊긴다.
+        private void PlayLandImpact()
+        {
+            FeedbackPlayer.Play(_data.LandFeedback, _popLanding.position);
+            _punch?.Kill();
+            _king.transform.localScale = _kingScale;
+            _punch = _king.transform.DOPunchScale(Vector3.Scale(_kingScale, new Vector3(-KingJolt * 0.5f, KingJolt, 0f)), 0.3f, 6).SetLink(gameObject);
+        }
+
+        // 납작하게 눌렸다가 탄력 있게 원래 모양으로 돌아온다. 좌우 뒤집힌 크기도 부호를 그대로 둔다.
+        private Tween LandSquashTween()
+        {
+            Vector3 squashed = Vector3.Scale(_playerScale, new Vector3(1f + LandSquash, 1f - LandSquash, 1f));
+            return DOTween.Sequence()
+                .Append(_player.DOScale(squashed, LandSquashTime).SetEase(Ease.OutQuad))
+                .Append(_player.DOScale(_playerScale, LandRecoverTime).SetEase(Ease.OutElastic));
         }
 
         // ── 정원 대사
