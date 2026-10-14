@@ -1195,6 +1195,7 @@ namespace ExplodeIt.Enemies
                     // 쓰러진 모습을 남겨 두고, 카메라가 왕에게 다가간 채 슬로모션이 걸린다. 처치 대화는 진행 흐름이 연다.
                     _isHoldingBody = true;
                     _visual.HoldsDeath = true;
+                    AudioManager.TapeStopBgm(_data.BgmTapeStopTime);
                     _isZoomed = true;
                     GameEvents.RaiseCameraFocusRequested(Vector2.Lerp(Body.position, HeadCrownPosition(), 0.5f), _data.DefeatZoomTime);
                     GameEvents.RaiseCameraZoomRequested(_data.DefeatZoom, _data.DefeatZoomTime);

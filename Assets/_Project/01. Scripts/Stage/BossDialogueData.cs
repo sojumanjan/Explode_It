@@ -1,4 +1,5 @@
 using System;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Stage
@@ -32,6 +33,9 @@ namespace ExplodeIt.Stage
             [Tooltip("처치 대화용. 이 줄이 시작될 때 쓰러진 각성 왕이 펑 하고 2등신 왕으로 돌아간다. 그 뒤 왕 줄은 2등신 왕이 표정과 함께 말하고, 대화가 끝나면 스티커처럼 떼어지며 퇴장한다")]
             [SerializeField] private bool _revertToKing;
 
+            [Tooltip("이 줄이 시작될 때 배경음을 이 곡으로 바꾼다. 비우면 지금 곡(또는 무음)을 그대로 둔다")]
+            [SerializeField] private BgmData _bgm;
+
             [Tooltip("이 줄이 시작될 때 먼저 보여 줄 연출. 연출이 끝난 뒤 이 줄의 말풍선이 뜬다")]
             [SerializeField] private DialogueAction _startAction;
 
@@ -46,6 +50,7 @@ namespace ExplodeIt.Stage
             public Sprite BossSprite => _bossSprite;
             public bool RevertToKing => _revertToKing;
             public DialogueAction StartAction => _startAction;
+            public BgmData Bgm => _bgm;
             public DialogueAction EndAction => _endAction;
         }
 

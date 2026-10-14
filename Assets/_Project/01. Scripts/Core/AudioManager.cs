@@ -13,6 +13,8 @@ namespace ExplodeIt.Core
         private const string BgmVolumeKey = "Audio.BgmVolume";
         // 슬로모션이 끝나 효과음 높낮이가 되돌아가는 빠르기 (배율/초, 실제 시간).
         private const float PitchRecoverSpeed = 4f;
+        // 테이프 멈춤 끝의 배경음 높낮이 배율.
+        private const float TapeStopPitch = 0.25f;
 
         private static AudioManager _current;
 
@@ -249,6 +251,33 @@ namespace ExplodeIt.Core
                 .OnComplete(front.Stop);
         }
 
+        // 테이프가 멈추듯 지금 배경음의 높낮이와 음량을 함께 떨어뜨리며 끈다. 최종 보스를 쓰러뜨린 순간 곡이 늘어지며 끊기게 할 때 쓴다.
+        // 슬로모션 중에도 정해진 실제 시간에 끝나게 한다.
+        public static void TapeStopBgm(float duration)
+        {
+            if (_current == null)
+            {
+                return;
+            }
+
+            _current._currentBgm = null;
+            AudioSource front = _current._bgmFront;
+            front.DOKill();
+            float startVolume = front.volume;
+            float startPitch = front.pitch;
+            DOTween.To(() => 0f, t =>
+                {
+                    front.pitch = Mathf.Lerp(startPitch, TapeStopPitch, t);
+                    front.volume = Mathf.Lerp(startVolume, 0f, t * t);
+                }, 1f, Mathf.Max(duration, 0.01f))
+                .SetTarget(front).SetUpdate(true).SetEase(Ease.Linear)
+                .OnComplete(() =>
+                {
+                    front.Stop();
+                    front.pitch = 1f;
+                });
+        }
+
         public static void PlayBgm(BgmData bgm)
         {
             if (_current != null && bgm != null)
@@ -340,6 +369,7 @@ namespace ExplodeIt.Core
 
             _bgmFront.clip = bgm.Clip;
             _bgmFront.volume = 0f;
+            _bgmFront.pitch = 1f;
             _bgmFront.Play();
 
             float duration = bgm.FadeDuration;

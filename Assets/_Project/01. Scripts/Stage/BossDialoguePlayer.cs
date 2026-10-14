@@ -48,6 +48,10 @@ namespace ExplodeIt.Stage
         [SerializeField, Min(0f)] private float _jumpArc = 2f;
         [SerializeField, Min(0.05f)] private float _suckDuration = 1.2f;
         [SerializeField, Min(0f)] private float _suckSpins = 3f;
+        // 빨려 들어가는 줄은 글자가 다 나온 뒤 이 시간(초)이 지나면 클릭 없이 저절로 빨려 들어간다.
+        [SerializeField, Min(0f)] private float _autoSuckDelay = 1.5f;
+        // 2등신 왕이 쏙 사라진 각성 왕 자리에서 말랑하게 튀어나오는 시간(초). 다 나온 뒤 대사가 뜬다.
+        [SerializeField, Min(0.05f)] private float _revertPopDuration = 0.35f;
         [SerializeField] private SoundData _bookLandSound;
         [SerializeField] private SoundData _flyAwaySound;
         [SerializeField] private SoundData _jumpSound;
@@ -66,6 +70,8 @@ namespace ExplodeIt.Stage
         private Tween _action;
         private TweenCallback _onAdvanceLine;
         private TweenCallback _onShowLine;
+        // 빨려 들어가는 줄의 글자가 다 나온 실제 시각. 음수면 아직이다.
+        private float _autoSuckReadyTime = -1f;
         private TweenCallback _onRevertEnd;
         private Vector2 _bossPoint;
         private float _bossTopOffset;
@@ -277,6 +283,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
+            TickAutoSuck();
             bool isOverSkip = IsPointerOverSkip();
             UpdateSkipHover(isOverSkip);
             if (!Mouse.current.leftButton.wasPressedThisFrame)
@@ -291,7 +298,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            if (!_isTalking)
+            if (!_isTalking || IsAutoSuckLine())
             {
                 return;
             }
@@ -307,6 +314,27 @@ namespace ExplodeIt.Stage
             NextLine();
         }
 
+        // 빨려 들어가는 줄은 클릭으로 넘길 수 없고, 말풍선이 뜬 뒤 정한 시간이 지나면 저절로 빨려 들어간다.
+        // 말하던 고블린이 말을 다 맺기도 전에 말풍선째 빨려 들어가는 게 웃음 포인트다.
+        private bool IsAutoSuckLine()
+        {
+            return _line >= 0 && _line < _data.LineCount && _data.GetLine(_line).EndAction == DialogueAction.PlayerSuckedIn;
+        }
+
+        private void TickAutoSuck()
+        {
+            if (!_isTalking || !IsAutoSuckLine() || _autoSuckReadyTime < 0f)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime - _autoSuckReadyTime >= _autoSuckDelay)
+            {
+                _autoSuckReadyTime = -1f;
+                NextLine();
+            }
+        }
+
         private void NextLine()
         {
             // 등장 동작은 표시한 줄을 다 읽고 넘기는 순간 시작한다. 마지막 줄에 표시하면 대화가 끝나며 시작한다.
@@ -319,8 +347,13 @@ namespace ExplodeIt.Stage
             if (_line >= 0 && _data.GetLine(_line).EndAction != DialogueAction.None)
             {
                 _isTalking = false;
-                _kingBubble.Hide();
-                _bossBubble.Hide();
+                // 빨려 들어갈 때는 말하던 말풍선도 함께 빨려 들어가게 남겨 둔다.
+                if (_data.GetLine(_line).EndAction != DialogueAction.PlayerSuckedIn)
+                {
+                    _kingBubble.Hide();
+                    _bossBubble.Hide();
+                }
+
                 PlayAction(_data.GetLine(_line).EndAction, _onAdvanceLine);
                 return;
             }
@@ -341,6 +374,11 @@ namespace ExplodeIt.Stage
 
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = false;
+            if (line.Bgm != null)
+            {
+                AudioManager.PlayBgm(line.Bgm);
+            }
+
             if (line.BossSprite != null && !_isReverted)
             {
                 GameEvents.RaiseBossPoseRequested(line.BossSprite);
@@ -383,10 +421,14 @@ namespace ExplodeIt.Stage
         {
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = true;
+            // 빨려 들어가는 줄은 첫 글자가 뜨는 지금부터 시간을 센다.
+            _autoSuckReadyTime = IsAutoSuckLine() ? Time.unscaledTime : -1f;
+            // 저절로 넘어가는 줄에는 클릭을 부르는 ▼를 띄우지 않는다.
+            bool waitsForClick = !IsAutoSuckLine();
             if (line.Speaker == DialogueSpeaker.Player && _player != null)
             {
                 _kingBubble.transform.position = new Vector3(_player.position.x, TopOf(_player) + _bubbleGap, 0f);
-                _kingBubble.Show(line.Text);
+                _kingBubble.Show(line.Text, waitsForClick);
             }
             else if (UsesKingBubble(line))
             {
@@ -396,13 +438,13 @@ namespace ExplodeIt.Stage
                 _king.transform.localScale = _kingScale;
                 _punch = _king.transform.DOPunchScale(_kingScale * _moodPunch, 0.25f, 6).SetLink(gameObject);
                 _kingBubble.transform.position = new Vector3(_king.transform.position.x, _king.bounds.max.y + _bubbleGap, 0f);
-                _kingBubble.Show(line.Text);
+                _kingBubble.Show(line.Text, waitsForClick);
             }
             else
             {
                 Vector2 boss = _boss != null ? (Vector2)_boss.position : _bossPoint;
                 _bossBubble.transform.position = new Vector3(boss.x, boss.y + _bossTopOffset + _bubbleGap, 0f);
-                _bossBubble.Show(line.Text);
+                _bossBubble.Show(line.Text, waitsForClick);
             }
         }
 
@@ -450,11 +492,17 @@ namespace ExplodeIt.Stage
             king.localRotation = Quaternion.identity;
             king.localScale = Vector3.zero;
             _king.gameObject.SetActive(true);
+            // 쏙 사라진 각성 왕 자리에서 말랑하게 늘었다 줄며 튀어나온다. 다 나온 뒤에 말한다.
+            // 말을 먼저 띄우면 표정 뽀잉이 크기를 바로 원래대로 덮어써 "탁" 하고 나타나 보였다.
+            Vector3 wide = new Vector3(_kingScale.x * 1.25f, _kingScale.y * 0.8f, _kingScale.z);
+            Vector3 tall = new Vector3(_kingScale.x * 0.9f, _kingScale.y * 1.12f, _kingScale.z);
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
-                .Append(king.DOScale(_kingScale, _appearDuration).SetEase(Ease.OutBack))
+                .Append(king.DOScale(wide, _revertPopDuration * 0.5f).SetEase(Ease.OutQuad))
+                .Append(king.DOScale(tall, _revertPopDuration * 0.25f).SetEase(Ease.InOutQuad))
+                .Append(king.DOScale(_kingScale, _revertPopDuration * 0.25f).SetEase(Ease.OutQuad))
+                .OnComplete(_onShowLine)
                 .SetLink(gameObject);
-            ShowCurrentLine();
         }
 
         // ── 엔딩 연출: 줄의 시작·끝 연출. 다 끝나면 done을 부른다.
@@ -535,11 +583,13 @@ namespace ExplodeIt.Stage
                 .Append(_player.DOPunchScale(new Vector3(0.25f, -0.25f, 0f) * _playerScale.x, 0.25f, 6));
         }
 
-        // 책이 번쩍이며 부풀고, 고블린이 빙글빙글 돌며 작아져 책 한가운데로 빨려 들어간다.
+        // 책이 번쩍이며 부풀고, 고블린이 빙글빙글 돌며 작아져 책 한가운데로 빨려 들어간다. 고블린 위 말풍선도 같이 돌며 빨려 들어간다.
         private Tween SuckIntoBook()
         {
             Vector2 from = _player.position;
             Vector2 to = _book.transform.position;
+            Transform bubble = _kingBubble.gameObject.activeSelf ? _kingBubble.transform : null;
+            Vector2 bubbleOffset = bubble != null ? (Vector2)bubble.position - from : Vector2.zero;
             AudioManager.Play(_suckSound);
             return DOTween.Sequence()
                 .Append(_book.transform.DOPunchScale(_bookScale * 0.15f, 0.4f, 4))
@@ -550,7 +600,15 @@ namespace ExplodeIt.Stage
                     _player.position = Vector2.Lerp(from, to, eased);
                     _player.localScale = _playerScale * (1f - eased);
                     _player.localRotation = Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased);
+                    if (bubble != null)
+                    {
+                        // 말풍선은 고블린을 따라 붙은 채, 고블린보다 조금 더 크게 휘돌며 줄어든다.
+                        bubble.position = (Vector2)_player.position + (Vector2)(Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased) * bubbleOffset) * (1f - eased);
+                        bubble.localRotation = Quaternion.Euler(0f, 0f, -360f * _suckSpins * eased);
+                        bubble.localScale = Vector3.one * (1f - eased);
+                    }
                 }).SetEase(Ease.Linear))
+                .AppendCallback(ResetBubbleTransform)
                 .Append(_book.transform.DOPunchScale(_bookScale * 0.2f, 0.3f, 6));
         }
 
@@ -594,8 +652,18 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 빨려 들어가며 돌고 줄어든 말풍선을 숨기고 원래 모양으로 되돌려 둔다.
+        private void ResetBubbleTransform()
+        {
+            _kingBubble.Hide();
+            _kingBubble.transform.localRotation = Quaternion.identity;
+            _kingBubble.transform.localScale = Vector3.one;
+        }
+
         private void HideAll()
         {
+            _kingBubble.transform.localRotation = Quaternion.identity;
+            _kingBubble.transform.localScale = Vector3.one;
             HideSkipButton();
             _king.gameObject.SetActive(false);
             _kingBubble.Hide();

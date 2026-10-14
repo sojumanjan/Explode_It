@@ -79,6 +79,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("최종 보스전 배경음. 각성 모습으로 바뀌는 순간 바뀐다")]
         [SerializeField] private BgmData _bossBgm;
 
+        [Tooltip("쓰러뜨린 순간 보스 곡이 테이프 멈추듯 늘어지며 끊기는 시간 (초, 실제 시간). 이후 처치 대화 앞부분은 무음이다")]
+        [SerializeField, Min(0.01f)] private float _bgmTapeStopTime = 1.2f;
+
         [Tooltip("2등신 왕이 떨기 시작할 때 원래 배경음이 사라지는 시간 (초)")]
         [SerializeField, Min(0f)] private float _bgmFadeOutTime = 1.2f;
 
@@ -438,6 +441,7 @@ namespace ExplodeIt.Enemies
         public SoundData TransformChargeSound => _transformChargeSound;
         public BgmData BossBgm => _bossBgm;
         public float BgmFadeOutTime => _bgmFadeOutTime;
+        public float BgmTapeStopTime => _bgmTapeStopTime;
         public float AwakenWaveTime => _awakenWaveTime;
         public Color AwakenWaveColor => _awakenWaveColor;
         public Color DarkenColor => _darkenColor;

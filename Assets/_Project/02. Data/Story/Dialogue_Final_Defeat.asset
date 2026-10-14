@@ -21,6 +21,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 21300000, guid: 3b891905a3150ce4394beb4a0d708aee, type: 3}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 2
@@ -30,6 +31,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -39,16 +41,28 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 21300000, guid: 9e50ad1bc00973340b371f18bb02c46f, type: 3}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 2
     _mood: 0
-    _text: "\uCC98\uC74C\uBD80\uD130 \uD588\uC5B4\uC694.\n\uB2E4\uB4E4 \uC81C \uB9D0\uC740
-      \uC548 \uB4E3\uACE0\n\uCE7C\uBD80\uD130 \uD718\uB450\uB974\uC168\uC796\uC544\uC694."
+    _text: "\uB9D0\uC740 \uCC98\uC74C\uBD80\uD130 \uD588\uC5B4\uC694."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 2
+    _mood: 0
+    _text: "\uB2E4\uB4E4 \uC81C \uB9D0\uC740 \uC548 \uB4E3\uACE0\n\uCE7C\uBD80\uD130
+      \uD718\uB450\uB974\uC168\uC796\uC544\uC694."
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 2
@@ -59,6 +73,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -67,7 +82,8 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
-    _revertToKing: 1
+    _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -78,6 +94,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 2
@@ -87,6 +104,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -96,7 +114,8 @@ MonoBehaviour:
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
-    _revertToKing: 0
+    _revertToKing: 1
+    _bgm: {fileID: 11400000, guid: 86ec6eb5eb0ded647bede6f50b0d1095, type: 2}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -107,6 +126,18 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 0
+    _mood: 8
+    _text: "\uD2B9\uD788 \uB9C8\uBC95\uC0AC\uB294 \uC9C4\uC9DC \uBE44\uC30C\uB2E4\uACE0..!!\n\uB3C8
+      \uB0B4\uB194!!"
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -116,6 +147,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -125,16 +157,18 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 1
     _endAction: 0
   - _speaker: 0
     _mood: 0
-    _text: "\uBB34\uC2DD\uD558\uAC8C \uD55C \uBC88 \uC810\uD504\uD574\uC11C \uB4E4\uC5B4\uAC00\uBD10.\n\uD639\uC2DC
+    _text: "\uD55C \uBC88 \uC810\uD504\uD574\uC11C \uB4E4\uC5B4\uAC00\uBD10.\n\uD639\uC2DC
       \uBAB0\uB77C~ \uB2E4\uC2DC \uB3CC\uC544\uAC08\uC9C0\uB3C4?"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 0
@@ -144,6 +178,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 2
   - _speaker: 2
@@ -153,27 +188,40 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 3
   - _speaker: 2
     _mood: 5
-    _text: ".... \uBB50\uC57C \uC544\uBB34 \uC77C\uB3C4 \uC548\uC77C\uC5B4\uB098\uC796\uC544!"
+    _text: ....
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 0
   - _speaker: 2
     _mood: 5
-    _text: "\uC774 \uC0AC\uAE30\uAFBC \uC784\uADFC\uAC19\uC740......"
+    _text: "\uBB50\uC57C..? \uC544\uBB34 \uC77C\uB3C4 \uC548\uC77C\uC5B4\uB098\uC796\uC544!"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 2
+    _mood: 5
+    _text: "\uC774\uB7F0 \uC0AC\uAE30\uAFBC \uC784\uAE08\uAC00...\u314C\uD2B8.\u3147.\u3161\u3141\u314E\uC5B4\u3153\uC5B4\uC5C9\uB7EC\uC5B5\u3132?!?!"
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
     _startAction: 0
     _endAction: 4
   _spawnPause: 0
   _kingBecomesBoss: 1
   _kingStandHeight: -1.221
-  _revertPause: 0.2
+  _revertPause: 0.1
