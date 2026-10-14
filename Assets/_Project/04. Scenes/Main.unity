@@ -42881,12 +42881,17 @@ MonoBehaviour:
   _jumpArc: 2
   _suckDuration: 1.2
   _suckSpins: 3
-  _autoSuckDelay: 1
+  _autoSuckProgress: 0.5
   _revertPopDuration: 0.35
   _bookLandSound: {fileID: 11400000, guid: bf7cb4cb18b4a3c4a9faab17825bf0f0, type: 2}
   _flyAwaySound: {fileID: 11400000, guid: d73bc2b5ed483bb458e8119ff027ca24, type: 2}
   _jumpSound: {fileID: 11400000, guid: a069a81ce776d0f478c31f0a8a9e9715, type: 2}
   _suckSound: {fileID: 11400000, guid: d866eb20f9b171146b546dec7f94983f, type: 2}
+  _bookGap: 0.2
+  _bookObstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _clickSound: {fileID: 11400000, guid: 9aefcb4ec29dbc248a3af51dffba2c43, type: 2}
   _skipHoverScale: 1.12
 --- !u!4 &1005818538
 Transform:

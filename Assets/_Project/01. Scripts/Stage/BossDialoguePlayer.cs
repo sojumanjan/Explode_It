@@ -48,14 +48,22 @@ namespace ExplodeIt.Stage
         [SerializeField, Min(0f)] private float _jumpArc = 2f;
         [SerializeField, Min(0.05f)] private float _suckDuration = 1.2f;
         [SerializeField, Min(0f)] private float _suckSpins = 3f;
-        // 빨려 들어가는 줄은 글자가 다 나온 뒤 이 시간(초)이 지나면 클릭 없이 저절로 빨려 들어간다.
-        [SerializeField, Min(0f)] private float _autoSuckDelay = 1.5f;
+        // 빨려 들어가는 줄은 글자가 이 비율(0~1)만큼 나왔을 때 클릭 없이 저절로 빨려 들어간다. 말을 다 맺기 전에 끊겨야 웃기다.
+        [SerializeField, Range(0f, 1f)] private float _autoSuckProgress = 0.5f;
         // 2등신 왕이 쏙 사라진 각성 왕 자리에서 말랑하게 튀어나오는 시간(초). 다 나온 뒤 대사가 뜬다.
         [SerializeField, Min(0.05f)] private float _revertPopDuration = 0.35f;
         [SerializeField] private SoundData _bookLandSound;
         [SerializeField] private SoundData _flyAwaySound;
         [SerializeField] private SoundData _jumpSound;
         [SerializeField] private SoundData _suckSound;
+        // 책은 두 캐릭터 사이 가로 위치의 발밑 아래 빈 곳에 떨어진다. 아래가 벽·구조물에 막히면 머리 위 빈 곳에 떨어진다.
+        // 캐릭터 발끝·머리 끝과 책 사이에 둘 간격(유닛)과, 막혔는지 볼 구조물 레이어.
+        [SerializeField, Min(0f)] private float _bookGap = 0.2f;
+        [SerializeField] private LayerMask _bookObstacleMask;
+
+        [Header("소리")]
+        // 대사를 클릭해 다음 줄로 넘길 때. 글자를 한 번에 다 보이게 하는 클릭에는 내지 않는다.
+        [SerializeField] private SoundData _clickSound;
         // 마우스를 올렸을 때 스킵 버튼이 커지는 배율.
         [SerializeField, Min(1f)] private float _skipHoverScale = 1.12f;
 
@@ -305,10 +313,11 @@ namespace ExplodeIt.Stage
                 return;
             }
 
+            AudioManager.Play(_clickSound);
             NextLine();
         }
 
-        // 빨려 들어가는 줄은 클릭으로 넘길 수 없고, 말풍선이 뜬 뒤 정한 시간이 지나면 저절로 빨려 들어간다.
+        // 빨려 들어가는 줄은 클릭으로 넘길 수 없고, 글자가 정한 비율만큼 나오면 저절로 빨려 들어간다.
         // 말하던 고블린이 말을 다 맺기도 전에 말풍선째 빨려 들어가는 게 웃음 포인트다.
         private bool IsAutoSuckLine()
         {
@@ -322,7 +331,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            if (Time.unscaledTime - _autoSuckReadyTime >= _autoSuckDelay)
+            if (CurrentBubble().TypingProgress >= _autoSuckProgress)
             {
                 _autoSuckReadyTime = -1f;
                 NextLine();
@@ -415,7 +424,7 @@ namespace ExplodeIt.Stage
         {
             BossDialogueData.Line line = _data.GetLine(_line);
             _isTalking = true;
-            // 빨려 들어가는 줄은 첫 글자가 뜨는 지금부터 시간을 센다.
+            // 빨려 들어가는 줄은 지금부터 글자가 나오는 정도를 지켜본다.
             _autoSuckReadyTime = IsAutoSuckLine() ? Time.unscaledTime : -1f;
             // 저절로 넘어가는 줄에는 클릭을 부르는 ▼를 띄우지 않는다.
             bool waitsForClick = !IsAutoSuckLine();
@@ -556,7 +565,7 @@ namespace ExplodeIt.Stage
             Transform book = _book.transform;
             Vector2 from = _king.gameObject.activeSelf ? (Vector2)_king.bounds.center : (Vector2)_boss.position;
             Vector2 king = _king.gameObject.activeSelf ? (Vector2)_king.transform.position : (Vector2)_boss.position;
-            Vector2 to = _player != null ? Vector2.Lerp(king, _player.position, 0.5f) : king + Vector2.right * 2f;
+            Vector2 to = BookLandPoint(king);
             _book.enabled = true;
             book.position = from;
             book.localScale = _bookScale * 0.4f;
@@ -570,6 +579,42 @@ namespace ExplodeIt.Stage
                 }).SetEase(Ease.Linear))
                 .AppendCallback(() => AudioManager.Play(_bookLandSound))
                 .Append(book.DOPunchScale(new Vector3(0.2f, -0.2f, 0f) * _bookScale.x, 0.25f, 6));
+        }
+
+        // 두 캐릭터 사이 가로 위치에서, 발밑 아래가 비어 있으면 아래에, 막혀 있으면 머리 위에 놓는다. 둘 다 막히면 아래.
+        private Vector2 BookLandPoint(Vector2 king)
+        {
+            Vector2 player = _player != null ? (Vector2)_player.position : king + Vector2.right * 2f;
+            float x = (king.x + player.x) * 0.5f;
+            Vector2 size = _book.sprite != null ? Vector2.Scale(_book.sprite.bounds.size, _bookScale) : Vector2.one;
+            float feet = Mathf.Min(king.y, player.y);
+            Vector2 below = new Vector2(x, feet - _bookGap - size.y * 0.5f);
+            if (!IsBookBlocked(below, size))
+            {
+                return below;
+            }
+
+            float kingTop = _king.gameObject.activeSelf ? _king.bounds.max.y : TopOf(_boss);
+            float top = _player != null ? Mathf.Max(kingTop, TopOf(_player)) : kingTop;
+            Vector2 above = new Vector2(x, top + _bookGap + size.y * 0.5f);
+            return IsBookBlocked(above, size) ? below : above;
+        }
+
+        private bool IsBookBlocked(Vector2 center, Vector2 size)
+        {
+            ArenaBounds arena = ArenaBounds.Current;
+            if (arena != null)
+            {
+                Bounds bounds = arena.Bounds;
+                Vector2 half = size * 0.5f;
+                if (center.x - half.x < bounds.min.x || center.x + half.x > bounds.max.x
+                    || center.y - half.y < bounds.min.y || center.y + half.y > bounds.max.y)
+                {
+                    return true;
+                }
+            }
+
+            return Physics2D.OverlapBox(center, size, 0f, _bookObstacleMask) != null;
         }
 
         // 2등신 왕이 살짝 웅크렸다가 하늘로 쏜살같이 솟구쳐 사라진다.

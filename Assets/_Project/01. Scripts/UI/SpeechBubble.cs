@@ -54,6 +54,8 @@ namespace ExplodeIt.UI
         }
 
         public bool IsTyping => _text.maxVisibleCharacters < _total;
+        // 지금까지 나온 글자 비율 (0~1).
+        public float TypingProgress => _total > 0 ? Mathf.Clamp01((float)_text.maxVisibleCharacters / _total) : 1f;
 
         // waitsForClick: 클릭해야 넘어가는 줄인지. 저절로 사라지는 줄에 ▼가 뜨면 눌러야 할 것처럼 읽히므로 끈다.
         public void Show(string line, bool waitsForClick = true)
