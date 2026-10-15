@@ -31,6 +31,8 @@ namespace ExplodeIt.UI
 
         [Header("오른쪽 페이지")]
         [SerializeField] private Image _previewIcon;
+        // 잠긴 것을 눌렀을 때 그림을 이 색으로 칠해 실루엣만 보여 준다.
+        [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
         [SerializeField] private TMP_Text _previewName;
         [SerializeField] private TMP_Text _previewText;
         [SerializeField] private Button _equipButton;
@@ -40,6 +42,8 @@ namespace ExplodeIt.UI
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
         [SerializeField, TextArea] private string _noUnlockText = "아직 해금 방법이 없어요.";
+        // 잠긴 카드에는 업적 이름 없이 해금 조건만 보여 준다.
+        [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n{0}";
 
         private readonly List<ItemCard> _weaponCards = new List<ItemCard>();
         private readonly List<ItemCard> _artifactCards = new List<ItemCard>();
@@ -214,17 +218,23 @@ namespace ExplodeIt.UI
             Sprite icon = weapon != null ? weapon.Icon : artifact != null ? artifact.Icon : null;
             _previewIcon.sprite = icon;
             _previewIcon.enabled = icon != null;
+            _previewIcon.color = Color.white;
             _previewName.text = weapon != null ? weapon.DisplayName : artifact != null ? artifact.DisplayName : "";
             _previewText.text = weapon != null ? weapon.Description : artifact != null ? artifact.Description : "";
         }
 
-        // 잠긴 카드는 고르지 않고 오른쪽 페이지에 해금 조건만 띄운다. 숨김 업적이면 조건도 가린다.
+        // 잠긴 카드는 고르지 않고 오른쪽 페이지에 실루엣과 해금 조건만 띄운다. 숨김 업적이면 조건도 가린다.
         private void ShowLocked(Object item)
         {
             AchievementData achievement = _catalog.FindAchievementRewarding(item);
-            _previewIcon.enabled = false;
+            WeaponData weapon = item as WeaponData;
+            ArtifactData artifact = item as ArtifactData;
+            Sprite icon = weapon != null ? weapon.Icon : artifact != null ? artifact.Icon : null;
+            _previewIcon.sprite = icon;
+            _previewIcon.enabled = icon != null;
+            _previewIcon.color = _silhouetteColor;
             _previewName.text = "???";
-            _previewText.text = achievement == null ? _noUnlockText : achievement.IsHidden ? "???" : achievement.Description;
+            _previewText.text = achievement == null ? _noUnlockText : string.Format(_unlockFormat, achievement.IsHidden ? "???" : achievement.Description);
             _equipButton.gameObject.SetActive(false);
         }
     }

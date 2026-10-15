@@ -3,8 +3,26 @@ guid: f2dffb267cff79043a6103e92bba2373
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1483665779731714255
-    second: Bomb_0
+      213: 1209400111021236992
+    second: bomb_balance_0
+  - first:
+      213: -185009522276551001
+    second: bomb_balance_1
+  - first:
+      213: 2264325784283031511
+    second: bomb_balance_2
+  - first:
+      213: -350754008932777516
+    second: bomb_balance_3
+  - first:
+      213: -7833868336235814212
+    second: bomb_balance_4
+  - first:
+      213: 415979380829854589
+    second: bomb_balance_5
+  - first:
+      213: -777956309857191499
+    second: bomb_balance_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +64,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -75,7 +93,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +131,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bomb_0
+      name: bomb_balance_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 4
-        width: 77
-        height: 92
+        x: 104
+        y: 82
+        width: 305
+        height: 377
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +146,140 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13f20b985d5f86be0800000000000000
-      internalID: -1483665779731714255
+      spriteID: 0032db84ef6a8c010800000000000000
+      internalID: 1209400111021236992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_1
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 459
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a634a8d1d6be6df0800000000000000
+      internalID: -185009522276551001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_2
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 447
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d7a2fbcd408c6f10800000000000000
+      internalID: 2264325784283031511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_3
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 442
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d18406561fd12bf0800000000000000
+      internalID: -350754008932777516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_4
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 419
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb2eb79f042884390800000000000000
+      internalID: -7833868336235814212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_5
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 392
+        width: 37
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7b104cfa0bd5c500800000000000000
+      internalID: 415979380829854589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_balance_6
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 369
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b93034abd42435f0800000000000000
+      internalID: -777956309857191499
       vertices: []
       indices: 
       edges: []
@@ -138,7 +288,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +298,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bomb_0: -1483665779731714255
+      bomb_balance_0: 1209400111021236992
+      bomb_balance_1: -185009522276551001
+      bomb_balance_2: 2264325784283031511
+      bomb_balance_3: -350754008932777516
+      bomb_balance_4: -7833868336235814212
+      bomb_balance_5: 415979380829854589
+      bomb_balance_6: -777956309857191499
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

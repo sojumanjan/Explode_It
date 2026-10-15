@@ -692,6 +692,7 @@ GameObject:
   - component: {fileID: 76132307}
   - component: {fileID: 76132308}
   - component: {fileID: 76132309}
+  - component: {fileID: 76132310}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -756,6 +757,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &76132310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76132306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
 --- !u!1 &77925817
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,7 +2622,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2939,6 +2952,7 @@ MonoBehaviour:
   _list: {fileID: 1638596857}
   _empty: {fileID: 1573399091}
   _previewIcon: {fileID: 1860742931}
+  _silhouetteColor: {r: 0.12, g: 0.09, b: 0.07, a: 0.85}
   _previewName: {fileID: 54336501}
   _previewText: {fileID: 1688931997}
   _equipButton: {fileID: 1921528699}
@@ -2947,6 +2961,7 @@ MonoBehaviour:
   _equipText: "\uC7A5\uCC29"
   _equippedText: "\uC7A5\uCC29 \uC911"
   _noUnlockText: "\uC544\uC9C1 \uD574\uAE08 \uBC29\uBC95\uC774 \uC5C6\uC5B4\uC694."
+  _unlockFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n{0}"
 --- !u!224 &427565590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3064,6 +3079,7 @@ GameObject:
   - component: {fileID: 475986966}
   - component: {fileID: 475986967}
   - component: {fileID: 475986968}
+  - component: {fileID: 475986969}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -3128,6 +3144,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &475986969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475986965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
 --- !u!1 &483862027
 GameObject:
   m_ObjectHideFlags: 0
@@ -6771,6 +6799,7 @@ GameObject:
   - component: {fileID: 1099705737}
   - component: {fileID: 1099705738}
   - component: {fileID: 1099705739}
+  - component: {fileID: 1099705740}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -6835,6 +6864,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1099705740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099705736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
 --- !u!1 &1131196849
 GameObject:
   m_ObjectHideFlags: 0
@@ -7904,7 +7945,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -9002,7 +9043,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 2568629836
   m_fontColor: {r: 0.3, g: 0.18, b: 0.1, a: 0.6}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -9015,7 +9056,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10031,7 +10072,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10155,7 +10196,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279905868
   m_fontColor: {r: 0.3, g: 0.18, b: 0.1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -10168,7 +10209,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10752,6 +10793,7 @@ GameObject:
   - component: {fileID: 1860742933}
   - component: {fileID: 1860742932}
   - component: {fileID: 1860742931}
+  - component: {fileID: 1860742934}
   m_Layer: 5
   m_Name: PreviewIcon
   m_TagString: Untagged
@@ -10816,6 +10858,18 @@ RectTransform:
   m_AnchoredPosition: {x: 336, y: 240}
   m_SizeDelta: {x: 220, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1860742934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860742930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
 --- !u!1 &1877405442
 GameObject:
   m_ObjectHideFlags: 0
@@ -12681,6 +12735,7 @@ GameObject:
   - component: {fileID: 2144490937}
   - component: {fileID: 2144490938}
   - component: {fileID: 2144490939}
+  - component: {fileID: 2144490940}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -12745,6 +12800,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2144490940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144490936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

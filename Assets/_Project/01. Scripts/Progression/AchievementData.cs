@@ -24,6 +24,13 @@ namespace ExplodeIt.Progression
         [Tooltip("켜면 달성 전까지 이름·조건을 ???로 가린다. 찾아내는 재미를 주는 업적용")]
         [SerializeField] private bool _isHidden;
 
+        [Header("조건")]
+        [Tooltip("달성 조건의 종류")]
+        [SerializeField] private AchievementCondition _condition;
+
+        [Tooltip("목표 수. 연속 처치면 연속 횟수(번), 폭탄 하나 처치면 동시 처치 수(마리), 한 판 처치면 처치 수(마리)")]
+        [SerializeField, Min(1)] private int _target = 1;
+
         [Header("보상 (둘 다 비워도 된다)")]
         [Tooltip("달성하면 해금되는 무기")]
         [SerializeField] private WeaponData _rewardWeapon;
@@ -36,6 +43,8 @@ namespace ExplodeIt.Progression
         public string Description => _description;
         public Sprite Sticker => _sticker;
         public bool IsHidden => _isHidden;
+        public AchievementCondition Condition => _condition;
+        public int Target => _target;
         public WeaponData RewardWeapon => _rewardWeapon;
         public ArtifactData RewardArtifact => _rewardArtifact;
         public bool IsCompleted => SaveSystem.Data.IsAchievementCompleted(_id);

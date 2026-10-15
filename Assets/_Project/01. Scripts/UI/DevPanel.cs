@@ -29,6 +29,8 @@ namespace ExplodeIt.UI
         [SerializeField] private EnemySpawner _spawner;
         [SerializeField] private PlayerAbility _ability;
         [SerializeField] private HitReceiver _playerHitReceiver;
+        // 패널로 무언가를 바꾼 판은 업적을 세지 않는다. 치트로 해금되면 해금하는 재미가 사라진다.
+        [SerializeField] private AchievementTracker _achievements;
         // 수치 비교용으로 갈아 끼울 무기들. 에셋 이름이 한글이라 IMGUI에서 깨지므로 버튼 이름을 따로 적는다.
         [SerializeField] private WeaponOption[] _weapons;
 
@@ -112,15 +114,29 @@ namespace ExplodeIt.UI
             GUILayout.BeginArea(new Rect(Margin, Margin, PanelWidth, height), GUI.skin.box);
             _scroll = GUILayout.BeginScrollView(_scroll);
 
+            // 버튼·슬라이더·토글을 건드리면 GUI.changed가 켜진다. 무기 칸은 중간에 이 값을 따로 쓰므로 그 안에서도 확인한다.
+            GUI.changed = false;
             DrawStatus();
             DrawWeapon();
             DrawStage();
             DrawCheats();
             DrawSave();
             DrawCommon();
+            if (GUI.changed)
+            {
+                MarkCheated();
+            }
 
             GUILayout.EndScrollView();
             GUILayout.EndArea();
+        }
+
+        private void MarkCheated()
+        {
+            if (_achievements != null)
+            {
+                _achievements.DisableForThisRun();
+            }
         }
 
         private void DrawStatus()
@@ -134,6 +150,11 @@ namespace ExplodeIt.UI
             Header("Bomb");
             DrawWeaponButtons();
             WeaponStats stats = _launcher.Stats;
+
+            if (GUI.changed)
+            {
+                MarkCheated();
+            }
 
             GUI.changed = false;
             stats.FuseDelay = Slider("Fuse Delay (s)", stats.FuseDelay, 0.3f, 2f);
@@ -170,6 +191,7 @@ namespace ExplodeIt.UI
                     if (GUILayout.Button(label))
                     {
                         _launcher.Equip(option.Data);
+                        MarkCheated();
                     }
                 }
                 GUILayout.EndHorizontal();
