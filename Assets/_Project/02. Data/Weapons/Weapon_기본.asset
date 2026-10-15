@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
   _id: basic
   _unlockedByDefault: 1
+  _displayName: "\uAE30\uBCF8"
+  _description: "\uADE0\uD615\uD615. \uD45C\uC900 \uBC94\uC704\uC758 \uD3ED\uD0C4\uC744
+    \uAFB8\uC900\uD788 \uB358\uC9C4\uB2E4."
+  _icon: {fileID: 0}
+  _bombSprite: {fileID: 21300000, guid: f2dffb267cff79043a6103e92bba2373, type: 3}
+  _bombSize: 0.76
   _charges: 1
   _throwInterval: 0.25
   _rechargeTime: 1

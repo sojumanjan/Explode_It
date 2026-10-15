@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
   _id: double_barrel
   _unlockedByDefault: 0
+  _displayName: "\uB354\uBE14\uBC30\uB7F4"
+  _description: "\uD55C \uBC88 \uB204\uB974\uBA74 \uB450 \uBC1C. \uB450 \uBC88\uC9F8
+    \uBC1C\uC740 \uADF8 \uC21C\uAC04 \uCEE4\uC11C \uC704\uCE58\uB85C \uB0A0\uC544\uAC04\uB2E4."
+  _icon: {fileID: 0}
   _charges: 2
   _throwInterval: 0.25
   _rechargeTime: 1.6

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ExplodeIt.Bombs
 {
     // 실행 중 SO 에셋을 직접 바꾸면 에디터에서 값이 에셋에 남는다.
@@ -14,6 +16,9 @@ namespace ExplodeIt.Bombs
         public float ExplosionRadius { get; set; }
         public float FlightDuration { get; set; }
         public float ArcHeight { get; set; }
+        // 그림 값이라 개발자 패널에서 바꾸지 않지만, 폭탄이 수치와 함께 한 번에 받아 가도록 여기 둔다.
+        public Sprite BombSprite { get; private set; }
+        public float BombSize { get; private set; }
 
         public WeaponStats(WeaponData data)
         {
@@ -33,6 +38,8 @@ namespace ExplodeIt.Bombs
             ExplosionRadius = data.ExplosionRadius;
             FlightDuration = data.FlightDuration;
             ArcHeight = data.ArcHeight;
+            BombSprite = data.BombSprite;
+            BombSize = data.BombSize;
         }
     }
 }

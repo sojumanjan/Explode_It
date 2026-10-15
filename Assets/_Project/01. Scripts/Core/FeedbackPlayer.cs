@@ -51,6 +51,8 @@ namespace ExplodeIt.Core
         {
             _current = this;
             _impulse = GetComponent<CinemachineImpulseSource>();
+            // 설정에서 끈 흔들림을 판마다 다시 적용한다. 개발자 패널 토글은 그 판에서만 유효하다.
+            ShakeEnabled = SaveSystem.Data.ShakeEnabled;
         }
 
         private void OnEnable()

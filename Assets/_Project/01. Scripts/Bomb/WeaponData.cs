@@ -13,6 +13,23 @@ namespace ExplodeIt.Bombs
         [Tooltip("처음부터 쓸 수 있는 무기인지. 끄면 업적 등으로 해금해야 고를 수 있다")]
         [SerializeField] private bool _unlockedByDefault;
 
+        [Header("메뉴 표시")]
+        [Tooltip("출전 준비 화면에 보이는 이름")]
+        [SerializeField] private string _displayName;
+
+        [Tooltip("출전 준비 화면에 보이는 특징 설명")]
+        [SerializeField, TextArea] private string _description;
+
+        [Tooltip("메뉴 장비 칸·카드 그림. 비워 두면 폭탄 그림을 쓴다")]
+        [SerializeField] private Sprite _icon;
+
+        [Header("폭탄 그림")]
+        [Tooltip("던진 폭탄의 그림. 비워 두면 폭탄 프리팹에 들어 있는 기본 그림을 쓴다")]
+        [SerializeField] private Sprite _bombSprite;
+
+        [Tooltip("폭탄 그림의 화면 크기 (유닛, 가로·세로 중 긴 쪽 기준). 그림 파일마다 원본 크기가 달라서 여기서 맞춘다. 0이면 프리팹 크기 그대로")]
+        [SerializeField, Min(0f)] private float _bombSize;
+
         [Header("투척")]
         [Tooltip("보유 개수. 쿨타임 없이 연속으로 던질 수 있는 폭탄 수")]
         [SerializeField, Min(1)] private int _charges = 3;
@@ -54,6 +71,11 @@ namespace ExplodeIt.Bombs
         [SerializeField, Range(0.5f, 2f)] private float _explosionPitchMax = 1.05f;
 
         public string Id => _id;
+        public string DisplayName => _displayName;
+        public string Description => _description;
+        public Sprite Icon => _icon != null ? _icon : _bombSprite;
+        public Sprite BombSprite => _bombSprite;
+        public float BombSize => _bombSize;
         public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsWeaponUnlocked(_id);
         public int Charges => _charges;
         public float ThrowInterval => _throwInterval;

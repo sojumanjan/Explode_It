@@ -39,6 +39,9 @@ namespace ExplodeIt.Bombs
         private float _radius;
         private Vector3 _bodyScale;
         private Color _bodyColor;
+        // 무기마다 폭탄 그림·크기가 달라서, 무기가 정하지 않았을 때 돌아갈 프리팹 그림과 크기.
+        private Sprite _defaultSprite;
+        private Vector3 _defaultScale;
         // 날아가는 동안의 바닥 위치를 알기 위한 값. 포물선 그림은 높이가 섞여 있어 바닥 위치로 쓸 수 없다.
         private bool _isFlying;
         private Vector2 _flightStart;
@@ -65,6 +68,8 @@ namespace ExplodeIt.Bombs
             // 착지 펀치 연출이 스케일을 흔드므로, 재사용 시 되돌릴 원래 크기를 기억한다.
             _bodyScale = _body.transform.localScale;
             _bodyColor = _body.color;
+            _defaultSprite = _body.sprite;
+            _defaultScale = _bodyScale;
 
             _onLanded = OnLanded;
             _onExplode = Explode;
@@ -118,6 +123,7 @@ namespace ExplodeIt.Bombs
         {
             _onFinished = onFinished;
             _radius = stats.ExplosionRadius;
+            ApplyLook(stats.BombSprite, stats.BombSize);
             ResetVisuals();
             _isFlying = true;
             _flightStart = transform.position;
@@ -209,6 +215,21 @@ namespace ExplodeIt.Bombs
         {
             _sequence = null;
             _onFinished?.Invoke(this);
+        }
+
+        // 그림의 긴 쪽이 정한 크기(유닛)가 되게 키운다. 부풀기·타 버리기 연출은 이 크기를 기준으로 한다.
+        private void ApplyLook(Sprite sprite, float size)
+        {
+            _body.sprite = sprite != null ? sprite : _defaultSprite;
+            if (sprite == null || size <= 0f)
+            {
+                _bodyScale = _defaultScale;
+                return;
+            }
+
+            Vector2 extent = sprite.bounds.size;
+            float scale = size / Mathf.Max(extent.x, extent.y, 0.0001f);
+            _bodyScale = new Vector3(scale, scale, _defaultScale.z);
         }
 
         private void ResetVisuals()
