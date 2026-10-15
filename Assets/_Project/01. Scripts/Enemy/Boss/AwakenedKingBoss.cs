@@ -2297,7 +2297,10 @@ namespace ExplodeIt.Enemies
 
             for (int i = 0; i < _gridLines.Length; i++)
             {
-                _gridLines[i].enabled = false;
+                if (_gridLines[i] != null)
+                {
+                    _gridLines[i].enabled = false;
+                }
             }
         }
 
@@ -2792,13 +2795,17 @@ namespace ExplodeIt.Enemies
             }
         }
 
+        // 메테오·격자선은 월드에 따로 만든 오브젝트라, 씬이 내려갈 때 보스보다 먼저 파괴될 수 있다. 그래서 남아 있는 것만 숨긴다.
         private void HidePhase3Effects()
         {
             if (_meteors != null)
             {
                 for (int i = 0; i < _meteors.Length; i++)
                 {
-                    _meteors[i].Hide();
+                    if (_meteors[i] != null)
+                    {
+                        _meteors[i].Hide();
+                    }
                 }
             }
 
