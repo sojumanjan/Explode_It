@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Bombs
@@ -5,6 +6,13 @@ namespace ExplodeIt.Bombs
     [CreateAssetMenu(fileName = "WeaponData", menuName = "Explode It/Weapon Data")]
     public class WeaponData : ScriptableObject
     {
+        [Header("해금")]
+        [Tooltip("저장에 쓰는 고유 ID (영문). 해금·선택 기록이 이 값으로 남으므로 한 번 정하면 바꾸지 않는다. 에셋 이름을 바꿔도 기록은 유지된다")]
+        [SerializeField] private string _id;
+
+        [Tooltip("처음부터 쓸 수 있는 무기인지. 끄면 업적 등으로 해금해야 고를 수 있다")]
+        [SerializeField] private bool _unlockedByDefault;
+
         [Header("투척")]
         [Tooltip("보유 개수. 쿨타임 없이 연속으로 던질 수 있는 폭탄 수")]
         [SerializeField, Min(1)] private int _charges = 3;
@@ -45,6 +53,8 @@ namespace ExplodeIt.Bombs
         [Tooltip("폭발음 최대 피치")]
         [SerializeField, Range(0.5f, 2f)] private float _explosionPitchMax = 1.05f;
 
+        public string Id => _id;
+        public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsWeaponUnlocked(_id);
         public int Charges => _charges;
         public float ThrowInterval => _throwInterval;
         public float RechargeTime => _rechargeTime;

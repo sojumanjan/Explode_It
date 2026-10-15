@@ -9,8 +9,6 @@ namespace ExplodeIt.Core
     // 씬마다 하나씩 두어도 되고, 그중 처음 것만 남는다. 어느 씬에서 시작해도 소리가 난다.
     public class AudioManager : MonoBehaviour
     {
-        private const string SfxVolumeKey = "Audio.SfxVolume";
-        private const string BgmVolumeKey = "Audio.BgmVolume";
         // 슬로모션이 끝나 효과음 높낮이가 되돌아가는 빠르기 (배율/초, 실제 시간).
         private const float PitchRecoverSpeed = 4f;
         // 테이프 멈춤 끝의 배경음 높낮이 배율.
@@ -54,7 +52,8 @@ namespace ExplodeIt.Core
                 }
 
                 _current._sfxVolume = Mathf.Clamp01(value);
-                PlayerPrefs.SetFloat(SfxVolumeKey, _current._sfxVolume);
+                // 슬라이더를 끄는 동안 매번 디스크에 쓰지 않게 값만 넣어 둔다. 설정 화면이 닫힐 때 SaveSystem.Save를 부른다.
+                SaveSystem.Data.SfxVolume = _current._sfxVolume;
             }
         }
 
@@ -69,7 +68,7 @@ namespace ExplodeIt.Core
                 }
 
                 _current._bgmVolume = Mathf.Clamp01(value);
-                PlayerPrefs.SetFloat(BgmVolumeKey, _current._bgmVolume);
+                SaveSystem.Data.BgmVolume = _current._bgmVolume;
                 _current.ApplyBgmVolume();
             }
         }
@@ -92,8 +91,8 @@ namespace ExplodeIt.Core
             _current = this;
             DontDestroyOnLoad(gameObject);
 
-            _sfxVolume = PlayerPrefs.GetFloat(SfxVolumeKey, 1f);
-            _bgmVolume = PlayerPrefs.GetFloat(BgmVolumeKey, 1f);
+            _sfxVolume = SaveSystem.Data.SfxVolume;
+            _bgmVolume = SaveSystem.Data.BgmVolume;
 
             _voices = new AudioSource[_sfxVoices];
             _voiceData = new SoundData[_sfxVoices];

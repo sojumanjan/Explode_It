@@ -116,6 +116,7 @@ namespace ExplodeIt.UI
             DrawWeapon();
             DrawStage();
             DrawCheats();
+            DrawSave();
             DrawCommon();
 
             GUILayout.EndScrollView();
@@ -260,6 +261,38 @@ namespace ExplodeIt.UI
                 IntroSequence.ClearSeen();
                 SceneFlow.LoadGame();
             }
+        }
+
+        // 저장 확인용. 초기화는 오프닝부터 다시 보도록 판을 새로 연다.
+        private void DrawSave()
+        {
+            Header("Save");
+            SaveData data = SaveSystem.Data;
+            GUILayout.Label($"Story {(data.StoryCleared ? "Cleared" : "-")}   Kills {data.TotalKills}   Best {data.BestEndlessKills}");
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Unlock All"))
+            {
+                data.StoryCleared = true;
+                for (int i = 0; i < _weapons.Length; i++)
+                {
+                    data.UnlockWeapon(_weapons[i].Data.Id);
+                }
+
+                SaveSystem.Save();
+            }
+
+            if (GUILayout.Button("Log Save"))
+            {
+                Debug.Log("[DevPanel] 저장 내용\n" + JsonUtility.ToJson(data, true));
+            }
+
+            if (GUILayout.Button("Reset Save"))
+            {
+                SaveSystem.ResetAll();
+                SceneFlow.LoadGame();
+            }
+            GUILayout.EndHorizontal();
         }
 
         private void DrawCheats()

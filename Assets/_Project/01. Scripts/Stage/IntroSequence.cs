@@ -17,7 +17,6 @@ namespace ExplodeIt.Stage
     // 카메라를 정원과 아레나 사이에서 순간 이동시켜야 해서 카메라와 범위 제한을 직접 잡는다.
     public class IntroSequence : MonoBehaviour
     {
-        private const string SeenKey = "ExplodeIt.IntroSeen";
         // 병사 걸음의 통통 튀는 높이(유닛)와 빠르기(초당 걸음 수). 그림만 움직이는 연출 값이다.
         private const float SoldierBobHeight = 0.12f;
         private const float SoldierStepRate = 6f;
@@ -105,13 +104,13 @@ namespace ExplodeIt.Stage
         private float _cameraBaseSize;
 
         public bool IsPlaying => _step != Step.None;
-        public static bool HasSeen => PlayerPrefs.GetInt(SeenKey, 0) == 1;
+        public static bool HasSeen => SaveSystem.Data.IntroSeen;
         public bool ShouldPlay => _data != null && !HasSeen;
 
         public static void ClearSeen()
         {
-            PlayerPrefs.DeleteKey(SeenKey);
-            PlayerPrefs.Save();
+            SaveSystem.Data.IntroSeen = false;
+            SaveSystem.Save();
         }
 
         private void Awake()
@@ -555,8 +554,8 @@ namespace ExplodeIt.Stage
         {
             EnterStep(Step.None);
             GameEvents.RaisePlayerWalkCancelled();
-            PlayerPrefs.SetInt(SeenKey, 1);
-            PlayerPrefs.Save();
+            SaveSystem.Data.IntroSeen = true;
+            SaveSystem.Save();
             GameEvents.RaisePlayerControlLockChanged(false);
             _onFinished?.Invoke();
         }

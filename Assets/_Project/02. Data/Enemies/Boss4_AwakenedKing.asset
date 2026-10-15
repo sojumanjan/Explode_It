@@ -89,10 +89,10 @@ MonoBehaviour:
   _crownHangTime: 0.8
   _crownHitRadius: 0.5
   _crownlessWalkSpeed: 1.2
-  _leapCount: 2
-  _leapRiseTime: 0.35
-  _leapTrackTime: 0.8
-  _leapTrackSpeed: 25
+  _leapCount: 5
+  _leapRiseTime: 0.2
+  _leapTrackTime: 0.2
+  _leapTrackSpeed: 50
   _leapLockTime: 0.6
   _leapFallTime: 0.12
   _leapRadius: 2.2
@@ -109,8 +109,8 @@ MonoBehaviour:
   _crownDropStagger: 0.3
   _crownRetrieveSpeed: 6
   _crownRetrieveTimeout: 4
-  _meteorCount: 110
-  _meteorCastTime: 6
+  _meteorCount: 120
+  _meteorCastTime: 5
   _meteorFallTime: 1.1
   _meteorRadius: 2.2
   _meteorTargetedCount: 3

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdea0c2685b806f4bba29abb0c28ade4, type: 3}
   m_Name: "Weapon_\uAE30\uBCF8"
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.WeaponData
+  _id: basic
+  _unlockedByDefault: 1
   _charges: 1
   _throwInterval: 0.25
   _rechargeTime: 1
