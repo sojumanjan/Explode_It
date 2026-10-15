@@ -44,7 +44,7 @@ namespace ExplodeIt.Enemies
         private const float CrownReturnArc = 1.5f;
         // 분노 대사를 외치는 동안 몸이 떠는 폭 (유닛).
         private const float RageJitter = 0.05f;
-        // 도약할 때 그림이 솟구치는 높이 (유닛). 화면 밖으로 사라질 만큼 높게 둔다.
+        // 왕관 투하에서 왕관이 솟구치는 높이 (유닛). 화면 밖으로 사라질 만큼 높게 둔다.
         private const float LeapHeight = 14f;
         // 착지 자리가 구조물에 걸리면 설 수 있는 자리를 찾는 간격과 최대 거리 (유닛), 방향 수.
         private const float LandSearchStep = 0.25f;
@@ -164,8 +164,11 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _slashReadySprite;
         [SerializeField] private Sprite[] _slashFrames;
         [SerializeField] private Sprite _thrustSprite;
-        // 도약해 공중에 있는 동안의 그림. 비워 두면 기본 그림이다.
-        [SerializeField] private Sprite _leapSprite;
+        // 도약: 공중에 떠 있는 그림, 플레이어 바로 위에서 수직으로 내리꽂는 그림, 비스듬히 내리꽂는 그림. 비워 두면 기본 그림이다.
+        // 그려진 방향은 오른쪽 그림 목록(_rightFacingPoseSprites)으로 판단한다. 대각 그림은 그려진 방향으로 내리꽂는다고 본다.
+        [SerializeField] private Sprite _leapHoverSprite;
+        [SerializeField] private Sprite _leapVerticalSlamSprite;
+        [SerializeField] private Sprite _leapDiagonalSlamSprite;
         // 2국면부터(분노 오라가 켜진 순간부터) 쓰는 살짝 붉어진 그림. 비워 둔 칸은 1국면 그림을 그대로 쓴다.
         [SerializeField] private Sprite _rageIdleSprite;
         [SerializeField] private Sprite _rageSlashReadySprite;
@@ -263,7 +266,14 @@ namespace ExplodeIt.Enemies
         private Vector2 _crownGround;
 
         // 도약으로 그림이 떠 있는 높이 (유닛). 머리 위 왕관도 같이 띄운다.
-        private float _leapHeight;
+        // 공중에 있는 동안 그림이 판정 위치에서 떨어져 보이는 거리. 0이면 땅에 있다.
+        private Vector2 _leapOffset;
+        // 뛰어오를 공중 자리(판정 위치 기준 거리)와, 착지 자리를 정한 순간 공중 자리까지의 거리. 내리꽂는 동안 이 값에서 0으로 줄어든다.
+        private Vector2 _leapAirOffset;
+        private Vector2 _leapDiveOffset;
+        private bool _isLeapDiving;
+        private Sprite _leapSlamPose;
+        private bool _leapSlamFacesRight;
         private Vector3 _leapShadowScale;
 
         // 왕관 투하 예고로 머리 위 왕관을 들어 올린 높이 (유닛).
@@ -800,7 +810,7 @@ namespace ExplodeIt.Enemies
             }
             else if (State == EnemyState.Attack && _pattern == Pattern.Leap && _step != Step.LeapLand)
             {
-                pose = _leapSprite;
+                pose = _isLeapDiving ? _leapSlamPose : _leapHoverSprite;
             }
 
             // 기본 자세는 그림(Body)에 넣어 둔 1국면 그림이라, 2국면에서는 붉어진 기본 그림을 자세 그림으로 덮어 쓴다.
@@ -1118,7 +1128,7 @@ namespace ExplodeIt.Enemies
             Color brightColor = _lookPhase >= 3 ? Color.Lerp(_data.Phase3CrownColor, Color.white, 0.6f) : Color.white;
             _crown.color = Color.Lerp(baseColor, brightColor, pulse);
             _crown.transform.localScale = _crownScale * (1f + 0.06f * pulse);
-            _crown.transform.localPosition = _crownPositionLocal + Vector3.up * (_leapHeight + _crownRaise + CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
+            _crown.transform.localPosition = _crownPositionLocal + (Vector3)_leapOffset + Vector3.up * (_crownRaise + CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
         }
 
         // 패턴 사이에는 일정 거리까지 다가온다. 구르는 중이면 구르기만 한다.
@@ -1526,16 +1536,45 @@ namespace ExplodeIt.Enemies
             return _dashRemaining <= 0.0001f;
         }
 
-        // ── 도약 내려찍기: 화면 위로 솟구쳐 사라지고, 바닥의 그림자가 플레이어를 따라가다 멈춘다. 멈춘 자리에 빨간 원이 차오르고
-        // 다 차는 순간 내려찍는다. 멈춘 순간 그 자리에 폭탄을 던지면 착지에 맞춰 터지는 "1초 뒤 예측" 시험이다(왕관을 쓰고 있어 맞지는 않는다).
-        // 공중에 있는 동안 몸(판정 위치)은 그림자와 함께 움직이고 그림만 높이 떠 있다. 공중이라 벽을 넘어 따라간다.
+        // ── 도약 내려찍기: 위쪽 부채꼴 안 무작위 방향으로 화면 안 공중 자리에 뛰어올라 떠 있다가, 플레이어 자리를 착지 자리로 정하고
+        // 빨간 원이 다 차는 순간 그쪽으로 비스듬히(바로 위면 수직으로) 내리꽂는다. 정한 순간 그 자리에 폭탄을 던지면 착지에 맞춰 터지는
+        // "1초 뒤 예측" 시험이다(왕관을 쓰고 있어 맞지는 않는다). 화면에서 사라지지 않아 어디서 내리꽂을지 눈으로 따라갈 수 있다.
+        // 공중에 있는 동안 판정 위치는 땅에 두고 그림만 옮긴다. 착지 자리를 정하는 순간 판정 위치를 착지 자리로 옮긴다.
+
+        private bool IsAirborne => _leapOffset.sqrMagnitude > 0f;
 
         private void BeginLeap()
         {
             _step = Step.LeapRise;
             _stepTime = 0f;
-            _leapShadow.enabled = true;
+            _isLeapDiving = false;
+            _leapAirOffset = PickLeapAirPoint() - Body.position;
             AudioManager.Play(_data.LeapSound);
+        }
+
+        // 플레이어를 기준으로 위쪽을 가운데로 정한 각도 안에서 방향을 골라, 플레이어 머리 위 둘레로 날아든다.
+        // 제자리 기준이면 살짝 떠오르는 정도로만 보여 뛰어오른 느낌이 약했다. 몸 전체가 화면 안에 보이도록 자리를 화면 안쪽으로 당긴다.
+        private Vector2 PickLeapAirPoint()
+        {
+            float half = _data.LeapAirAngle * 0.5f;
+            float angle = (90f + Random.Range(-half, half)) * Mathf.Deg2Rad;
+            Vector2 point = TargetPosition + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * Random.Range(_data.LeapAirDistanceMin, _data.LeapAirDistanceMax);
+
+            Camera view = Camera.main;
+            if (view == null)
+            {
+                return point;
+            }
+
+            float halfHeight = view.orthographicSize;
+            float halfWidth = halfHeight * view.aspect;
+            Vector2 center = view.transform.position;
+            float margin = _data.LeapScreenMargin;
+            // 그림은 발밑이 기준점이라 위쪽은 키만큼 더 띄운다.
+            float bodyHeight = _bodyRenderer.bounds.size.y;
+            point.x = Mathf.Clamp(point.x, center.x - halfWidth + margin, center.x + halfWidth - margin);
+            point.y = Mathf.Clamp(point.y, center.y - halfHeight + margin, center.y + halfHeight - margin - bodyHeight);
+            return point;
         }
 
         private bool TickLeap(float deltaTime)
@@ -1544,7 +1583,8 @@ namespace ExplodeIt.Enemies
             {
                 case Step.LeapRise:
                     float rise = Mathf.Clamp01(_stepTime / _data.LeapRiseTime);
-                    SetLeapHeight(LeapHeight * rise * rise);
+                    SetLeapOffset(_leapAirOffset * (1f - (1f - rise) * (1f - rise)));
+                    FaceLeapTarget(_leapHoverSprite);
                     if (rise >= 1f)
                     {
                         _step = Step.LeapTrack;
@@ -1554,7 +1594,7 @@ namespace ExplodeIt.Enemies
                     return false;
 
                 case Step.LeapTrack:
-                    TrackLeapTarget(deltaTime);
+                    FaceLeapTarget(_leapHoverSprite);
                     if (_stepTime >= _data.LeapTrackTime)
                     {
                         LockLeap();
@@ -1568,7 +1608,18 @@ namespace ExplodeIt.Enemies
                     // 원이 다 차는 순간 땅에 닿도록, 고정 시간의 마지막 구간에 떨어진다.
                     float fallStart = _data.LeapLockTime - _data.LeapFallTime;
                     float fall = Mathf.Clamp01((_stepTime - fallStart) / _data.LeapFallTime);
-                    SetLeapHeight(LeapHeight * (1f - fall * fall));
+                    _isLeapDiving = _stepTime >= fallStart;
+                    SetLeapOffset(_leapDiveOffset * (1f - fall * fall));
+                    _leapShadow.transform.localScale = _leapShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, fall);
+                    if (_isLeapDiving)
+                    {
+                        _visual.FlipOverride = _leapSlamFacesRight != IsArtFacingRight(_leapSlamPose);
+                    }
+                    else
+                    {
+                        FaceLeapTarget(_leapHoverSprite);
+                    }
+
                     if (fill >= 1f)
                     {
                         LandLeap();
@@ -1594,27 +1645,39 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        // 공중이라 구조물을 무시하고 따라가되, 맵 밖으로는 나가지 않는다.
-        private void TrackLeapTarget(float deltaTime)
+        // 떠 있는 동안은 플레이어 쪽을 본다.
+        private void FaceLeapTarget(Sprite pose)
         {
-            Vector2 toTarget = TargetPosition - Body.position;
-            float step = Mathf.Min(_data.LeapTrackSpeed * deltaTime, toTarget.magnitude);
-            if (step <= 0.0001f)
-            {
-                return;
-            }
-
-            Body.MovePosition(ClampToArena(Body.position + toTarget.normalized * step));
+            float airX = Body.position.x + _leapOffset.x;
+            _visual.FlipOverride = (TargetPosition.x > airX) != IsArtFacingRight(pose);
         }
 
-        // 그림자를 멈추고 착지 범위를 깐다. 구조물에 걸리는 자리면 가장 가까운 설 수 있는 자리로 옮긴 뒤 고정한다.
+        private bool IsArtFacingRight(Sprite sprite)
+        {
+            return sprite != null && System.Array.IndexOf(_rightFacingPoseSprites, sprite) >= 0;
+        }
+
+        // 지금 플레이어 자리를 착지 자리로 정하고 범위를 깐다. 구조물에 걸리는 자리면 가장 가까운 설 수 있는 자리로 옮긴다.
+        // 판정 위치는 착지 자리로 옮기고, 그림은 공중 자리에 그대로 보이도록 거리를 다시 잡는다.
+        // 왕이 플레이어 바로 위 부채꼴 안에 떠 있으면 수직으로, 아니면 착지 쪽으로 비스듬히 내리꽂는다.
         private void LockLeap()
         {
             _step = Step.LeapLock;
             _stepTime = 0f;
-            Vector2 land = FindLandingPoint(Body.position);
+            Vector2 air = Body.position + _leapOffset;
+            Vector2 land = FindLandingPoint(ClampToArena(TargetPosition));
             Body.position = land;
             transform.position = land;
+            _leapDiveOffset = air - land;
+            SetLeapOffset(_leapDiveOffset);
+
+            Vector2 fromTarget = air - TargetPosition;
+            bool isAbove = fromTarget.sqrMagnitude > 0.0001f && Vector2.Angle(Vector2.up, fromTarget) <= _data.LeapVerticalSlamAngle * 0.5f;
+            _leapSlamPose = isAbove || _leapDiagonalSlamSprite == null ? _leapVerticalSlamSprite : _leapDiagonalSlamSprite;
+            // 대각 그림은 그려진 방향으로 내리꽂으므로 내려갈 쪽을 보게 한다. 수직 그림은 플레이어 쪽을 본다.
+            _leapSlamFacesRight = isAbove ? TargetPosition.x > air.x : land.x > air.x;
+            _leapShadow.enabled = true;
+            _leapShadow.transform.localScale = _leapShadowScale * LeapShadowMinScale;
             _slashRange.BuildCircle(_data.LeapRadius);
             _slashFill.CopyLimits(_slashRange);
             _slashFill.SetRadius(0f);
@@ -1639,23 +1702,22 @@ namespace ExplodeIt.Enemies
             _screenFlashTime = 0f;
         }
 
-        private void SetLeapHeight(float height)
+        private void SetLeapOffset(Vector2 offset)
         {
-            _leapHeight = height;
-            _visual.Lift = height;
-            float t = 1f - Mathf.Clamp01(height / LeapHeight);
-            _leapShadow.transform.localScale = _leapShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, t);
+            _leapOffset = offset;
+            _visual.Shift = offset;
         }
 
         private void EndLeapVisual()
         {
-            if (_leapHeight <= 0f && !_leapShadow.enabled)
+            _isLeapDiving = false;
+            _visual.FlipOverride = null;
+            if (!IsAirborne && !_leapShadow.enabled)
             {
                 return;
             }
 
-            _leapHeight = 0f;
-            _visual.Lift = 0f;
+            SetLeapOffset(Vector2.zero);
             _leapShadow.enabled = false;
             _leapShadow.transform.localScale = _leapShadowScale;
         }
@@ -3116,7 +3178,7 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
-            bool isVisible = _leapHeight <= 0f;
+            bool isVisible = !IsAirborne;
             ParticleSystem.EmissionModule flames = _rageFlames.emission;
             flames.enabled = isVisible;
             ParticleSystem.EmissionModule embers = _rageEmbers.emission;
@@ -3144,7 +3206,7 @@ namespace ExplodeIt.Enemies
         {
             // 국면 전환 중에는 왕관이 머리에 없으므로 "팅"으로 튕겨 내는 반응도 없다.
             // 도약해 공중에 있을 때 그림자에 떨어진 폭탄도 반응하지 않는다(왕은 화면 밖에 있다).
-            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy || _shiftTime >= 0f || _leapHeight > 0f)
+            if (!HitReceiver.IsShielded || !_hasTransformed || _isGroggy || _shiftTime >= 0f || IsAirborne)
             {
                 return;
             }

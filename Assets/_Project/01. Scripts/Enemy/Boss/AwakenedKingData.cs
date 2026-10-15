@@ -211,20 +211,32 @@ namespace ExplodeIt.Enemies
         [Tooltip("한 번 패턴에 연달아 뛰는 횟수 (번)")]
         [SerializeField, Min(1)] private int _leapCount = 2;
 
-        [Tooltip("땅을 박차고 화면 위로 솟구치는 시간 (초). 이때 바닥에 그림자가 생긴다")]
+        [Tooltip("땅을 박차고 공중 자리로 뛰어오르는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _leapRiseTime = 0.35f;
 
-        [Tooltip("공중에서 그림자가 플레이어를 따라가는 시간 (초)")]
+        [Tooltip("공중 자리가 플레이어에게서 떨어진 거리의 최소·최대 (유닛). 뛸 때마다 이 사이에서 무작위로 고른다. 화면 밖으로 나가면 화면 안쪽으로 당긴다")]
+        [SerializeField, Min(0f)] private float _leapAirDistanceMin = 6f;
+
+        [Tooltip("공중 자리가 플레이어에게서 떨어진 거리의 최대 (유닛)")]
+        [SerializeField, Min(0f)] private float _leapAirDistanceMax = 8f;
+
+        [Tooltip("공중 자리 방향의 범위 (도). 플레이어 기준 위쪽을 가운데로 이 각도 안에서 무작위로 고른다. 150이면 위에서 좌우 75도까지")]
+        [SerializeField, Range(0f, 180f)] private float _leapAirAngle = 150f;
+
+        [Tooltip("공중 자리를 화면 가장자리에서 띄우는 여유 (유닛). 몸이 화면 끝에 잘리지 않게 한다")]
+        [SerializeField, Min(0f)] private float _leapScreenMargin = 1f;
+
+        [Tooltip("공중에 떠 있다가 착지 자리를 정하기까지 (초)")]
         [SerializeField, Min(0f)] private float _leapTrackTime = 0.8f;
 
-        [Tooltip("그림자가 플레이어를 따라가는 속도 (유닛/초). 플레이어 이동 속도보다 느리면 계속 걸어 따돌릴 수 있다")]
-        [SerializeField, Min(0f)] private float _leapTrackSpeed = 9f;
-
-        [Tooltip("그림자가 멈춘 뒤 착지까지 (초). 이 동안 빨간 원이 차오르고, 다 차는 순간 내려찍는다. 폭탄 지연(1초)과 같게 두면 멈춘 순간 그 자리에 던진 폭탄이 착지에 맞춰 터진다")]
+        [Tooltip("착지 자리(그때 플레이어 위치)를 정한 뒤 착지까지 (초). 이 동안 빨간 원이 차오르고, 다 차는 순간 내려찍는다. 폭탄 지연(1초)과 같게 두면 정한 순간 그 자리에 던진 폭탄이 착지에 맞춰 터진다")]
         [SerializeField, Min(0.1f)] private float _leapLockTime = 1f;
 
-        [Tooltip("원이 다 차기 직전 하늘에서 떨어지는 시간 (초). 고정 시간 안에 포함된다")]
+        [Tooltip("원이 다 차기 직전 공중 자리에서 착지 자리로 내리꽂는 시간 (초). 착지까지 시간 안에 포함된다")]
         [SerializeField, Min(0.01f)] private float _leapFallTime = 0.12f;
+
+        [Tooltip("수직 내려찍기 범위 (도). 내리꽂는 순간 왕이 플레이어 바로 위쪽 이 부채꼴 안에 있으면 수직 그림, 아니면 대각 그림으로 내리꽂는다")]
+        [SerializeField, Range(0f, 180f)] private float _leapVerticalSlamAngle = 30f;
 
         [Tooltip("내려찍기 판정 반경 (유닛)")]
         [SerializeField, Min(0.1f)] private float _leapRadius = 2.2f;
@@ -497,8 +509,12 @@ namespace ExplodeIt.Enemies
         public float CrownlessWalkSpeed => _crownlessWalkSpeed;
         public int LeapCount => _leapCount;
         public float LeapRiseTime => _leapRiseTime;
+        public float LeapAirDistanceMin => _leapAirDistanceMin;
+        public float LeapAirDistanceMax => Mathf.Max(_leapAirDistanceMin, _leapAirDistanceMax);
+        public float LeapAirAngle => _leapAirAngle;
+        public float LeapScreenMargin => _leapScreenMargin;
         public float LeapTrackTime => _leapTrackTime;
-        public float LeapTrackSpeed => _leapTrackSpeed;
+        public float LeapVerticalSlamAngle => _leapVerticalSlamAngle;
         public float LeapLockTime => _leapLockTime;
         public float LeapFallTime => _leapFallTime;
         public float LeapRadius => _leapRadius;

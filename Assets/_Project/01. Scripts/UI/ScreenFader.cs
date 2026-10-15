@@ -8,11 +8,19 @@ namespace ExplodeIt.UI
     // 메뉴 → 게임이 툭 끊기지 않고 어두워졌다 밝아지며 이어지게 한다.
     public class ScreenFader : MonoBehaviour
     {
+        // 밝아질 때 한 프레임에 반영하는 최대 시간(초). 씬을 막 불러온 직후 프레임은 로딩 시간이 통째로 들어와
+        // 트윈이면 첫 프레임에 끝나 버려 밝아지는 게 보이지 않는다.
+        private const float MaxFadeStep = 1f / 30f;
+
         [SerializeField] private CanvasGroup _group;
         [Tooltip("씬이 시작될 때 검은 화면에서 밝아질지")]
         [SerializeField] private bool _fadeInOnStart = true;
         [Tooltip("어두워지고 밝아지는 시간 (초, 실제 시간)")]
         [SerializeField, Min(0.05f)] private float _fadeTime = 0.4f;
+
+        private bool _isFadingIn;
+        // 첫 프레임을 건너뛰고 밝아지기 시작한다. 그 프레임까지 씬의 Start들이 돌며 끊긴다.
+        private bool _hasSkippedFirstFrame;
 
         private void Start()
         {
@@ -25,12 +33,34 @@ namespace ExplodeIt.UI
             _group.gameObject.SetActive(true);
             _group.alpha = 1f;
             _group.blocksRaycasts = true;
-            _group.DOFade(0f, _fadeTime).SetUpdate(true).SetLink(gameObject).OnComplete(Hide);
+            _isFadingIn = true;
+        }
+
+        private void Update()
+        {
+            if (!_isFadingIn)
+            {
+                return;
+            }
+
+            if (!_hasSkippedFirstFrame)
+            {
+                _hasSkippedFirstFrame = true;
+                return;
+            }
+
+            _group.alpha -= Mathf.Min(Time.unscaledDeltaTime, MaxFadeStep) / _fadeTime;
+            if (_group.alpha <= 0f)
+            {
+                _isFadingIn = false;
+                Hide();
+            }
         }
 
         // 다 덮으면 onCovered를 부른다. 덮는 동안은 클릭이 아래로 새지 않는다.
         public void FadeOut(Action onCovered)
         {
+            _isFadingIn = false;
             _group.DOKill();
             _group.gameObject.SetActive(true);
             _group.blocksRaycasts = true;

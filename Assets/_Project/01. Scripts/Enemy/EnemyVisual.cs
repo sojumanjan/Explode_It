@@ -95,6 +95,8 @@ namespace ExplodeIt.Enemies
             _tint = Color.white;
             _alpha = 1f;
             Lift = 0f;
+            Shift = Vector2.zero;
+            FlipOverride = null;
             ExtraLean = 0f;
             ExtraScale = Vector2.one;
             Jitter = 0f;
@@ -150,6 +152,12 @@ namespace ExplodeIt.Enemies
             // 기절(그로기)은 쓰러진 상태라 플레이어를 따라 돌아보면 어색하다. 쓰러진 방향 그대로 둔다.
             if (state == EnemyState.Stunned)
             {
+                return;
+            }
+
+            if (FlipOverride.HasValue)
+            {
+                _sprite.flipX = FlipOverride.Value;
                 return;
             }
 
@@ -214,6 +222,12 @@ namespace ExplodeIt.Enemies
 
         // 그림을 위로 띄우는 높이 (유닛). 도약처럼 판정 위치는 그대로 두고 그림만 들어 올릴 때 쓴다. 음수면 가라앉는다.
         public float Lift { get; set; }
+
+        // 그림을 옮기는 거리 (유닛, 가로·세로). 공중에 떠 화면 위 다른 자리에 보이는 동안처럼 판정 위치와 그림 위치가 갈라질 때 쓴다.
+        public Vector2 Shift { get; set; }
+
+        // 값이 있으면 상태별 방향 고르기를 건너뛰고 그림을 이대로 뒤집는다. 자세 그림마다 그려진 방향이 달라 보스가 직접 정할 때 쓴다.
+        public bool? FlipOverride { get; set; }
 
         // 상태별 자세에 더하는 기울기 (도, + = 바라보는 쪽으로 숙임, - = 뒤로 젖힘). 뒷도약처럼 잠깐 몸을 젖힐 때 쓴다.
         public float ExtraLean { get; set; }
@@ -496,7 +510,7 @@ namespace ExplodeIt.Enemies
 
         private void ApplyPose(Vector2 offset, Vector2 scale, float angle)
         {
-            _body.localPosition = _baseLocalPosition + (Vector3)offset + new Vector3(0f, Lift, 0f);
+            _body.localPosition = _baseLocalPosition + (Vector3)offset + new Vector3(Shift.x, Lift + Shift.y, 0f);
             _body.localScale = new Vector3(_baseLocalScale.x * scale.x, _baseLocalScale.y * scale.y, _baseLocalScale.z);
             _body.localRotation = Quaternion.Euler(0f, 0f, angle);
         }
