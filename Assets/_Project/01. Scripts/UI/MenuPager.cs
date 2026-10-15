@@ -18,12 +18,15 @@ namespace ExplodeIt.UI
 
         [SerializeField] private CanvasGroup[] _pages;
         [SerializeField] private CanvasGroup _firstPage;
-        // 표지를 한 번 넘긴 뒤 게임에서 돌아오면 표지를 다시 보이지 않고 이 페이지(메인 메뉴)부터 연다.
+        // 타이틀을 한 번 넘긴 뒤 게임에서 돌아오면 타이틀을 다시 보이지 않고 이 페이지(메인 메뉴)부터 연다.
         [SerializeField] private CanvasGroup _returnPage;
         [SerializeField] private InputActionReference _backAction;
         // 확인 창이 떠 있으면 뒤로가기는 페이지 대신 창을 닫는다.
         [SerializeField] private ConfirmDialog _dialog;
         [SerializeField] private SoundData _pageSound;
+        // 타이틀 ↔ 책처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막과, 덮고 걷는 시간(초, 각각).
+        [SerializeField] private ScreenFader _fader;
+        [SerializeField, Min(0.05f)] private float _blackFadeTime = 0.25f;
 
         private static bool _hasPassedFirstPage;
 
@@ -72,10 +75,11 @@ namespace ExplodeIt.UI
                 _history.Push(_current);
             }
 
+            _hasPassedFirstPage = true;
             SwitchTo(page);
         }
 
-        // 되돌아갈 곳 없이 연다. 표지 → 메인 메뉴처럼 다시 돌아갈 일이 없는 넘김에 쓴다.
+        // 되돌아갈 곳 없이 연다. 다시 돌아갈 일이 없는 넘김에 쓴다.
         public void OpenRoot(CanvasGroup page)
         {
             _hasPassedFirstPage = true;
@@ -105,12 +109,36 @@ namespace ExplodeIt.UI
         private void SwitchTo(CanvasGroup page)
         {
             AudioManager.Play(_pageSound);
+            // 타이틀은 배경이 통째로 달라서, 책과 오갈 때는 검게 덮었다가 걷어 내며 바꾼다.
+            bool isBackgroundChange = page == _firstPage || _current == _firstPage;
+            if (isBackgroundChange && _fader != null && _current != null)
+            {
+                CanvasGroup from = _current;
+                from.interactable = false;
+                from.blocksRaycasts = false;
+                _current = page;
+                _fader.FadeThrough(_blackFadeTime, () => SwapInstantly(from, page));
+                return;
+            }
+
             if (_current != null)
             {
                 Hide(_current);
             }
 
             Show(page, true);
+        }
+
+        private void SwapInstantly(CanvasGroup from, CanvasGroup to)
+        {
+            if (from.TryGetComponent(out IMenuPage listener))
+            {
+                listener.OnPageClosed();
+            }
+
+            from.DOKill();
+            from.gameObject.SetActive(false);
+            Show(to, false);
         }
 
         private void Show(CanvasGroup page, bool animate)
