@@ -114,6 +114,16 @@ namespace ExplodeIt.Core
         public bool UnlockArtifact(string id) => TryAdd(_unlockedArtifacts, id);
         public bool CompleteAchievement(string id) => TryAdd(_completedAchievements, id);
 
+        // 업적 달성과 그 보상 해금만 지운다(개발자 패널). 오프닝·기록·설정은 남긴다.
+        public void ResetAchievements()
+        {
+            _completedAchievements.Clear();
+            _unlockedWeapons.Clear();
+            _unlockedArtifacts.Clear();
+            _selectedWeapon = "";
+            _selectedArtifacts.Clear();
+        }
+
         public string GetArtifactInSlot(int slot)
         {
             return slot >= 0 && slot < _selectedArtifacts.Count ? _selectedArtifacts[slot] : "";

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26b6aa306c034a4fa32d5a28cb3a82e, type: 3}
   m_Name: IntroData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.IntroData
+  _bgm: {fileID: 11400000, guid: a7c0b3d374d068b429cdc626d60ccba6, type: 2}
+  _arenaBgm: {fileID: 11400000, guid: 78b6d130ec357014599d0d8571302dc6, type: 2}
   _panelSprites:
   - {fileID: 21300000, guid: f62ee980cf8ad71449dd1c55948f036c, type: 3}
   - {fileID: 21300000, guid: 45ef27fcf8ccb4b41837ffd461c6aeb8, type: 3}

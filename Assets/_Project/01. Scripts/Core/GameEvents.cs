@@ -12,6 +12,8 @@ namespace ExplodeIt.Core
         // 위치, 반경, 범위 안 대상 수. 다중 처치 업적·재화, 잔불 장판 등이 폭탄 코드를 몰라도 되게 한다.
         public static event Action<Vector2, float, int> BombExploded;
         public static event Action PlayerDied;
+        // 플레이어 남은 체력, 최대 체력. 판이 시작될 때와 맞아서 줄었을 때 발행한다. 체력 UI가 플레이어 코드를 몰라도 되게 한다.
+        public static event Action<int, int> PlayerHealthChanged;
         // 처치 위치. 재화 드롭, 처치 수 업적, 이펙트가 구독한다.
         public static event Action<Vector2> EnemyKilled;
         // 현재 충전량(처치 수, 모든 칸 합계), 한 칸에 필요한 양, 칸 수. 게이지 UI가 능력 코드를 몰라도 되게 한다.
@@ -238,6 +240,11 @@ namespace ExplodeIt.Core
             PlayerDied?.Invoke();
         }
 
+        public static void RaisePlayerHealthChanged(int current, int max)
+        {
+            PlayerHealthChanged?.Invoke(current, max);
+        }
+
         public static void RaiseEnemyKilled(Vector2 position)
         {
             EnemyKilled?.Invoke(position);
@@ -250,6 +257,7 @@ namespace ExplodeIt.Core
             GameStateChanged = null;
             BombExploded = null;
             PlayerDied = null;
+            PlayerHealthChanged = null;
             EnemyKilled = null;
             AbilityChargeChanged = null;
             BombChargesChanged = null;

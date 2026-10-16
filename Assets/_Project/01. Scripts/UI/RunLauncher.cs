@@ -9,6 +9,7 @@ namespace ExplodeIt.UI
     public class RunLauncher : MonoBehaviour
     {
         [SerializeField] private ScreenFader _fader;
+        [SerializeField] private SoundData _clickSound;
 
         private bool _isLaunching;
 
@@ -21,6 +22,7 @@ namespace ExplodeIt.UI
             }
 
             _isLaunching = true;
+            AudioManager.Play(_clickSound);
             RunSetup.Set(mode, weaponId, artifactIds);
             _fader.FadeOut(SceneFlow.LoadGame);
         }

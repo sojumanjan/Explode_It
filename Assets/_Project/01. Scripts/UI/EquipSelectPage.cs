@@ -32,6 +32,8 @@ namespace ExplodeIt.UI
         [Header("오른쪽 페이지")]
         [SerializeField] private Image _previewIcon;
         // 잠긴 것을 눌렀을 때 그림을 이 색으로 칠해 실루엣만 보여 준다.
+        // 잠긴 카드를 눌렀을 때 소리.
+        [SerializeField] private SoundData _errorSound;
         [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
         [SerializeField] private TMP_Text _previewName;
         [SerializeField] private TMP_Text _previewText;
@@ -226,6 +228,7 @@ namespace ExplodeIt.UI
         // 잠긴 카드는 고르지 않고 오른쪽 페이지에 실루엣과 해금 조건만 띄운다. 숨김 업적이면 조건도 가린다.
         private void ShowLocked(Object item)
         {
+            AudioManager.Play(_errorSound);
             AchievementData achievement = _catalog.FindAchievementRewarding(item);
             WeaponData weapon = item as WeaponData;
             ArtifactData artifact = item as ArtifactData;

@@ -21,6 +21,8 @@ namespace ExplodeIt.Core
         public event Action<HitInfo> Blocked;
 
         public bool IsDead => _isDead;
+        // 죽기까지 더 먹힐 수 있는 피격 수. 1이면 다음 피격에 죽는다.
+        public int RemainingHits => _remainingHits;
         private float _invulnerableUntil;
 
         // 개발자 패널의 무적 치트. 구르기 무적과 따로 두어, 구르기가 끝날 때 치트까지 풀리지 않게 한다.

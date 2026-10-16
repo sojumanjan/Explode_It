@@ -18,9 +18,18 @@ namespace ExplodeIt.Progression
         private int _frameKills;
         private int _frameKillsFrame = -1;
 
+        // 이번 판에 업적을 세는 중인지. 개발자 패널이 상태 줄에 보여 준다.
+        public bool IsCounting => _isRunning && !_isDisabled;
+
         public void DisableForThisRun()
         {
+            if (_isDisabled)
+            {
+                return;
+            }
+
             _isDisabled = true;
+            Debug.Log("[AchievementTracker] 개발자 패널을 써서 이번 판은 업적을 세지 않습니다.");
         }
 
         private void OnEnable()
@@ -84,8 +93,6 @@ namespace ExplodeIt.Progression
             Check(AchievementCondition.SingleKillStreak, _singleKillStreak);
             Check(AchievementCondition.KillsInOneBomb, kills);
         }
-
-        private bool IsCounting => _isRunning && !_isDisabled;
 
         private void Check(AchievementCondition condition, int value)
         {

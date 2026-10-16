@@ -32,6 +32,8 @@ namespace ExplodeIt.UI
 
         private readonly Stack<CanvasGroup> _history = new Stack<CanvasGroup>();
         private CanvasGroup _current;
+        // 덮개로 연 페이지 아래에 그대로 보이는 페이지. 덮개를 닫으면 그 페이지로 바로 돌아간다.
+        private CanvasGroup _overlayBase;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatic()
@@ -79,6 +81,22 @@ namespace ExplodeIt.UI
             SwitchTo(page);
         }
 
+        // 지금 페이지를 그대로 보이게 둔 채 그 위에 바로 띄운다(전환 연출 없음). 타이틀 배경 위에 설정 책만 띄울 때 쓴다.
+        public void OpenOverlay(CanvasGroup page)
+        {
+            if (page == _current || _current == null)
+            {
+                return;
+            }
+
+            AudioManager.Play(_pageSound);
+            _history.Push(_current);
+            _overlayBase = _current;
+            _overlayBase.interactable = false;
+            _overlayBase.blocksRaycasts = false;
+            Show(page, false);
+        }
+
         // 되돌아갈 곳 없이 연다. 다시 돌아갈 일이 없는 넘김에 쓴다.
         public void OpenRoot(CanvasGroup page)
         {
@@ -109,6 +127,12 @@ namespace ExplodeIt.UI
         private void SwitchTo(CanvasGroup page)
         {
             AudioManager.Play(_pageSound);
+            if (page == _overlayBase)
+            {
+                CloseOverlay();
+                return;
+            }
+
             // 타이틀은 배경이 통째로 달라서, 책과 오갈 때는 검게 덮었다가 걷어 내며 바꾼다.
             bool isBackgroundChange = page == _firstPage || _current == _firstPage;
             if (isBackgroundChange && _fader != null && _current != null)
@@ -127,6 +151,22 @@ namespace ExplodeIt.UI
             }
 
             Show(page, true);
+        }
+
+        private void CloseOverlay()
+        {
+            CanvasGroup overlay = _current;
+            if (overlay.TryGetComponent(out IMenuPage listener))
+            {
+                listener.OnPageClosed();
+            }
+
+            overlay.DOKill();
+            overlay.gameObject.SetActive(false);
+            _current = _overlayBase;
+            _overlayBase = null;
+            _current.interactable = true;
+            _current.blocksRaycasts = true;
         }
 
         private void SwapInstantly(CanvasGroup from, CanvasGroup to)

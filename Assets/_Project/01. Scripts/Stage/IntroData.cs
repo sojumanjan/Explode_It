@@ -33,6 +33,13 @@ namespace ExplodeIt.Stage
             public bool PopsGoblinBefore => _popsGoblinBefore;
         }
 
+        [Header("배경음")]
+        [Tooltip("오프닝 동안 흐르는 배경음. 비워 두면 판 배경음 그대로")]
+        [SerializeField] private BgmData _bgm;
+
+        [Tooltip("오프닝이 끝나고 아레나에 들어갈 때 바꿀 배경음. 비워 두면 오프닝 배경음이 이어진다")]
+        [SerializeField] private BgmData _arenaBgm;
+
         [Header("만화 컷")]
         [Tooltip("컷 그림. 위에서부터 차례로 페이지의 1~4번 칸에 들어간다. 비워 두면 빈 칸(회색)으로 보인다")]
         [SerializeField] private Sprite[] _panelSprites = new Sprite[4];
@@ -121,6 +128,8 @@ namespace ExplodeIt.Stage
         [Tooltip("걸어 내려오다 이 시간(초)이 지나면 그 자리에서 조작을 돌려준다")]
         [SerializeField, Min(0.1f)] private float _arenaWalkTimeout = 1.5f;
 
+        public BgmData Bgm => _bgm;
+        public BgmData ArenaBgm => _arenaBgm;
         public int PanelCount => Mathf.Min(_panelSprites.Length, _panelLines.Length);
         public Sprite GetPanelSprite(int index) => _panelSprites[index];
         public string GetPanelLine(int index) => _panelLines[index];

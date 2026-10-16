@@ -142,6 +142,11 @@ namespace ExplodeIt.UI
         private void DrawStatus()
         {
             GUILayout.Label($"FPS {_fps:0}   Enemies {_spawner.ActiveCount}   Speed {Time.timeScale:0.0}x");
+            // 패널을 건드린 판은 업적이 꺼진다. 업적 시험 중이라면 여기서 꺼졌는지 바로 본다.
+            if (_achievements != null)
+            {
+                GUILayout.Label(_achievements.IsCounting ? "Achievements: ON" : "Achievements: OFF (this run)");
+            }
         }
 
         // 슬라이더 범위는 시험해 볼 만한 폭일 뿐 밸런스 값이 아니다. 실제 값은 SO에 있다.
@@ -301,6 +306,12 @@ namespace ExplodeIt.UI
                     data.UnlockWeapon(_weapons[i].Data.Id);
                 }
 
+                SaveSystem.Save();
+            }
+
+            if (GUILayout.Button("Reset Achv"))
+            {
+                data.ResetAchievements();
                 SaveSystem.Save();
             }
 

@@ -16,7 +16,7 @@ MonoBehaviour:
   _unlockedByDefault: 0
   _displayName: "\uD070\uD3ED\uBC1C"
   _description: "\uBC94\uC704\uAC00 \uB113\uC740 \uB300\uC2E0 \uCFE8\uD0C0\uC784\uC774
-    \uAE38\uB2E4."
+    \uAE38\uACE0 \uB290\uB9AC\uAC8C \uD3ED\uBC1C\uD55C\uB2E4."
   _icon: {fileID: 0}
   _bombSprite: {fileID: -6153194148187077190, guid: 3b6ec97243280ae4aa439d4f71b74868, type: 3}
   _bombSize: 1.1
@@ -27,7 +27,7 @@ MonoBehaviour:
   _burstInterval: 0.2
   _maxThrowRange: 7
   _fuseDelay: 0.85
-  _explosionRadius: 2.3
+  _explosionRadius: 2.5
   _flightDuration: 0.3
   _arcHeight: 1
   _explosionPitchMin: 0.7

@@ -39,6 +39,8 @@ namespace ExplodeIt.UI
         [SerializeField, TextArea] private string _endlessNotReadyText = "무한 모드는 준비 중이에요!";
 
         [Header("알림")]
+        // 잠겼거나 준비 중이라 못 누를 때 소리.
+        [SerializeField] private SoundData _errorSound;
         [SerializeField] private CanvasGroup _notice;
         [SerializeField] private TMP_Text _noticeText;
 
@@ -137,6 +139,7 @@ namespace ExplodeIt.UI
 
         private void ShowNotice(string text)
         {
+            AudioManager.Play(_errorSound);
             _noticeText.text = text;
             _notice.DOKill();
             _notice.alpha = 1f;

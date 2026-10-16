@@ -92,6 +92,7 @@ namespace ExplodeIt.Stage
         private bool _areSoldiersCalled;
         // 고블린이 책에서 튀어나왔는지, 몇 번째 줄 전에 튀어나오는지.
         private bool _hasPopped;
+        private bool _isBgmPending;
         private int _popLine;
         private int _line;
         private float _stepTime;
@@ -204,6 +205,8 @@ namespace ExplodeIt.Stage
 
             EnterStep(Step.Comic);
             _comic.Play(_data, OnComicDone);
+            // 판 배경음은 다른 오브젝트의 Start에서 켜지므로, 그 뒤 첫 Update에서 오프닝 배경음으로 덮는다.
+            _isBgmPending = true;
         }
 
         private void EnterStep(Step step)
@@ -217,6 +220,15 @@ namespace ExplodeIt.Stage
             if (_step == Step.None)
             {
                 return;
+            }
+
+            if (_isBgmPending)
+            {
+                _isBgmPending = false;
+                if (_data.Bgm != null)
+                {
+                    AudioManager.PlayBgm(_data.Bgm);
+                }
             }
 
             _stepTime += Time.deltaTime;
@@ -553,6 +565,11 @@ namespace ExplodeIt.Stage
         private void Finish()
         {
             EnterStep(Step.None);
+            if (_data.ArenaBgm != null)
+            {
+                AudioManager.PlayBgm(_data.ArenaBgm);
+            }
+
             GameEvents.RaisePlayerWalkCancelled();
             SaveSystem.Data.IntroSeen = true;
             SaveSystem.Save();

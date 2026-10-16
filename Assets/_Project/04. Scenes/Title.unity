@@ -1027,7 +1027,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1413785940}
         m_TargetAssemblyTypeName: ExplodeIt.UI.MenuPager, Assembly-CSharp
-        m_MethodName: Open
+        m_MethodName: OpenOverlay
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 399817020}
@@ -3285,6 +3285,7 @@ MonoBehaviour:
   _list: {fileID: 1638596857}
   _empty: {fileID: 1573399091}
   _previewIcon: {fileID: 1860742931}
+  _errorSound: {fileID: 11400000, guid: 644b1e9932431da4488f223e8a9ebc15, type: 2}
   _silhouetteColor: {r: 0.12, g: 0.09, b: 0.07, a: 0.85}
   _previewName: {fileID: 54336501}
   _previewText: {fileID: 1688931997}
@@ -4671,10 +4672,10 @@ RectTransform:
   - {fileID: 1908882495}
   m_Father: {fileID: 2077180664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 220, y: -178}
+  m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &696202502
 MonoBehaviour:
@@ -7976,10 +7977,10 @@ RectTransform:
   - {fileID: 1963025669}
   m_Father: {fileID: 2077180664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 220, y: -544}
+  m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184213960
 MonoBehaviour:
@@ -9344,7 +9345,7 @@ MonoBehaviour:
   _returnPage: {fileID: 1626104604}
   _backAction: {fileID: -8338598726356848359, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _dialog: {fileID: 1808690169}
-  _pageSound: {fileID: 11400000, guid: 9aefcb4ec29dbc248a3af51dffba2c43, type: 2}
+  _pageSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
   _fader: {fileID: 1886730002}
   _blackFadeTime: 0.25
 --- !u!114 &1413785941
@@ -9360,6 +9361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.RunLauncher
   _fader: {fileID: 1886730002}
+  _clickSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
 --- !u!1 &1442978119
 GameObject:
   m_ObjectHideFlags: 0
@@ -9961,6 +9963,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1537627907}
   - component: {fileID: 1537627906}
+  - component: {fileID: 1537627908}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10034,6 +10037,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1537627908
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537627905}
+  m_Enabled: 1
 --- !u!1 &1548261504
 GameObject:
   m_ObjectHideFlags: 0
@@ -10517,6 +10528,7 @@ MonoBehaviour:
   _endlessLockedText: "\uC2A4\uD1A0\uB9AC \uBAA8\uB4DC\uB97C \uD074\uB9AC\uC5B4\uD558\uBA74
     \uC5F4\uB824\uC694!"
   _endlessNotReadyText: "\uBB34\uD55C \uBAA8\uB4DC\uB294 \uC900\uBE44 \uC911\uC774\uC5D0\uC694!"
+  _errorSound: {fileID: 11400000, guid: 644b1e9932431da4488f223e8a9ebc15, type: 2}
   _notice: {fileID: 1298128665}
   _noticeText: {fileID: 120586439}
 --- !u!224 &1626104606
@@ -11627,10 +11639,10 @@ RectTransform:
   - {fileID: 25209722}
   m_Father: {fileID: 2077180664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 220, y: -300}
+  m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1780546326
 MonoBehaviour:
@@ -12133,6 +12145,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877405442}
   m_CullTransparentMesh: 1
+--- !u!1 &1883113642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883113644}
+  - component: {fileID: 1883113643}
+  m_Layer: 0
+  m_Name: TitleBgm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1883113643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883113642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563a4319dd653204080695892b83687d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.BgmPlayer
+  _bgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
+--- !u!4 &1883113644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883113642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886729996
 GameObject:
   m_ObjectHideFlags: 0
@@ -13635,10 +13692,10 @@ RectTransform:
   - {fileID: 1052781390}
   m_Father: {fileID: 2077180664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 220, y: -56}
+  m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2131813649
 MonoBehaviour:
@@ -13789,10 +13846,10 @@ RectTransform:
   - {fileID: 242960885}
   m_Father: {fileID: 2077180664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 220, y: -422}
+  m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2136463572
 MonoBehaviour:
@@ -14004,3 +14061,4 @@ SceneRoots:
   - {fileID: 892108713}
   - {fileID: 1886730001}
   - {fileID: 1792344800}
+  - {fileID: 1883113644}
