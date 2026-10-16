@@ -34,7 +34,7 @@ namespace ExplodeIt.Player
             _hitReceiver = GetComponent<HitReceiver>();
             _baseColor = _sprite.color;
             _bodyScale = _sprite.transform.localScale;
-            _maxHealth = RunSetup.Mode == RunMode.Story ? _data.StoryHealth : 1;
+            _maxHealth = (RunSetup.Mode == RunMode.Story ? _data.StoryHealth : 1) + RunModifiers.ExtraHealth;
             _hitReceiver.ResetHits(_maxHealth);
         }
 

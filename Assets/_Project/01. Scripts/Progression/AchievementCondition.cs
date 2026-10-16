@@ -1,6 +1,8 @@
 namespace ExplodeIt.Progression
 {
     // 업적 달성 조건의 종류. 목표 수는 업적 데이터에 따로 둔다.
+    // 스킬 조건은 업적에 스킬을 정하면 그 스킬만, 비워 두면 모든 스킬을 센다.
+    // 업적 데이터가 번호로 기억하므로 새 조건은 맨 뒤에만 더한다.
     public enum AchievementCondition
     {
         None,
@@ -21,6 +23,14 @@ namespace ExplodeIt.Progression
         // 업적에 정한 스킬로 지금까지 처치한 수 (모든 판 누적).
         AbilityKillsTotal,
         // 업적에 정한 스킬을 한 번 발동하는 동안 던진 폭탄 수 (순간폭탄용). 연발 무기는 한 발씩 센다.
-        AbilityThrowsInOneUse
+        AbilityThrowsInOneUse,
+        // 대시 무적으로 적 공격을 피한 횟수 (모든 판 누적).
+        EvadesTotal,
+        // 스킬 한 번으로 처치한 방패병 수.
+        AbilityShieldKillsInOneUse,
+        // 스킬을 한 번도 쓰지 않은 판에서 처치한 수.
+        KillsInOneRunWithoutAbility,
+        // 빗나간 폭탄(아무도 못 잡고 터진, 직접 던진 폭탄) 없이 한 판에 처치한 수.
+        NoMissKillsInOneRun
     }
 }

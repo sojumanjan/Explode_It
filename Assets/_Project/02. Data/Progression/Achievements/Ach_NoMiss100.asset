@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_NoMiss100
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: no_miss_100
+  _displayName: "\uBC31\uBC1C\uBC31\uC911"
+  _description: "\uD3ED\uD0C4\uC744 \uD55C \uBC88\uB3C4 \uBE57\uB9DE\uD788\uC9C0
+    \uC54A\uACE0 \uD55C \uD310\uC5D0 \uC801 100\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30"
+  _sticker: {fileID: 0}
+  _isHidden: 0
+  _condition: 13
+  _target: 100
+  _ability: {fileID: 0}
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
+  _rewardArtifact: {fileID: 11400000, guid: 759b4a3542a1078498262e0a6881d13c, type: 2}

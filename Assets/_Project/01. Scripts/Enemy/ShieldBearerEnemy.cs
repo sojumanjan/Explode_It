@@ -26,6 +26,7 @@ namespace ExplodeIt.Enemies
         private Vector2 _slamCenter;
 
         protected override EnemyData Data => _data;
+        protected override EnemyKind Kind => EnemyKind.ShieldBearer;
         public override Vector2 AimDirection => _slamDirection;
 
         private Vector2 BodyCenter => (Vector2)transform.position + _data.BodyCenterOffset;

@@ -11,13 +11,20 @@ namespace ExplodeIt.Core
 
         // 위치, 반경, 범위 안 대상 수. 다중 처치 업적·재화, 잔불 장판 등이 폭탄 코드를 몰라도 되게 한다.
         public static event Action<Vector2, float, int> BombExploded;
+        // 플레이어가 직접 던진 폭탄(일반·순간폭탄)이 터졌다. BombExploded 바로 앞에 온다. 빗나감 업적이 듣는다.
+        public static event Action ThrownBombExploded;
+
+        public static void RaiseThrownBombExploded()
+        {
+            ThrownBombExploded?.Invoke();
+        }
         public static event Action PlayerDied;
         // 플레이어 남은 체력, 최대 체력. 판이 시작될 때와 맞아서 줄었을 때 발행한다. 체력 UI가 플레이어 코드를 몰라도 되게 한다.
         public static event Action<int, int> PlayerHealthChanged;
         // 처치 위치. 재화 드롭, 처치 수 업적, 이펙트가 구독한다.
         public static event Action<Vector2> EnemyKilled;
-        // 처치 출처와 보스인지. 처치 수에 들지 않는 보스도 발행한다. 스킬 업적(보스 막타 등)이 듣는다.
-        public static event Action<DamageSource, bool> EnemyKilledBy;
+        // 처치 출처와 적 부류. 처치 수에 들지 않는 보스도 발행한다. 스킬 업적(보스 막타, 방패병 처치 등)이 듣는다.
+        public static event Action<DamageSource, EnemyKind> EnemyKilledBy;
         // 현재 충전량(처치 수, 모든 칸 합계), 한 칸에 필요한 양, 칸 수. 게이지 UI가 능력 코드를 몰라도 되게 한다.
         public static event Action<int, int, int> AbilityChargeChanged;
         // 남은 폭탄 수, 최대 보유 수. HUD가 무기 코드를 몰라도 되게 한다.
@@ -105,6 +112,14 @@ namespace ExplodeIt.Core
         public static void RaisePlayerDodged()
         {
             PlayerDodged?.Invoke();
+        }
+
+        // 대시 무적으로 적 공격을 피해 냈다(슬로모션이 걸리는 순간). 회피 업적이 센다.
+        public static event Action PlayerEvaded;
+
+        public static void RaisePlayerEvaded()
+        {
+            PlayerEvaded?.Invoke();
         }
 
         // 플레이어가 특수 능력(블랙홀)을 썼다. 튜토리얼이 스킬 안내를 거두는 데 쓴다.
@@ -252,9 +267,9 @@ namespace ExplodeIt.Core
             EnemyKilled?.Invoke(position);
         }
 
-        public static void RaiseEnemyKilledBy(DamageSource source, bool isBoss)
+        public static void RaiseEnemyKilledBy(DamageSource source, EnemyKind kind)
         {
-            EnemyKilledBy?.Invoke(source, isBoss);
+            EnemyKilledBy?.Invoke(source, kind);
         }
 
         // 도메인 리로드를 끈 플레이모드 설정에서도 이전 세션의 구독자가 남지 않게 한다.
@@ -264,6 +279,8 @@ namespace ExplodeIt.Core
             GameStateChanged = null;
             BombExploded = null;
             PlayerDied = null;
+            PlayerEvaded = null;
+            ThrownBombExploded = null;
             PlayerHealthChanged = null;
             EnemyKilled = null;
             EnemyKilledBy = null;

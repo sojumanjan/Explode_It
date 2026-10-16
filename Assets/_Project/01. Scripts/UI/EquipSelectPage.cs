@@ -38,9 +38,9 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _previewName;
         [SerializeField] private TMP_Text _previewText;
         [SerializeField] private Button _equipButton;
-        [SerializeField] private TMP_Text _equipLabel;
-        // 아티팩트 칸에 뭔가 끼워져 있을 때만 보인다.
-        [SerializeField] private GameObject _unequipButton;
+        // "장착 중"에 마우스를 올리면 "장착 해제"로 바꿔 보인다. 장착 중을 다시 누르면 해제된다.
+        [SerializeField] private HoverLabel _equipHover;
+        [SerializeField] private string _unequipText = "장착 해제";
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
         [SerializeField] private string _upgradeEquipText = "강화 장착";
@@ -121,7 +121,7 @@ namespace ExplodeIt.UI
         {
         }
 
-        // 장착 버튼. 다른 아티팩트 칸에 이미 끼운 것이면 두 칸을 맞바꾼다.
+        // 장착 버튼. 다른 아티팩트 칸에 이미 끼운 것이면 두 칸을 맞바꾼다. 이미 장착 중인 것을 누르면 해제한다.
         public void Equip()
         {
             // 강화는 같은 버튼으로 끼웠다 뺐다 한다.
@@ -137,6 +137,16 @@ namespace ExplodeIt.UI
             }
 
             SaveData data = SaveSystem.Data;
+            if (_preview == Equipped())
+            {
+                if (CanUnequip(_preview))
+                {
+                    Unequip();
+                }
+
+                return;
+            }
+
             switch (_kind)
             {
                 case Kind.Weapon:
@@ -165,12 +175,65 @@ namespace ExplodeIt.UI
             _pager.Back();
         }
 
-        // 빼기 버튼 (아티팩트 칸만).
-        public void Unequip()
+        // 무기·스킬은 비우면 기본 무기·기본 스킬로 돌아간다. 아티팩트는 칸이 빈다.
+        private void Unequip()
         {
-            SaveSystem.Data.SetArtifactInSlot(_slot, "");
+            SaveData data = SaveSystem.Data;
+            switch (_kind)
+            {
+                case Kind.Weapon:
+                    data.SelectedWeapon = "";
+                    break;
+                case Kind.Ability:
+                    data.SelectedAbility = "";
+                    break;
+                default:
+                    data.SetArtifactInSlot(_slot, "");
+                    break;
+            }
+
             SaveSystem.Save();
             _pager.Back();
+        }
+
+        // 기본 무기·기본 스킬은 해제해도 그대로 기본이라 해제할 수 없는 것으로 본다.
+        private bool CanUnequip(IUnlockable item)
+        {
+            switch (_kind)
+            {
+                case Kind.Weapon:
+                    return !ReferenceEquals(item, _catalog.FindUsableWeapon(""));
+                case Kind.Ability:
+                    return !ReferenceEquals(item, _catalog.FindUsableAbility(""));
+                default:
+                    return true;
+            }
+        }
+
+        // 다른 아티팩트 칸에 끼워 둔 것인지. 고르면 두 칸이 맞바뀐다.
+        private bool IsInOtherSlot(IUnlockable item)
+        {
+            if (_kind != Kind.Artifact)
+            {
+                return false;
+            }
+
+            SaveData data = SaveSystem.Data;
+            for (int i = 0; i < _catalog.ArtifactSlots; i++)
+            {
+                if (i != _slot && data.GetArtifactInSlot(i) == item.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void SetEquipButton(bool isEquipped, bool canUnequip, string equipText)
+        {
+            _equipButton.interactable = !isEquipped || canUnequip;
+            _equipHover.SetTexts(isEquipped ? _equippedText : equipText, isEquipped && canUnequip ? _unequipText : "");
         }
 
         // 강화는 여러 개를 함께 끼울 수 있어 페이지를 떠나지 않고 바로 반영한다.
@@ -280,6 +343,8 @@ namespace ExplodeIt.UI
                 cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked);
                 // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
                 cards[i].SetSelected(item == equipped);
+                // 다른 칸에 끼운 아티팩트는 살짝 회색으로 눌러 둔다. 노란색은 지금 고르는 칸의 것에만 쓴다.
+                cards[i].SetDimmed(item.IsUnlocked && item != equipped && IsInOtherSlot(item));
             }
 
             if (_kind == Kind.Ability)
@@ -290,9 +355,7 @@ namespace ExplodeIt.UI
             ShowPreview(_preview);
             bool isEquipped = _preview != null && _preview == equipped;
             _equipButton.gameObject.SetActive(_preview != null);
-            _equipButton.interactable = !isEquipped;
-            _equipLabel.text = isEquipped ? _equippedText : _equipText;
-            _unequipButton.SetActive(_kind == Kind.Artifact && equipped != null);
+            SetEquipButton(isEquipped, _preview != null && CanUnequip(_preview), _equipText);
         }
 
         // 같은 스킬의 강화는 목록 순서대로 I, II로 부른다. 잠긴 칸은 이름 대신 ???가 보인다.
@@ -322,7 +385,6 @@ namespace ExplodeIt.UI
                 _upgradePreview = null;
                 cell.Shake();
                 ShowLocked(upgrade);
-                _unequipButton.SetActive(false);
                 return;
             }
 
@@ -335,9 +397,7 @@ namespace ExplodeIt.UI
         {
             bool isEquipped = _upgradePreview.IsEquipped;
             _equipButton.gameObject.SetActive(true);
-            _equipButton.interactable = true;
-            _equipLabel.text = isEquipped ? _equippedText : _upgradeEquipText;
-            _unequipButton.SetActive(false);
+            SetEquipButton(isEquipped, true, _upgradeEquipText);
         }
 
         private void OnCardClicked(ItemCard card)

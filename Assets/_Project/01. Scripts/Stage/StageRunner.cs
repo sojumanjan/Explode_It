@@ -208,7 +208,10 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            _phaseTime += Time.deltaTime;
+            // 웨이브 적이 나오는 동안만 시계를 빨리 돌려 스폰 간격을 줄인다(아티팩트 팬던트). 휴식·보스전 시간은 그대로다.
+            bool isSpawning = _phase == Phase.Spawning;
+            float spawnInterval = RunModifiers.SpawnIntervalMultiplier;
+            _phaseTime += isSpawning && spawnInterval > 0f ? Time.deltaTime / spawnInterval : Time.deltaTime;
             switch (_phase)
             {
                 case Phase.Rest:

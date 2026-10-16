@@ -9,6 +9,8 @@ namespace ExplodeIt.Bombs
     {
         [SerializeField] private WeaponData _weaponData;
         [SerializeField] private PlayerInputReader _input;
+        // 구르는 동안 던지기를 막는 데 쓴다. 비워 두면 막지 않는다.
+        [SerializeField] private PlayerDodge _dodge;
         [SerializeField] private Bomb _bombPrefab;
         [SerializeField] private ThrowRangeIndicator _rangeIndicator;
         [SerializeField, Min(1)] private int _poolPrewarm = 16;
@@ -148,12 +150,19 @@ namespace ExplodeIt.Bombs
                 return;
             }
 
-            if (!_input.ThrowHeld || _chargesLeft <= 0 || Time.time < _nextThrowTime)
+            if (!_input.ThrowHeld || _chargesLeft <= 0 || Time.time < _nextThrowTime || IsBlockedByDodge())
             {
                 return;
             }
 
             Throw();
+        }
+
+        // 구르는 동안은 던지지 못한다. 회피와 공격을 한 번에 하지 못하게 해 대시를 쓰는 순간에 대가를 둔다.
+        // 아티팩트(빨간 리본)를 끼면 구르면서도 던진다.
+        private bool IsBlockedByDodge()
+        {
+            return _dodge != null && _dodge.IsDodging && !RunModifiers.CanThrowWhileDodging;
         }
 
         // 가득 차 있지 않으면 쿨타임마다 하나씩 찬다. 던져도 진행 중인 충전은 처음부터 다시 세지 않는다.

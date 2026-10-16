@@ -12,6 +12,9 @@ namespace ExplodeIt.Progression
     {
         // 스킬별 누적 처치를 저장하는 이름 앞부분. 뒤에 처치 출처 이름이 붙는다.
         private const string AbilityKillsStatPrefix = "kills_";
+        // 종류와 상관없이 스킬로 잡은 누적 수, 회피 누적 수.
+        private const string AnyAbilityKillsStat = "kills_ability";
+        private const string EvadesStat = "evades";
 
         [SerializeField] private UnlockCatalog _catalog;
 
@@ -25,6 +28,10 @@ namespace ExplodeIt.Progression
         private AbilityData _activeAbility;
         private int _useKills;
         private int _useThrows;
+        private int _useShieldKills;
+        // 이번 판에 스킬을 썼는지, 빗나간 폭탄이 있었는지.
+        private bool _hasUsedAbility;
+        private bool _hasMissed;
 
         // 이번 판에 업적을 세는 중인지. 개발자 패널이 상태 줄에 보여 준다.
         public bool IsCounting => _isRunning && !_isDisabled;
@@ -47,6 +54,8 @@ namespace ExplodeIt.Progression
             GameEvents.EnemyKilledBy += OnEnemyKilledBy;
             GameEvents.BombExploded += OnBombExploded;
             GameEvents.BombThrown += OnBombThrown;
+            GameEvents.ThrownBombExploded += OnThrownBombExploded;
+            GameEvents.PlayerEvaded += OnPlayerEvaded;
             GameEvents.PlayerDied += OnRunEnded;
             GameEvents.StageCleared += OnRunEnded;
             ProgressionEvents.AbilityStarted += OnAbilityStarted;
@@ -60,6 +69,8 @@ namespace ExplodeIt.Progression
             GameEvents.EnemyKilledBy -= OnEnemyKilledBy;
             GameEvents.BombExploded -= OnBombExploded;
             GameEvents.BombThrown -= OnBombThrown;
+            GameEvents.ThrownBombExploded -= OnThrownBombExploded;
+            GameEvents.PlayerEvaded -= OnPlayerEvaded;
             GameEvents.PlayerDied -= OnRunEnded;
             GameEvents.StageCleared -= OnRunEnded;
             ProgressionEvents.AbilityStarted -= OnAbilityStarted;
@@ -71,6 +82,8 @@ namespace ExplodeIt.Progression
             _isRunning = true;
             _runKills = 0;
             _singleKillStreak = 0;
+            _hasUsedAbility = false;
+            _hasMissed = false;
         }
 
         private void OnRunEnded()
@@ -90,11 +103,47 @@ namespace ExplodeIt.Progression
             Check(AchievementCondition.KillsInOneRun, _runKills);
             // 누적은 판이 끝날 때 저장에 더해지므로, 그 전까지는 이번 판 수를 더해 본다.
             Check(AchievementCondition.TotalKills, SaveSystem.Data.TotalKills + _runKills);
+            if (!_hasUsedAbility)
+            {
+                Check(AchievementCondition.KillsInOneRunWithoutAbility, _runKills);
+            }
+
+            if (!_hasMissed)
+            {
+                Check(AchievementCondition.NoMissKillsInOneRun, _runKills);
+            }
+        }
+
+        // 폭발 직전까지 이번 프레임에 쌓인 처치가 그 폭탄의 처치다. 하나도 없으면 빗나감이다.
+        private void OnThrownBombExploded()
+        {
+            if (!IsCounting)
+            {
+                return;
+            }
+
+            int kills = _frameKillsFrame == Time.frameCount ? _frameKills : 0;
+            if (kills == 0)
+            {
+                _hasMissed = true;
+            }
+        }
+
+        private void OnPlayerEvaded()
+        {
+            if (!IsCounting)
+            {
+                return;
+            }
+
+            SaveSystem.Data.AddStat(EvadesStat, 1);
+            Check(AchievementCondition.EvadesTotal, SaveSystem.Data.GetStat(EvadesStat));
         }
 
         // 모든 처치(보스 포함)와 그 출처.
-        private void OnEnemyKilledBy(DamageSource source, bool isBoss)
+        private void OnEnemyKilledBy(DamageSource source, EnemyKind kind)
         {
+            bool isBoss = kind == EnemyKind.Boss;
             if (!IsCounting)
             {
                 return;
@@ -114,6 +163,11 @@ namespace ExplodeIt.Progression
             {
                 _useKills++;
                 Check(AchievementCondition.AbilityKillsInOneUse, _useKills, _activeAbility);
+                if (kind == EnemyKind.ShieldBearer)
+                {
+                    _useShieldKills++;
+                    Check(AchievementCondition.AbilityShieldKillsInOneUse, _useShieldKills, _activeAbility);
+                }
             }
         }
 
@@ -149,12 +203,23 @@ namespace ExplodeIt.Progression
 
             string stat = AbilityKillsStatPrefix + source;
             SaveSystem.Data.AddStat(stat, 1);
+            SaveSystem.Data.AddStat(AnyAbilityKillsStat, 1);
             int total = SaveSystem.Data.GetStat(stat);
+            int anyTotal = SaveSystem.Data.GetStat(AnyAbilityKillsStat);
             for (int i = 0; i < achievements.Length; i++)
             {
                 AchievementData achievement = achievements[i];
-                if (achievement.Condition == AchievementCondition.AbilityKillsTotal && achievement.Ability != null
-                    && SourceOf(achievement.Ability.Kind) == source)
+                if (achievement.Condition != AchievementCondition.AbilityKillsTotal)
+                {
+                    continue;
+                }
+
+                // 스킬을 정하지 않은 업적은 모든 스킬의 처치를 합쳐 센다.
+                if (achievement.Ability == null)
+                {
+                    TryComplete(achievement, anyTotal);
+                }
+                else if (SourceOf(achievement.Ability.Kind) == source)
                 {
                     TryComplete(achievement, total);
                 }
@@ -180,6 +245,8 @@ namespace ExplodeIt.Progression
             _activeAbility = ability;
             _useKills = 0;
             _useThrows = 0;
+            _useShieldKills = 0;
+            _hasUsedAbility = true;
         }
 
         // 일반 폭탄 던지기만 온다(스킬 폭탄은 이 이벤트를 내지 않는다).
@@ -232,14 +299,14 @@ namespace ExplodeIt.Progression
             }
         }
 
-        // ability를 주면 그 스킬을 기준으로 한 업적만 본다.
+        // ability를 주면 그 스킬을 정한 업적과, 스킬을 정하지 않은(모든 스킬) 업적을 본다.
         private void Check(AchievementCondition condition, int value, AbilityData ability = null)
         {
             AchievementData[] achievements = _catalog.Achievements;
             for (int i = 0; i < achievements.Length; i++)
             {
                 AchievementData achievement = achievements[i];
-                if (achievement.Condition == condition && (ability == null || achievement.Ability == ability))
+                if (achievement.Condition == condition && (ability == null || achievement.Ability == null || achievement.Ability == ability))
                 {
                     TryComplete(achievement, value);
                 }

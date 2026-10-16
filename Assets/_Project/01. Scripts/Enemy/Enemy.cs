@@ -626,6 +626,9 @@ namespace ExplodeIt.Enemies
             OnEnterState(state);
         }
 
+        // 업적이 따로 세는 적 부류. 특정 적을 세야 하면 그 적이 덮어쓴다.
+        protected virtual EnemyKind Kind => this is IBoss ? EnemyKind.Boss : EnemyKind.Normal;
+
         // 판정과 처치 집계는 죽는 순간 끝내고, 몸만 사망 연출 동안 남겨 둔다.
         // 콜라이더를 꺼서 남은 몸이 폭탄 범위·블랙홀·길막에 끼어들지 않게 한다.
         private void OnDied(HitInfo hit)
@@ -637,7 +640,7 @@ namespace ExplodeIt.Enemies
                 GameEvents.RaiseEnemyKilled(Body.position);
             }
 
-            GameEvents.RaiseEnemyKilledBy(hit.Source, this is IBoss);
+            GameEvents.RaiseEnemyKilledBy(hit.Source, Kind);
 
             _died?.Invoke(this);
         }

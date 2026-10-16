@@ -15,6 +15,7 @@ namespace ExplodeIt.Progression
     //   다발폭탄: 360도를 고르게 나눠 폭탄을 뿌린다(칸마다 살짝 비틂). 벽을 무시하고 방패를 뚫는다. 강화하면 터진 자리에서 작은 폭탄이 다시 튄다.
     //   순간폭탄: 정한 시간 동안 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라진다.
     // 해금하고 장착한 강화만 판이 시작될 때 이 스킬에 붙는다.
+    // 아티팩트: 필요 처치 수 감소(망토), 칸 증가(벨트), 가만히 서 있으면 충전(동전), 많이 잡으면 회복(반지).
     public class PlayerAbility : MonoBehaviour
     {
         [SerializeField] private UnlockCatalog _catalog;
@@ -37,6 +38,13 @@ namespace ExplodeIt.Progression
         // 아직 터지지 않은 다발폭탄 수(작은 폭탄 포함). 0이 되면 발동이 끝난다.
         private int _pendingBombs;
         private float _instantEndTime = -1f;
+        // 아티팩트를 반영한 한 칸에 필요한 처치 수와 칸 수.
+        private int _killsToCharge;
+        private int _maxCharges;
+        // 이번 발동으로 잡은 수(반지)와, 이동하지 않은 시간·다음 충전까지 남은 시간(동전).
+        private int _useKills;
+        private float _stillTime;
+        private float _nextStillCharge;
 
         // 해금한 강화를 합친 값.
         private float _radiusMultiplier = 1f;
@@ -53,6 +61,9 @@ namespace ExplodeIt.Progression
             }
 
             ApplyUpgrades();
+            _killsToCharge = Mathf.Max(1, _data.KillsToCharge - RunModifiers.KillsToChargeReduction);
+            _maxCharges = Mathf.Max(1, _data.MaxCharges + RunModifiers.ExtraAbilityCharges);
+            _nextStillCharge = RunModifiers.StillChargeDelay;
 
             // 한 번에 하나만 존재하므로 풀 대신 하나를 미리 만들어 재사용한다. 전투 중 생성이 일어나지 않는다.
             // 던진 뒤 플레이어를 따라가면 안 되므로 부모 없이 월드에 둔다.
@@ -66,7 +77,7 @@ namespace ExplodeIt.Progression
             _childStats = BuildScatterStats(_data.ChildRadius, _data.ChildFuseDelayMin, _data.ChildFlightDuration, _data.ChildSpriteSize);
 
             // 첫 위기에 바로 쓸 수 있게 차 있는 채로 시작한다. 능력을 처음부터 알게 되는 효과도 있다.
-            _charge = _data.KillsToCharge * _data.StartCharges;
+            _charge = _killsToCharge * Mathf.Min(_data.StartCharges, _maxCharges);
         }
 
         private void ApplyUpgrades()
@@ -118,12 +129,16 @@ namespace ExplodeIt.Progression
         private void OnEnable()
         {
             GameEvents.EnemyKilled += OnEnemyKilled;
+            GameEvents.EnemyKilledBy += OnEnemyKilledBy;
+            GameEvents.PlayerDodged += OnPlayerDodged;
             GameEvents.GameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
             GameEvents.EnemyKilled -= OnEnemyKilled;
+            GameEvents.EnemyKilledBy -= OnEnemyKilledBy;
+            GameEvents.PlayerDodged -= OnPlayerDodged;
             GameEvents.GameStateChanged -= OnGameStateChanged;
         }
 
@@ -133,7 +148,7 @@ namespace ExplodeIt.Progression
             RaiseChargeChanged();
         }
 
-        private int MaxCharge => _data.KillsToCharge * _data.MaxCharges;
+        private int MaxCharge => _killsToCharge * _maxCharges;
 
         // 개발자 패널용. 처치 없이 바로 시험해 볼 수 있게 모든 칸을 채운다.
         public void FillCharge()
@@ -144,7 +159,7 @@ namespace ExplodeIt.Progression
 
         private void RaiseChargeChanged()
         {
-            GameEvents.RaiseAbilityChargeChanged(_charge, _data.KillsToCharge, _data.MaxCharges);
+            GameEvents.RaiseAbilityChargeChanged(_charge, _killsToCharge, _maxCharges);
         }
 
         private void Update()
@@ -156,7 +171,9 @@ namespace ExplodeIt.Progression
                 Finish();
             }
 
-            if (!_canUse || _isActive || _charge < _data.KillsToCharge || !_input.AbilityPressed)
+            TickStillCharge();
+
+            if (!_canUse || _isActive || _charge < _killsToCharge || !_input.AbilityPressed)
             {
                 return;
             }
@@ -167,8 +184,9 @@ namespace ExplodeIt.Progression
         private void Use()
         {
             // 한 칸만 쓴다. 차던 중인 다음 칸의 진행분은 그대로 남는다.
-            _charge -= _data.KillsToCharge;
+            _charge -= _killsToCharge;
             _isActive = true;
+            _useKills = 0;
             RaiseChargeChanged();
             GameEvents.RaiseAbilityUsed();
             ProgressionEvents.RaiseAbilityStarted(_data);
@@ -304,6 +322,63 @@ namespace ExplodeIt.Progression
             RaiseChargeChanged();
         }
 
+        // 이동 입력이 없으면 시간을 센다. 폭탄은 던져도 되지만 움직이거나 구르면 처음부터.
+        private void TickStillCharge()
+        {
+            if (RunModifiers.StillChargeDelay <= 0f || !_canUse)
+            {
+                return;
+            }
+
+            if (_input.Move.sqrMagnitude > 0.01f)
+            {
+                ResetStill();
+                return;
+            }
+
+            _stillTime += Time.deltaTime;
+            if (_stillTime < _nextStillCharge)
+            {
+                return;
+            }
+
+            _nextStillCharge += Mathf.Max(0.1f, RunModifiers.StillChargeInterval);
+            AddCharge(1);
+        }
+
+        private void ResetStill()
+        {
+            _stillTime = 0f;
+            _nextStillCharge = RunModifiers.StillChargeDelay;
+        }
+
+        private void OnPlayerDodged()
+        {
+            ResetStill();
+        }
+
+        // 발동 중에는 처치로 게이지가 차지 않으므로, 아티팩트 충전도 같은 규칙을 따른다.
+        private void AddCharge(int amount)
+        {
+            if (_isActive || _charge >= MaxCharge)
+            {
+                return;
+            }
+
+            _charge = Mathf.Min(_charge + amount, MaxCharge);
+            RaiseChargeChanged();
+        }
+
+        // 이번 발동의 스킬로 잡은 적(보스 제외). 반지 회복 조건에 쓴다.
+        private void OnEnemyKilledBy(DamageSource source, EnemyKind kind)
+        {
+            if (_isActive && kind != EnemyKind.Boss && (source == DamageSource.BlackHole || source == DamageSource.ScatterBomb
+                || source == DamageSource.InstantBomb))
+            {
+                _useKills++;
+            }
+        }
+
         private void Finish()
         {
             if (_data.Kind == AbilityKind.BlackHole)
@@ -312,6 +387,11 @@ namespace ExplodeIt.Progression
             }
 
             _isActive = false;
+            if (RunModifiers.AbilityRefundMinKills > 0 && _useKills >= RunModifiers.AbilityRefundMinKills)
+            {
+                AddCharge(RunModifiers.AbilityRefundAmount);
+            }
+
             GameEvents.RaiseAbilityFinished();
             ProgressionEvents.RaiseAbilityEnded(_data);
         }

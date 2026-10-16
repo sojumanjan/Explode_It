@@ -18,6 +18,9 @@ namespace ExplodeIt.Player
         private bool _canMove = true;
         private bool _isAutoWalking;
         private Vector2 _walkTarget;
+        // 아티팩트 이속 보너스 조건: 폭탄이 가득 장전됐는지, 스킬 직후 보너스가 끝나는 시각.
+        private bool _areBombsFull = true;
+        private float _abilityBonusUntil = -1f;
 
         private void Awake()
         {
@@ -29,6 +32,8 @@ namespace ExplodeIt.Player
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.PlayerWalkRequested += OnWalkRequested;
             GameEvents.PlayerWalkCancelled += OnWalkCancelled;
+            GameEvents.BombChargesChanged += OnBombChargesChanged;
+            GameEvents.AbilityUsed += OnAbilityUsed;
         }
 
         private void OnDisable()
@@ -36,6 +41,8 @@ namespace ExplodeIt.Player
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.PlayerWalkRequested -= OnWalkRequested;
             GameEvents.PlayerWalkCancelled -= OnWalkCancelled;
+            GameEvents.BombChargesChanged -= OnBombChargesChanged;
+            GameEvents.AbilityUsed -= OnAbilityUsed;
             _isAutoWalking = false;
         }
 
@@ -43,6 +50,36 @@ namespace ExplodeIt.Player
         {
             _walkTarget = target;
             _isAutoWalking = true;
+        }
+
+        private void OnBombChargesChanged(int left, int max)
+        {
+            _areBombsFull = left >= max;
+        }
+
+        private void OnAbilityUsed()
+        {
+            if (RunModifiers.MoveSpeedBonusAfterAbility > 0f)
+            {
+                _abilityBonusUntil = Time.time + RunModifiers.MoveSpeedBonusAfterAbilityDuration;
+            }
+        }
+
+        // 아티팩트 보너스를 더한 이동속도. 보너스끼리는 더한다(+10%와 +20%면 +30%).
+        private float CurrentMoveSpeed()
+        {
+            float bonus = 0f;
+            if (_areBombsFull)
+            {
+                bonus += RunModifiers.MoveSpeedBonusWhenBombsFull;
+            }
+
+            if (Time.time < _abilityBonusUntil)
+            {
+                bonus += RunModifiers.MoveSpeedBonusAfterAbility;
+            }
+
+            return _data.MoveSpeed * (1f + bonus);
         }
 
         private void OnWalkCancelled()
@@ -76,7 +113,7 @@ namespace ExplodeIt.Player
             {
                 input = AutoWalkInput();
             }
-            Vector2 targetVelocity = input * _data.MoveSpeed;
+            Vector2 targetVelocity = input * CurrentMoveSpeed();
             float rate = input.sqrMagnitude > 0f ? _data.Acceleration : _data.Deceleration;
 
             _rigidbody.linearVelocity = Vector2.MoveTowards(

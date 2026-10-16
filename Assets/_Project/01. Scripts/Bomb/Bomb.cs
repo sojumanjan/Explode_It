@@ -199,6 +199,11 @@ namespace ExplodeIt.Bombs
             _body.enabled = false;
             _fuseFill.SetColor(_explodeFlashColor);
 
+            if (_options.Source == DamageSource.Bomb || _options.Source == DamageSource.InstantBomb)
+            {
+                GameEvents.RaiseThrownBombExploded();
+            }
+
             GameEvents.RaiseBombExploded(position, _radius, hitCount);
             _onExploded?.Invoke(position);
         }

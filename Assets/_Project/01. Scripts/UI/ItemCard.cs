@@ -11,6 +11,8 @@ namespace ExplodeIt.UI
     {
         // 잠긴 카드는 그림을 거의 검게 칠해 모양만 알아보게 한다.
         private static readonly Color LockedTint = new Color(0.08f, 0.06f, 0.05f, 0.92f);
+        // 다른 칸에 이미 끼운 카드는 살짝 회색으로 눌러 둔다.
+        private static readonly Color DimmedTint = new Color(0.55f, 0.55f, 0.55f, 1f);
 
         [SerializeField] private Button _button;
         [SerializeField] private Image _icon;
@@ -19,6 +21,7 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _selectedMark;
 
         private Action<ItemCard> _onClick;
+        private Color _nameColor;
 
         public object Item { get; private set; }
         public bool IsLocked { get; private set; }
@@ -26,6 +29,7 @@ namespace ExplodeIt.UI
         private void Awake()
         {
             _button.onClick.AddListener(OnClick);
+            _nameColor = _name.color;
         }
 
         public void Setup(object item, Sprite icon, string displayName, bool isLocked, Action<ItemCard> onClick)
@@ -38,7 +42,19 @@ namespace ExplodeIt.UI
             _icon.color = isLocked ? LockedTint : Color.white;
             _name.text = isLocked ? "???" : displayName;
             _lockMark.SetActive(isLocked);
+            _name.color = _nameColor;
             SetSelected(false);
+        }
+
+        public void SetDimmed(bool isDimmed)
+        {
+            if (IsLocked)
+            {
+                return;
+            }
+
+            _icon.color = isDimmed ? DimmedTint : Color.white;
+            _name.color = isDimmed ? _nameColor * DimmedTint : _nameColor;
         }
 
         public void SetSelected(bool isSelected)

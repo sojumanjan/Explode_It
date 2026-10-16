@@ -8,6 +8,8 @@ namespace ExplodeIt.Core
         Bomb,
         BlackHole,
         ScatterBomb,
-        InstantBomb
+        InstantBomb,
+        // 아티팩트(가죽 헬름)로 대시 중 부딪혀 처치.
+        Dodge
     }
 }

@@ -28,7 +28,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 526f71ffe19e3c649a673a7a50e84559, type: 2}
   - {fileID: 11400000, guid: 2660c868568176e45a836c8e5f3034fd, type: 2}
   - {fileID: 11400000, guid: fb063c8c6b1b4e646ae4a5b5fdd049ca, type: 2}
-  _artifacts: []
+  _artifacts:
+  - {fileID: 11400000, guid: d88375cbad2500e45b05436bc7b38dad, type: 2}
+  - {fileID: 11400000, guid: 05ac22b744461ef46880d60676fef832, type: 2}
+  - {fileID: 11400000, guid: fec0ca9eed10d034a9dee85645a61c37, type: 2}
+  - {fileID: 11400000, guid: 59fe51ed8579c3e4b9c25a7da2f3261a, type: 2}
+  - {fileID: 11400000, guid: 8c906035644ec2047b2b8bc6cc2d2cc1, type: 2}
+  - {fileID: 11400000, guid: 11df0dd05a0b7ec419269c7c148740be, type: 2}
+  - {fileID: 11400000, guid: 4a4e7490ced85c14ca29391a35decd7c, type: 2}
+  - {fileID: 11400000, guid: cabeff3448d833941986ee51665dc423, type: 2}
+  - {fileID: 11400000, guid: 759b4a3542a1078498262e0a6881d13c, type: 2}
+  - {fileID: 11400000, guid: 949b0a055cbc8ff42a676004830662ce, type: 2}
   _achievements:
   - {fileID: 11400000, guid: 27b62fe804d7eb248893da64a587c002, type: 2}
   - {fileID: 11400000, guid: 698be6d3cca133b4f9ed5176e5747f9b, type: 2}
@@ -41,4 +51,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a942d31456262214897d8327a1007c80, type: 2}
   - {fileID: 11400000, guid: a8d7b298988f4544c8df52819209044f, type: 2}
   - {fileID: 11400000, guid: d729abbac40e170459f4565e801f7b6d, type: 2}
+  - {fileID: 11400000, guid: 3c48afa0f99afb749a1cd8e44a614349, type: 2}
+  - {fileID: 11400000, guid: f643d7e6ff2a4064689ac17acdb8ff38, type: 2}
+  - {fileID: 11400000, guid: 009ba68505d17d64a8f936af6bf114da, type: 2}
+  - {fileID: 11400000, guid: 1ba1780b0dfb48b46a1c4456ce9dfb07, type: 2}
+  - {fileID: 11400000, guid: ce1d5ae8cb3f6644cbc57d9f01bbf23c, type: 2}
+  - {fileID: 11400000, guid: fc7a3adc88d4549499677143acda627f, type: 2}
+  - {fileID: 11400000, guid: bec4a3293ac468142b5407c9a8223bcf, type: 2}
+  - {fileID: 11400000, guid: 4536bfe4cb2bc1948bb9b62c20e44898, type: 2}
+  - {fileID: 11400000, guid: 0292ac3be7a20fd4f87e95ee6f6a4a2f, type: 2}
+  - {fileID: 11400000, guid: e030681a4ec8d4b4e81c2536261794ce, type: 2}
   _artifactSlots: 2

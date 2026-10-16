@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_Kills100
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: kills_100
+  _displayName: "\uBAB8\uD480\uAE30"
+  _description: "\uD55C \uD310\uC5D0 \uC801 100\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30"
+  _sticker: {fileID: 0}
+  _isHidden: 0
+  _condition: 3
+  _target: 100
+  _ability: {fileID: 0}
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
+  _rewardArtifact: {fileID: 11400000, guid: d88375cbad2500e45b05436bc7b38dad, type: 2}
