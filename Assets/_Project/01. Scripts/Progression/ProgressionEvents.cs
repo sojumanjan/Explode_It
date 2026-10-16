@@ -14,11 +14,28 @@ namespace ExplodeIt.Progression
             AchievementCompleted?.Invoke(achievement);
         }
 
+        // 스킬 발동 시작·끝(블랙홀이 터져 사라질 때, 다발폭탄이 모두 터졌을 때, 순간폭탄 시간이 끝났을 때).
+        // 스킬 강화 업적이 "한 번 발동하는 동안"을 센다.
+        public static event Action<AbilityData> AbilityStarted;
+        public static event Action<AbilityData> AbilityEnded;
+
+        public static void RaiseAbilityStarted(AbilityData ability)
+        {
+            AbilityStarted?.Invoke(ability);
+        }
+
+        public static void RaiseAbilityEnded(AbilityData ability)
+        {
+            AbilityEnded?.Invoke(ability);
+        }
+
         // 도메인 리로드를 끈 플레이모드 설정에서도 이전 세션의 구독자가 남지 않게 한다.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetSubscribers()
         {
             AchievementCompleted = null;
+            AbilityStarted = null;
+            AbilityEnded = null;
         }
     }
 }

@@ -28,7 +28,11 @@ namespace ExplodeIt.Core
         [Tooltip("최대 재생 간격 (초). 최소 간격보다 크면, 재생할 때마다 최소~최대 사이에서 다음 간격을 무작위로 정한다. 연달아 터지는 소리(유성우 등)가 기계처럼 일정한 박자로 들리지 않게 한다. 최소 간격 이하면 최소 간격 고정")]
         [SerializeField, Min(0f)] private float _maxInterval;
 
+        [Tooltip("화면·메뉴 소리인지. 켜 두면 결과 화면에서 게임 소리를 죽여도 이 소리는 들린다(버튼, 해금 알림 등)")]
+        [SerializeField] private bool _isInterface;
+
         public float Volume => _volume;
+        public bool IsInterface => _isInterface;
         public int MaxInstances => _maxInstances;
         public float MinInterval => _minInterval;
 

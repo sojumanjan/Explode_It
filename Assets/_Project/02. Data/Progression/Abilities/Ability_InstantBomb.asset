@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186bc05e8d821284b80da15231e957af, type: 3}
+  m_Name: Ability_InstantBomb
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AbilityData
+  _id: instant_bomb
+  _unlockedByDefault: 0
+  _displayName: "\uC21C\uAC04\uD3ED\uD0C4"
+  _description: "7\uCD08 \uB3D9\uC548 \uB358\uC9C4 \uD3ED\uD0C4\uC774 \uB545\uC5D0
+    \uB2FF\uC790\uB9C8\uC790 \uD130\uC9C0\uACE0, \uACF5\uACA9 \uC18D\uB3C4\uAC00
+    3\uBC30\uAC00 \uB41C\uB2E4."
+  _icon: {fileID: 21300000, guid: 157d49b78c6e24441a9fc521a7129aa6, type: 3}
+  _kind: 2
+  _killsToCharge: 10
+  _maxCharges: 2
+  _startCharges: 1
+  _maxThrowRange: 15
+  _radiusMultiplier: 2
+  _pullDuration: 1.5
+  _pullSpeed: 4
+  _scatterCount: 10
+  _scatterAngleJitter: 5
+  _scatterDistance: 5
+  _scatterRadius: 1.4
+  _scatterThrowDelayMax: 0.35
+  _scatterFuseDelayMin: 0.6
+  _scatterFuseDelayMax: 1
+  _scatterFlightDuration: 0.45
+  _scatterArcHeight: 1.5
+  _scatterSprite: {fileID: 0}
+  _scatterSpriteSize: 0.7
+  _childCountMin: 2
+  _childCountMax: 3
+  _childDistance: 1.8
+  _childRadius: 0.9
+  _childThrowDelayMax: 0.2
+  _childFuseDelayMin: 0.25
+  _childFuseDelayMax: 0.5
+  _childFlightDuration: 0.3
+  _childSpriteSize: 0.45
+  _instantDuration: 7
+  _instantSpeedMultiplier: 3

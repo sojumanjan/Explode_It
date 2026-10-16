@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_Scatter30
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: scatter_30
+  _displayName: "\uD3ED\uD0C4 \uBE44"
+  _description: "\uB2E4\uBC1C\uD3ED\uD0C4\uC73C\uB85C \uB204\uC801 30\uB9C8\uB9AC
+    \uCC98\uCE58\uD558\uAE30"
+  _sticker: {fileID: 0}
+  _isHidden: 0
+  _condition: 8
+  _target: 30
+  _ability: {fileID: 11400000, guid: bb847d37476f5554a9fa1f10a60d6335, type: 2}
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 11400000, guid: dc96a7ce1f84b71458d242f75e921556, type: 2}
+  _rewardArtifact: {fileID: 0}

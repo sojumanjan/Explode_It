@@ -19,9 +19,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6341796715287f45b0e271a626107cc, type: 2}
   _abilities:
   - {fileID: 11400000, guid: 5b38ccfd3a44697489f4d6f286ec6301, type: 2}
+  - {fileID: 11400000, guid: bb847d37476f5554a9fa1f10a60d6335, type: 2}
+  - {fileID: 11400000, guid: daa53f07636beae4697db790bccb4517, type: 2}
+  _upgrades:
+  - {fileID: 11400000, guid: 5faddc369557e384ea5fef80e22e374b, type: 2}
+  - {fileID: 11400000, guid: b33bd51021c2a7e4e8358cf61dd24d04, type: 2}
+  - {fileID: 11400000, guid: dc96a7ce1f84b71458d242f75e921556, type: 2}
+  - {fileID: 11400000, guid: 526f71ffe19e3c649a673a7a50e84559, type: 2}
+  - {fileID: 11400000, guid: 2660c868568176e45a836c8e5f3034fd, type: 2}
+  - {fileID: 11400000, guid: fb063c8c6b1b4e646ae4a5b5fdd049ca, type: 2}
   _artifacts: []
   _achievements:
   - {fileID: 11400000, guid: 27b62fe804d7eb248893da64a587c002, type: 2}
   - {fileID: 11400000, guid: 698be6d3cca133b4f9ed5176e5747f9b, type: 2}
   - {fileID: 11400000, guid: 1806c4894501de04185ad65a8b61b340, type: 2}
+  - {fileID: 11400000, guid: 34d8827a193f91d4b9db725c1c3de66a, type: 2}
+  - {fileID: 11400000, guid: 20ede7f56dbae7448b6da5c0e6e6e745, type: 2}
+  - {fileID: 11400000, guid: d416728c87feb684691004526a02f7cd, type: 2}
+  - {fileID: 11400000, guid: 7cc70d4884b1fdc4f90464a2a6de6822, type: 2}
+  - {fileID: 11400000, guid: d8d131aea6cba33489732a0559aaff1b, type: 2}
+  - {fileID: 11400000, guid: a942d31456262214897d8327a1007c80, type: 2}
+  - {fileID: 11400000, guid: a8d7b298988f4544c8df52819209044f, type: 2}
+  - {fileID: 11400000, guid: d729abbac40e170459f4565e801f7b6d, type: 2}
   _artifactSlots: 2

@@ -16,11 +16,13 @@ MonoBehaviour:
   _hitsToDie: 1
   _attackTriggerRange: 2
   _arenaEntryDelay: 1
+  _countsAsKill: 1
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 1.5
   _telegraphDuration: 0.5
   _recoverDuration: 0.8
   _deathDuration: 0.5
-  _attackRadius: 2
+  _attackRadius: 2.8
   _attackAngle: 100
   _swingSound: {fileID: 0}

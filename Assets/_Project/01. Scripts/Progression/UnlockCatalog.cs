@@ -14,6 +14,9 @@ namespace ExplodeIt.Progression
         [Tooltip("고를 수 있는 스킬. 처음부터 열린 스킬 중 맨 앞의 것이 기본 스킬이다")]
         [SerializeField] private AbilityData[] _abilities = new AbilityData[0];
 
+        [Tooltip("스킬 강화 전체. 업적으로 해금하면 그 스킬을 쓰는 판에 자동으로 붙는다")]
+        [SerializeField] private AbilityUpgradeData[] _upgrades = new AbilityUpgradeData[0];
+
         [Tooltip("고를 수 있는 아티팩트")]
         [SerializeField] private ArtifactData[] _artifacts = new ArtifactData[0];
 
@@ -25,6 +28,7 @@ namespace ExplodeIt.Progression
 
         public WeaponData[] Weapons => _weapons;
         public AbilityData[] Abilities => _abilities;
+        public AbilityUpgradeData[] Upgrades => _upgrades;
         public ArtifactData[] Artifacts => _artifacts;
 
         // 저장된 ID가 지워졌거나 잠긴 스킬을 가리키면 처음부터 열린 맨 앞 스킬을 돌려준다.
@@ -156,7 +160,8 @@ namespace ExplodeIt.Progression
             for (int i = 0; i < _achievements.Length; i++)
             {
                 AchievementData achievement = _achievements[i];
-                if (achievement.RewardWeapon == reward || achievement.RewardArtifact == reward || achievement.RewardAbility == reward)
+                if (achievement.RewardWeapon == reward || achievement.RewardArtifact == reward
+                    || achievement.RewardAbility == reward || achievement.RewardUpgrade == reward)
                 {
                     return achievement;
                 }

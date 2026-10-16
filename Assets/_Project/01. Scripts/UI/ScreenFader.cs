@@ -19,20 +19,35 @@ namespace ExplodeIt.UI
         [SerializeField, Min(0.05f)] private float _fadeTime = 0.4f;
 
         private bool _isFadingIn;
+        private float _fadeInTime;
         // 첫 프레임을 건너뛰고 밝아지기 시작한다. 그 프레임까지 씬의 Start들이 돌며 끊긴다.
         private bool _hasSkippedFirstFrame;
 
         private void Start()
         {
+            // 다른 스크립트가 Start에서 먼저 밝히기 시작했으면(시간을 따로 정해) 그대로 둔다.
+            if (_isFadingIn)
+            {
+                return;
+            }
+
             if (!_fadeInOnStart)
             {
                 Hide();
                 return;
             }
 
+            FadeIn(_fadeTime);
+        }
+
+        // 검은 화면에서 시작해 duration 동안 밝아진다. 씬 시작 시 기본 시간 대신 다른 시간으로 밝힐 때도 쓴다.
+        public void FadeIn(float duration)
+        {
+            _group.DOKill();
             _group.gameObject.SetActive(true);
             _group.alpha = 1f;
             _group.blocksRaycasts = true;
+            _fadeInTime = Mathf.Max(0.05f, duration);
             _isFadingIn = true;
         }
 
@@ -49,7 +64,7 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            _group.alpha -= Mathf.Min(Time.unscaledDeltaTime, MaxFadeStep) / _fadeTime;
+            _group.alpha -= Mathf.Min(Time.unscaledDeltaTime, MaxFadeStep) / _fadeInTime;
             if (_group.alpha <= 0f)
             {
                 _isFadingIn = false;

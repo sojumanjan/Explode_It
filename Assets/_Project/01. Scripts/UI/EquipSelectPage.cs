@@ -43,9 +43,19 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _unequipButton;
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
+        [SerializeField] private string _upgradeEquipText = "강화 장착";
         [SerializeField, TextArea] private string _noUnlockText = "아직 해금 방법이 없어요.";
         // 잠긴 카드에는 업적 이름 없이 해금 조건만 보여 준다.
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n{0}";
+        [Header("스킬 (왼쪽 페이지에 스킬 3개, 각 스킬 밑으로 강화 칸이 세로로 이어진다)")]
+        // 스킬 줄을 담는 칸(가로 배치). 무기·아티팩트 목록 대신 스킬일 때만 보인다.
+        [SerializeField] private RectTransform _abilityList;
+        // 강화 칸 견본(스킬 카드보다 조금 작은 카드). 씬에서는 꺼 둔다.
+        [SerializeField] private ItemCard _upgradeCellTemplate;
+        [SerializeField] private string _upgradeCellFormat = "강화 {0}";
+        // 스킬 한 줄의 너비와 칸 사이 간격 (UI 단위). 높이는 스킬 카드와 강화 칸 수로 정해진다.
+        [SerializeField] private float _abilityColumnWidth = 180f;
+        [SerializeField] private float _upgradeCellSpacing = 8f;
 
         private enum Kind
         {
@@ -62,6 +72,11 @@ namespace ExplodeIt.UI
         private int _slot;
         private IUnlockable _preview;
         private bool _hasCards;
+        // 스킬 줄마다의 강화 칸과 그 강화.
+        private readonly List<ItemCard> _upgradeCells = new List<ItemCard>();
+        private readonly List<AbilityUpgradeData> _upgradeItems = new List<AbilityUpgradeData>();
+        // 오른쪽 페이지에 띄운 강화. 있으면 장착·빼기 버튼이 스킬이 아니라 이 강화를 다룬다.
+        private AbilityUpgradeData _upgradePreview;
 
         public void PrepareWeapon()
         {
@@ -85,6 +100,9 @@ namespace ExplodeIt.UI
             _title.text = _kind == Kind.Weapon ? _weaponTitle
                 : _kind == Kind.Ability ? _abilityTitle
                 : string.Format(_artifactTitle, SlotName(_slot));
+            bool isAbility = _kind == Kind.Ability;
+            _list.gameObject.SetActive(!isAbility);
+            _abilityList.gameObject.SetActive(isAbility);
             for (int k = 0; k < _cards.Length; k++)
             {
                 for (int i = 0; i < _cards[k].Count; i++)
@@ -94,6 +112,7 @@ namespace ExplodeIt.UI
             }
 
             _empty.SetActive(_items[(int)_kind].Count == 0);
+            _upgradePreview = null;
             _preview = Equipped();
             Refresh();
         }
@@ -105,6 +124,13 @@ namespace ExplodeIt.UI
         // 장착 버튼. 다른 아티팩트 칸에 이미 끼운 것이면 두 칸을 맞바꾼다.
         public void Equip()
         {
+            // 강화는 같은 버튼으로 끼웠다 뺐다 한다.
+            if (_upgradePreview != null)
+            {
+                SetUpgradeEquipped(!_upgradePreview.IsEquipped);
+                return;
+            }
+
             if (_preview == null)
             {
                 return;
@@ -147,6 +173,16 @@ namespace ExplodeIt.UI
             _pager.Back();
         }
 
+        // 강화는 여러 개를 함께 끼울 수 있어 페이지를 떠나지 않고 바로 반영한다.
+        private void SetUpgradeEquipped(bool isEquipped)
+        {
+            SaveSystem.Data.SetUpgradeEquipped(_upgradePreview.Id, isEquipped);
+            SaveSystem.Save();
+            AudioManager.Play(_clickSound);
+            RefreshUpgradeCells();
+            ShowUpgradeButtons();
+        }
+
         private IUnlockable Equipped()
         {
             SaveData data = SaveSystem.Data;
@@ -175,8 +211,51 @@ namespace ExplodeIt.UI
 
             _hasCards = true;
             AddItems(Kind.Weapon, _catalog.Weapons);
-            AddItems(Kind.Ability, _catalog.Abilities);
             AddItems(Kind.Artifact, _catalog.Artifacts);
+            AbilityData[] abilities = _catalog.Abilities;
+            for (int i = 0; i < abilities.Length; i++)
+            {
+                AddAbilityColumn(abilities[i]);
+            }
+        }
+
+        // 스킬 한 줄: 위에 스킬 카드, 그 밑으로 강화 칸이 세로로 이어진다.
+        private void AddAbilityColumn(AbilityData ability)
+        {
+            var column = new GameObject(ability.Id, typeof(RectTransform));
+            var columnRect = (RectTransform)column.transform;
+            columnRect.SetParent(_abilityList, false);
+            var vertical = column.AddComponent<VerticalLayoutGroup>();
+            vertical.childAlignment = TextAnchor.UpperCenter;
+            vertical.spacing = _upgradeCellSpacing;
+            vertical.childControlWidth = false;
+            vertical.childControlHeight = false;
+            vertical.childForceExpandWidth = false;
+            vertical.childForceExpandHeight = false;
+
+            _items[(int)Kind.Ability].Add(ability);
+            ItemCard card = Instantiate(_cardTemplate, columnRect);
+            card.gameObject.SetActive(true);
+            _cards[(int)Kind.Ability].Add(card);
+            float height = ((RectTransform)_cardTemplate.transform).sizeDelta.y;
+            float cellHeight = ((RectTransform)_upgradeCellTemplate.transform).sizeDelta.y;
+
+            AbilityUpgradeData[] upgrades = _catalog.Upgrades;
+            for (int i = 0; i < upgrades.Length; i++)
+            {
+                if (upgrades[i].Ability != ability)
+                {
+                    continue;
+                }
+
+                ItemCard cell = Instantiate(_upgradeCellTemplate, columnRect);
+                cell.gameObject.SetActive(true);
+                _upgradeCells.Add(cell);
+                _upgradeItems.Add(upgrades[i]);
+                height += _upgradeCellSpacing + cellHeight;
+            }
+
+            columnRect.sizeDelta = new Vector2(_abilityColumnWidth, height);
         }
 
         private void AddItems(Kind kind, IUnlockable[] items)
@@ -199,7 +278,13 @@ namespace ExplodeIt.UI
             {
                 IUnlockable item = items[i];
                 cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked);
-                cards[i].SetSelected(item == _preview);
+                // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
+                cards[i].SetSelected(item == equipped);
+            }
+
+            if (_kind == Kind.Ability)
+            {
+                RefreshUpgradeCells();
             }
 
             ShowPreview(_preview);
@@ -210,17 +295,70 @@ namespace ExplodeIt.UI
             _unequipButton.SetActive(_kind == Kind.Artifact && equipped != null);
         }
 
+        // 같은 스킬의 강화는 목록 순서대로 I, II로 부른다. 잠긴 칸은 이름 대신 ???가 보인다.
+        private void RefreshUpgradeCells()
+        {
+            AbilityData current = null;
+            int number = 0;
+            for (int i = 0; i < _upgradeCells.Count; i++)
+            {
+                AbilityUpgradeData upgrade = _upgradeItems[i];
+                number = upgrade.Ability == current ? number + 1 : 0;
+                current = upgrade.Ability;
+                string label = string.Format(_upgradeCellFormat, SlotName(number));
+                _upgradeCells[i].Setup(upgrade, upgrade.Icon, label, !upgrade.IsUnlocked, OnUpgradeCellClicked);
+                // 강화 칸의 표시는 "보고 있는 것"이 아니라 "장착한 것"이다.
+                _upgradeCells[i].SetSelected(upgrade.IsEquipped);
+            }
+        }
+
+        // 잠겼으면 해금 조건만 보여 준다(강화 내용은 해금 전까지 숨긴다). 해금했으면 내용과 장착·빼기 버튼을 보여 준다.
+        private void OnUpgradeCellClicked(ItemCard cell)
+        {
+            AudioManager.Play(_clickSound);
+            var upgrade = (AbilityUpgradeData)cell.Item;
+            if (cell.IsLocked)
+            {
+                _upgradePreview = null;
+                cell.Shake();
+                ShowLocked(upgrade);
+                _unequipButton.SetActive(false);
+                return;
+            }
+
+            _upgradePreview = upgrade;
+            ShowPreview(upgrade);
+            ShowUpgradeButtons();
+        }
+
+        private void ShowUpgradeButtons()
+        {
+            bool isEquipped = _upgradePreview.IsEquipped;
+            _equipButton.gameObject.SetActive(true);
+            _equipButton.interactable = true;
+            _equipLabel.text = isEquipped ? _equippedText : _upgradeEquipText;
+            _unequipButton.SetActive(false);
+        }
+
         private void OnCardClicked(ItemCard card)
         {
             AudioManager.Play(_clickSound);
             IUnlockable item = (IUnlockable)card.Item;
             if (card.IsLocked)
             {
+                if (_upgradePreview != null)
+                {
+                    // 강화를 보던 중이었으면 빼기 버튼이 스킬 쪽으로 남지 않게 원래 상태로 되돌린다.
+                    _upgradePreview = null;
+                    Refresh();
+                }
+
                 card.Shake();
                 ShowLocked(item);
                 return;
             }
 
+            _upgradePreview = null;
             _preview = item;
             Refresh();
         }

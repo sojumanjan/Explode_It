@@ -20,3 +20,4 @@ MonoBehaviour:
   _maxInstances: 2
   _minInterval: 0.03
   _maxInterval: 0
+  _isInterface: 1

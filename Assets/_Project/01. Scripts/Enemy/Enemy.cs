@@ -637,6 +637,8 @@ namespace ExplodeIt.Enemies
                 GameEvents.RaiseEnemyKilled(Body.position);
             }
 
+            GameEvents.RaiseEnemyKilledBy(hit.Source, this is IBoss);
+
             _died?.Invoke(this);
         }
 

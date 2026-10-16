@@ -40,6 +40,8 @@ namespace ExplodeIt.Core
         private BgmData _currentBgm;
         private float _sfxVolume = 1f;
         private float _bgmVolume = 1f;
+        // 판이 끝나 결과 화면을 볼 때 게임 소리(적 공격 등)를 막는다. 화면·메뉴 소리만 들린다.
+        private bool _isWorldMuted;
 
         public static float SfxVolume
         {
@@ -157,6 +159,33 @@ namespace ExplodeIt.Core
             _current._voiceFadeStart[handle.Voice] = Time.unscaledTime;
             _current._voiceFadeDuration[handle.Voice] = duration;
             _current._voiceFadeVolume[handle.Voice] = voice.volume;
+        }
+
+        // 켜면 지금 울리는 게임 소리를 짧게 줄여 끄고, 이후 게임 소리는 내지 않는다. 씬을 넘기면 다시 풀린다.
+        public static void SetWorldMuted(bool isMuted, float fadeDuration = 0.3f)
+        {
+            if (_current == null)
+            {
+                return;
+            }
+
+            _current._isWorldMuted = isMuted;
+            if (!isMuted)
+            {
+                return;
+            }
+
+            AudioSource[] voices = _current._voices;
+            for (int i = 0; i < voices.Length; i++)
+            {
+                SoundData data = _current._voiceData[i];
+                if (voices[i].isPlaying && data != null && !data.IsInterface && _current._voiceFadeStart[i] < 0f)
+                {
+                    _current._voiceFadeStart[i] = Time.unscaledTime;
+                    _current._voiceFadeDuration[i] = Mathf.Max(fadeDuration, 0.01f);
+                    _current._voiceFadeVolume[i] = voices[i].volume;
+                }
+            }
         }
 
         public static void Stop(SoundHandle handle)
@@ -297,6 +326,11 @@ namespace ExplodeIt.Core
         private SoundHandle PlaySfx(SoundData sound, float pitch)
         {
             if (!sound.HasClip)
+            {
+                return SoundHandle.None;
+            }
+
+            if (_isWorldMuted && !sound.IsInterface)
             {
                 return SoundHandle.None;
             }

@@ -25,6 +25,11 @@ namespace ExplodeIt.Core
         [SerializeField] private List<string> _unlockedWeapons = new List<string>();
         [SerializeField] private string _selectedWeapon = "";
         [SerializeField] private List<string> _unlockedAbilities = new List<string>();
+        [SerializeField] private List<string> _unlockedUpgrades = new List<string>();
+        // 해금한 강화 중 장착한 것. 장착한 강화만 판에서 효과가 난다.
+        [SerializeField] private List<string> _equippedUpgrades = new List<string>();
+        // 이름 붙은 누적 수(스킬별 누적 처치 등). 업적 조건이 읽는다.
+        [SerializeField] private List<SaveStat> _stats = new List<SaveStat>();
         [SerializeField] private string _selectedAbility = "";
         [SerializeField] private List<string> _unlockedArtifacts = new List<string>();
         // 칸 순서대로 장착한 아티팩트 ID. 빈 칸은 빈 문자열이다.
@@ -116,12 +121,55 @@ namespace ExplodeIt.Core
         public bool IsWeaponUnlocked(string id) => Has(_unlockedWeapons, id);
         public bool IsArtifactUnlocked(string id) => Has(_unlockedArtifacts, id);
         public bool IsAbilityUnlocked(string id) => Has(_unlockedAbilities, id);
+        public bool IsUpgradeUnlocked(string id) => Has(_unlockedUpgrades, id);
+        public bool IsUpgradeEquipped(string id) => Has(_equippedUpgrades, id);
         public bool IsAchievementCompleted(string id) => Has(_completedAchievements, id);
 
         // 새로 해금·달성했으면 true. 이미 있으면 false라 알림을 두 번 띄우지 않는다.
         public bool UnlockWeapon(string id) => TryAdd(_unlockedWeapons, id);
         public bool UnlockArtifact(string id) => TryAdd(_unlockedArtifacts, id);
         public bool UnlockAbility(string id) => TryAdd(_unlockedAbilities, id);
+        public bool UnlockUpgrade(string id) => TryAdd(_unlockedUpgrades, id);
+
+        public void SetUpgradeEquipped(string id, bool isEquipped)
+        {
+            if (isEquipped)
+            {
+                TryAdd(_equippedUpgrades, id);
+                return;
+            }
+
+            _equippedUpgrades.Remove(id);
+        }
+
+        public int GetStat(string id)
+        {
+            for (int i = 0; i < _stats.Count; i++)
+            {
+                if (_stats[i].Id == id)
+                {
+                    return _stats[i].Value;
+                }
+            }
+
+            return 0;
+        }
+
+        public void AddStat(string id, int amount)
+        {
+            for (int i = 0; i < _stats.Count; i++)
+            {
+                if (_stats[i].Id == id)
+                {
+                    _stats[i].Value += amount;
+                    return;
+                }
+            }
+
+            var stat = new SaveStat(id);
+            stat.Value = amount;
+            _stats.Add(stat);
+        }
         public bool CompleteAchievement(string id) => TryAdd(_completedAchievements, id);
 
         // 업적 달성과 그 보상 해금만 지운다(개발자 패널). 오프닝·기록·설정은 남긴다.
@@ -131,6 +179,9 @@ namespace ExplodeIt.Core
             _unlockedWeapons.Clear();
             _unlockedArtifacts.Clear();
             _unlockedAbilities.Clear();
+            _unlockedUpgrades.Clear();
+            _equippedUpgrades.Clear();
+            _stats.Clear();
             _selectedWeapon = "";
             _selectedAbility = "";
             _selectedArtifacts.Clear();

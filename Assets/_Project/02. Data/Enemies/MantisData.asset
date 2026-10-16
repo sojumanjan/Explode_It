@@ -17,6 +17,7 @@ MonoBehaviour:
   _attackTriggerRange: 1.5
   _arenaEntryDelay: 1
   _countsAsKill: 1
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 1.5
   _telegraphDuration: 0.3
@@ -27,6 +28,6 @@ MonoBehaviour:
   _dashDuration: 0.095
   _dashSquash: {x: 1.4, y: 0.55}
   _squashRecoverTime: 0.15
-  _attackRadius: 1.5
+  _attackRadius: 1.7
   _attackAngle: 100
   _swingSound: {fileID: 11400000, guid: d877ad611f4f5dc4b912a49f0dafa52c, type: 2}

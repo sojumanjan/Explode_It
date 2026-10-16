@@ -47,6 +47,14 @@ namespace ExplodeIt.Bombs
         private int _pendingShots;
         private float _nextBurstTime;
         private bool _canThrow = true;
+        // 일반 투척의 처치 출처. 순간폭탄 스킬이 켜져 있는 동안은 그 스킬로 센다.
+        private DamageSource _throwSource = DamageSource.Bomb;
+        // 순간폭탄 동안 바꾸기 전 수치.
+        private bool _isInstantMode;
+        private float _savedFuseDelay;
+        private float _savedThrowInterval;
+        private float _savedRechargeTime;
+        private float _savedExplosionRadius;
 
         public WeaponStats Stats => _stats;
         public WeaponData Weapon => _weaponData;
@@ -205,7 +213,7 @@ namespace ExplodeIt.Bombs
             }
 
             Bomb bomb = _pool.Get(transform.position);
-            bomb.Launch(target, _stats, _releaseBomb);
+            bomb.Launch(target, _stats, new BombOptions(false, false, _throwSource), null, _releaseBomb);
 
             // 가득 찬 상태에서 처음 던질 때만 충전을 새로 시작한다.
             if (_chargesLeft >= _stats.Charges)
@@ -327,6 +335,58 @@ namespace ExplodeIt.Bombs
         private void ReleaseBomb(Bomb bomb)
         {
             _pool.Release(bomb);
+        }
+
+        // 스킬이 쓰는 폭탄. 일반 폭탄과 같은 풀을 쓰고, 보유 개수·연사 간격과는 상관없다.
+        // 스킬은 드물게 쓰이므로 끝 알림을 위한 람다 할당은 감수한다.
+        public void LaunchSkillBomb(Vector2 from, Vector2 target, WeaponStats stats, BombOptions options,
+            Action<Vector2> onExploded, Action onFinished)
+        {
+            Bomb bomb = _pool.Get(from);
+            bomb.Launch(target, stats, options, onExploded, finished =>
+            {
+                _pool.Release(finished);
+                onFinished?.Invoke();
+            });
+        }
+
+        // 순간폭탄 스킬: 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라진다. 범위 배율은 강화로 커질 수 있다.
+        public void BeginInstantMode(float speedMultiplier, float radiusMultiplier)
+        {
+            if (_isInstantMode)
+            {
+                return;
+            }
+
+            _isInstantMode = true;
+            _savedFuseDelay = _stats.FuseDelay;
+            _savedThrowInterval = _stats.ThrowInterval;
+            _savedRechargeTime = _stats.RechargeTime;
+            _savedExplosionRadius = _stats.ExplosionRadius;
+            float speed = Mathf.Max(0.01f, speedMultiplier);
+            _stats.FuseDelay = 0f;
+            _stats.ThrowInterval /= speed;
+            _stats.RechargeTime /= speed;
+            _stats.ExplosionRadius *= radiusMultiplier;
+            _rechargeTimer = Mathf.Min(_rechargeTimer, _stats.RechargeTime);
+            _throwSource = DamageSource.InstantBomb;
+            ApplyStats();
+        }
+
+        public void EndInstantMode()
+        {
+            if (!_isInstantMode)
+            {
+                return;
+            }
+
+            _isInstantMode = false;
+            _stats.FuseDelay = _savedFuseDelay;
+            _stats.ThrowInterval = _savedThrowInterval;
+            _stats.RechargeTime = _savedRechargeTime;
+            _stats.ExplosionRadius = _savedExplosionRadius;
+            _throwSource = DamageSource.Bomb;
+            ApplyStats();
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)

@@ -137,10 +137,14 @@ namespace ExplodeIt.Bombs
         public void SetRadius(float radius)
         {
             EnsureInitialized();
+            // 반경은 월드 단위인데 정점은 이 오브젝트 기준이다. 크기를 키운 적(전사 등)의 자식이면
+            // 그 배율만큼 크게 그려져 실제 판정보다 넓어 보이므로 배율을 되돌린다.
+            float scale = Mathf.Abs(transform.lossyScale.x);
+            float toLocal = scale > 0.0001f ? 1f / scale : 1f;
             _vertices[0] = Vector3.zero;
             for (int i = 0; i < _segments; i++)
             {
-                _vertices[i + 1] = _directions[i] * Mathf.Min(radius, _limits[i]);
+                _vertices[i + 1] = _directions[i] * (Mathf.Min(radius, _limits[i]) * toLocal);
             }
 
             _mesh.vertices = _vertices;

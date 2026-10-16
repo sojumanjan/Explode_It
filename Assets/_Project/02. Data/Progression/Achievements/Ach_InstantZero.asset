@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_InstantZero
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: instant_zero
+  _displayName: "\uD5DB\uBC29 \uC5F0\uC0AC"
+  _description: "\uC21C\uAC04\uD3ED\uD0C4\uC774 \uB05D\uB0A0 \uB54C\uAE4C\uC9C0 \uD55C
+    \uB9C8\uB9AC\uB3C4 \uC7A1\uC9C0 \uC54A\uAE30"
+  _sticker: {fileID: 0}
+  _isHidden: 0
+  _condition: 6
+  _target: 1
+  _ability: {fileID: 11400000, guid: daa53f07636beae4697db790bccb4517, type: 2}
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 11400000, guid: fb063c8c6b1b4e646ae4a5b5fdd049ca, type: 2}
+  _rewardArtifact: {fileID: 0}

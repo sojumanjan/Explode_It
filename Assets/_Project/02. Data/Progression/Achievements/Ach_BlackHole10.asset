@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_BlackHole10
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: bh_ten
+  _displayName: "\uBE14\uB799\uD640 \uC18C\uC6A9\uB3CC\uC774"
+  _description: "\uBE14\uB799\uD640 \uD55C \uBC88\uC73C\uB85C 10\uB9C8\uB9AC \uB3D9\uC2DC\uC5D0
+    \uCC98\uCE58\uD558\uAE30"
+  _sticker: {fileID: 0}
+  _isHidden: 0
+  _condition: 5
+  _target: 10
+  _ability: {fileID: 11400000, guid: 5b38ccfd3a44697489f4d6f286ec6301, type: 2}
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 11400000, guid: 5faddc369557e384ea5fef80e22e374b, type: 2}
+  _rewardArtifact: {fileID: 0}

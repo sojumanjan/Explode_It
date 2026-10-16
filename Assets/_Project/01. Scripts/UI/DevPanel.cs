@@ -31,6 +31,8 @@ namespace ExplodeIt.UI
         [SerializeField] private HitReceiver _playerHitReceiver;
         // 패널로 무언가를 바꾼 판은 업적을 세지 않는다. 치트로 해금되면 해금하는 재미가 사라진다.
         [SerializeField] private AchievementTracker _achievements;
+        // Unlock All이 스킬·강화까지 풀 때 목록을 본다.
+        [SerializeField] private UnlockCatalog _catalog;
         // 수치 비교용으로 갈아 끼울 무기들. 에셋 이름이 한글이라 IMGUI에서 깨지므로 버튼 이름을 따로 적는다.
         [SerializeField] private WeaponOption[] _weapons;
 
@@ -304,6 +306,19 @@ namespace ExplodeIt.UI
                 for (int i = 0; i < _weapons.Length; i++)
                 {
                     data.UnlockWeapon(_weapons[i].Data.Id);
+                }
+
+                if (_catalog != null)
+                {
+                    for (int i = 0; i < _catalog.Abilities.Length; i++)
+                    {
+                        data.UnlockAbility(_catalog.Abilities[i].Id);
+                    }
+
+                    for (int i = 0; i < _catalog.Upgrades.Length; i++)
+                    {
+                        data.UnlockUpgrade(_catalog.Upgrades[i].Id);
+                    }
                 }
 
                 SaveSystem.Save();

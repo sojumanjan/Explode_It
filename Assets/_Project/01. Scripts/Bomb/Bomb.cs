@@ -36,6 +36,9 @@ namespace ExplodeIt.Bombs
         private ContactFilter2D _obstacleFilter;
         private Sequence _sequence;
         private Action<Bomb> _onFinished;
+        // 터지는 순간 폭발 위치를 받는 쪽(다발폭탄이 작은 폭탄을 다시 뿌릴 때). 일반 폭탄은 비어 있다.
+        private Action<Vector2> _onExploded;
+        private BombOptions _options;
         private float _radius;
         private Vector3 _bodyScale;
         private Color _bodyColor;
@@ -121,7 +124,14 @@ namespace ExplodeIt.Bombs
         // 폭탄은 포물선으로 날아가므로 구조물 너머로 던질 수 있다. 비행 중에는 충돌 검사를 하지 않는다.
         public void Launch(Vector2 target, WeaponStats stats, Action<Bomb> onFinished)
         {
+            Launch(target, stats, BombOptions.Normal, null, onFinished);
+        }
+
+        public void Launch(Vector2 target, WeaponStats stats, BombOptions options, Action<Vector2> onExploded, Action<Bomb> onFinished)
+        {
             _onFinished = onFinished;
+            _onExploded = onExploded;
+            _options = options;
             _radius = stats.ExplosionRadius;
             ApplyLook(stats.BombSprite, stats.BombSize);
             ResetVisuals();
@@ -147,7 +157,15 @@ namespace ExplodeIt.Bombs
         private void OnLanded()
         {
             _isFlying = false;
-            _rangeOutline.Build(transform.position, _radius, _obstacleFilter);
+            if (_options.IgnoresObstacles)
+            {
+                _rangeOutline.BuildCircle(_radius);
+            }
+            else
+            {
+                _rangeOutline.Build(transform.position, _radius, _obstacleFilter);
+            }
+
             _fuseFill.CopyLimits(_rangeOutline);
             _fuseFill.SetRadius(0f);
             _rangeOutline.Visible = true;
@@ -159,14 +177,14 @@ namespace ExplodeIt.Bombs
         {
             Vector2 position = transform.position;
             int candidateCount = Physics2D.OverlapCircle(position, _radius, _hitFilter, HitBuffer);
-            var hit = new HitInfo(position);
+            var hit = new HitInfo(position, _options.IgnoresGuard, _options.Source);
             int hitCount = 0;
 
             for (int i = 0; i < candidateCount; i++)
             {
                 Collider2D candidate = HitBuffer[i];
                 // 몸 일부만 가려진 경우에도 결과가 한 가지로 읽히도록 중심 한 점만 본다.
-                if (IsBlocked(position, candidate.bounds.center))
+                if (!_options.IgnoresObstacles && IsBlocked(position, candidate.bounds.center))
                 {
                     continue;
                 }
@@ -182,6 +200,7 @@ namespace ExplodeIt.Bombs
             _fuseFill.SetColor(_explodeFlashColor);
 
             GameEvents.RaiseBombExploded(position, _radius, hitCount);
+            _onExploded?.Invoke(position);
         }
 
         private bool IsBlocked(Vector2 from, Vector2 to)

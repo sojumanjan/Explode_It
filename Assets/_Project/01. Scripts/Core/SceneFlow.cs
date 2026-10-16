@@ -25,6 +25,7 @@ namespace ExplodeIt.Core
         private static void Load(string sceneName)
         {
             Time.timeScale = 1f;
+            AudioManager.SetWorldMuted(false);
             SceneManager.LoadScene(sceneName);
         }
     }

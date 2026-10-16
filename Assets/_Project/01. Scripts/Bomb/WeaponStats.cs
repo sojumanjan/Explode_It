@@ -17,12 +17,17 @@ namespace ExplodeIt.Bombs
         public float FlightDuration { get; set; }
         public float ArcHeight { get; set; }
         // 그림 값이라 개발자 패널에서 바꾸지 않지만, 폭탄이 수치와 함께 한 번에 받아 가도록 여기 둔다.
-        public Sprite BombSprite { get; private set; }
-        public float BombSize { get; private set; }
+        public Sprite BombSprite { get; set; }
+        public float BombSize { get; set; }
 
         public WeaponStats(WeaponData data)
         {
             CopyFrom(data);
+        }
+
+        // 무기와 상관없는 폭탄(스킬 폭탄)의 수치를 직접 채울 때 쓴다.
+        public WeaponStats()
+        {
         }
 
         // 개발자 패널에서 바꾼 값을 원본 데이터 값으로 되돌릴 때도 쓴다.
