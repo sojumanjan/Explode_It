@@ -28,7 +28,9 @@ MonoBehaviour:
   _pullSpeed: 4
   _scatterCount: 8
   _scatterAngleJitter: 5
-  _scatterDistance: 5
+  _scatterDistanceMin: 3
+  _scatterDistanceMax: 6
+  _scatterSelfDropRadius: 0.2
   _scatterRadius: 2
   _scatterThrowDelayMax: 0.35
   _scatterFuseDelayMin: 0.6
@@ -39,7 +41,8 @@ MonoBehaviour:
   _scatterSpriteSize: 0.7
   _childCountMin: 2
   _childCountMax: 3
-  _childDistance: 1.8
+  _childDistanceMin: 1
+  _childDistanceMax: 1.8
   _childRadius: 1.3
   _childThrowDelayMax: 0.2
   _childFuseDelayMin: 0.4

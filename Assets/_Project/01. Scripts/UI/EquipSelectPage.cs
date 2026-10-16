@@ -139,7 +139,7 @@ namespace ExplodeIt.UI
             SaveData data = SaveSystem.Data;
             if (_preview == Equipped())
             {
-                if (CanUnequip(_preview))
+                if (CanUnequip())
                 {
                     Unequip();
                 }
@@ -175,39 +175,17 @@ namespace ExplodeIt.UI
             _pager.Back();
         }
 
-        // 무기·스킬은 비우면 기본 무기·기본 스킬로 돌아간다. 아티팩트는 칸이 빈다.
         private void Unequip()
         {
-            SaveData data = SaveSystem.Data;
-            switch (_kind)
-            {
-                case Kind.Weapon:
-                    data.SelectedWeapon = "";
-                    break;
-                case Kind.Ability:
-                    data.SelectedAbility = "";
-                    break;
-                default:
-                    data.SetArtifactInSlot(_slot, "");
-                    break;
-            }
-
+            SaveSystem.Data.SetArtifactInSlot(_slot, "");
             SaveSystem.Save();
             _pager.Back();
         }
 
-        // 기본 무기·기본 스킬은 해제해도 그대로 기본이라 해제할 수 없는 것으로 본다.
-        private bool CanUnequip(IUnlockable item)
+        // 무기·스킬은 늘 하나를 끼고 있어야 하므로 해제하지 않고 다른 것으로 바꿔 끼기만 한다. 아티팩트만 칸을 비울 수 있다.
+        private bool CanUnequip()
         {
-            switch (_kind)
-            {
-                case Kind.Weapon:
-                    return !ReferenceEquals(item, _catalog.FindUsableWeapon(""));
-                case Kind.Ability:
-                    return !ReferenceEquals(item, _catalog.FindUsableAbility(""));
-                default:
-                    return true;
-            }
+            return _kind == Kind.Artifact;
         }
 
         // 다른 아티팩트 칸에 끼워 둔 것인지. 고르면 두 칸이 맞바뀐다.
@@ -343,7 +321,7 @@ namespace ExplodeIt.UI
                 cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked);
                 // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
                 cards[i].SetSelected(item == equipped);
-                // 다른 칸에 끼운 아티팩트는 살짝 회색으로 눌러 둔다. 노란색은 지금 고르는 칸의 것에만 쓴다.
+                // 다른 칸에 끼운 아티팩트는 회색으로 칠하고 누를 수 없게 한다. 노란색은 지금 고르는 칸의 것에만 쓴다.
                 cards[i].SetDimmed(item.IsUnlocked && item != equipped && IsInOtherSlot(item));
             }
 
@@ -355,7 +333,7 @@ namespace ExplodeIt.UI
             ShowPreview(_preview);
             bool isEquipped = _preview != null && _preview == equipped;
             _equipButton.gameObject.SetActive(_preview != null);
-            SetEquipButton(isEquipped, _preview != null && CanUnequip(_preview), _equipText);
+            SetEquipButton(isEquipped, CanUnequip(), _equipText);
         }
 
         // 같은 스킬의 강화는 목록 순서대로 I, II로 부른다. 잠긴 칸은 이름 대신 ???가 보인다.
