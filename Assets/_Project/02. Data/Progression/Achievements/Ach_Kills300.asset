@@ -23,4 +23,4 @@ MonoBehaviour:
   _rewardWeapon: {fileID: 0}
   _rewardAbility: {fileID: 11400000, guid: daa53f07636beae4697db790bccb4517, type: 2}
   _rewardUpgrade: {fileID: 0}
-  _rewardArtifact: {fileID: 0}
+  _rewardArtifact: {fileID: 11400000, guid: fec0ca9eed10d034a9dee85645a61c37, type: 2}

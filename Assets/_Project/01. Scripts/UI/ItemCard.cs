@@ -11,7 +11,7 @@ namespace ExplodeIt.UI
     {
         // 잠긴 카드는 그림을 거의 검게 칠해 모양만 알아보게 한다.
         private static readonly Color LockedTint = new Color(0.08f, 0.06f, 0.05f, 0.92f);
-        // 다른 칸에 이미 끼운 카드는 칸째 회색으로 칠하고 누를 수 없게 한다.
+        // 다른 칸에 이미 끼운 카드는 칸째 회색으로 칠한다. 눌러서 설명은 볼 수 있다.
         private static readonly Color DimmedTint = new Color(0.55f, 0.55f, 0.55f, 1f);
 
         [SerializeField] private Button _button;
@@ -70,7 +70,6 @@ namespace ExplodeIt.UI
 
         public void SetDimmed(bool isDimmed)
         {
-            _button.interactable = !isDimmed;
             _name.color = isDimmed ? _nameColor * DimmedTint : _nameColor;
             if (_background != null)
             {

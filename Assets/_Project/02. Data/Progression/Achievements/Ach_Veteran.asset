@@ -19,5 +19,8 @@ MonoBehaviour:
   _isHidden: 0
   _condition: 3
   _target: 200
+  _ability: {fileID: 0}
   _rewardWeapon: {fileID: 11400000, guid: c6341796715287f45b0e271a626107cc, type: 2}
+  _rewardAbility: {fileID: 11400000, guid: bb847d37476f5554a9fa1f10a60d6335, type: 2}
+  _rewardUpgrade: {fileID: 0}
   _rewardArtifact: {fileID: 0}

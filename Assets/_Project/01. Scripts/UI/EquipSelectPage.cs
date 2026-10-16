@@ -135,6 +135,11 @@ namespace ExplodeIt.UI
                 return;
             }
 
+            if (IsInOtherSlot(_preview))
+            {
+                return;
+            }
+
             SaveData data = SaveSystem.Data;
             if (_preview == Equipped())
             {
@@ -324,7 +329,7 @@ namespace ExplodeIt.UI
                 cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked);
                 // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
                 cards[i].SetSelected(item == equipped);
-                // 다른 칸에 끼운 아티팩트는 회색으로 칠하고 누를 수 없게 한다. 노란색은 지금 고르는 칸의 것에만 쓴다.
+                // 다른 칸에 끼운 아티팩트는 회색으로 칠한다(눌러서 설명은 볼 수 있다). 노란색은 지금 고르는 칸의 것에만 쓴다.
                 cards[i].SetDimmed(item.IsUnlocked && item != equipped && IsInOtherSlot(item));
             }
 
@@ -336,6 +341,13 @@ namespace ExplodeIt.UI
             ShowPreview(_preview);
             bool isEquipped = _preview != null && _preview == equipped;
             _equipButton.gameObject.SetActive(_preview != null);
+            // 다른 칸에 낀 아티팩트는 설명만 보여 주고 "장착 중"으로 묶어 둔다. 해제·맞바꿈은 그 칸에서만 한다.
+            if (_preview != null && IsInOtherSlot(_preview))
+            {
+                SetEquipButton(true, false, _equipText);
+                return;
+            }
+
             SetEquipButton(isEquipped, CanUnequip(), _equipText);
         }
 
