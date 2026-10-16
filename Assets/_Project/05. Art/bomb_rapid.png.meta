@@ -11,6 +11,21 @@ TextureImporter:
   - first:
       213: 5134107160370304528
     second: bomb_rapid_2
+  - first:
+      213: 9198546516178622767
+    second: bomb_rapid_3
+  - first:
+      213: 4026093531565598813
+    second: bomb_rapid_4
+  - first:
+      213: -2516449852908949062
+    second: bomb_rapid_5
+  - first:
+      213: -4173013691161538827
+    second: bomb_rapid_6
+  - first:
+      213: 6511227197067070670
+    second: bomb_rapid_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,11 +67,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.499, y: 0.45}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -122,12 +137,12 @@ TextureImporter:
       name: bomb_rapid_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 25
-        width: 157
-        height: 179
-      alignment: 9
-      pivot: {x: 0.4, y: 0.38}
+        x: 331
+        y: 439
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -144,12 +159,12 @@ TextureImporter:
       name: bomb_rapid_1
       rect:
         serializedVersion: 2
-        x: 154
-        y: 204
-        width: 7
-        height: 8
+        x: 331
+        y: 412
+        width: 21
+        height: 28
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -166,12 +181,12 @@ TextureImporter:
       name: bomb_rapid_2
       rect:
         serializedVersion: 2
-        x: 174
-        y: 176
-        width: 11
-        height: 8
+        x: 364
+        y: 428
+        width: 24
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -184,11 +199,121 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: bomb_rapid_3
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 125
+        width: 252
+        height: 307
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f29dbba025dc7af70800000000000000
+      internalID: 9198546516178622767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_rapid_4
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 423
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d58277d5cbe8fd730800000000000000
+      internalID: 4026093531565598813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_rapid_5
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 400
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab137460136c31dd0800000000000000
+      internalID: -2516449852908949062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_rapid_6
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 373
+        width: 35
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fe897f482a7616c0800000000000000
+      internalID: -4173013691161538827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_rapid_7
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 351
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecc8b0543a68c5a50800000000000000
+      internalID: 6511227197067070670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b81e15ae6e7b83b4fae8cbf0cc3ee83c
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -201,6 +326,11 @@ TextureImporter:
       bomb_rapid_0: 3181415302045702031
       bomb_rapid_1: 3742969072691896549
       bomb_rapid_2: 5134107160370304528
+      bomb_rapid_3: 9198546516178622767
+      bomb_rapid_4: 4026093531565598813
+      bomb_rapid_5: -2516449852908949062
+      bomb_rapid_6: -4173013691161538827
+      bomb_rapid_7: 6511227197067070670
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

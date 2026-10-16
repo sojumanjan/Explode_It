@@ -24,11 +24,12 @@ namespace ExplodeIt.UI
         // 확인 창이 떠 있으면 뒤로가기는 페이지 대신 창을 닫는다.
         [SerializeField] private ConfirmDialog _dialog;
         [SerializeField] private SoundData _pageSound;
-        // 타이틀 ↔ 책처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막과, 덮고 걷는 시간(초, 각각).
+        // 타이틀 ↔ 메인처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막.
         [SerializeField] private ScreenFader _fader;
-        [SerializeField, Min(0.05f)] private float _blackFadeTime = 0.25f;
-        [Tooltip("책에서 타이틀로 돌아갈 때 검은 화면이 걷히는 시간 (초). 길게 두어 타이틀이 천천히 드러나게 한다")]
-        [SerializeField, Min(0.05f)] private float _titleRevealTime = 1.5f;
+        [Tooltip("타이틀 ↔ 메인을 오갈 때 화면이 검게 어두워지는 시간 (초). 길게 두어 장면이 천천히 끝나는 느낌을 준다")]
+        [SerializeField, Min(0.05f)] private float _coverTime = 1.5f;
+        [Tooltip("검은 화면이 걷히며 다음 화면이 드러나는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _revealTime = 0.5f;
 
         [Header("배경음 (타이틀과 책이 다르다)")]
         [SerializeField] private BgmData _titleBgm;
@@ -157,9 +158,14 @@ namespace ExplodeIt.UI
                 from.blocksRaycasts = false;
                 _current = page;
                 bool isToTitle = page == _firstPage;
-                // 배경음도 덮는 순간부터 바꿔, 화면과 함께 넘어가게 한다.
-                AudioManager.PlayBgm(isToTitle ? _titleBgm : _menuBgm);
-                _fader.FadeThrough(_blackFadeTime, isToTitle ? _titleRevealTime : _blackFadeTime, () => SwapInstantly(from, page));
+                // 배경음도 화면과 같은 박자로: 어두워지는 동안 지금 곡이 잦아들고, 밝아지는 동안 다음 곡이 들어온다.
+                AudioManager.FadeOutBgm(_coverTime);
+                BgmData nextBgm = isToTitle ? _titleBgm : _menuBgm;
+                _fader.FadeThrough(_coverTime, _revealTime, () =>
+                {
+                    SwapInstantly(from, page);
+                    AudioManager.PlayBgm(nextBgm, _revealTime);
+                });
                 return;
             }
 

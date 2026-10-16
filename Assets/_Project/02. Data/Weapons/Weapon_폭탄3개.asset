@@ -19,7 +19,7 @@ MonoBehaviour:
     \uB358\uC9C4\uB2E4."
   _icon: {fileID: 21300000, guid: 971578371657ea4449b7e78ca729fe57, type: 3}
   _bombSprite: {fileID: 21300000, guid: f2dffb267cff79043a6103e92bba2373, type: 3}
-  _bombSize: 0.65
+  _bombSize: 0.74
   _charges: 3
   _throwInterval: 0.1
   _rechargeTime: 1.15

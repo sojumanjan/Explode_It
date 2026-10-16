@@ -8,6 +8,24 @@ TextureImporter:
   - first:
       213: -842388003798280947
     second: bomb_huge_1
+  - first:
+      213: -7773312677008848535
+    second: bomb_huge_2
+  - first:
+      213: -2555390022903582798
+    second: bomb_huge_3
+  - first:
+      213: 3668368541032888808
+    second: bomb_huge_4
+  - first:
+      213: -6832654514997263661
+    second: bomb_huge_5
+  - first:
+      213: -505838656339835418
+    second: bomb_huge_6
+  - first:
+      213: 873184572820117081
+    second: bomb_huge_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,11 +67,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.48, y: 0.395}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -119,12 +137,12 @@ TextureImporter:
       name: bomb_huge_0
       rect:
         serializedVersion: 2
-        x: 109
-        y: 77
-        width: 300
-        height: 357
-      alignment: 9
-      pivot: {x: 0.477, y: 0.406}
+        x: 335
+        y: 463
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -141,12 +159,12 @@ TextureImporter:
       name: bomb_huge_1
       rect:
         serializedVersion: 2
-        x: 357
-        y: 430
-        width: 8
-        height: 8
+        x: 341
+        y: 448
+        width: 13
+        height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -159,11 +177,143 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: bomb_huge_2
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 453
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 969c8d61e45af1490800000000000000
+      internalID: -7773312677008848535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_huge_3
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 41
+        width: 328
+        height: 416
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf214e205e698cd0800000000000000
+      internalID: -2555390022903582798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_huge_4
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 448
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e9bb7190c9a8e230800000000000000
+      internalID: 3668368541032888808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_huge_5
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 428
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d28e986be88d21a0800000000000000
+      internalID: -6832654514997263661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_huge_6
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 402
+        width: 33
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e5043f0c66eaf8f0800000000000000
+      internalID: -505838656339835418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bomb_huge_7
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 381
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9565b4e1ebc2e1c00800000000000000
+      internalID: 873184572820117081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 2082c076cca68a648a10f2119a663a1f
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -175,6 +325,12 @@ TextureImporter:
     nameFileIdTable:
       bomb_huge_0: -6153194148187077190
       bomb_huge_1: -842388003798280947
+      bomb_huge_2: -7773312677008848535
+      bomb_huge_3: -2555390022903582798
+      bomb_huge_4: 3668368541032888808
+      bomb_huge_5: -6832654514997263661
+      bomb_huge_6: -505838656339835418
+      bomb_huge_7: 873184572820117081
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

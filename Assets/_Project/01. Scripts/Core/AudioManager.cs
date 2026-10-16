@@ -281,7 +281,16 @@ namespace ExplodeIt.Core
         {
             if (_current != null && bgm != null)
             {
-                _current.SwitchBgm(bgm);
+                _current.SwitchBgm(bgm, bgm.FadeDuration);
+            }
+        }
+
+        // 곡에 정해 둔 시간 대신 이 시간(초, 실제 시간)으로 바꾼다. 화면 전환 속도에 맞춰 들어오게 할 때 쓴다.
+        public static void PlayBgm(BgmData bgm, float fadeDuration)
+        {
+            if (_current != null && bgm != null)
+            {
+                _current.SwitchBgm(bgm, fadeDuration);
             }
         }
 
@@ -356,7 +365,7 @@ namespace ExplodeIt.Core
         }
 
         // 재시작으로 같은 씬이 다시 불러와져도 같은 곡이면 처음부터 다시 틀지 않는다.
-        private void SwitchBgm(BgmData bgm)
+        private void SwitchBgm(BgmData bgm, float duration)
         {
             if (bgm == _currentBgm || bgm.Clip == null)
             {
@@ -371,7 +380,6 @@ namespace ExplodeIt.Core
             _bgmFront.pitch = 1f;
             _bgmFront.Play();
 
-            float duration = bgm.FadeDuration;
             AudioSource front = _bgmFront;
             AudioSource back = _bgmBack;
             front.DOKill();
