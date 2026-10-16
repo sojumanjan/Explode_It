@@ -10,7 +10,7 @@ namespace ExplodeIt.UI
     // 메인 메뉴의 장비 칸을 누르면 열리는 고르기 페이지. 누른 칸에 따라 무기·스킬·아티팩트 목록을 보여 준다.
     // 왼쪽 페이지에서 카드를 누르면 오른쪽 페이지에 크게 보이고, 장착을 누르면 저장한다. 메인 메뉴로는 뒤로가기로 돌아간다.
     // 잠긴 카드는 이름을 가리고 해금 조건(그 보상을 주는 업적의 조건)을 보여 준다.
-    // 카드는 처음 열릴 때 견본을 복제해 만든다(전투 중이 아니라 Instantiate를 써도 된다).
+    // 카드는 씬에 미리 놓아 두고(하이어라키에서 위치를 직접 고칠 수 있게), 목록 순서대로 짝지어 쓴다.
     public class EquipSelectPage : MonoBehaviour, IMenuPage
     {
         [SerializeField] private UnlockCatalog _catalog;
@@ -21,9 +21,10 @@ namespace ExplodeIt.UI
         // 아티팩트 칸 번호 표시. 칸 순서대로.
         [SerializeField] private string[] _slotNames = { "I", "II" };
 
-        [Header("목록")]
-        // 복제할 견본 카드. 씬에서는 꺼 둔다.
-        [SerializeField] private ItemCard _cardTemplate;
+        [Header("목록 (씬에 미리 놓은 카드, 카탈로그 목록과 같은 순서)")]
+        [SerializeField] private ItemCard[] _weaponCards;
+        [SerializeField] private ItemCard[] _artifactCards;
+        // 무기·아티팩트 카드를 담는 칸. 스킬일 때는 숨긴다.
         [SerializeField] private Transform _list;
         // 고를 것이 하나도 없을 때(아직 아티팩트가 없는 등) 대신 보이는 글.
         [SerializeField] private GameObject _empty;
@@ -46,15 +47,19 @@ namespace ExplodeIt.UI
         [SerializeField, TextArea] private string _noUnlockText = "아직 해금 방법이 없어요.";
         // 잠긴 카드에는 업적 이름 없이 해금 조건만 보여 준다.
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n{0}";
-        [Header("스킬 (왼쪽 페이지에 스킬 3개, 각 스킬 밑으로 강화 칸이 세로로 이어진다)")]
-        // 스킬 줄을 담는 칸(가로 배치). 무기·아티팩트 목록 대신 스킬일 때만 보인다.
+        // 해금한 아티팩트는 어떻게 땄는지를 지우지 않고 남겨 두고, 그 밑에 능력을 보여 준다. 도감 대신 여기서 다시 볼 수 있게 한다.
+        [SerializeField, TextArea] private string _clearedFormat = "<b>해금 조건</b>\n{0}\n\n<b>능력</b>\n{1}";
+        // 해금 조건 옆에 찍는 "클리어" 도장. 해금한 아티팩트를 볼 때만 켠다.
+        [SerializeField] private GameObject _clearStamp;
+        [Tooltip("해금 조건 글 끝과 도장 사이 간격 (UI 단위)")]
+        [SerializeField] private float _stampGap = 6f;
+        [Header("스킬 (왼쪽 페이지에 스킬 3줄, 각 스킬 밑으로 강화 칸)")]
+        // 스킬 줄을 담는 칸. 무기·아티팩트 목록 대신 스킬일 때만 보인다.
         [SerializeField] private RectTransform _abilityList;
-        // 강화 칸 견본(스킬 카드보다 조금 작은 카드). 씬에서는 꺼 둔다.
-        [SerializeField] private ItemCard _upgradeCellTemplate;
+        [SerializeField] private ItemCard[] _abilityCards;
+        // 강화 칸. 카탈로그의 강화 목록과 같은 순서.
+        [SerializeField] private ItemCard[] _upgradeCards;
         [SerializeField] private string _upgradeCellFormat = "강화 {0}";
-        // 스킬 한 줄의 너비와 칸 사이 간격 (UI 단위). 높이는 스킬 카드와 강화 칸 수로 정해진다.
-        [SerializeField] private float _abilityColumnWidth = 180f;
-        [SerializeField] private float _upgradeCellSpacing = 8f;
 
         private enum Kind
         {
@@ -259,62 +264,39 @@ namespace ExplodeIt.UI
             }
 
             _hasCards = true;
-            AddItems(Kind.Weapon, _catalog.Weapons);
-            AddItems(Kind.Artifact, _catalog.Artifacts);
-            AbilityData[] abilities = _catalog.Abilities;
-            for (int i = 0; i < abilities.Length; i++)
-            {
-                AddAbilityColumn(abilities[i]);
-            }
-        }
-
-        // 스킬 한 줄: 위에 스킬 카드, 그 밑으로 강화 칸이 세로로 이어진다.
-        private void AddAbilityColumn(AbilityData ability)
-        {
-            var column = new GameObject(ability.Id, typeof(RectTransform));
-            var columnRect = (RectTransform)column.transform;
-            columnRect.SetParent(_abilityList, false);
-            var vertical = column.AddComponent<VerticalLayoutGroup>();
-            vertical.childAlignment = TextAnchor.UpperCenter;
-            vertical.spacing = _upgradeCellSpacing;
-            vertical.childControlWidth = false;
-            vertical.childControlHeight = false;
-            vertical.childForceExpandWidth = false;
-            vertical.childForceExpandHeight = false;
-
-            _items[(int)Kind.Ability].Add(ability);
-            ItemCard card = Instantiate(_cardTemplate, columnRect);
-            card.gameObject.SetActive(true);
-            _cards[(int)Kind.Ability].Add(card);
-            float height = ((RectTransform)_cardTemplate.transform).sizeDelta.y;
-            float cellHeight = ((RectTransform)_upgradeCellTemplate.transform).sizeDelta.y;
-
+            Pair(Kind.Weapon, _catalog.Weapons, _weaponCards);
+            Pair(Kind.Artifact, _catalog.Artifacts, _artifactCards);
+            Pair(Kind.Ability, _catalog.Abilities, _abilityCards);
             AbilityUpgradeData[] upgrades = _catalog.Upgrades;
-            for (int i = 0; i < upgrades.Length; i++)
+            WarnIfMismatch("강화", upgrades.Length, _upgradeCards.Length);
+            for (int i = 0; i < upgrades.Length && i < _upgradeCards.Length; i++)
             {
-                if (upgrades[i].Ability != ability)
-                {
-                    continue;
-                }
-
-                ItemCard cell = Instantiate(_upgradeCellTemplate, columnRect);
-                cell.gameObject.SetActive(true);
-                _upgradeCells.Add(cell);
+                _upgradeCells.Add(_upgradeCards[i]);
                 _upgradeItems.Add(upgrades[i]);
-                height += _upgradeCellSpacing + cellHeight;
             }
-
-            columnRect.sizeDelta = new Vector2(_abilityColumnWidth, height);
         }
 
-        private void AddItems(Kind kind, IUnlockable[] items)
+        // 목록과 카드 수가 다르면 남는 쪽은 쓰지 않는다. 아이템을 추가했으면 카드를 복제해 같은 순서에 놓으면 된다.
+        private void Pair(Kind kind, IUnlockable[] items, ItemCard[] cards)
         {
-            for (int i = 0; i < items.Length; i++)
+            WarnIfMismatch(kind.ToString(), items.Length, cards.Length);
+            for (int i = 0; i < items.Length && i < cards.Length; i++)
             {
                 _items[(int)kind].Add(items[i]);
-                ItemCard card = Instantiate(_cardTemplate, _list);
-                card.gameObject.SetActive(false);
-                _cards[(int)kind].Add(card);
+                _cards[(int)kind].Add(cards[i]);
+            }
+
+            for (int i = items.Length; i < cards.Length; i++)
+            {
+                cards[i].gameObject.SetActive(false);
+            }
+        }
+
+        private static void WarnIfMismatch(string label, int itemCount, int cardCount)
+        {
+            if (itemCount != cardCount)
+            {
+                Debug.LogWarning($"[EquipSelectPage] {label} 목록 {itemCount}개, 씬 카드 {cardCount}개. 카드를 목록 순서에 맞게 놓아 주세요.");
             }
         }
 
@@ -441,6 +423,83 @@ namespace ExplodeIt.UI
             _previewIcon.color = Color.white;
             _previewName.text = item != null ? item.DisplayName : "";
             _previewText.text = item != null ? item.Description : "";
+            _clearStamp.SetActive(false);
+            if (item is ArtifactData && item.IsUnlocked)
+            {
+                AchievementData achievement = _catalog.FindAchievementRewarding((Object)item);
+                if (achievement != null)
+                {
+                    // 달성한 조건은 가운데에 줄을 그어 끝냈다는 걸 한눈에 보이게 한다.
+                    _previewText.text = string.Format(_clearedFormat, "<s>" + achievement.Description + "</s>", item.Description);
+                    _clearStamp.SetActive(true);
+                    PlaceStampAfterCondition(achievement.Description);
+                }
+            }
+        }
+
+        // 도장을 해금 조건 글의 오른쪽 끝에 둔다. 조건이 여러 줄이면 가장 긴 줄의 끝, 높이는 그 줄들 전체의 가운데.
+        // 조건 길이·줄바꿈·자동 글자 크기가 바뀌어도 글을 따라간다.
+        private void PlaceStampAfterCondition(string condition)
+        {
+            int start = _clearedFormat.IndexOf("{0}");
+            if (start < 0 || condition.Length == 0)
+            {
+                return;
+            }
+
+            _previewText.ForceMeshUpdate();
+            TMP_TextInfo info = _previewText.textInfo;
+            int first = VisibleLength(_clearedFormat.Substring(0, start));
+            int last = first + condition.Length - 1;
+            if (first < 0 || last >= info.characterCount)
+            {
+                return;
+            }
+
+            int firstLine = info.characterInfo[first].lineNumber;
+            int lastLine = info.characterInfo[last].lineNumber;
+            float right = float.MinValue;
+            for (int i = first; i <= last; i++)
+            {
+                TMP_CharacterInfo character = info.characterInfo[i];
+                if (character.isVisible)
+                {
+                    right = Mathf.Max(right, character.topRight.x);
+                }
+            }
+
+            float middle = (info.lineInfo[firstLine].ascender + info.lineInfo[lastLine].descender) * 0.5f;
+            Vector3 world = _previewText.rectTransform.TransformPoint(new Vector3(right, middle, 0f));
+            var stamp = (RectTransform)_clearStamp.transform;
+            var parent = (RectTransform)stamp.parent;
+            Vector2 local = parent.InverseTransformPoint(world);
+            float gap = stamp.rect.width * 0.5f + _stampGap;
+            stamp.localPosition = new Vector3(local.x + gap, local.y, stamp.localPosition.z);
+        }
+
+        // 서식 태그(<b> 등)를 뺀 글자 수. 화면 글자 번호를 셀 때 쓴다.
+        private static int VisibleLength(string text)
+        {
+            int count = 0;
+            bool inTag = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (c == '<')
+                {
+                    inTag = true;
+                }
+                else if (c == '>')
+                {
+                    inTag = false;
+                }
+                else if (!inTag)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         // 잠긴 카드는 고르지 않고 오른쪽 페이지에 실루엣과 해금 조건만 띄운다. 숨김 업적이면 조건도 가린다.
@@ -451,6 +510,7 @@ namespace ExplodeIt.UI
             _previewIcon.enabled = item.Icon != null;
             _previewIcon.color = _silhouetteColor;
             _previewName.text = "???";
+            _clearStamp.SetActive(false);
             _previewText.text = achievement == null ? _noUnlockText : string.Format(_unlockFormat, achievement.IsHidden ? "???" : achievement.Description);
             _equipButton.gameObject.SetActive(false);
         }
