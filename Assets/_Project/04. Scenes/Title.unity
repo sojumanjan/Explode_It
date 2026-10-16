@@ -6370,7 +6370,7 @@ GameObject:
   - component: {fileID: 949511090}
   - component: {fileID: 949511089}
   m_Layer: 5
-  m_Name: Background
+  m_Name: MainMenuBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7954,9 +7954,8 @@ GameObject:
   - component: {fileID: 1184213963}
   - component: {fileID: 1184213962}
   - component: {fileID: 1184213961}
-  - component: {fileID: 1184213960}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: TitleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7982,18 +7981,6 @@ RectTransform:
   m_AnchoredPosition: {x: 220, y: -544}
   m_SizeDelta: {x: 440, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1184213960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1184213958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dacfa82c164549f4fbc7b2d8c997c0eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HideOnWeb
 --- !u!114 &1184213961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8058,9 +8045,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1886729997}
-        m_TargetAssemblyTypeName: ExplodeIt.UI.UIActions, Assembly-CSharp
-        m_MethodName: Quit
+      - m_Target: {fileID: 1413785940}
+        m_TargetAssemblyTypeName: ExplodeIt.UI.MenuPager, Assembly-CSharp
+        m_MethodName: ReturnToTitle
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9348,6 +9335,9 @@ MonoBehaviour:
   _pageSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
   _fader: {fileID: 1886730002}
   _blackFadeTime: 0.25
+  _titleRevealTime: 1.5
+  _titleBgm: {fileID: 11400000, guid: 9239659c74b97024c9b703bedd18d4a3, type: 2}
+  _menuBgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
 --- !u!114 &1413785941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12145,51 +12135,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877405442}
   m_CullTransparentMesh: 1
---- !u!1 &1883113642
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1883113644}
-  - component: {fileID: 1883113643}
-  m_Layer: 0
-  m_Name: TitleBgm
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1883113643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1883113642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 563a4319dd653204080695892b83687d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.BgmPlayer
-  _bgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
---- !u!4 &1883113644
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1883113642}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886729996
 GameObject:
   m_ObjectHideFlags: 0
@@ -13079,7 +13024,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB098\uAC00\uAE30"
+  m_text: "\uD0C0\uC774\uD2C0\uB85C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
   m_sharedMaterial: {fileID: -7608153116842864627, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
@@ -14061,4 +14006,3 @@ SceneRoots:
   - {fileID: 892108713}
   - {fileID: 1886730001}
   - {fileID: 1792344800}
-  - {fileID: 1883113644}

@@ -70,14 +70,20 @@ namespace ExplodeIt.UI
         // 검게 덮고, 다 덮이면 onCovered로 화면을 바꾼 뒤 다시 걷어 낸다. 같은 씬 안에서 배경이 통째로 바뀔 때 쓴다.
         public void FadeThrough(float duration, Action onCovered)
         {
+            FadeThrough(duration, duration, onCovered);
+        }
+
+        // 덮는 시간과 걷어 내는 시간을 따로 준다. 천천히 밝아지며 다른 장면이 드러나게 할 때 쓴다.
+        public void FadeThrough(float coverTime, float revealTime, Action onCovered)
+        {
             _isFadingIn = false;
             _group.DOKill();
             _group.gameObject.SetActive(true);
             _group.blocksRaycasts = true;
             DOTween.Sequence()
-                .Append(_group.DOFade(1f, duration))
+                .Append(_group.DOFade(1f, coverTime))
                 .AppendCallback(() => onCovered?.Invoke())
-                .Append(_group.DOFade(0f, duration))
+                .Append(_group.DOFade(0f, revealTime))
                 .OnComplete(Hide)
                 .SetUpdate(true)
                 .SetLink(gameObject);

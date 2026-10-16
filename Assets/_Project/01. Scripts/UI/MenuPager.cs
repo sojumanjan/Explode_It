@@ -27,6 +27,12 @@ namespace ExplodeIt.UI
         // 타이틀 ↔ 책처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막과, 덮고 걷는 시간(초, 각각).
         [SerializeField] private ScreenFader _fader;
         [SerializeField, Min(0.05f)] private float _blackFadeTime = 0.25f;
+        [Tooltip("책에서 타이틀로 돌아갈 때 검은 화면이 걷히는 시간 (초). 길게 두어 타이틀이 천천히 드러나게 한다")]
+        [SerializeField, Min(0.05f)] private float _titleRevealTime = 1.5f;
+
+        [Header("배경음 (타이틀과 책이 다르다)")]
+        [SerializeField] private BgmData _titleBgm;
+        [SerializeField] private BgmData _menuBgm;
 
         private static bool _hasPassedFirstPage;
 
@@ -51,7 +57,16 @@ namespace ExplodeIt.UI
 
         private void Start()
         {
-            Show(_hasPassedFirstPage && _returnPage != null ? _returnPage : _firstPage, false);
+            CanvasGroup first = _hasPassedFirstPage && _returnPage != null ? _returnPage : _firstPage;
+            Show(first, false);
+            AudioManager.PlayBgm(first == _firstPage ? _titleBgm : _menuBgm);
+        }
+
+        // 책의 "메인화면" 버튼. 어디서 왔든(게임에서 돌아와 기록이 비어 있어도) 타이틀로 돌아간다.
+        public void ReturnToTitle()
+        {
+            _history.Clear();
+            SwitchTo(_firstPage);
         }
 
         private void OnEnable()
@@ -141,7 +156,10 @@ namespace ExplodeIt.UI
                 from.interactable = false;
                 from.blocksRaycasts = false;
                 _current = page;
-                _fader.FadeThrough(_blackFadeTime, () => SwapInstantly(from, page));
+                bool isToTitle = page == _firstPage;
+                // 배경음도 덮는 순간부터 바꿔, 화면과 함께 넘어가게 한다.
+                AudioManager.PlayBgm(isToTitle ? _titleBgm : _menuBgm);
+                _fader.FadeThrough(_blackFadeTime, isToTitle ? _titleRevealTime : _blackFadeTime, () => SwapInstantly(from, page));
                 return;
             }
 

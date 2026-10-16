@@ -6845,7 +6845,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0C0\uC774\uD2C0\uB85C"
+  m_text: "\uBA54\uC778\uC73C\uB85C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
   m_sharedMaterial: {fileID: -7608153116842864627, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
@@ -9024,7 +9024,7 @@ GameObject:
   - component: {fileID: 178731716}
   - component: {fileID: 178731715}
   m_Layer: 5
-  m_Name: "\uD0C0\uC774\uD2C0\uB85CButton"
+  m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9116,7 +9116,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1367413039}
         m_TargetAssemblyTypeName: ExplodeIt.UI.UIActions, Assembly-CSharp
-        m_MethodName: GoToTitle
+        m_MethodName: GoToMainMenu
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15425,7 +15425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0C0\uC774\uD2C0\uB85C"
+  m_text: "\uBA54\uC778\uC73C\uB85C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
   m_sharedMaterial: {fileID: -7608153116842864627, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
@@ -48108,7 +48108,7 @@ GameObject:
   - component: {fileID: 1035785289}
   - component: {fileID: 1035785288}
   m_Layer: 5
-  m_Name: "\uD0C0\uC774\uD2C0\uB85CButton"
+  m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48200,7 +48200,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1367413039}
         m_TargetAssemblyTypeName: ExplodeIt.UI.UIActions, Assembly-CSharp
-        m_MethodName: GoToTitle
+        m_MethodName: GoToMainMenu
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -61513,7 +61513,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0C0\uC774\uD2C0\uB85C"
+  m_text: "\uBA54\uC778\uC73C\uB85C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
   m_sharedMaterial: {fileID: -7608153116842864627, guid: 1f89e9cef5128354fbc899d5cdbc12d5, type: 2}
@@ -78730,7 +78730,7 @@ GameObject:
   - component: {fileID: 1666153859}
   - component: {fileID: 1666153858}
   m_Layer: 5
-  m_Name: "\uD0C0\uC774\uD2C0\uB85CButton"
+  m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78822,7 +78822,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1367413039}
         m_TargetAssemblyTypeName: ExplodeIt.UI.UIActions, Assembly-CSharp
-        m_MethodName: GoToTitle
+        m_MethodName: GoToMainMenu
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
