@@ -1,97 +1,160 @@
-# 작업 인수인계 (2026-10-08 기준)
+# 작업 인수인계 (2026-10-16 기준)
 
-다른 컴퓨터·새 Claude Code 세션에서 이어서 작업하기 위한 요약. 새 세션 시작 시 이 파일과 `CLAUDE.md`, `Docs/design.md`를 먼저 읽힌다.
+다른 컴퓨터·새 Claude Code 세션에서 바로 이어서 작업하기 위한 요약이다. 새 세션을 시작하면 이 파일 → `CLAUDE.md` → `Docs/design.md` 순서로 읽힌다.
+
+> 새 세션 첫 메시지 예: "Docs/handoff.md, CLAUDE.md, Docs/design.md 읽고 이어서 하자. handoff 2번의 작업 규칙을 메모리에 저장해 줘."
+
+---
 
 ## 1. 먼저 볼 문서
 
 | 파일 | 내용 |
 |---|---|
-| `CLAUDE.md` | 프로젝트 규칙(절대 규칙, 폴더 구조, 컨벤션, 작업 방식) |
-| `Docs/design.md` | 기획서. CLAUDE.md와 어긋나면 이쪽이 우선 |
-| `Docs/schedule.md` | 주차별 개발 일정(완료/진행 중/예정) |
-| `Docs/devlog.md` | AI 코드 수정 기록 (`날짜 \| 문제 \| 원인 \| 바꾼 방식 \| 결과`) |
+| `CLAUDE.md` | 프로젝트 규칙(절대 규칙, 폴더 구조, 컨벤션, 작업 방식, 현재 단계, 결정 사항) |
+| `Docs/design.md` | 기획서. **무기·스킬·강화·아티팩트·업적 전체 표가 여기 있다.** CLAUDE.md와 어긋나면 이쪽이 우선 |
+| `Docs/devlog.md` | AI 코드를 고치거나 버린 기록 (`날짜 \| 문제 \| 원인 \| 바꾼 방식 \| 결과`) |
+| `Docs/schedule.md` | 주차별 일정. **10/8 이후 갱신 안 됨**(3주차 진행분 반영 필요) |
 | `Docs/submit/` | 학원 제출용 기획서·일정 PDF |
 
-## 2. 작업 규칙 (메모리 + 그동안 굳어진 방식)
+---
 
-새 컴퓨터의 Claude 메모리는 비어 있으므로 아래를 그대로 지킨다.
+## 2. 작업 규칙 (새 컴퓨터 메모리는 비어 있으니 이대로 지킨다)
 
-- **플레이 테스트는 사용자가 한다.** 플레이모드에 들어가지 않는다. 작업 끝에 "바꾼 것 / 에디터에서 할 일 / 확인할 점"을 정리한다.
-- **SO 필드에는 모두 한글 `[Tooltip]`** (의미 + 단위 + 조정 방향). 밸런스 수치는 코드에 하드코딩하지 않는다. 그림 전용 연출 값은 코드 상수 + "왜" 주석으로 둘 수 있다.
-- **형제 클래스도 같이 고친다.** 한 적의 문제를 고치면 같은 구조의 다른 적도 묻지 말고 점검·수정하고, 무엇을 같이 바꿨는지만 알린다.
-- **주석은 한글로 "왜"를 적는다.** `[SerializeField] private`, `_camelCase`, 한 파일 한 클래스.
+### 사용자와 일하는 방식
+- 답은 **한국어**. 사용자는 짧게 말한다("ㄱㄱ", "커밋 후 데브로그").
+- **플레이 테스트는 사용자가 한다.** 플레이모드에 들어가지 않는다. 작업 끝에 "바꾼 것 / 에디터에서 할 일 / 확인 방법"을 짧게 정리한다.
+- **MCP 작업 전 플레이 중인지 먼저 확인**(`EditorApplication.isPlaying`). 플레이 중에 컴파일하면 실행 중인 게임이 깨지고(NullReference), 씬 저장도 실패한다. 플레이 중이면 꺼 달라고 한다.
+- **에디터 작업:** 원칙은 인스펙터 안내지만, 사용자가 "너가 해줘 / ㄱㄱ"라고 하면 Unity MCP `execute_code`로 씬·프리팹·SO·임포트 설정을 직접 고쳐 왔다(지금은 거의 항상 직접 한다).
 - **큰 변경(파일 3개 이상, 구조 변경, 새 시스템)은 계획을 먼저 말하고 확인받는다.** 패키지 추가는 먼저 묻는다. `.meta`는 직접 만들거나 고치지 않는다.
-- **에디터 작업(MCP):** 원칙은 "인스펙터 안내"였지만, 사용자가 "너가 해줘 / ㄱㄱ 진행해줘"라고 하면 Unity MCP `execute_code`로 프리팹·SO·임포트 설정·씬을 직접 고쳐 왔다. 요청이 없으면 안내로 대신한다. 씬을 직접 저장하기 전에는 씬이 dirty인지 확인한다.
-- **커밋은 요청이 있을 때만.** 사용자는 보통 "커밋 후 데브로그"라고 한다 → 기능 커밋 1개 + 데브로그 커밋 1개.
-  - 메시지 형식: `[Feat]/[Fix]/[Docs] 한 줄 요약` + 빈 줄 + `- 항목` 목록 + 마지막 줄 `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
-  - 메시지는 scratchpad에 파일로 쓰고 `git commit -F`로 커밋(한글·여러 줄 안전).
-  - 사용자가 직접 바꾼 데이터·그림도 같이 커밋하고 메시지에 언급.
-- **데브로그:** AI가 만든 것을 고치거나 버린 경우 `Docs/devlog.md` 끝에 한 줄 추가.
+- **SO 필드에는 모두 한글 `[Tooltip]`**(의미 + 단위). 밸런스 수치는 코드에 하드코딩하지 않는다.
+- **형제 클래스도 같이 고친다.** 한 적의 문제를 고치면 같은 구조의 다른 적도 묻지 말고 점검·수정하고 무엇을 같이 바꿨는지 알린다.
+- 주석은 한글로 "왜"를 적는다. `[SerializeField] private`, `_camelCase`, 한 파일 한 클래스.
+- 사용자가 에셋 수치를 인스펙터에서 자주 직접 바꾼다. 문서에 수치를 적을 땐 기억 말고 **에셋에서 뽑아서** 적는다.
+
+### 커밋과 데브로그
+- **커밋은 요청이 있을 때만.** "커밋 후 데브로그" → 기능 커밋 1개 + 데브로그 커밋 1개.
+- 메시지: `[Feat]/[Fix]/[Docs]/[Refactor] 한 줄 요약` (+ 빈 줄 + `- 항목`) + 마지막 줄 `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
+- 사용자가 직접 바꾼 데이터·그림도 같이 커밋하고 메시지/보고에 언급한다.
+- 데브로그는 AI가 만든 것을 고치거나 버렸을 때만 `Docs/devlog.md` 끝에 한 줄. 경로는 대문자 `Docs/`(git이 대소문자 구분).
+- 푸시는 사용자가 말할 때만.
 
 ### Unity MCP 사용 팁
-
-- `execute_code`는 `compiler: codedom`(C# 6) 사용. `UnityEngine.Object`는 명시적으로 쓴다. 삼항 연산자에서 `null : null` 같은 형태는 컴파일 에러.
-- `AssetDatabase.DeleteAsset`, `File.Delete` 등은 안전 검사에 막힌다.
-- 스크립트 수정 후 `refresh_unity(compile: request, mode: force)` → `read_console(types: error, warning)`으로 확인.
+- `execute_code`는 `compiler: codedom`(C# 6). `Object`는 `UnityEngine.Object`로 명시. `objectReferenceInstanceIDValue`는 막힘(obsolete).
+- `AssetDatabase.DeleteAsset`, `File.Delete`는 안전 검사에 막힌다 → 에셋 삭제는 참조 확인 후 `git rm`.
+- 스크립트 수정 후 `refresh_unity(compile: request, mode: force)` → `read_console(types: error, warning)`. 새 타입이 정말 잡혔는지 리플렉션으로 한 번 확인.
+- **`execute_code`의 `replay`는 쓰지 않는다.** 번호가 헷갈려 옛 코드가 다시 돌아간 적이 있다(폰트 값이 되돌아감).
+- 씬 오브젝트는 **이름이 아니라 전체 경로로** 찾는다. 같은 이름(`Goblin`)이 다른 페이지에도 있어 엉뚱한 걸 고친 적이 있다.
 - 프리팹은 `PrefabUtility.LoadPrefabContents` → 수정 → `SaveAsPrefabAsset` → `UnloadPrefabContents`.
-- MCP 연결이 끊기면(CONNECT_TIMEOUT) 사용자에게 Unity 쪽 MCP 재연결을 부탁한다.
+- UI 확인은 임시 카메라 + `ScreenSpaceCamera`로 캔버스를 렌더해 scratchpad에 PNG로 저장해서 본다(끝나면 상태 복구).
+- MCP 연결이 끊기면(CONNECT_TIMEOUT) 사용자에게 재연결을 부탁한다. 에디터가 뒤에 가려져 있으면 컴파일이 멈추므로 Unity를 한 번 클릭해 달라고 한다.
 
-### 그림 가져오기 주의 (여러 번 반복된 문제)
+### 셸 주의
+- Git Bash 히어독(`<<'EOF'`) 안의 파이썬에서 `\\n`이 줄바꿈으로 바뀌어 C# 문자열이 깨진다. 이스케이프가 들어가는 수정은 **파이썬 스크립트를 파일로 써서** 실행한다.
+- 사용자 PC 파이썬은 `-I`(격리)로 돌리면 PIL을 못 찾는다. 이미지 처리 스크립트는 scratchpad에서 그냥 실행.
 
-사용자가 그림 파일을 교체하거나 새로 넣으면 **가져오기 설정이 기본값(Sprite Mode Multiple, Bilinear)으로 들어와 프리팹 연결이 끊긴다.** 넣을 때마다 확인해서 맞춘다.
-- 캐릭터·왕: Single, Point, 발밑 기준점(BottomCenter), PPU 100, 압축 없음
-- 각성 왕 동작 그림(slash_ready, slash2, thrust): PPU 80 (1.25배)
-- 왕관 `crown.png`: Single, Point, 가운데 기준점
+### 그림 가져오기 주의 (반복된 문제)
+- 사용자가 같은 이름으로 그림을 덮어쓰면 Unity가 **Sprite Mode Multiple로 자동 분할**해 참조가 끊긴다. 넣을 때마다 Single로 되돌리고 다시 연결한다.
+- 캐릭터·왕: Single, Point, 발밑 기준점, PPU 100, 압축 없음. 각성 왕 동작 그림 일부 PPU 80.
+- 폭탄 그림(`bomb_*.png`): Single, 기준점은 공 몸통 가운데(불투명 픽셀 무게중심). UI에서는 `PivotCenteredImage`가 기준점을 반영한다.
+- **이미지 생성 모델은 투명 배경 대신 바둑판 무늬를 그려 넣는다.** 배경 제거·분할은 파이썬(PIL)으로 했다(밝은 무채색 덩어리 제거 → 물건별 덩어리로 잘라냄). 다음엔 프롬프트에 `solid flat #FF00FF magenta background`를 넣게 안내.
 
-### 정렬 규칙 (2026-10-08 도입)
+### 정렬 규칙 (10/8 도입)
+- 2D 렌더러 Transparency Sort Mode = Custom Axis (0, 1, 0) → 화면 아래쪽이 앞.
+- 서 있는 것 = Default 레이어 순서 5, Sprite Sort Point = Pivot, 기준점 발밑. 그림자 1, 범위·예고선 0~3, 투사체·이펙트 6+, 대화 왕 20.
+- 대각선 소품은 세로 띠로 나눠 띠마다 기준점(`Slice_N`).
 
-- 2D 렌더러: Transparency Sort Mode = Custom Axis (0, 1, 0) → 화면 아래쪽이 앞.
-- 서 있는 것(플레이어·적·보스 몸, 소품) = Default 레이어, 순서 **5**, Sprite Sort Point = **Pivot**, 그림 기준점은 **발밑/발판**.
-- 그림자 1. 범위·예고선·장판 0~3(소품 아래). 투사체·요정·이펙트 6 이상(소품 위). 대화 왕 20.
-- **대각선으로 긴 소품**은 그림을 세로 띠로 나누고 띠마다 기준점을 판정 캡슐 중심선 높이에 둔다(가판대 2개에 적용, 부모 아래 `Slice_N`, 부모 그림은 꺼 둠). 새 대각선 소품이 생기면 같은 작업 필요(에디터 메뉴로 만들자는 제안 있음).
+---
 
-## 3. 현재 구현 상태 (요약)
+## 3. 씬과 화면 흐름
 
-- **모드:** 스토리 모드 = 고정 웨이브 4개(Wave_01~04, 각 100마리) + 보스 4전 → 400킬에 엔딩(StageCleared). 무한 모드는 기획만(design.md).
-- **적:** 전사, 궁수, 저격수(Shooter), 사마귀, 방패병, 돌격병(Charger). 상태 머신 Move → Telegraph → Attack → Recover / Stunned / Dead.
-- **보스:** 1 화염 마법사(영역·요정·메테오·파이어볼 4연발), 2 드릴 광부, 3 야수(혼불), 4 각성한 왕(최종).
-- **왕 스토리 연출:** 보스전 전 왕 대화(클릭 진행, 줄별 보스 등장/등장 동작 체크, `BossDialogueData`), 우측 하단 왕 컷인(`KingCutInView`, 스토리 전용, 화면 픽셀 정수 배율로 크기 맞춤). 표정 9종(`KingMood`).
-- **무기 5종:** 기본, 더블배럴(2연발), 빠른연사, 큰폭발, 폭탄3개. 충전은 하나씩. 무기별 폭발음 피치 범위. 시작 무기 = 기본. 개발자 패널에서 무기 교체·수치 조정.
-- **던지기:** 플레이어→커서 방향에 `_throwBlockMask`(지금 MapLine 레이어) 걸리면 막힌 지점 0.15 앞까지만 던짐(맵 밖 스폰킬 방지).
-- **카메라:** `CameraFollowTarget`(초점 이동 이벤트), `CameraZoom`(확대 이벤트, PlayerCamera에 부착·연결 완료).
+| 씬 | 내용 |
+|---|---|
+| `04. Scenes/Title.unity` | **타이틀**(첫 화면: 시작하기·설정·나가기) + **메인**(책 메뉴). 한 씬 안에서 `MenuPager`가 페이지를 넘긴다 |
+| `04. Scenes/Game.unity` | 실제 플레이. 이름이 예전엔 Main.unity였다 |
 
-### 최종 보스 각성한 왕 (Boss4) — 1국면만 구현
+- 용어: **"타이틀" = 첫 화면, "메인" = 책 메뉴.** 헷갈려서 이름을 정리했다.
+- 타이틀 → 메인: 1.5초 검게 덮기 → 0.5초 밝아지기, BGM도 같이(`Bgm_Title` → `Bgm_Main`). 설정은 페이지 넘김 없이 타이틀 위에 책만 띄운다(덮개 열기).
+- 메인(책): 왼쪽 장비 칸(무기 · 스킬 · 아티팩트 I/II) + 모드 버튼(스토리, 무한은 잠김). 장비 칸을 누르면 `SelectPage`(고르기 페이지).
+- 게임 → 메인: 결과 창 버튼이 검게 덮고 씬을 넘김, 메인에서 0.8초 밝아짐(타이틀은 건너뜀).
+- 판 시작: `RunLauncher` → `RunSetup.Set(모드, 무기, 스킬, 아티팩트)` → Game 씬. Game 씬의 `RunLoadoutApplier`가 무기를 끼우고 아티팩트를 판 보정값에 채운다.
 
-- 파일: `Enemy/Boss/AwakenedKingBoss.cs`, `AwakenedKingData.cs`, 데이터 `02. Data/Enemies/Boss4_AwakenedKing.asset`, 프리팹 `03. Prefabs/Boss4.prefab`, 대화 `02. Data/Story/Dialogue_Final_King.asset`(왕이 곧 보스, 마지막 줄에서 등장+등장 동작, 멈춤 2.2초, 왕 서는 높이 -1.221).
-- 머리 위 떠 있는 왕관 = 무적. 폭탄 근처 착지 시 쿨 없이 구르기.
-- 패턴 로테이션: 베기 3연격(일직선 파고들기 → 멈춰 베기, 벽 뚫음, 레디 그림 → slash2 한 장) → 돌진 3번(뒤로 물러난 뒤 벽 뚫는 돌진, 달려드는 동안만 thrust 그림) → 왕관 부메랑(유일한 공격 기회, 벽 통과).
-- 왕관 없이 3번 맞으면 그로기, 그로기 때 한 방에 쓰러짐. 맞을 때마다 "다음 국면"으로 넘어가는 자리만 있고 **2·3국면 패턴은 없음**(1국면 반복).
-- 등장 연출: 화난 2등신 왕이 불티 속에서 떨다가(1.4초) 한가운데로 0까지 줄고 → 각성 모습이 0에서 팍 커짐(OutBack). 그동안 카메라 확대(0.65배) 후 스윽 복귀. 대사 "조금만 맞자." 넘기면 왕관이 내려오고 조작 복귀.
-- 사운드·피드백 일부는 다른 보스 것을 임시로 재사용 중.
+---
 
-## 4. 진행 중이던 작업: 맵 아트
+## 4. 시스템 지도 (어디를 보면 되는지)
 
-- **컨셉 결정:** 무너진 폐허가 아니라 **평화로운 중세 마을** 한가운데(실외). 지금 맵 판정 구조는 유지.
-  - 얇은 벽 → 나무 울타리·돌담·생울타리·시장 가판대 줄 / 큰 덩어리 → 위에서 본 집·술집·대장간 지붕 / 작은 덩어리 → 수레·우물·건초더미 / 맵 테두리 → 마을 성벽 / 적 등장 구역 → 마을 길·성문
-  - 판정 없는 장식(꽃, 빨래, 닭, 깃발) 흩뿌리기. 바닥은 어둡고 채도 낮게(폭탄 범위·예고선이 묻히지 않게).
-  - 아이디어: 판이 진행될수록 폭탄 그을음이 쌓여 마을이 엉망이 되는 연출(나중).
-- **현재 배치:** 과일·채소 가판대(대각선, 띠 나누기 완료, 판정은 자식 캡슐), 돌 기둥·바위(에셋 팩 `05. Art/Props/Pixel Art Top Down - Basic`).
-- **원칙:** 3/4 시점 그림은 절대 회전하지 않는다(대각선은 대각선용 그림을 따로). 판정은 그림 전체가 아니라 발판만.
-- 맵 판정은 Obstacle 레이어 BoxCollider 59개(대부분 두께 0.3 얇은 선)와 테두리 EdgeCollider. 판정을 두껍게 바꾸면 통로 폭, 적 동선, 폭발 차단, 웨이브 입구를 다시 확인해야 한다.
+### 저장
+- `Core/SaveSystem.cs`, `SaveData.cs`, `SaveStat.cs`: JSON 한 덩어리를 PlayerPrefs에 저장. 해금·장착(무기·스킬·아티팩트 칸·강화)·업적 달성·누적 기록(이름 붙은 Stat)·설정.
+- `Progression/ProgressRecorder.cs`: 판이 끝날 때 누적 처치·기록 저장.
 
-## 5. 남은 일 / 메모
+### 해금 구조
+- `Core/IUnlockable.cs`: 무기·스킬·강화·아티팩트 공통 인터페이스(Id, 이름, 설명, 아이콘, 해금 여부).
+- `Progression/UnlockCatalog.cs` (+ `02. Data/Progression/UnlockCatalog.asset`): 모든 무기·스킬·강화·아티팩트·업적 목록. **고르기 화면 카드 순서 = 여기 목록 순서.**
+- `Progression/AchievementData.cs`: 조건 + 목표 + (스킬 지정) + 보상(무기·스킬·강화·아티팩트 각각 하나씩 여러 개 가능) + 스티커 그림.
+- `Progression/AchievementCondition.cs`: 조건 종류. **새 조건은 맨 뒤에만 추가**(에셋이 번호로 기억).
+- `Progression/AchievementTracker.cs`: 판 도중 조건을 세고 달성 시 해금·저장. 개발자 패널을 쓴 판은 세지 않음.
+- 처치 출처: `Core/DamageSource.cs`(Bomb·BlackHole·ScatterBomb·InstantBomb·Dodge), 적 부류 `Core/EnemyKind.cs`(Normal·ShieldBearer·Boss). `GameEvents.EnemyKilledBy(source, kind)`.
 
-- [ ] 맵 아트 계속(바닥, 울타리·돌담 늘어나는 그림, 집 지붕, 소품) — 그림이 오면 벽 크기에 맞춰 자동 배치해 주기로 함
-- [ ] 최종 보스 2·3국면 설계·구현
-- [ ] 최종 보스 미결 질문: 그로기에서 못 잡고 왕관이 다시 생긴 뒤, 다음 왕관 부메랑 때 맞히면 바로 죽는다(남은 체력 1). 다시 그로기를 거치게 할지 사용자에게 물어볼 것
-- [ ] 최종 보스 전용 사운드(지금 임시 재사용), 그로기 그림
-- [ ] 엔딩 연출, 아티팩트, 저장·업적·해금, 무기·아티팩트 선택 화면, 무한 모드 절차적 웨이브 생성기, 하드모드(승천), WebGL 빌드 확인
-- 안 쓰는 에셋: `07. Materials/SpriteSilhouette.shader`, `Mat_SilhouetteFill.mat`, `Mat_SilhouetteGlow.mat`(지워도 됨)
-- 외부 에셋 팩은 규칙상 `09. ThirdParty`로 옮기는 게 맞음(지금 `05. Art/Props` 안)
-- 최근 커밋: `41c3ce3` [Docs] 데브로그: Y 정렬, 대각선 소품 띠 나누기 / `f974b63` Y 정렬·띠 나누기 / `162b584`, `3c4ba14` 변신 카메라·던지기 막힘·무기 피치
+### 무기
+- `Bomb/WeaponData.cs`(에셋 `02. Data/Weapons/`), `BombLauncher.cs`, `Bomb.cs`. 무기 4종(기본·빠른연사·큰폭발·폭탄3개). 더블배럴은 보류(목록에서 빠짐).
+- **클릭 한 번에 폭탄 하나**(꾹 눌러 연사 없음). 던지기 간격 직전 클릭은 0.15초 기억.
+- 대시 중에는 못 던진다(빨간 리본으로 허용).
 
-## 6. 새 컴퓨터 준비
+### 스킬 (우클릭)
+- `Progression/PlayerAbility.cs`, `AbilityData.cs`(에셋 `02. Data/Progression/Abilities/`), `AbilityKind.cs`.
+- 블랙홀(기본) / 다발폭탄(한 발은 발밑, 나머지 사방, 시각·거리·폭발 무작위, 벽 무시) / 순간폭탄(일정 시간 착지 즉시 폭발·공속 배율, 화면 테두리 `UI/InstantBombBorder.cs`). 스킬은 모두 방패 관통.
+- 강화: `AbilityUpgradeData.cs`(에셋 `Upgrades/`), 효과 `AbilityUpgradeEffect.cs`. **해금 + 장착해야 적용.**
 
-1. 저장소 clone 후 Unity 6000.5.6f1로 열기(2D URP, Input System, Cinemachine 3, DOTween).
-2. Unity MCP(MCP for Unity) 패키지·서버 연결 확인 — Claude Code에서 `mcp__UnityMCP__*` 도구가 보여야 한다.
-3. 새 세션 첫 메시지 예: "Docs/handoff.md, CLAUDE.md 읽고 이어서 하자. 메모리 규칙도 handoff 2번 항목대로 저장해 줘."
+### 아티팩트 (2칸)
+- `Progression/ArtifactData.cs`(효과 종류 + 값1 + 값2, 에셋 `02. Data/Progression/Artifacts/`), `ArtifactEffect.cs`.
+- 판 시작 시 `RunLoadoutApplier`(실행 순서 -200)가 `Core/RunModifiers.cs`(정적 판 보정값)에 모으고, 각 시스템이 읽는다:
+  이동속도(`PlayerMovement`), 대시 횟수·쿨·대시 처치(`PlayerDodge`), 체력(`PlayerDeath`), 스폰 간격(`StageRunner`), 게이지 칸·필요 처치·동전·반지(`PlayerAbility`), 대시 중 던지기(`BombLauncher`).
+- 아이콘 `05. Art/Artifacts/Artifact_*.png`.
+
+### 체력·대시
+- `Player/PlayerDeath.cs`: 스토리 2칸(+팬던트), 무한 1칸. 피격 후 반투명 무적. 사망 연출(찌그러짐 → 사망 그림 → 카메라 확대 → 슬로모션 → 결과 창).
+- `Player/PlayerDodge.cs`, `DodgeData.cs`: 대시 충전식(기본 1회), 대시 무적으로 공격을 피하면 슬로모션 + `GameEvents.PlayerEvaded`(회피 업적).
+
+### UI
+- 메뉴: `MenuPager`, `TitlePage`, `MainMenuPage`, `EquipSelectPage`(고르기), `ItemCard`(카드), `SettingsPage`, `ConfirmDialog`, `ScreenFader`, `HoverScale`(버튼 1.1배), `HoverLabel`(마우스 올리면 "장착 해제").
+- 고르기 페이지 규칙: 노란 표시 = 지금 장착 중만. 다른 아티팩트 칸에 낀 것은 회색(눌러서 설명만, "장착 중" 고정). "장착 중"을 다시 누르면 해제(아티팩트·강화만, 무기·스킬은 바꿔 끼기만). 카드 더블클릭 = 장착/해제. 장착해도 페이지에 남는다(뒤로가기로만 메인).
+- 해금한 아티팩트를 누르면 해금 조건(취소선) + CLEAR 도장(`05. Art/UI/Stamp_Clear.png`, 조건 글 끝에 따라 붙음) + 능력.
+- **고르기 카드는 씬에 미리 놓여 있다**(`SelectPage` 아래 무기 4·아티팩트 10, `AbilityList` 아래 스킬 줄 3개 × 카드 + 강화 칸 2). 아이템을 추가하면 카드를 복제해 같은 순서에 넣고 `EquipSelectPage` 배열에도 넣는다.
+- 게임 중: `AchievementToast`(좌측 하단, 업적 이름 + 달성 방법, 4초), `UnlockSummaryPanel`(판이 끝나면 해금 창, 보상마다 한 장씩 넘김, 획득 경로 = 업적 설명 + 스티커), `StatePanel`(결과 창: 다 보일 때까지 클릭 막음, 뜨면 게임 소리 끔), `HealthView`, `AbilityGaugeView`(칸 수에 맞춰 폭 나눔).
+- 소리: `Core/AudioManager.cs`. `SoundData.IsInterface`가 켜진 소리(클릭·에러·해금·대사)만 결과 화면에서도 들린다. 소리 겹침 상한·간격은 소리마다.
+
+### 개발자 패널 (`UI/DevPanel.cs`, Game 씬)
+- 무기 교체·수치 조정, 보스 바로가기(Final Boss, King Groggy/Defeat), Replay Intro, **Unlock All**(무기·스킬·강화·아티팩트 전부), **Reset Achv**(업적·해금·장착만 초기화), Log Save, Reset Save, Fill Ability, Kill All, 배속.
+- 패널을 쓴 판은 업적을 세지 않는다.
+
+---
+
+## 5. 콘텐츠 현황 (숫자는 design.md 표가 기준)
+
+- 스토리: 웨이브 4개(각 100마리) + 보스 4전(화염 마법사 → 드릴 광부 → 야수 → 각성한 왕) → 400킬 엔딩.
+- 적: 전사, 궁수, 저격수, 사마귀, 방패병, 돌격병.
+- 최종 보스(`Enemy/Boss/AwakenedKingBoss.cs`): 3국면 패턴(1국면 베기·돌진·왕관 부메랑 / 2국면 베기·도약 내려찍기·왕관 투하 / 3국면 유성우·천지 가르기·별의 의식)과 국면 전환 연출이 코드에 있다. 도약은 플레이어 기준 위쪽 150도 공중 자리 → 상단 30도 안이면 수직, 아니면 대각 내려찍기.
+- 업적 19개(전부 보상 있음) / 무기 4 / 스킬 3 / 강화 6 / 아티팩트 10.
+- 스티커 그림 없음 → 공용 빈 스티커(`05. Art/UI/Sticker_Empty.png`)로 대신.
+
+---
+
+## 6. 남은 일
+
+- [ ] **도감(스티커) 페이지**: 지금 있는 해금 업적 19개를 모두 도감에 넣기로 함. 이후 수치를 바꾼 단계형(예: 처치 수 단계)이나 새 수집 요소로 늘릴 예정
+- [ ] 업적 목록 확정 후 **스티커 시트 한 장으로 생성**(프롬프트 틀은 대화에서 만듦: 4×3 격자, 흰 테두리 스티커, 글자 없음)
+- [ ] 무한 모드(절차적 웨이브, 보스 로테이션), 스토리 클리어 → 무한 해금 연결
+- [ ] 승천(하드모드)
+- [ ] `Docs/schedule.md` 갱신
+- [ ] 해금 창을 보상마다 한 장 → 업적당 한 장으로 묶을지(사용자 답 대기)
+- [ ] 무기·스킬 고르기에도 해금 조건 + CLEAR 도장을 보일지(지금은 아티팩트만)
+- [ ] 엔딩 연출, 최종 보스 전용 사운드, WebGL 빌드 확인, 맵 아트(평화로운 중세 마을 컨셉) 계속
+- 정리할 것: 안 쓰는 `07. Materials/SpriteSilhouette.shader`, `Mat_Silhouette*.mat` / 외부 에셋 팩은 `09. ThirdParty`로 옮기는 게 규칙상 맞음
+
+---
+
+## 7. 새 컴퓨터 준비
+
+1. 저장소 pull/clone 후 Unity **6000.5.6f1**로 열기(2D URP, Input System, Cinemachine 3, DOTween).
+2. Unity MCP(MCP for Unity) 연결 확인 — Claude Code에서 `mcp__UnityMCP__*` 도구가 보여야 한다.
+3. 저장 데이터는 PlayerPrefs라 **컴퓨터마다 따로**다. 집에서는 해금이 비어 있으니 개발자 패널 `Unlock All`로 시작하면 편하다.
+4. 새 세션에 위 첫 메시지 예시를 보내고, 2번 규칙을 메모리에 저장하게 한다.
