@@ -20,7 +20,13 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _lockMark;
         [SerializeField] private GameObject _selectedMark;
 
+        // 두 번 누른 것으로 보는 간격 (초, 실제 시간). 운영체제 기본 더블클릭 간격과 비슷하게 둔다.
+        private const float DoubleClickTime = 0.3f;
+
         private Action<ItemCard> _onClick;
+        private Action<ItemCard> _onDoubleClick;
+        // 목록을 다시 그려도(Setup) 지워지지 않아야 두 번째 클릭을 알아본다.
+        private float _lastClickTime = -1f;
         private Color _nameColor;
         private Image _background;
         private Color _backgroundColor;
@@ -53,9 +59,12 @@ namespace ExplodeIt.UI
             }
         }
 
-        public void Setup(object item, Sprite icon, string displayName, bool isLocked, Action<ItemCard> onClick)
+        // onDoubleClick은 같은 카드를 빠르게 두 번 눌렀을 때 한 번 더 불린다(첫 클릭의 onClick 다음).
+        public void Setup(object item, Sprite icon, string displayName, bool isLocked, Action<ItemCard> onClick,
+            Action<ItemCard> onDoubleClick = null)
         {
             Initialize();
+            _onDoubleClick = onDoubleClick;
             Item = item;
             IsLocked = isLocked;
             _onClick = onClick;
@@ -99,6 +108,16 @@ namespace ExplodeIt.UI
             transform.DOKill(true);
             transform.DOPunchScale(Vector3.one * 0.08f, 0.2f, 6).SetUpdate(true).SetLink(gameObject);
             _onClick?.Invoke(this);
+
+            float now = Time.unscaledTime;
+            if (_lastClickTime >= 0f && now - _lastClickTime <= DoubleClickTime)
+            {
+                _lastClickTime = -1f;
+                _onDoubleClick?.Invoke(this);
+                return;
+            }
+
+            _lastClickTime = now;
         }
     }
 }

@@ -15,9 +15,8 @@ MonoBehaviour:
   _id: old_coin
   _displayName: "\uB0A1\uC740 \uB3D9\uC804"
   _description: "5\uCD08 \uB3D9\uC548 \uC6C0\uC9C1\uC774\uC9C0 \uC54A\uC73C\uBA74
-    \uC2A4\uD0AC \uAC8C\uC774\uC9C0\uAC00 1 \uCC28\uACE0, \uACC4\uC18D \uC11C \uC788\uC73C\uBA74
-    2\uCD08\uB9C8\uB2E4 1\uC529 \uCC2C\uB2E4. \uD3ED\uD0C4\uC740 \uB358\uC838\uB3C4
-    \uB41C\uB2E4."
+    \uC2A4\uD0AC \uAC8C\uC774\uC9C0\uAC00 1 \uCC28\uACE0,\n\uACC4\uC18D \uC11C \uC788\uC73C\uBA74
+    2\uCD08\uB9C8\uB2E4 1\uC529 \uCC2C\uB2E4."
   _icon: {fileID: 21300000, guid: a0bcba0f16b24ff4791e6a7bb8bd61cf, type: 3}
   _unlockedByDefault: 0
   _effect: 6

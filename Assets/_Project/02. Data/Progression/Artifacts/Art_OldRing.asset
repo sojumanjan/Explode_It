@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: old_ring
   _displayName: "\uB0A1\uC740 \uBC18\uC9C0"
   _description: "\uC2A4\uD0AC \uD55C \uBC88\uC73C\uB85C 5\uB9C8\uB9AC \uC774\uC0C1
-    \uC7A1\uC73C\uBA74 \uC2A4\uD0AC \uAC8C\uC774\uC9C0\uAC00 2 \uCC2C\uB2E4."
+    \uC7A1\uC73C\uBA74\n\uC2A4\uD0AC \uAC8C\uC774\uC9C0\uAC00 2 \uCC2C\uB2E4."
   _icon: {fileID: 21300000, guid: ab303ef26682c6c4f8ee7fb412013191, type: 3}
   _unlockedByDefault: 0
   _effect: 8

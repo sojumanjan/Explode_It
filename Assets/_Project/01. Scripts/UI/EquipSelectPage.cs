@@ -326,7 +326,7 @@ namespace ExplodeIt.UI
             for (int i = 0; i < items.Count; i++)
             {
                 IUnlockable item = items[i];
-                cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked);
+                cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked, OnCardDoubleClicked);
                 // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
                 cards[i].SetSelected(item == equipped);
                 // 다른 칸에 끼운 아티팩트는 회색으로 칠한다(눌러서 설명은 볼 수 있다). 노란색은 지금 고르는 칸의 것에만 쓴다.
@@ -362,7 +362,7 @@ namespace ExplodeIt.UI
                 number = upgrade.Ability == current ? number + 1 : 0;
                 current = upgrade.Ability;
                 string label = string.Format(_upgradeCellFormat, SlotName(number));
-                _upgradeCells[i].Setup(upgrade, upgrade.Icon, label, !upgrade.IsUnlocked, OnUpgradeCellClicked);
+                _upgradeCells[i].Setup(upgrade, upgrade.Icon, label, !upgrade.IsUnlocked, OnUpgradeCellClicked, OnUpgradeCellDoubleClicked);
                 // 강화 칸의 표시는 "보고 있는 것"이 아니라 "장착한 것"이다.
                 _upgradeCells[i].SetSelected(upgrade.IsEquipped);
             }
@@ -391,6 +391,23 @@ namespace ExplodeIt.UI
             bool isEquipped = _upgradePreview.IsEquipped;
             _equipButton.gameObject.SetActive(true);
             SetEquipButton(isEquipped, true, _upgradeEquipText);
+        }
+
+        // 편의 기능: 카드를 두 번 누르면 장착 버튼을 누른 것과 같다(장착 중이면 해제). 첫 클릭에서 이미 오른쪽에 띄워져 있다.
+        private void OnCardDoubleClicked(ItemCard card)
+        {
+            if (!card.IsLocked && ReferenceEquals(card.Item, _preview))
+            {
+                Equip();
+            }
+        }
+
+        private void OnUpgradeCellDoubleClicked(ItemCard cell)
+        {
+            if (!cell.IsLocked && ReferenceEquals(cell.Item, _upgradePreview))
+            {
+                Equip();
+            }
         }
 
         private void OnCardClicked(ItemCard card)

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
   _id: evade_3
   _displayName: "\uC544\uC2AC\uC544\uC2AC"
-  _description: "\uB300\uC2DC\uB85C \uC801 \uACF5\uACA9\uC744 3\uBC88 \uD53C\uD558\uAE30"
+  _description: "\uB300\uC2DC\uB85C \uC801 \uACF5\uACA9\uC744 \uB204\uC801 3\uBC88
+    \uD53C\uD558\uAE30"
   _sticker: {fileID: 0}
   _isHidden: 0
   _condition: 10

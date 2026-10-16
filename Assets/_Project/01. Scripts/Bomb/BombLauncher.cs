@@ -44,6 +44,9 @@ namespace ExplodeIt.Bombs
         private Action<Bomb> _releaseBomb;
         private int _chargesLeft;
         private float _nextThrowTime;
+        // 던지기 간격·대시가 끝나기 직전에 누른 클릭을 잠깐 기억해 두는 시각. 빠르게 연타한 클릭이 씹히지 않게 한다.
+        private float _throwQueuedUntil = -1f;
+        private const float ThrowBufferTime = 0.15f;
         private float _rechargeTimer;
         // 연발 무기에서 아직 자동으로 나갈 발 수와 다음 발 시각.
         private int _pendingShots;
@@ -150,11 +153,18 @@ namespace ExplodeIt.Bombs
                 return;
             }
 
-            if (!_input.ThrowHeld || _chargesLeft <= 0 || Time.time < _nextThrowTime || IsBlockedByDodge())
+            // 폭탄이 없을 때 누른 것은 기억하지 않는다. 다시 차는 순간 저절로 나가면 의도와 다르기 때문이다.
+            if (_input.ThrowPressed && _chargesLeft > 0)
+            {
+                _throwQueuedUntil = Time.time + ThrowBufferTime;
+            }
+
+            if (Time.time > _throwQueuedUntil || _chargesLeft <= 0 || Time.time < _nextThrowTime || IsBlockedByDodge())
             {
                 return;
             }
 
+            _throwQueuedUntil = -1f;
             Throw();
         }
 

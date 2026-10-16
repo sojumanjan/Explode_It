@@ -19,8 +19,8 @@ namespace ExplodeIt.Player
         public Vector2 Move => IsLocked ? Vector2.zero : _moveAction.action.ReadValue<Vector2>();
         // 화면 좌표. 월드 좌표 변환은 카메라를 아는 쪽에서 한다.
         public Vector2 Aim => _aimAction.action.ReadValue<Vector2>();
-        // 누르고 있으면 연사 간격마다 계속 던지도록 눌림 상태로 읽는다.
-        public bool ThrowHeld => !IsLocked && !PointerBlocked && _throwAction.action.IsPressed();
+        // 한 번 누를 때 한 번만 던진다. 꾹 누르고 있어도 연사되지 않게 누른 프레임만 읽는다.
+        public bool ThrowPressed => !IsLocked && !PointerBlocked && _throwAction.action.WasPressedThisFrame();
         // 게이지가 차는 순간 누르고 있던 버튼으로 바로 나가지 않도록, 누른 프레임만 읽는다.
         public bool AbilityPressed => !IsLocked && !PointerBlocked && !IsAbilityBlocked && _abilityAction.action.WasPressedThisFrame();
         // 키보드 입력이라 패널 위 커서와 무관하게 받는다.

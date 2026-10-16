@@ -16,7 +16,7 @@ MonoBehaviour:
   _unlockedByDefault: 0
   _displayName: "\uD3ED\uD0C43\uAC1C"
   _description: "\uD3ED\uD0C4\uC744 \uCD5C\uB300 3\uAC1C \uBCF4\uC720\uD560 \uC218
-    \uC788\uC9C0\uB9CC, \uC7AC\uC7A5\uC804 \uC2DC\uAC04\uC774 \uC57D\uAC04 \uC99D\uAC00\uD55C\uB2E4."
+    \uC788\uC9C0\uB9CC,\n\uC7AC\uC7A5\uC804 \uC2DC\uAC04\uC774 \uC57D\uAC04 \uC99D\uAC00\uD55C\uB2E4."
   _icon: {fileID: 21300000, guid: 971578371657ea4449b7e78ca729fe57, type: 3}
   _bombSprite: {fileID: 21300000, guid: f2dffb267cff79043a6103e92bba2373, type: 3}
   _bombSize: 0.74
