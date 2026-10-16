@@ -16,7 +16,7 @@ MonoBehaviour:
   _displayName: "\uBE68\uAC04 \uB9AC\uBCF8"
   _description: "\uB300\uC2DC \uC911\uC5D0\uB3C4 \uD3ED\uD0C4\uC744 \uB358\uC9C8
     \uC218 \uC788\uB2E4."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 713d4b8478420dd40842fa2b21d985d4, type: 3}
   _unlockedByDefault: 0
   _effect: 9
   _value1: 0

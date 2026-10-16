@@ -3,8 +3,8 @@ guid: d81ecfd598df8574281f601464eb3a47
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3197974186826156915
-    second: MainTitleGoblin_0
+      213: -8612198089822144934
+    second: TitleGoblin_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainTitleGoblin_0
+      name: TitleGoblin_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1536
-        height: 1152
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 37b44ae449c716c20800000000000000
-      internalID: 3197974186826156915
+      spriteID: a567ad877735b7880800000000000000
+      internalID: -8612198089822144934
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MainTitleGoblin_0: 3197974186826156915
+      TitleGoblin_0: -8612198089822144934
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

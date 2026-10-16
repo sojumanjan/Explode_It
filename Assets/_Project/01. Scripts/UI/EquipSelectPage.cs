@@ -8,13 +8,12 @@ using UnityEngine.UI;
 namespace ExplodeIt.UI
 {
     // 메인 메뉴의 장비 칸을 누르면 열리는 고르기 페이지. 누른 칸에 따라 무기·스킬·아티팩트 목록을 보여 준다.
-    // 왼쪽 페이지에서 카드를 누르면 오른쪽 페이지에 크게 보이고, 장착을 누르면 저장하고 메인 메뉴로 돌아간다.
+    // 왼쪽 페이지에서 카드를 누르면 오른쪽 페이지에 크게 보이고, 장착을 누르면 저장한다. 메인 메뉴로는 뒤로가기로 돌아간다.
     // 잠긴 카드는 이름을 가리고 해금 조건(그 보상을 주는 업적의 조건)을 보여 준다.
     // 카드는 처음 열릴 때 견본을 복제해 만든다(전투 중이 아니라 Instantiate를 써도 된다).
     public class EquipSelectPage : MonoBehaviour, IMenuPage
     {
         [SerializeField] private UnlockCatalog _catalog;
-        [SerializeField] private MenuPager _pager;
         [SerializeField] private TMP_Text _title;
         [SerializeField, TextArea] private string _weaponTitle = "무기 고르기";
         [SerializeField, TextArea] private string _abilityTitle = "스킬 고르기";
@@ -172,14 +171,18 @@ namespace ExplodeIt.UI
             }
 
             SaveSystem.Save();
-            _pager.Back();
+            // 장착해도 페이지에 남아 다른 것과 비교해 볼 수 있게 한다. 메인으로는 뒤로가기로만 돌아간다.
+            AudioManager.Play(_clickSound);
+            Refresh();
         }
 
         private void Unequip()
         {
             SaveSystem.Data.SetArtifactInSlot(_slot, "");
             SaveSystem.Save();
-            _pager.Back();
+            // 장착해도 페이지에 남아 다른 것과 비교해 볼 수 있게 한다. 메인으로는 뒤로가기로만 돌아간다.
+            AudioManager.Play(_clickSound);
+            Refresh();
         }
 
         // 무기·스킬은 늘 하나를 끼고 있어야 하므로 해제하지 않고 다른 것으로 바꿔 끼기만 한다. 아티팩트만 칸을 비울 수 있다.
