@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AbilityUpgradeData
   _id: instant_duration
   _ability: {fileID: 11400000, guid: daa53f07636beae4697db790bccb4517, type: 2}
-  _displayName: "\uC21C\uAC04\uD3ED\uD0C4 \uC9C0\uC18D +4\uCD08"
-  _description: "\uC21C\uAC04\uD3ED\uD0C4\uC774 4\uCD08 \uB354 \uC774\uC5B4\uC9C4\uB2E4."
+  _displayName: "\uC21C\uAC04\uD3ED\uD0C4 \uC9C0\uC18D +3\uCD08"
+  _description: "\uC21C\uAC04\uD3ED\uD0C4\uC774 3\uCD08 \uB354 \uC774\uC5B4\uC9C4\uB2E4."
   _effect: 1
-  _value: 4
+  _value: 3
