@@ -24,6 +24,7 @@ namespace ExplodeIt.Progression
         // 발동 중인 스킬과 그 발동 동안 센 처치 수.
         private AbilityData _activeAbility;
         private int _useKills;
+        private int _useThrows;
 
         // 이번 판에 업적을 세는 중인지. 개발자 패널이 상태 줄에 보여 준다.
         public bool IsCounting => _isRunning && !_isDisabled;
@@ -45,6 +46,7 @@ namespace ExplodeIt.Progression
             GameEvents.EnemyKilled += OnEnemyKilled;
             GameEvents.EnemyKilledBy += OnEnemyKilledBy;
             GameEvents.BombExploded += OnBombExploded;
+            GameEvents.BombThrown += OnBombThrown;
             GameEvents.PlayerDied += OnRunEnded;
             GameEvents.StageCleared += OnRunEnded;
             ProgressionEvents.AbilityStarted += OnAbilityStarted;
@@ -57,6 +59,7 @@ namespace ExplodeIt.Progression
             GameEvents.EnemyKilled -= OnEnemyKilled;
             GameEvents.EnemyKilledBy -= OnEnemyKilledBy;
             GameEvents.BombExploded -= OnBombExploded;
+            GameEvents.BombThrown -= OnBombThrown;
             GameEvents.PlayerDied -= OnRunEnded;
             GameEvents.StageCleared -= OnRunEnded;
             ProgressionEvents.AbilityStarted -= OnAbilityStarted;
@@ -176,6 +179,19 @@ namespace ExplodeIt.Progression
         {
             _activeAbility = ability;
             _useKills = 0;
+            _useThrows = 0;
+        }
+
+        // 일반 폭탄 던지기만 온다(스킬 폭탄은 이 이벤트를 내지 않는다).
+        private void OnBombThrown()
+        {
+            if (!IsCounting || _activeAbility == null)
+            {
+                return;
+            }
+
+            _useThrows++;
+            Check(AchievementCondition.AbilityThrowsInOneUse, _useThrows, _activeAbility);
         }
 
         private void OnAbilityEnded(AbilityData ability)

@@ -201,24 +201,40 @@ namespace ExplodeIt.Progression
         // 던지는 시각·거리·폭발까지 시간을 폭탄마다 무작위로 정해, 한꺼번에 날아가 동시에 터지지 않고 우르르 이어 터지게 한다.
         private void ThrowScatter()
         {
-            int count = Mathf.Max(1, _data.ScatterCount + _countBonus);
+            int total = Mathf.Max(1, _data.ScatterCount + _countBonus);
+            // 한 발은 발밑에 떨구고, 나머지로 360도를 나눈다.
+            ThrowScatterBomb(Vector2.zero, _data.ScatterSelfDropRadius, 0f);
+            int count = total - 1;
+            if (count <= 0)
+            {
+                return;
+            }
+
             float step = 360f / count;
             float jitter = _data.ScatterAngleJitter;
             for (int i = 0; i < count; i++)
             {
                 float angle = (step * i + Random.Range(-jitter, jitter)) * Mathf.Deg2Rad;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-                float fuse = Random.Range(_data.ScatterFuseDelayMin, _data.ScatterFuseDelayMax);
-                float distance = Random.Range(_data.ScatterDistanceMin, _data.ScatterDistanceMax);
-                LaunchLater(Random.Range(0f, _data.ScatterThrowDelayMax), () =>
-                {
-                    // 늦게 나가는 폭탄은 그 순간의 플레이어 자리에서 출발한다.
-                    Vector2 origin = transform.position;
-                    _scatterStats.FuseDelay = fuse;
-                    _launcher.LaunchSkillBomb(origin, ClampToArena(origin + direction * distance), _scatterStats, _scatterOptions,
-                        _hasChildBombs ? _onScatterExploded : null, _onSkillBombFinished);
-                });
+                ThrowScatterBomb(direction, _data.ScatterDistanceMin, _data.ScatterDistanceMax);
             }
+        }
+
+        // 던지는 시각·거리·폭발까지 시간을 폭탄마다 무작위로 정한다. 방향이 0이면 거리 반경 안 아무 곳(발밑)에 떨군다.
+        private void ThrowScatterBomb(Vector2 direction, float distanceMin, float distanceMax)
+        {
+            float fuse = Random.Range(_data.ScatterFuseDelayMin, _data.ScatterFuseDelayMax);
+            Vector2 offset = direction == Vector2.zero
+                ? Random.insideUnitCircle * distanceMin
+                : direction * Random.Range(distanceMin, distanceMax);
+            LaunchLater(Random.Range(0f, _data.ScatterThrowDelayMax), () =>
+            {
+                // 늦게 나가는 폭탄은 그 순간의 플레이어 자리에서 출발한다.
+                Vector2 origin = transform.position;
+                _scatterStats.FuseDelay = fuse;
+                _launcher.LaunchSkillBomb(origin, ClampToArena(origin + offset), _scatterStats, _scatterOptions,
+                    _hasChildBombs ? _onScatterExploded : null, _onSkillBombFinished);
+            });
         }
 
         // 다발폭탄 강화: 터진 자리에서 작은 폭탄이 무작위 방향으로 튀어 나가 연달아 터진다. 작은 폭탄은 다시 튀지 않는다.

@@ -19,6 +19,8 @@ namespace ExplodeIt.Progression
         // 업적에 정한 스킬로 보스의 마지막 한 방을 넣기.
         BossKilledByAbility,
         // 업적에 정한 스킬로 지금까지 처치한 수 (모든 판 누적).
-        AbilityKillsTotal
+        AbilityKillsTotal,
+        // 업적에 정한 스킬을 한 번 발동하는 동안 던진 폭탄 수 (순간폭탄용). 연발 무기는 한 발씩 센다.
+        AbilityThrowsInOneUse
     }
 }

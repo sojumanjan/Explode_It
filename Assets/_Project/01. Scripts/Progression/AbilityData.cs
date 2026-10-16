@@ -67,6 +67,10 @@ namespace ExplodeIt.Progression
         [UnityEngine.Serialization.FormerlySerializedAs("_scatterDistance")]
         [SerializeField, Min(0f)] private float _scatterDistanceMax = 5f;
 
+        // 멀리만 뿌리면 바로 붙은 적이 비어 애매하므로, 한 발은 늘 발밑에 떨군다.
+        [Tooltip("폭탄 수 중 한 발은 플레이어 발밑 이 반경 안에 떨어진다 (유닛). 나머지는 사방으로 뿌린다")]
+        [SerializeField, Min(0f)] private float _scatterSelfDropRadius = 0.2f;
+
         [Tooltip("폭탄 하나의 폭발 반경 (유닛)")]
         [SerializeField, Min(0.1f)] private float _scatterRadius = 1.4f;
 
@@ -148,6 +152,7 @@ namespace ExplodeIt.Progression
         public float ScatterAngleJitter => _scatterAngleJitter;
         public float ScatterDistanceMin => _scatterDistanceMin;
         public float ScatterDistanceMax => Mathf.Max(_scatterDistanceMin, _scatterDistanceMax);
+        public float ScatterSelfDropRadius => _scatterSelfDropRadius;
         public float ScatterRadius => _scatterRadius;
         public float ScatterThrowDelayMax => _scatterThrowDelayMax;
         public float ScatterFuseDelayMin => _scatterFuseDelayMin;

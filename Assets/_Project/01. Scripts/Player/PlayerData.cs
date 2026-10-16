@@ -18,7 +18,7 @@ namespace ExplodeIt.Player
 
         [Header("체력")]
         [Tooltip("스토리 모드에서 버틸 수 있는 피격 수 (칸). 무한 모드는 한 방에 죽는다")]
-        [SerializeField, Min(1)] private int _storyHealth = 3;
+        [SerializeField, Min(1)] private int _storyHealth = 2;
 
         [Tooltip("맞고 살아남은 뒤 무적 시간 (초). 이 동안 몸이 반투명해지며 다시 맞지 않는다")]
         [SerializeField, Min(0f)] private float _hurtInvulnerability = 1.5f;

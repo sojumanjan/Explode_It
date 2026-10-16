@@ -213,7 +213,9 @@ namespace ExplodeIt.Bombs
             }
 
             Bomb bomb = _pool.Get(transform.position);
-            bomb.Launch(target, _stats, new BombOptions(false, false, _throwSource), null, _releaseBomb);
+            // 스킬은 모두 방패를 뚫는다. 순간폭탄 발동 중에 던진 폭탄도 스킬 폭탄이다.
+            bool ignoresGuard = _throwSource == DamageSource.InstantBomb;
+            bomb.Launch(target, _stats, new BombOptions(false, ignoresGuard, _throwSource), null, _releaseBomb);
 
             // 가득 찬 상태에서 처음 던질 때만 충전을 새로 시작한다.
             if (_chargesLeft >= _stats.Charges)
