@@ -24,6 +24,8 @@ namespace ExplodeIt.Core
         // 업적 등으로 해금한 무기 ID. 처음부터 열린 무기는 무기 데이터 쪽 표시로 판단하므로 여기 넣지 않는다.
         [SerializeField] private List<string> _unlockedWeapons = new List<string>();
         [SerializeField] private string _selectedWeapon = "";
+        [SerializeField] private List<string> _unlockedAbilities = new List<string>();
+        [SerializeField] private string _selectedAbility = "";
         [SerializeField] private List<string> _unlockedArtifacts = new List<string>();
         // 칸 순서대로 장착한 아티팩트 ID. 빈 칸은 빈 문자열이다.
         [SerializeField] private List<string> _selectedArtifacts = new List<string>();
@@ -60,6 +62,12 @@ namespace ExplodeIt.Core
         {
             get => _selectedWeapon;
             set => _selectedWeapon = value ?? "";
+        }
+
+        public string SelectedAbility
+        {
+            get => _selectedAbility;
+            set => _selectedAbility = value ?? "";
         }
 
         public float SfxVolume
@@ -107,11 +115,13 @@ namespace ExplodeIt.Core
 
         public bool IsWeaponUnlocked(string id) => Has(_unlockedWeapons, id);
         public bool IsArtifactUnlocked(string id) => Has(_unlockedArtifacts, id);
+        public bool IsAbilityUnlocked(string id) => Has(_unlockedAbilities, id);
         public bool IsAchievementCompleted(string id) => Has(_completedAchievements, id);
 
         // 새로 해금·달성했으면 true. 이미 있으면 false라 알림을 두 번 띄우지 않는다.
         public bool UnlockWeapon(string id) => TryAdd(_unlockedWeapons, id);
         public bool UnlockArtifact(string id) => TryAdd(_unlockedArtifacts, id);
+        public bool UnlockAbility(string id) => TryAdd(_unlockedAbilities, id);
         public bool CompleteAchievement(string id) => TryAdd(_completedAchievements, id);
 
         // 업적 달성과 그 보상 해금만 지운다(개발자 패널). 오프닝·기록·설정은 남긴다.
@@ -120,7 +130,9 @@ namespace ExplodeIt.Core
             _completedAchievements.Clear();
             _unlockedWeapons.Clear();
             _unlockedArtifacts.Clear();
+            _unlockedAbilities.Clear();
             _selectedWeapon = "";
+            _selectedAbility = "";
             _selectedArtifacts.Clear();
         }
 

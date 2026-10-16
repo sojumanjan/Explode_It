@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ExplodeIt.UI
 {
-    // 메인 메뉴. 책 왼쪽 페이지에 지금 장착한 무기·아티팩트 칸이 보이고, 칸을 누르면 고르기 페이지로 간다.
+    // 메인 메뉴. 책 왼쪽 페이지에 지금 장착한 무기·스킬·아티팩트 칸이 보이고, 칸을 누르면 고르기 페이지로 간다.
     // 오른쪽 페이지에서 모드를 누르면 장착한 그대로 바로 판을 시작한다.
     // 무한 모드는 스토리를 클리어해야 열리고, 열렸어도 아직 구현 전이면 "준비 중"만 알린다.
     public class MainMenuPage : MonoBehaviour, IMenuPage
@@ -22,6 +22,7 @@ namespace ExplodeIt.UI
 
         [Header("장비 칸")]
         [SerializeField] private ItemCard _weaponSlot;
+        [SerializeField] private ItemCard _abilitySlot;
         // 칸 순서대로. 카탈로그의 아티팩트 칸 수보다 많은 칸은 숨긴다.
         [SerializeField] private ItemCard[] _artifactSlots;
         [SerializeField] private EquipSelectPage _select;
@@ -102,7 +103,8 @@ namespace ExplodeIt.UI
         private void BeginRun(RunMode mode)
         {
             WeaponData weapon = _catalog.FindUsableWeapon(SaveSystem.Data.SelectedWeapon);
-            _launcher.Launch(mode, weapon != null ? weapon.Id : "", SaveSystem.Data.SelectedArtifacts);
+            AbilityData ability = _catalog.FindUsableAbility(SaveSystem.Data.SelectedAbility);
+            _launcher.Launch(mode, weapon != null ? weapon.Id : "", ability != null ? ability.Id : "", SaveSystem.Data.SelectedArtifacts);
         }
 
         private void RefreshSlots()
@@ -110,6 +112,8 @@ namespace ExplodeIt.UI
             SaveData data = SaveSystem.Data;
             WeaponData weapon = _catalog.FindUsableWeapon(data.SelectedWeapon);
             _weaponSlot.Setup(weapon, weapon != null ? weapon.Icon : null, weapon != null ? weapon.DisplayName : _emptySlotText, false, OnWeaponSlotClicked);
+            AbilityData ability = _catalog.FindUsableAbility(data.SelectedAbility);
+            _abilitySlot.Setup(ability, ability != null ? ability.Icon : null, ability != null ? ability.DisplayName : _emptySlotText, false, OnAbilitySlotClicked);
 
             for (int i = 0; i < _artifactSlots.Length && i < _catalog.ArtifactSlots; i++)
             {
@@ -121,6 +125,12 @@ namespace ExplodeIt.UI
         private void OnWeaponSlotClicked(ItemCard slot)
         {
             _select.PrepareWeapon();
+            _pager.Open(_selectPage);
+        }
+
+        private void OnAbilitySlotClicked(ItemCard slot)
+        {
+            _select.PrepareAbility();
             _pager.Open(_selectPage);
         }
 

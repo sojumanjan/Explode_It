@@ -13,7 +13,7 @@ namespace ExplodeIt.UI
 
         private bool _isLaunching;
 
-        public void Launch(RunMode mode, string weaponId, IReadOnlyList<string> artifactIds)
+        public void Launch(RunMode mode, string weaponId, string abilityId, IReadOnlyList<string> artifactIds)
         {
             // 덮이는 동안 버튼을 또 눌러 두 번 넘어가지 않게 한다.
             if (_isLaunching)
@@ -23,7 +23,7 @@ namespace ExplodeIt.UI
 
             _isLaunching = true;
             AudioManager.Play(_clickSound);
-            RunSetup.Set(mode, weaponId, artifactIds);
+            RunSetup.Set(mode, weaponId, abilityId, artifactIds);
             _fader.FadeOut(SceneFlow.LoadGame);
         }
     }

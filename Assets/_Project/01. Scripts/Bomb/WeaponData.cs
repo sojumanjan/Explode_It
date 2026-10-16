@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ExplodeIt.Bombs
 {
     [CreateAssetMenu(fileName = "WeaponData", menuName = "Explode It/Weapon Data")]
-    public class WeaponData : ScriptableObject
+    public class WeaponData : ScriptableObject, IUnlockable
     {
         [Header("해금")]
         [Tooltip("저장에 쓰는 고유 ID (영문). 해금·선택 기록이 이 값으로 남으므로 한 번 정하면 바꾸지 않는다. 에셋 이름을 바꿔도 기록은 유지된다")]

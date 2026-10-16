@@ -17,6 +17,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d43e31b338f00544eb0b8db66ea60555, type: 2}
   - {fileID: 11400000, guid: 704607521b200f14eb3d5c65cc2d416c, type: 2}
   - {fileID: 11400000, guid: c6341796715287f45b0e271a626107cc, type: 2}
+  _abilities:
+  - {fileID: 11400000, guid: 5b38ccfd3a44697489f4d6f286ec6301, type: 2}
   _artifacts: []
   _achievements:
   - {fileID: 11400000, guid: 27b62fe804d7eb248893da64a587c002, type: 2}

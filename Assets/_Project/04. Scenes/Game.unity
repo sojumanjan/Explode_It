@@ -9023,6 +9023,7 @@ GameObject:
   - component: {fileID: 178731717}
   - component: {fileID: 178731716}
   - component: {fileID: 178731715}
+  - component: {fileID: 178731719}
   m_Layer: 5
   m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
@@ -9164,6 +9165,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178731713}
   m_CullTransparentMesh: 1
+--- !u!114 &178731719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178731713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &180838993
 GameObject:
   m_ObjectHideFlags: 0
@@ -39549,6 +39563,7 @@ GameObject:
   - component: {fileID: 847771952}
   - component: {fileID: 847771951}
   - component: {fileID: 847771950}
+  - component: {fileID: 847771953}
   m_Layer: 5
   m_Name: OkButton
   m_TagString: Untagged
@@ -39670,6 +39685,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847771948}
   m_CullTransparentMesh: 1
+--- !u!114 &847771953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847771948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &848885036
 GameObject:
   m_ObjectHideFlags: 0
@@ -40517,6 +40545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
+  _alignBottom: 0
 --- !u!1 &865813512
 GameObject:
   m_ObjectHideFlags: 0
@@ -48107,6 +48136,7 @@ GameObject:
   - component: {fileID: 1035785290}
   - component: {fileID: 1035785289}
   - component: {fileID: 1035785288}
+  - component: {fileID: 1035785292}
   m_Layer: 5
   m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
@@ -48248,6 +48278,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035785286}
   m_CullTransparentMesh: 1
+--- !u!114 &1035785292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035785286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1038525105
 GameObject:
   m_ObjectHideFlags: 0
@@ -59064,6 +59107,7 @@ GameObject:
   - component: {fileID: 1241937371}
   - component: {fileID: 1241937370}
   - component: {fileID: 1241937369}
+  - component: {fileID: 1241937373}
   m_Layer: 5
   m_Name: "\uB2E4\uC2DC\uD558\uAE30Button"
   m_TagString: Untagged
@@ -59205,6 +59249,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241937367}
   m_CullTransparentMesh: 1
+--- !u!114 &1241937373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241937367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1242970271
 GameObject:
   m_ObjectHideFlags: 0
@@ -70632,6 +70689,7 @@ GameObject:
   - component: {fileID: 1493232876}
   - component: {fileID: 1493232875}
   - component: {fileID: 1493232874}
+  - component: {fileID: 1493232878}
   m_Layer: 5
   m_Name: "\uB2E4\uC2DC\uD558\uAE30Button"
   m_TagString: Untagged
@@ -70773,6 +70831,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493232872}
   m_CullTransparentMesh: 1
+--- !u!114 &1493232878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493232872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1494101045
 GameObject:
   m_ObjectHideFlags: 0
@@ -78292,6 +78363,7 @@ GameObject:
   - component: {fileID: 1656376668}
   - component: {fileID: 1656376667}
   - component: {fileID: 1656376666}
+  - component: {fileID: 1656376670}
   m_Layer: 5
   m_Name: "\uB2E4\uC2DC\uD558\uAE30Button"
   m_TagString: Untagged
@@ -78433,6 +78505,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656376664}
   m_CullTransparentMesh: 1
+--- !u!114 &1656376670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656376664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1660952291
 GameObject:
   m_ObjectHideFlags: 0
@@ -78729,6 +78814,7 @@ GameObject:
   - component: {fileID: 1666153860}
   - component: {fileID: 1666153859}
   - component: {fileID: 1666153858}
+  - component: {fileID: 1666153862}
   m_Layer: 5
   m_Name: "\uBA54\uC778\uC73C\uB85CButton"
   m_TagString: Untagged
@@ -78870,6 +78956,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666153856}
   m_CullTransparentMesh: 1
+--- !u!114 &1666153862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666153856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1669764419
 GameObject:
   m_ObjectHideFlags: 0
@@ -86051,6 +86150,7 @@ GameObject:
   - component: {fileID: 1782013341}
   - component: {fileID: 1782013340}
   - component: {fileID: 1782013339}
+  - component: {fileID: 1782013343}
   m_Layer: 5
   m_Name: "\uACC4\uC18D\uD558\uAE30Button"
   m_TagString: Untagged
@@ -86192,6 +86292,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782013337}
   m_CullTransparentMesh: 1
+--- !u!114 &1782013343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782013337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef552ec20cbced49b0209b9b50e5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverScale
+  _target: {fileID: 0}
 --- !u!1 &1784337183
 GameObject:
   m_ObjectHideFlags: 0
@@ -102695,6 +102808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01318081fdeb5240b5a0d237f9c9723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.PivotCenteredImage
+  _alignBottom: 0
 --- !u!1 &2147149694
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using ExplodeIt.Bombs;
 using ExplodeIt.Core;
 using ExplodeIt.Progression;
 using TMPro;
@@ -23,9 +24,11 @@ namespace ExplodeIt.UI
         [SerializeField] private SoundData _sound;
         [SerializeField] private string _titleFormat = "업적 달성 · {0}";
         [SerializeField] private string _weaponFormat = "새 무기 해금: {0}";
+        [SerializeField] private string _abilityFormat = "새 스킬 해금: {0}";
         [SerializeField] private string _artifactFormat = "새 아티팩트 해금: {0}";
 
         private readonly Queue<AchievementData> _queue = new Queue<AchievementData>();
+        private readonly List<IUnlockable> _rewards = new List<IUnlockable>();
         private Vector2 _shownPosition;
         private Vector2 _hiddenPosition;
         private Sequence _sequence;
@@ -60,6 +63,11 @@ namespace ExplodeIt.UI
             }
         }
 
+        private string FormatFor(IUnlockable reward)
+        {
+            return reward is WeaponData ? _weaponFormat : reward is AbilityData ? _abilityFormat : _artifactFormat;
+        }
+
         private void ShowNext()
         {
             if (_queue.Count == 0)
@@ -71,13 +79,15 @@ namespace ExplodeIt.UI
 
             _isShowing = true;
             AchievementData achievement = _queue.Dequeue();
-            Sprite icon = achievement.RewardWeapon != null ? achievement.RewardWeapon.Icon
-                : achievement.RewardArtifact != null ? achievement.RewardArtifact.Icon : achievement.Sticker;
+            // 보상이 여럿이면 첫 보상을 보여 준다. 판이 끝난 뒤 해금 창에 전부 나온다.
+            _rewards.Clear();
+            achievement.CollectRewards(_rewards);
+            IUnlockable reward = _rewards.Count > 0 ? _rewards[0] : null;
+            Sprite icon = reward != null ? reward.Icon : achievement.Sticker;
             _icon.sprite = icon;
             _icon.enabled = icon != null;
             _title.text = string.Format(_titleFormat, achievement.DisplayName);
-            _detail.text = achievement.RewardWeapon != null ? string.Format(_weaponFormat, achievement.RewardWeapon.DisplayName)
-                : achievement.RewardArtifact != null ? string.Format(_artifactFormat, achievement.RewardArtifact.DisplayName) : achievement.Description;
+            _detail.text = reward != null ? string.Format(FormatFor(reward), reward.DisplayName) : achievement.Description;
 
             _panel.gameObject.SetActive(true);
             _panel.anchoredPosition = _hiddenPosition;

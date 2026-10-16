@@ -11,6 +11,9 @@ namespace ExplodeIt.Progression
         [Tooltip("고를 수 있는 무기. 처음부터 열린 무기 중 맨 앞의 것이 기본 무기다")]
         [SerializeField] private WeaponData[] _weapons = new WeaponData[0];
 
+        [Tooltip("고를 수 있는 스킬. 처음부터 열린 스킬 중 맨 앞의 것이 기본 스킬이다")]
+        [SerializeField] private AbilityData[] _abilities = new AbilityData[0];
+
         [Tooltip("고를 수 있는 아티팩트")]
         [SerializeField] private ArtifactData[] _artifacts = new ArtifactData[0];
 
@@ -21,7 +24,34 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(0)] private int _artifactSlots = 2;
 
         public WeaponData[] Weapons => _weapons;
+        public AbilityData[] Abilities => _abilities;
         public ArtifactData[] Artifacts => _artifacts;
+
+        // 저장된 ID가 지워졌거나 잠긴 스킬을 가리키면 처음부터 열린 맨 앞 스킬을 돌려준다.
+        public AbilityData FindUsableAbility(string id)
+        {
+            AbilityData fallback = null;
+            for (int i = 0; i < _abilities.Length; i++)
+            {
+                AbilityData ability = _abilities[i];
+                if (!ability.IsUnlocked)
+                {
+                    continue;
+                }
+
+                if (ability.Id == id)
+                {
+                    return ability;
+                }
+
+                if (fallback == null)
+                {
+                    fallback = ability;
+                }
+            }
+
+            return fallback;
+        }
         public AchievementData[] Achievements => _achievements;
         public int ArtifactSlots => _artifactSlots;
 
@@ -126,7 +156,7 @@ namespace ExplodeIt.Progression
             for (int i = 0; i < _achievements.Length; i++)
             {
                 AchievementData achievement = _achievements[i];
-                if (achievement.RewardWeapon == reward || achievement.RewardArtifact == reward)
+                if (achievement.RewardWeapon == reward || achievement.RewardArtifact == reward || achievement.RewardAbility == reward)
                 {
                     return achievement;
                 }

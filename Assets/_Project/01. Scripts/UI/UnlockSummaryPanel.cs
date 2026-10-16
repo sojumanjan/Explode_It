@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using ExplodeIt.Bombs;
 using ExplodeIt.Core;
 using ExplodeIt.Progression;
 using TMPro;
@@ -25,9 +26,11 @@ namespace ExplodeIt.UI
         [SerializeField] private Transform _list;
         [SerializeField] private SoundData _sound;
         [SerializeField] private string _weaponFormat = "무기 · {0}";
+        [SerializeField] private string _abilityFormat = "스킬 · {0}";
         [SerializeField] private string _artifactFormat = "아티팩트 · {0}";
 
         private readonly List<AchievementData> _completed = new List<AchievementData>();
+        private readonly List<IUnlockable> _rewards = new List<IUnlockable>();
         private float _showAt = -1f;
         private bool _hasShown;
 
@@ -84,18 +87,17 @@ namespace ExplodeIt.UI
         {
             _hasShown = true;
             _window.SetActive(true);
+            _rewards.Clear();
             for (int i = 0; i < _completed.Count; i++)
             {
-                AchievementData achievement = _completed[i];
-                if (achievement.RewardWeapon != null)
-                {
-                    AddRow(achievement.RewardWeapon.Icon, string.Format(_weaponFormat, achievement.RewardWeapon.DisplayName));
-                }
+                _completed[i].CollectRewards(_rewards);
+            }
 
-                if (achievement.RewardArtifact != null)
-                {
-                    AddRow(achievement.RewardArtifact.Icon, string.Format(_artifactFormat, achievement.RewardArtifact.DisplayName));
-                }
+            for (int i = 0; i < _rewards.Count; i++)
+            {
+                IUnlockable reward = _rewards[i];
+                string format = reward is WeaponData ? _weaponFormat : reward is AbilityData ? _abilityFormat : _artifactFormat;
+                AddRow(reward.Icon, string.Format(format, reward.DisplayName));
             }
 
             AudioManager.Play(_sound);

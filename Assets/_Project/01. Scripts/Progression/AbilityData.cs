@@ -1,11 +1,29 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Progression
 {
-    // 특수 능력: 블랙홀 폭탄. 처치로 게이지를 채워 한 번에 뭉쳐서 지우는 공격 수단이다.
+    // 특수 능력(스킬): 처치로 게이지를 채워 우클릭으로 쓰는 공격 수단이다. 지금은 블랙홀 폭탄 하나다.
+    // 메인 메뉴의 스킬 칸에서 고르고, 업적으로 해금한다.
     [CreateAssetMenu(fileName = "AbilityData", menuName = "Explode It/Ability Data")]
-    public class AbilityData : ScriptableObject
+    public class AbilityData : ScriptableObject, IUnlockable
     {
+        [Header("해금·메뉴 표시")]
+        [Tooltip("저장에 쓰는 고유 ID (영문). 해금·선택 기록이 이 값으로 남으므로 한 번 정하면 바꾸지 않는다")]
+        [SerializeField] private string _id;
+
+        [Tooltip("처음부터 쓸 수 있는 스킬인지. 끄면 업적으로 해금해야 고를 수 있다")]
+        [SerializeField] private bool _unlockedByDefault;
+
+        [Tooltip("메뉴에 보이는 이름")]
+        [SerializeField] private string _displayName;
+
+        [Tooltip("메뉴에 보이는 설명")]
+        [SerializeField, TextArea] private string _description;
+
+        [Tooltip("메뉴 스킬 칸·카드 그림. 비워 두면 이름만 보인다")]
+        [SerializeField] private Sprite _icon;
+
         [Header("충전")]
         [Tooltip("게이지를 채우는 데 필요한 처치 수 (마리). 블랙홀로 잡은 적은 세지 않는다")]
         [SerializeField, Min(1)] private int _killsToCharge = 9;
@@ -32,6 +50,11 @@ namespace ExplodeIt.Progression
         [Tooltip("흡입 속도 (유닛/초). 범위 안의 적이 중심 쪽으로 끌려가는 속도")]
         [SerializeField, Min(0f)] private float _pullSpeed = 4f;
 
+        public string Id => _id;
+        public string DisplayName => _displayName;
+        public string Description => _description;
+        public Sprite Icon => _icon;
+        public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsAbilityUnlocked(_id);
         public int KillsToCharge => _killsToCharge;
         public int MaxCharges => _maxCharges;
         public int StartCharges => Mathf.Min(_startCharges, _maxCharges);

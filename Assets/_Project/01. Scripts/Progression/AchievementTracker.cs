@@ -121,6 +121,11 @@ namespace ExplodeIt.Progression
                 data.UnlockArtifact(achievement.RewardArtifact.Id);
             }
 
+            if (achievement.RewardAbility != null)
+            {
+                data.UnlockAbility(achievement.RewardAbility.Id);
+            }
+
             SaveSystem.Save();
             ProgressionEvents.RaiseAchievementCompleted(achievement);
         }

@@ -12,9 +12,11 @@ namespace ExplodeIt.Core
         private static bool _isSet;
         private static RunMode _mode;
         private static string _weaponId;
+        private static string _abilityId;
 
         public static RunMode Mode => _isSet ? _mode : RunMode.Story;
         public static string WeaponId => _isSet ? _weaponId : SaveSystem.Data.SelectedWeapon;
+        public static string AbilityId => _isSet ? _abilityId : SaveSystem.Data.SelectedAbility;
         // 고른 아티팩트 ID. 빈 칸(빈 문자열)이 섞여 있을 수 있으니 읽는 쪽에서 건너뛴다.
         public static IReadOnlyList<string> ArtifactIds => _isSet ? _artifactIds : SaveSystem.Data.SelectedArtifacts;
 
@@ -24,14 +26,16 @@ namespace ExplodeIt.Core
             _isSet = false;
             _mode = RunMode.Story;
             _weaponId = "";
+            _abilityId = "";
             _artifactIds.Clear();
         }
 
-        public static void Set(RunMode mode, string weaponId, IReadOnlyList<string> artifactIds)
+        public static void Set(RunMode mode, string weaponId, string abilityId, IReadOnlyList<string> artifactIds)
         {
             _isSet = true;
             _mode = mode;
             _weaponId = weaponId ?? "";
+            _abilityId = abilityId ?? "";
             _artifactIds.Clear();
             if (artifactIds == null)
             {
