@@ -8,7 +8,7 @@ namespace ExplodeIt.Core
     {
         // 장전된 폭탄이 가득일 때 이동속도에 더하는 비율 (0.1 = +10%).
         public static float MoveSpeedBonusWhenBombsFull;
-        // 대시를 연달아 쓸 수 있는 추가 횟수.
+        // 대시가 끝난 직후 이어 구를 수 있는 횟수.
         public static int ExtraDodges;
         // 대시 쿨타임 배율.
         public static float DodgeCooldownMultiplier = 1f;

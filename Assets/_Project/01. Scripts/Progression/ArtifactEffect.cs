@@ -6,7 +6,7 @@ namespace ExplodeIt.Progression
         None,
         // 장전된 폭탄이 가득일 때 이동속도 증가. 값 1 = 증가 비율.
         MoveSpeedWhenBombsFull,
-        // 대시를 연달아 더 쓸 수 있음. 값 1 = 추가 횟수.
+        // 대시가 끝난 직후 다시 누르면 쿨타임 없이 이어 구름. 값 1 = 이어 구를 수 있는 횟수.
         ExtraDodge,
         // 체력 증가, 대신 적이 빨리 나옴. 값 1 = 체력 칸, 값 2 = 스폰 간격 배율.
         ExtraHealth,

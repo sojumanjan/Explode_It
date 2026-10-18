@@ -33,7 +33,7 @@ namespace ExplodeIt.Player
         private float _time;
         private float _hopPhase;
         private float _hopWeight;
-        private bool _wasDodging;
+        private int _seenDodgeCount;
         // 구르기 눌림 연출이 시작된 뒤 지난 시간. 음수면 연출 중이 아니다.
         private float _dodgeFxTime = -1f;
 
@@ -101,13 +101,13 @@ namespace ExplodeIt.Player
 
             // 구르기는 회전 없이 위아래로 눌렸다가 천천히 펴진다. 스프링은 너무 빨리 돌아와서 시간을 직접 정한다.
             // 연출 동안은 뛰기·숨쉬기를 얹지 않아, 눌린 모양이 그대로 읽히게 한다.
-            bool isDodging = _dodge.IsDodging;
-            if (isDodging && !_wasDodging)
+            // 이어 구르기도 처음부터 다시 눌리도록, 구르기 상태가 아니라 시작 횟수로 새 구르기를 알아챈다.
+            if (_dodge.DodgeCount != _seenDodgeCount)
             {
+                _seenDodgeCount = _dodge.DodgeCount;
                 _dodgeFxTime = 0f;
             }
 
-            _wasDodging = isDodging;
             if (_dodgeFxTime >= 0f)
             {
                 TickDodgeSquash(deltaTime);

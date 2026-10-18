@@ -20,6 +20,13 @@ namespace ExplodeIt.Player
         [Tooltip("쿨타임 (초). 구르기를 시작한 순간부터 다음 구르기까지")]
         [SerializeField, Min(0f)] private float _cooldown = 1.5f;
 
+        [Header("이어 구르기 (아티팩트 가죽 신발)")]
+        [Tooltip("구르기가 끝난 뒤 이 시간(초) 안에 다시 누르면, 이 시간이 다 지나는 순간 쿨타임 없이 한 번 더 구른다. 두 구르기 사이의 쉬는 틈이기도 하다")]
+        [SerializeField, Min(0f)] private float _chainWindow = 0.3f;
+
+        [Tooltip("구르기가 끝나기 이 시간(초) 전부터 누른 것도 이어 구르기로 예약한다. 구르는 시간보다 짧게 둬야 아무 때나 눌러도 이어지는 일이 없다")]
+        [SerializeField, Min(0f)] private float _chainBufferTime = 0.05f;
+
         [Tooltip("구르기 효과음. 비워 두면 소리 없이 구른다")]
         [SerializeField] private SoundData _sound;
 
@@ -30,6 +37,8 @@ namespace ExplodeIt.Player
         public float Duration => _duration;
         public float InvulnerableDuration => _invulnerableDuration;
         public float Cooldown => _cooldown;
+        public float ChainWindow => _chainWindow;
+        public float ChainBufferTime => _chainBufferTime;
         public SoundData Sound => _sound;
         public FeedbackData EvadeFeedback => _evadeFeedback;
     }

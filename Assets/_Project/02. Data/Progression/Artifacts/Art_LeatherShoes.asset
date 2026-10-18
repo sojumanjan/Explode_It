@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.ArtifactData
   _id: leather_shoes
   _displayName: "\uAC00\uC8FD \uC2E0\uBC1C"
-  _description: "\uB300\uC2DC\uB97C \uB450 \uBC88 \uC5F0\uB2EC\uC544 \uC4F8 \uC218
-    \uC788\uB2E4."
+  _description: "\uB300\uC2DC\uAC00 \uB05D\uB09C \uC9C1\uD6C4 \uB2E4\uC2DC \uB204\uB974\uBA74
+    \uC7A0\uC2DC \uB4A4 \uD55C \uBC88 \uB354 \uC774\uC5B4 \uAD6C\uB978\uB2E4."
   _icon: {fileID: 21300000, guid: f753a0e0b64847a4190f1f43635d62e4, type: 3}
   _unlockedByDefault: 0
   _effect: 2

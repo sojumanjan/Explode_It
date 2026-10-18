@@ -5,7 +5,7 @@ namespace ExplodeIt.Player
 {
     // 누른 순간의 이동 방향으로 일정 거리를 구른다. 이동 입력이 없으면 마지막으로 움직인 방향으로 구른다.
     // 속도로 밀기 때문에 벽은 물리가 막아 준다.
-    // 아티팩트: 연달아 쓸 수 있는 횟수(신발), 대시 중 부딪힌 적 처치와 쿨타임 증가(헬름).
+    // 아티팩트: 끝난 직후 다시 누르면 쿨타임 없이 이어 구르기(신발), 대시 중 부딪힌 적 처치와 쿨타임 증가(헬름).
     [RequireComponent(typeof(Rigidbody2D), typeof(HitReceiver))]
     public class PlayerDodge : MonoBehaviour
     {
@@ -22,7 +22,7 @@ namespace ExplodeIt.Player
         private Vector2 _direction;
         private Vector2 _lastMoveDirection = Vector2.right;
         private float _dodgeEndTime;
-        // 남은 대시 횟수와 다음 한 번이 차는 시각. 기본은 1회라 예전처럼 "쓰면 쿨타임"과 같다.
+        // 남은 대시 횟수와 다음 한 번이 차는 시각. 늘 1회라 "쓰면 쿨타임"과 같다. 신발은 횟수 대신 이어 구르기를 준다.
         private int _maxCharges = 1;
         private int _charges = 1;
         private float _rechargeAt;
@@ -35,8 +35,14 @@ namespace ExplodeIt.Player
         // 이번 구르기의 무적이 끝나는 시각과, 그동안 공격을 흘려 낸 연출을 이미 냈는지.
         private float _evadeUntil;
         private bool _hasEvaded;
+        // 이번 구르기 뒤에 더 이어 구를 수 있는 횟수와, 끝나기 직전에 눌러 둔 이어 구르기가 있는지.
+        private int _chainsLeft;
+        private bool _isChainQueued;
+        private int _dodgeCount;
 
         public bool IsDodging => Time.time < _dodgeEndTime;
+        // 구르기가 시작될 때마다 1씩 는다. 이어 구르기는 끊김 없이 바로 시작돼서 IsDodging만으로는 새 구르기를 알 수 없다.
+        public int DodgeCount => _dodgeCount;
 
         private void Awake()
         {
@@ -47,7 +53,7 @@ namespace ExplodeIt.Player
         // 아티팩트 적용기가 Awake에서 판 보정값을 채운 뒤에 읽는다.
         private void Start()
         {
-            _maxCharges = 1 + RunModifiers.ExtraDodges;
+            _maxCharges = 1;
             _charges = _maxCharges;
             _cooldown = _data.Cooldown * RunModifiers.DodgeCooldownMultiplier;
             _enemyFilter = new ContactFilter2D();
@@ -76,9 +82,41 @@ namespace ExplodeIt.Player
             }
 
             TickRecharge();
-            if (_canDodge && _charges > 0 && !IsDodging && _input.DodgePressed)
+            if (!_canDodge)
             {
-                StartDodge(move);
+                return;
+            }
+
+            bool isPressed = _input.DodgePressed;
+            if (IsDodging)
+            {
+                if (isPressed && _chainsLeft > 0 && _dodgeEndTime - Time.time <= _data.ChainBufferTime)
+                {
+                    _isChainQueued = true;
+                }
+
+                return;
+            }
+
+            // 이어 구르기는 끝난 뒤 정한 시간이 지나야 나간다. 그 사이에 누른 것은 예약만 해 둔다.
+            // 끝나자마자 바로 다시 구르면 한 번에 길게 미끄러지는 것처럼 보여 두 번 구른 느낌이 안 난다.
+            if (_chainsLeft > 0 && Time.time < _dodgeEndTime + _data.ChainWindow)
+            {
+                if (isPressed)
+                {
+                    _isChainQueued = true;
+                }
+
+                return;
+            }
+
+            if (_isChainQueued)
+            {
+                StartDodge(move, true);
+            }
+            else if (isPressed && _charges > 0)
+            {
+                StartDodge(move, false);
             }
         }
 
@@ -144,17 +182,29 @@ namespace ExplodeIt.Player
             return false;
         }
 
-        private void StartDodge(Vector2 move)
+        // 이어 구르기는 횟수를 쓰지 않고 쿨타임도 다시 걸지 않는다. 쿨타임은 첫 구르기부터 센다.
+        private void StartDodge(Vector2 move, bool isChain)
         {
             _direction = move.sqrMagnitude > 0.01f ? move.normalized : _lastMoveDirection;
             _dodgeEndTime = Time.time + _data.Duration;
-            // 가득 찬 상태에서 처음 쓸 때만 충전을 새로 시작한다.
-            if (_charges >= _maxCharges)
+            if (isChain)
             {
-                _rechargeAt = Time.time + _cooldown;
+                _chainsLeft--;
+            }
+            else
+            {
+                // 가득 찬 상태에서 처음 쓸 때만 충전을 새로 시작한다.
+                if (_charges >= _maxCharges)
+                {
+                    _rechargeAt = Time.time + _cooldown;
+                }
+
+                _charges--;
+                _chainsLeft = RunModifiers.ExtraDodges;
             }
 
-            _charges--;
+            _isChainQueued = false;
+            _dodgeCount++;
             _struckCount = 0;
             _hitReceiver.GrantInvulnerability(_data.InvulnerableDuration);
             _evadeUntil = Time.time + _data.InvulnerableDuration;
@@ -180,6 +230,7 @@ namespace ExplodeIt.Player
         private void OnGameStateChanged(GameState previous, GameState current)
         {
             _canDodge = current == GameState.Playing;
+            _isChainQueued = false;
         }
     }
 }
