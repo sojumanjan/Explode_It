@@ -16,8 +16,8 @@ MonoBehaviour:
   _displayName: "\uC778\uAE30 \uD3ED\uBC1C"
   _description: "\uB9F5 \uC548\uC5D0 \uC801 40\uB9C8\uB9AC\uAC00 \uB3D9\uC2DC\uC5D0
     \uC788\uAC8C \uD558\uAE30"
-  _sticker: {fileID: 21300000, guid: 3f1eb9c63517c54469f974946a83e054, type: 3}
-  _stickerSilhouette: {fileID: 21300000, guid: 3f1eb9c63517c54469f974946a83e054, type: 3}
+  _sticker: {fileID: 21300000, guid: 5be51ad9370f2604998640434dbd90c4, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: 1983444d497caa24cbc81744dac6ee17, type: 3}
   _isHidden: 0
   _condition: 16
   _target: 40

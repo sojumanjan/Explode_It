@@ -65,4 +65,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2c48e7327c0cc3647803a0b6776668e5, type: 2}
   - {fileID: 11400000, guid: c0ab0736959fc5b40bc5e12a329bd338, type: 2}
   - {fileID: 11400000, guid: 2f920b5e37807a2438a36560cb000929, type: 2}
+  - {fileID: 11400000, guid: f28a940e5ab5afb4f933c760ab5aed2d, type: 2}
   _artifactSlots: 2
