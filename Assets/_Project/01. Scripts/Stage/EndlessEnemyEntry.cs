@@ -18,7 +18,7 @@ namespace ExplodeIt.Stage
         [Tooltip("처음 등장할 때 가중치. 다른 적 가중치와의 비율로 뽑힌다")]
         [SerializeField, Min(0f)] private float _baseWeight = 1f;
 
-        [Tooltip("등장한 뒤 웨이브마다 더해지는 가중치. 강한 적일수록 크게 줘서 점점 자주 나오게 한다")]
+        [Tooltip("등장한 뒤 웨이브마다 더해지는 가중치. 강한 적일수록 크게 줘서 점점 자주 나오게 한다. 무한 모드 데이터의 가중치 상승 시작 처치 수 전에는 더하지 않는다")]
         [SerializeField, Min(0f)] private float _weightPerWave;
 
         [Tooltip("가중치 최대. 한 적만 계속 커져 다른 적이 안 나오는 것을 막는다")]
@@ -53,15 +53,23 @@ namespace ExplodeIt.Stage
             }
         }
 
-        // 아직 등장 전이면 0.
-        public float GetWeight(int kills, int spawnsPerWave)
+        // 아직 등장 전이면 0. growthStartKills가 된 웨이브부터 웨이브마다 오른다(보스를 다 잡은 직후 웨이브부터 바로 어려워지게).
+        // 그보다 늦게 처음 나오는 적은 등장한 웨이브에는 기본 가중치로 나오고 다음 웨이브부터 오른다.
+        public float GetWeight(int kills, int spawnsPerWave, int growthStartKills)
         {
             if (Enemy == null || kills < _unlockKills)
             {
                 return 0f;
             }
 
-            int waves = spawnsPerWave > 0 ? (kills - _unlockKills) / spawnsPerWave : 0;
+            int waves = 0;
+            if (spawnsPerWave > 0 && kills >= growthStartKills)
+            {
+                waves = _unlockKills >= growthStartKills
+                    ? (kills - _unlockKills) / spawnsPerWave
+                    : (kills - growthStartKills) / spawnsPerWave + 1;
+            }
+
             return Mathf.Min(_baseWeight + _weightPerWave * waves, _maxWeight);
         }
 

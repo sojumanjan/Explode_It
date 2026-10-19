@@ -28,10 +28,10 @@ MonoBehaviour:
     _fairyOrbitSpeed: 60
     _meteorCount: 8
   - _fairyCount: 4
-    _fairyOrbitSpeed: 80
+    _fairyOrbitSpeed: 65
     _meteorCount: 10
   - _fairyCount: 5
-    _fairyOrbitSpeed: 100
+    _fairyOrbitSpeed: 70
     _meteorCount: 12
   _fieldRadius: 5
   _fieldGrowTime: 1

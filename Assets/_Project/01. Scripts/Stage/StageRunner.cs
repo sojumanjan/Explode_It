@@ -152,6 +152,10 @@ namespace ExplodeIt.Stage
                 _stage = _endlessStage;
             }
 
+            // 정적 값이라 다시 하기(씬 다시 불러오기)에도 지난 판 속도가 남으므로 판마다 되돌린다.
+            EnemyTempo.MoveSpeedMultiplier = 1f;
+            BossTempo.Reset();
+
             // 구역을 추가할 때마다 인스펙터에 연결하지 않도록 시작할 때 씬에서 모두 찾는다.
             SpawnArea[] areas = FindObjectsByType<SpawnArea>();
             if (areas.Length == 0 || (!_stage.IsEndless && _stage.Waves.Count == 0))
@@ -268,9 +272,10 @@ namespace ExplodeIt.Stage
 
                 case Phase.BossIntro:
                     // 내려앉을 자리를 원으로 키워 보여주다가, 다 차는 순간 보스가 나타난다.
-                    float progress = _stage.BossIntroDuration > 0f ? _phaseTime / _stage.BossIntroDuration : 1f;
+                    float introDuration = _stage.GetBossIntroDuration(_bossTier);
+                    float progress = introDuration > 0f ? _phaseTime / introDuration : 1f;
                     SetMarker(_bossPrefab != null, progress);
-                    if (_phaseTime >= _stage.BossIntroDuration)
+                    if (_phaseTime >= introDuration)
                     {
                         SetMarker(false, 0f);
                         if (_bossPrefab != null)
@@ -358,6 +363,7 @@ namespace ExplodeIt.Stage
         }
 
         public int BossKindCount => _stage != null ? _stage.BossKindCount : 0;
+        public bool IsEndless => _stage != null && _stage.IsEndless;
         public int BossLaps => _stage != null ? _stage.BossLaps : 0;
 
         // 개발자 패널용. 남은 적과 스폰을 지우고 해당 보스의 등장 연출부터 바로 시작한다.
@@ -374,6 +380,7 @@ namespace ExplodeIt.Stage
         {
             _bossNumber = bossNumber;
             _bossPrefab = _stage.GetBoss(bossNumber, out _bossTier);
+            _stage.ApplyBossTempo(_bossTier);
             _isBossDefeated = false;
             _bossEnemy = null;
             _boss = null;
@@ -744,6 +751,8 @@ namespace ExplodeIt.Stage
                 _events.Clear();
                 _eventOrder = 0;
                 _generator.BeginWave(_waveNumber + 1, _waveNumber * _stage.SpawnsPerWave);
+                // 이미 나와 있는 적도 다음 걸음부터 같이 빨라진다.
+                EnemyTempo.MoveSpeedMultiplier = _stage.EndlessWaves.GetEnemySpeedMultiplier(_waveNumber + 1);
             }
             else
             {
@@ -967,7 +976,7 @@ namespace ExplodeIt.Stage
             IReadOnlyList<EndlessEnemyEntry> enemies = data.Enemies;
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (enemies[i] != null && enemies[i].GetWeight(0, _stage.SpawnsPerWave) > 0f)
+                if (enemies[i] != null && enemies[i].GetWeight(0, _stage.SpawnsPerWave, 0) > 0f)
                 {
                     return true;
                 }

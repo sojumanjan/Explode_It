@@ -77,6 +77,8 @@ namespace ExplodeIt.Enemies
             : _targetCollider != null && _targetCollider.enabled ? (Vector2)_targetCollider.bounds.center : (Vector2)_target.position;
         // 패턴마다 예고 길이가 다른 적(여러 기술을 쓰는 보스)은 지금 쓰는 패턴의 길이로 바꾼다.
         public virtual float TelegraphDuration => Data.TelegraphDuration;
+        // 공격 뒤 쉬는 시간. 무한 모드 보스는 바퀴마다 줄인다.
+        protected virtual float RecoverDuration => Data.RecoverDuration;
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
         public virtual Vector2 AimDirection => DirectionToTarget();
         // 움직이는 중에도 그림이 플레이어 쪽을 보게 할지. 뒷걸음질·뒷도약처럼 가는 방향과 보는 방향이 반대일 때 켠다.
@@ -200,7 +202,7 @@ namespace ExplodeIt.Enemies
                     break;
 
                 case EnemyState.Recover:
-                    if (_stateTime >= Data.RecoverDuration)
+                    if (_stateTime >= RecoverDuration)
                     {
                         EnterState(EnemyState.Move);
                     }
@@ -348,6 +350,9 @@ namespace ExplodeIt.Enemies
 
             return _hasEntryPoint ? field.GetDirectionTo(_entryPoint, Body.position) : field.GetDirection(Body.position);
         }
+
+        // 플레이어를 쫓아 걷는 속도. 무한 모드에서 웨이브가 쌓이면 판 전체 배율만큼 빨라진다.
+        protected virtual float ChaseSpeed => Data.MoveSpeed * EnemyTempo.MoveSpeedMultiplier;
 
         // 이름은 그대로지만 입구로 들어오는 중에는 입구 점으로 간다. 걷는 속도·밀어내기는 같다.
         protected void MoveTowardTarget(float speed, float deltaTime)

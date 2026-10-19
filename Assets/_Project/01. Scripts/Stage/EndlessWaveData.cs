@@ -20,6 +20,13 @@ namespace ExplodeIt.Stage
         [Tooltip("나올 수 있는 적. 처치 수에 따라 열리고, 군집마다 가중치로 하나를 뽑는다")]
         [SerializeField] private EndlessEnemyEntry[] _enemies;
 
+        [Tooltip("적 가중치가 웨이브마다 오르기 시작하는 처치 수 (마리). 그 전까지는 모든 적이 기본 가중치로 나온다. 300이면 보스 셋을 한 번씩 잡은 뒤 4웨이브부터 오른다")]
+        [SerializeField, Min(0)] private int _weightGrowthStartKills = 300;
+
+        // 순수 무작위면 가중치가 낮은 적이 한참 안 나오거나 한 종류가 몰려 나와 운에 너무 기댄다.
+        [Tooltip("박자에서 안 뽑힐 때마다 그 적의 가중치에 더하는 값. 뽑히면 0으로 돌아간다. 오래 안 나온 적이 조금씩 나오기 쉬워진다. 0이면 순수 무작위")]
+        [SerializeField, Min(0f)] private float _missWeightGrowth = 0.01f;
+
         [Header("구역 고르기")]
         // 가까운 구역을 아예 빼면 플레이어가 움직이는 쪽에서 적이 안 나와 쉬워지므로, 양 끝을 덜 뽑는 정도로만 둔다.
         [Tooltip("플레이어와의 거리에 따른 구역 가중치. 가로축 0 = 가장 가까운 구역, 1 = 가장 먼 구역, 세로축 = 가중치")]
@@ -49,8 +56,9 @@ namespace ExplodeIt.Stage
         [Tooltip("웨이브마다 포위 박자 가중치에 더하는 값. 쉬는 구간에는 더하지 않는다")]
         [SerializeField, Min(0f)] private float _surroundWeightPerWave = 3f;
 
-        [Tooltip("웨이브마다 뭉치 박자 가중치에 더하는 값. 쉬는 구간에는 더하지 않는다")]
-        [SerializeField, Min(0f)] private float _clumpWeightPerWave = 2f;
+        // 뭉쳐 나오면 폭탄 한 발에 여럿이 잡혀 오히려 쉬워지므로, 웨이브가 쌓일수록 줄이는 쪽(음수)으로 둔다.
+        [Tooltip("웨이브마다 뭉치 박자 가중치에 더하는 값. 음수면 줄어들고, 0 밑으로는 내려가지 않는다")]
+        [SerializeField] private float _clumpWeightPerWave = -1.5f;
 
         [Tooltip("박자 가중치가 더 이상 오르지 않는 웨이브 수 (웨이브). 10이면 11웨이브부터는 그대로다")]
         [SerializeField, Min(0)] private int _beatShiftWaveCap = 10;
@@ -64,6 +72,12 @@ namespace ExplodeIt.Stage
         [Tooltip("포위 구역이 하나 늘어나는 웨이브 간격 (웨이브). 3이면 4·7·10웨이브에서 하나씩 는다. 0이면 늘지 않는다")]
         [SerializeField, Min(0)] private int _wavesPerExtraArea = 3;
 
+        [Tooltip("적 이동 속도가 오르기 시작하는 웨이브 (웨이브). 물량·배치 상승이 멈추는 쯤부터 속도로 계속 어려워진다")]
+        [SerializeField, Min(1)] private int _speedUpStartWave = 11;
+
+        [Tooltip("시작 웨이브부터 웨이브마다 적 이동 속도에 곱하는 증가율. 0.04면 웨이브마다 4%씩 빨라지고 상한은 없다")]
+        [SerializeField, Min(0f)] private float _speedUpPerWave = 0.04f;
+
         [Tooltip("웨이브가 쌓여 늘어나는 포위 구역 수 최대 (개)")]
         [SerializeField, Min(0)] private int _maxExtraAreas = 2;
 
@@ -74,6 +88,8 @@ namespace ExplodeIt.Stage
         public int WavesPerExtraArea => _wavesPerExtraArea;
         public int MaxExtraAreas => _maxExtraAreas;
         public float FrontJumpChance => _frontJumpChance;
+        public int WeightGrowthStartKills => _weightGrowthStartKills;
+        public float MissWeightGrowth => _missWeightGrowth;
         public float SameKindSurroundWeight => _sameKindSurroundWeight;
         public float MixedSurroundWeight => _mixedSurroundWeight;
         public float SurroundWeightPerWave => _surroundWeightPerWave;
@@ -103,6 +119,13 @@ namespace ExplodeIt.Stage
         public float GetAreaSpreadWeight(float normalizedAngle)
         {
             return Mathf.Max(0f, _areaSpreadWeight.Evaluate(normalizedAngle));
+        }
+
+        // waveNumber는 1부터. 시작 웨이브 전에는 1.
+        public float GetEnemySpeedMultiplier(int waveNumber)
+        {
+            int waves = waveNumber - _speedUpStartWave + 1;
+            return waves > 0 ? Mathf.Pow(1f + _speedUpPerWave, waves) : 1f;
         }
 
         public float GetFrontAngleWeight(float normalizedAngle)

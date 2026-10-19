@@ -49,7 +49,8 @@ namespace ExplodeIt.Enemies
             _moveTime += deltaTime;
             if (!_isDashing)
             {
-                if (_moveTime >= _data.PauseDuration)
+                // 사마귀는 순식간에 돌진하므로 걸음 대신 멈춰 있는 시간을 판 전체 빠르기만큼 줄인다.
+                if (_moveTime * EnemyTempo.MoveSpeedMultiplier >= _data.PauseDuration)
                 {
                     BeginDash();
                 }

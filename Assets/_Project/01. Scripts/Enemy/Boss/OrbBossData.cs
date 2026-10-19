@@ -31,6 +31,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("할퀴기 간격 (초). 마지막 할퀴기(또는 등장) 뒤 이 시간이 지난 뒤, 플레이어가 공통 항목의 공격 시작 거리 안에 들어오면 할퀴기를 준비한다")]
         [SerializeField, Min(0f)] private float _clawInterval = 3f;
 
+        [Tooltip("무한 모드에서 빨라져도 지킬 할퀴기 간격 하한 (초). 할퀴기는 구르기로만 피하므로 구르기 쿨타임(1.25초)보다 길게 둔다")]
+        [SerializeField, Min(0f)] private float _minClawInterval = 1.6f;
+
         [Tooltip("할퀴기 길이 (유닛). 몸 중심에서 정면으로 뻗는 사각형 길이. 할퀴면서 이 끝까지 돌진한다")]
         [SerializeField, Min(0f)] private float _clawLength = 8f;
 
@@ -121,6 +124,7 @@ namespace ExplodeIt.Enemies
         public Vector2 LungeDuration => _lungeDuration;
         public Vector2 LungePause => _lungePause;
         public float ClawInterval => _clawInterval;
+        public float MinClawInterval => _minClawInterval;
         public float ClawLength => _clawLength;
         public float ClawWidth => _clawWidth;
         public float ClawDashSpeed => _clawDashSpeed;

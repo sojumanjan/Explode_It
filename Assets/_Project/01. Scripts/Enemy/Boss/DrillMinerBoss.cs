@@ -72,6 +72,9 @@ namespace ExplodeIt.Enemies
         private float _emergeTime = -1f;
 
         protected override EnemyData Data => _data;
+        // 구멍이 차오르는 동안이 분출 예고다.
+        public override float TelegraphDuration => BossTempo.TelegraphTime(_data.TelegraphDuration);
+        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
         protected override bool CanBePulled => false;
         protected override bool RequiresLineOfSight => false;
         // 도약은 플레이어를 바라본 채 뒤로 뛰는 뒷도약이다.
@@ -211,7 +214,7 @@ namespace ExplodeIt.Enemies
         // 구조물을 넘어 착지점까지 곧장 날아간다. 그림만 포물선으로 떠오른다.
         private void TickLeap()
         {
-            float t = Mathf.Clamp01(_phaseTime / _data.LeapDuration);
+            float t = Mathf.Clamp01(_phaseTime / BossTempo.ActionTime(_data.LeapDuration));
             Body.MovePosition(Vector2.Lerp(_leapStart, _leapEnd, t));
             float arc = Mathf.Sin(t * Mathf.PI);
             _visual.Lift = arc * _data.LeapHeight;
@@ -226,7 +229,7 @@ namespace ExplodeIt.Enemies
         // 살짝 뛰어올랐다가(준비) 드릴을 내리꽂고, 진동하며 흙을 튀기면서 가라앉아 사라진다.
         private void TickDig()
         {
-            float t = Mathf.Clamp01(_phaseTime / _data.DigDuration);
+            float t = Mathf.Clamp01(_phaseTime / BossTempo.ActionTime(_data.DigDuration));
             Vector2 position = Body.position;
 
             if (t < DigHopEnd)
@@ -286,16 +289,16 @@ namespace ExplodeIt.Enemies
         private void TickUnderground(float deltaTime)
         {
             Vector2 toTarget = TargetPosition - Body.position;
-            float step = _data.UndergroundSpeed * deltaTime;
+            float step = BossTempo.Speed(_data.UndergroundSpeed) * deltaTime;
             if (toTarget.sqrMagnitude > step * step)
             {
                 Body.MovePosition(Body.position + toTarget.normalized * step);
             }
 
-            float fadeStart = _data.MoundVisibleTime;
+            float fadeStart = BossTempo.ActionTime(_data.MoundVisibleTime);
             float alpha = _phaseTime <= fadeStart
                 ? 1f
-                : 1f - Mathf.Clamp01((_phaseTime - fadeStart) / Mathf.Max(_data.MoundFadeTime, 0.01f));
+                : 1f - Mathf.Clamp01((_phaseTime - fadeStart) / Mathf.Max(BossTempo.ActionTime(_data.MoundFadeTime), 0.01f));
             SetMoundAlpha(alpha);
 
             // 땅속에서 드릴이 돌고 있다는 느낌으로 흙더미가 들썩이고, 또렷이 보이는 동안 흙이 튄다.
@@ -310,12 +313,12 @@ namespace ExplodeIt.Enemies
 
         protected override bool ShouldStartAttack()
         {
-            return _isFighting && _phase == MovePhase.Underground && _phaseTime >= _data.UndergroundDuration;
+            return _isFighting && _phase == MovePhase.Underground && _phaseTime >= BossTempo.ActionTime(_data.UndergroundDuration);
         }
 
         protected override void TickTelegraph(float deltaTime)
         {
-            float progress = StateTime / _data.TelegraphDuration;
+            float progress = StateTime / TelegraphDuration;
             for (int i = 0; i < _holeCount; i++)
             {
                 _holes[i].SetProgress(progress);
@@ -616,8 +619,8 @@ namespace ExplodeIt.Enemies
                 float angle = (baseAngle + step * k + Random.Range(-step * 0.25f, step * 0.25f)) * Mathf.Deg2Rad;
                 float distance = Random.Range(_data.DynamiteDistance.x, _data.DynamiteDistance.y);
                 Vector2 landing = ClampToArena(center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance);
-                float delay = Random.Range(_data.DynamiteDelayRange.x, _data.DynamiteDelayRange.y);
-                _dynamites[index].Launch(center, landing, delay,_data.DynamiteArcHeight, _data.DynamiteRadius, _onDynamiteExplode);
+                float delay = BossTempo.TelegraphTime(Random.Range(_data.DynamiteDelayRange.x, _data.DynamiteDelayRange.y));
+                _dynamites[index].Launch(center, landing, delay,_data.DynamiteArcHeight, _data.GetDynamiteRadius(_tier), _onDynamiteExplode);
                 index++;
             }
 

@@ -20,6 +20,11 @@ MonoBehaviour:
   _sameAreaSpawnInterval: 0.2
   _clusterRadius: 1
   _waves: []
+  _bossTempoPerLap: 0.2
+  _bossTelegraphShare: 0.5
+  _bossActionMinRatio: 0.4
+  _bossTelegraphMinRatio: 0.5
+  _bossSpeedMaxMultiplier: 1.8
   _endlessWaves: {fileID: 11400000, guid: cabd74c1fa7232b42a8d9a0c4cbcda73, type: 2}
   _bossRotation:
   - {fileID: 5819474946675302735, guid: ba8234f74e4101a4f8f42543ecf83b55, type: 3}

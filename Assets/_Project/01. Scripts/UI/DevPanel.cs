@@ -49,6 +49,8 @@ namespace ExplodeIt.UI
         private bool _isOpen;
         private float _fps;
         private float _scale = 1f;
+        // 무한 모드 보스 건너뛰기에서 고른 바퀴(1부터).
+        private int _bossLap = 1;
         private Vector2 _scroll;
 
         private void Awake()
@@ -227,8 +229,13 @@ namespace ExplodeIt.UI
                 GUILayout.EndHorizontal();
             }
 
-            // 보스 종류(B1~B3) × 바퀴(L1~L3). 버튼 하나가 곧 보스 번호(100마리 단위 순번)다.
             int kinds = _stageRunner.BossKindCount;
+            if (_stageRunner.IsEndless)
+            {
+                DrawEndlessBossLaps(kinds);
+            }
+
+            // 보스 종류(B1~B3) × 바퀴(L1~L3). 버튼 하나가 곧 보스 번호(100마리 단위 순번)다.
             for (int lap = 0; lap < _stageRunner.BossLaps; lap++)
             {
                 GUILayout.BeginHorizontal();
@@ -302,6 +309,32 @@ namespace ExplodeIt.UI
             if (GUILayout.Button("Restart Endless"))
             {
                 RestartAs(RunMode.Endless);
+            }
+            GUILayout.EndHorizontal();
+        }
+
+        // 무한 모드 보스 난이도 검증용. 바퀴를 골라 그 바퀴의 보스로 바로 건너뛴다. 바퀴 수 제한이 없어 위 버튼 줄과 따로 둔다.
+        private void DrawEndlessBossLaps(int kinds)
+        {
+            GUILayout.Label($"Boss Tempo  action x{BossTempo.Action:0.00}  telegraph x{BossTempo.Telegraph:0.00}");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("-", GUILayout.Width(30f)))
+            {
+                _bossLap = Mathf.Max(1, _bossLap - 1);
+            }
+
+            GUILayout.Label($"Lap {_bossLap}", GUILayout.Width(60f));
+            if (GUILayout.Button("+", GUILayout.Width(30f)))
+            {
+                _bossLap++;
+            }
+
+            for (int kind = 0; kind < kinds; kind++)
+            {
+                if (GUILayout.Button($"B{kind + 1}"))
+                {
+                    _stageRunner.SkipToBoss((_bossLap - 1) * kinds + kind + 1);
+                }
             }
             GUILayout.EndHorizontal();
         }

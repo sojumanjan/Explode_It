@@ -23,7 +23,10 @@ namespace ExplodeIt.Stage
         private readonly float[] _areaWeights;
         private readonly float[] _areaDistances;
         private readonly bool[] _isAreaUsed;
+        // 이번 웨이브의 적 가중치(웨이브 동안 고정)와, 안 뽑힐 때마다 쌓이는 덤(웨이브를 넘어 이어진다). 뽑을 때는 둘을 더해 쓴다.
         private readonly float[] _enemyWeights;
+        private readonly float[] _enemyMissBonus;
+        private readonly float[] _enemyPickWeights;
         private readonly float[] _beatWeights = new float[3];
         // 전선 각도를 잴 기준점. 구역들의 가운데라 맵 중심과 거의 같다.
         private readonly Vector2 _center;
@@ -48,6 +51,8 @@ namespace ExplodeIt.Stage
             _areaDistances = new float[areas.Length];
             _isAreaUsed = new bool[areas.Length];
             _enemyWeights = new float[data.Enemies.Count];
+            _enemyMissBonus = new float[data.Enemies.Count];
+            _enemyPickWeights = new float[data.Enemies.Count];
             _segment = int.MaxValue;
             Vector2 sum = Vector2.zero;
             for (int i = 0; i < areas.Length; i++)
@@ -73,7 +78,7 @@ namespace ExplodeIt.Stage
             IReadOnlyList<EndlessEnemyEntry> enemies = _data.Enemies;
             for (int i = 0; i < enemies.Count; i++)
             {
-                _enemyWeights[i] = enemies[i] != null ? enemies[i].GetWeight(killsBefore, _spawnsPerWave) : 0f;
+                _enemyWeights[i] = enemies[i] != null ? enemies[i].GetWeight(killsBefore, _spawnsPerWave, _data.WeightGrowthStartKills) : 0f;
             }
 
             EnterSegment(0, 0f);
@@ -144,7 +149,7 @@ namespace ExplodeIt.Stage
 
             _beatWeights[(int)Beat.Single] = segment.SingleWeight;
             _beatWeights[(int)Beat.Surround] = segment.SurroundWeight + _surroundBonus;
-            _beatWeights[(int)Beat.Clump] = segment.ClumpWeight + _clumpBonus;
+            _beatWeights[(int)Beat.Clump] = Mathf.Max(0f, segment.ClumpWeight + _clumpBonus);
             // 남은 마리가 하나면 포위·뭉치를 해도 한 마리라 단독과 같다.
             Beat beat = _segmentLeft > 1 ? (Beat)Mathf.Max(0, PickWeighted(_beatWeights)) : Beat.Single;
 
@@ -153,9 +158,9 @@ namespace ExplodeIt.Stage
                 case Beat.Surround:
                     return Surround(segment, player, output);
                 case Beat.Clump:
-                    return Emit(PickFrontArea(player), PickWeighted(_enemyWeights), UnityEngine.Random.Range(segment.ClumpSizeMin, segment.ClumpSizeMax + 1), output);
+                    return Emit(PickFrontArea(player), PickEnemy(), UnityEngine.Random.Range(segment.ClumpSizeMin, segment.ClumpSizeMax + 1), output);
                 default:
-                    return Emit(PickFrontArea(player), PickWeighted(_enemyWeights), 1, output);
+                    return Emit(PickFrontArea(player), PickEnemy(), 1, output);
             }
         }
 
@@ -168,14 +173,14 @@ namespace ExplodeIt.Stage
             float sameKind = _data.SameKindSurroundWeight;
             float total = sameKind + _data.MixedSurroundWeight;
             bool isSameKind = total <= 0f || UnityEngine.Random.value * total < sameKind;
-            int sharedEnemy = isSameKind ? PickWeighted(_enemyWeights) : -1;
+            int sharedEnemy = isSameKind ? PickEnemy() : -1;
 
             int spawned = 0;
             int first = -1;
             for (int i = 0; i < areaCount && _segmentLeft > 0; i++)
             {
                 int area = PickArea(player, first, -1);
-                int enemy = isSameKind ? sharedEnemy : PickWeighted(_enemyWeights);
+                int enemy = isSameKind ? sharedEnemy : PickEnemy();
                 int count = Emit(area, enemy, 1, output);
                 if (count == 0)
                 {
@@ -190,6 +195,35 @@ namespace ExplodeIt.Stage
             }
 
             return spawned;
+        }
+
+        // 적 하나를 뽑는다. 뽑힌 적의 덤은 0으로, 나올 수 있는데 안 뽑힌 적의 덤은 조금씩 쌓인다.
+        private int PickEnemy()
+        {
+            for (int i = 0; i < _enemyWeights.Length; i++)
+            {
+                _enemyPickWeights[i] = _enemyWeights[i] > 0f ? _enemyWeights[i] + _enemyMissBonus[i] : 0f;
+            }
+
+            int pick = PickWeighted(_enemyPickWeights);
+            if (pick < 0)
+            {
+                return pick;
+            }
+
+            for (int i = 0; i < _enemyWeights.Length; i++)
+            {
+                if (i == pick)
+                {
+                    _enemyMissBonus[i] = 0f;
+                }
+                else if (_enemyWeights[i] > 0f)
+                {
+                    _enemyMissBonus[i] += _data.MissWeightGrowth;
+                }
+            }
+
+            return pick;
         }
 
         // 단독·뭉치 박자의 구역. 직전 구역 근처를 골라 전선을 잇고, 가끔은 건너뛰어 다른 쪽에 새 전선을 연다.

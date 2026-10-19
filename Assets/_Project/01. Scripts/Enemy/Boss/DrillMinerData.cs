@@ -75,6 +75,12 @@ namespace ExplodeIt.Enemies
         [Tooltip("다이너마이트 폭발 반경 (구멍 분출 반경 대비 비율)")]
         [SerializeField, Range(0.1f, 1f)] private float _dynamiteRadiusRatio = 0.5f;
 
+        [Tooltip("무한 모드에서 다이너마이트 폭발 반경이 커지는 최대 배율. 바퀴마다 고르게 커져 아래 바퀴에서 최대가 된다")]
+        [SerializeField, Min(1f)] private float _endlessDynamiteRadiusMax = 1.5f;
+
+        [Tooltip("다이너마이트 폭발 반경이 최대 배율에 닿는 바퀴 (1부터). 5면 1바퀴 1배 → 5바퀴 최대 배율, 그 뒤로는 그대로")]
+        [SerializeField, Min(2)] private int _endlessDynamiteRadiusFullLap = 5;
+
         [Tooltip("다이너마이트가 날아갈 때 떠오르는 높이 (유닛)")]
         [SerializeField, Min(0f)] private float _dynamiteArcHeight = 0.8f;
 
@@ -162,6 +168,13 @@ namespace ExplodeIt.Enemies
         public Vector2 DynamiteDelayRange => _dynamiteDelayRange;
         public Vector2 DynamiteDistance => _dynamiteDistance;
         public float DynamiteRadius => _holeRadius * _dynamiteRadiusRatio;
+
+        // tier는 바퀴(0부터). 스토리 모드는 늘 0바퀴라 기본 반경이다.
+        public float GetDynamiteRadius(int tier)
+        {
+            float t = Mathf.Clamp01(tier / (float)(_endlessDynamiteRadiusFullLap - 1));
+            return DynamiteRadius * Mathf.Lerp(1f, _endlessDynamiteRadiusMax, t);
+        }
         public float DynamiteArcHeight => _dynamiteArcHeight;
         public SoundData DynamiteSound => _dynamiteSound;
         public SoundData DiggingMoveSound => _diggingMoveSound;

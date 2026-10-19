@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Player
 {
-    // 플레이어 체력과 사망. 스토리 모드는 정한 칸 수만큼 버티고, 무한 모드는 한 방에 죽는다.
+    // 플레이어 체력과 사망. 스토리·무한 모드마다 정한 칸 수만큼 버틴다.
     // 맞고 살아남으면 잠깐 무적이 되어 몸이 반투명해진다. 연달아 맞아 한꺼번에 여러 칸이 사라지는 억울함을 막는다.
     // 죽으면 몸이 납작하게 눌렸다가 쓰러진 그림으로 퐁 바뀌고, 슬로모션이 걸린 채 카메라가 고블린에게 다가간다.
     // 결과 창은 사망 패널의 대기 시간이 지난 뒤 뜬다.
@@ -34,7 +34,7 @@ namespace ExplodeIt.Player
             _hitReceiver = GetComponent<HitReceiver>();
             _baseColor = _sprite.color;
             _bodyScale = _sprite.transform.localScale;
-            _maxHealth = (RunSetup.Mode == RunMode.Story ? _data.StoryHealth : 1) + RunModifiers.ExtraHealth;
+            _maxHealth = (RunSetup.Mode == RunMode.Story ? _data.StoryHealth : _data.EndlessHealth) + RunModifiers.ExtraHealth;
             _hitReceiver.ResetHits(_maxHealth);
         }
 

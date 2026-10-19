@@ -17,8 +17,11 @@ namespace ExplodeIt.Player
         [SerializeField, Min(0f)] private float _deceleration = 100f;
 
         [Header("체력")]
-        [Tooltip("스토리 모드에서 버틸 수 있는 피격 수 (칸). 무한 모드는 한 방에 죽는다")]
+        [Tooltip("스토리 모드에서 버틸 수 있는 피격 수 (칸)")]
         [SerializeField, Min(1)] private int _storyHealth = 2;
+
+        [Tooltip("무한 모드에서 버틸 수 있는 피격 수 (칸)")]
+        [SerializeField, Min(1)] private int _endlessHealth = 2;
 
         [Tooltip("맞고 살아남은 뒤 무적 시간 (초). 이 동안 몸이 반투명해지며 다시 맞지 않는다")]
         [SerializeField, Min(0f)] private float _hurtInvulnerability = 1.5f;
@@ -53,6 +56,7 @@ namespace ExplodeIt.Player
         public float DeathZoom => _deathZoom;
         public float DeathZoomTime => _deathZoomTime;
         public int StoryHealth => _storyHealth;
+        public int EndlessHealth => _endlessHealth;
         public float HurtInvulnerability => _hurtInvulnerability;
         public FeedbackData HurtFeedback => _hurtFeedback;
         public float Acceleration => _acceleration;

@@ -66,8 +66,11 @@ namespace ExplodeIt.Enemies
         // 벽 뒤에 숨은 플레이어에게도 메테오를 떨어뜨리고, 화염구는 벽에 막혀 사라지는 것이 피하는 방법이다.
         protected override bool RequiresLineOfSight => false;
         public override Vector2 AimDirection => _aimDirection;
+        // 화염구 모으기는 조준선이 보이는 예고라 덜 줄이고, 메테오 시전은 경고 원이 떨어진 뒤 따로 있으니 행동으로 줄인다.
         public override float TelegraphDuration =>
-            _currentPattern == Pattern.Fireball ? _data.FireballChargeTime : _data.MeteorCastTime;
+            _currentPattern == Pattern.Fireball ? FireballChargeTime : BossTempo.ActionTime(_data.MeteorCastTime);
+        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
+        private float FireballChargeTime => BossTempo.TelegraphTime(_data.FireballChargeTime);
 
         private FireMageData.Tier Tier => _data.GetTier(_tier);
 
@@ -200,7 +203,7 @@ namespace ExplodeIt.Enemies
             TickField(Time.deltaTime);
             if (_field.enabled)
             {
-                _field.transform.Rotate(0f, 0f, _data.FieldSpinSpeed * Time.deltaTime);
+                _field.transform.Rotate(0f, 0f, BossTempo.Speed(_data.FieldSpinSpeed) * Time.deltaTime);
             }
 
             // 영역은 늘 보이는 위험이라 따로 예고하지 않는다. 다시 펼쳐질 때는 퍼지는 모습이 예고다.
@@ -225,12 +228,12 @@ namespace ExplodeIt.Enemies
 
         protected override bool ShouldStartAttack()
         {
-            return _isFighting && _patternTimer >= _data.PatternInterval;
+            return _isFighting && _patternTimer >= BossTempo.ActionTime(_data.PatternInterval);
         }
 
         protected override void TickTelegraph(float deltaTime)
         {
-            if (_currentPattern == Pattern.Fireball && StateTime < _data.FireballChargeTime - _data.FireballAimLockTime)
+            if (_currentPattern == Pattern.Fireball && StateTime < FireballChargeTime - _data.FireballAimLockTime)
             {
                 Aim();
             }
@@ -246,7 +249,7 @@ namespace ExplodeIt.Enemies
                 {
                     FireFireball(_fireballs[_shotsFired], _shotsFired > 0);
                     _shotsFired++;
-                    _burstTimer += _data.FireballBurstInterval;
+                    _burstTimer += BossTempo.ActionTime(_data.FireballBurstInterval);
                 }
 
                 return _shotsFired >= _fireballs.Length;
@@ -256,9 +259,9 @@ namespace ExplodeIt.Enemies
             _burstTimer -= deltaTime;
             if (_burstTimer <= 0f && _meteorsFired < _meteors.Length)
             {
-                _meteors[_meteorsFired].Launch(TargetPosition, _data.MeteorFallTime, _data.MeteorRadius, _onMeteorImpact);
+                _meteors[_meteorsFired].Launch(TargetPosition, BossTempo.TelegraphTime(_data.MeteorFallTime), _data.MeteorRadius, _onMeteorImpact);
                 _meteorsFired++;
-                _burstTimer += _data.MeteorInterval;
+                _burstTimer += BossTempo.ActionTime(_data.MeteorInterval);
             }
 
             return _meteorsFired >= Mathf.Min(Tier.MeteorCount, _meteors.Length);
@@ -368,7 +371,7 @@ namespace ExplodeIt.Enemies
             _orbitDirection = 1f;
             for (int i = 0; i < _launchedFairies; i++)
             {
-                _fairies[i].Launch(center, _data.FairyOrbitRadius, start + step * i, Tier.FairyOrbitSpeed);
+                _fairies[i].Launch(center, _data.FairyOrbitRadius, start + step * i, BossTempo.Speed(Tier.FairyOrbitSpeed));
             }
 
             _aliveFairies = _launchedFairies;
@@ -430,7 +433,7 @@ namespace ExplodeIt.Enemies
             }
 
             int killed = _launchedFairies - _aliveFairies;
-            float speed = (Tier.FairyOrbitSpeed + _data.FairySpeedUpPerKill * killed) * _orbitDirection;
+            float speed = (BossTempo.Speed(Tier.FairyOrbitSpeed) + _data.FairySpeedUpPerKill * killed) * _orbitDirection;
             for (int i = 0; i < _fairies.Length; i++)
             {
                 _fairies[i].ChangeOrbit(speed, _data.FairyReverseHold);

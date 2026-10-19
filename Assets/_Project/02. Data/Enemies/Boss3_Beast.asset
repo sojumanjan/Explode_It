@@ -17,6 +17,7 @@ MonoBehaviour:
   _attackTriggerRange: 3
   _arenaEntryDelay: 0
   _countsAsKill: 0
+  _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
   _telegraphDuration: 0.6
@@ -26,16 +27,18 @@ MonoBehaviour:
   - _orbCount: 3
     _orbSpeed: 6
   - _orbCount: 4
-    _orbSpeed: 7
+    _orbSpeed: 6
   - _orbCount: 5
-    _orbSpeed: 8
+    _orbSpeed: 6
   _clawInterval: 2
+  _minClawInterval: 1.6
   _clawLength: 8.5
   _clawWidth: 6
   _clawDashSpeed: 20
   _groggyDuration: 5
   _orbBounceJitter: 10
   _orbSpawnRadius: 0.5
+  _entranceSettleTime: 1.5
   _lungeCircleRadius: 2
   _lungeDuration: {x: 0.35, y: 0.45}
   _lungePause: {x: 0.15, y: 0.175}

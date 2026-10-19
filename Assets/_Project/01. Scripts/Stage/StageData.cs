@@ -26,6 +26,10 @@ namespace ExplodeIt.Stage
         [Tooltip("보스전 연출 시간 (초). 웨이브를 다 잡으면 이 시간 동안 보스 등장 연출을 보여준다. 보스가 생기기 전까지는 연출 뒤 바로 웨이브 사이 간격으로 넘어간다")]
         [SerializeField, Min(0f)] private float _bossIntroDuration = 2f;
 
+        // 무한 모드에서 같은 보스를 몇 번째 보는 것이라 자리 표시를 오래 보여 줄 필요가 없다.
+        [Tooltip("같은 보스가 다시 나오는 바퀴(2바퀴부터)에서 보스 자리 원이 차는 속도 배율. 3이면 3배 빨리 찬다. 원이 다 찬 뒤 연출은 그대로")]
+        [SerializeField, Min(1f)] private float _repeatBossIntroSpeed = 3f;
+
         [Header("스폰")]
         [Tooltip("웨이브당 스폰 수 (마리). 웨이브의 군집 합계가 이 수와 다르면 시작할 때 경고한다")]
         [SerializeField, Min(1)] private int _spawnsPerWave = 100;
@@ -40,6 +44,22 @@ namespace ExplodeIt.Stage
         [Header("웨이브")]
         [Tooltip("웨이브 목록. 위에서부터 차례로 진행하고, 마지막 웨이브는 계속 반복한다")]
         [SerializeField] private WaveData[] _waves;
+
+        [Header("보스 템포 (무한 모드 바퀴마다)")]
+        [Tooltip("바퀴마다 보스 행동 배율에 더하는 값. 0.2면 1바퀴 1배, 2바퀴 1.2배, 3바퀴 1.4배… 상한 없이 오르지만 아래 하한·상한에서 값마다 멈춘다. 스토리 모드는 0")]
+        [SerializeField, Min(0f)] private float _bossTempoPerLap;
+
+        [Tooltip("예고(경고 표시가 떠 있는 시간)에 반영할 비율 (0~1). 0.5면 행동이 1.4배 빨라질 때 예고는 1.2배만 짧아진다")]
+        [SerializeField, Range(0f, 1f)] private float _bossTelegraphShare = 0.5f;
+
+        [Tooltip("보스 행동 시간(쿨타임·간격·이동 시간)이 줄어드는 하한 (원래 대비 비율). 0.4면 원래의 40% 밑으로는 줄지 않는다")]
+        [SerializeField, Range(0.1f, 1f)] private float _bossActionMinRatio = 0.4f;
+
+        [Tooltip("보스 예고 시간이 줄어드는 하한 (원래 대비 비율). 이보다 짧으면 반응이 아니라 운이 된다")]
+        [SerializeField, Range(0.1f, 1f)] private float _bossTelegraphMinRatio = 0.5f;
+
+        [Tooltip("보스 이동·회전·투사체 속도 배율 상한. 플레이어 이동(5)과 구르기로 따라잡을 수 없을 만큼 빨라지지 않게 막는다")]
+        [SerializeField, Min(1f)] private float _bossSpeedMaxMultiplier = 1.8f;
 
         [Header("무한 모드")]
         [Tooltip("무한 모드 웨이브 생성 규칙. 넣으면 웨이브 목록 대신 이 규칙으로 실시간 생성하고, 최종 보스 없이 보스 순서를 끝없이 돈다")]
@@ -114,6 +134,14 @@ namespace ExplodeIt.Stage
         // 무한 모드는 끝나지 않으므로 최종 보스 차례가 오지 않는다.
         public int FinalBossNumber => IsEndless ? int.MaxValue : BossKindCount * _bossLaps + 1;
         public bool IsEndless => _endlessWaves != null;
+
+        // tier는 바퀴(0부터). 이 바퀴 보스가 쓸 템포를 정한다.
+        public void ApplyBossTempo(int tier)
+        {
+            float action = 1f + _bossTempoPerLap * Mathf.Max(0, tier);
+            float telegraph = 1f + (action - 1f) * _bossTelegraphShare;
+            BossTempo.Set(action, telegraph, _bossActionMinRatio, _bossTelegraphMinRatio, _bossSpeedMaxMultiplier);
+        }
         public EndlessWaveData EndlessWaves => _endlessWaves;
 
         // bossNumber(1부터)로 몇 번째 보스가 어느 바퀴로 나올지 정한다. 바퀴는 0부터.
@@ -193,6 +221,12 @@ namespace ExplodeIt.Stage
         }
         public float WaveInterval => _waveInterval;
         public float BossIntroDuration => _bossIntroDuration;
+
+        // tier는 바퀴(0부터).
+        public float GetBossIntroDuration(int tier)
+        {
+            return tier > 0 ? _bossIntroDuration / _repeatBossIntroSpeed : _bossIntroDuration;
+        }
         public int SpawnsPerWave => _spawnsPerWave;
         public float SameAreaSpawnInterval => _sameAreaSpawnInterval;
         public float ClusterRadius => _clusterRadius;

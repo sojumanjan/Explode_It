@@ -16,6 +16,8 @@ namespace ExplodeIt.Enemies
 
         [SerializeField] private OrbBossData _data;
         [SerializeField] private RectTelegraph _clawTelegraph;
+        // 할퀴며 지나간 자리에 남는 발톱 자국. 비워 두면 자국 없이 돌진만 한다.
+        [SerializeField] private ClawSlash _clawSlash;
         // 오브젝트 피커가 컴포넌트 타입 칸에 프리팹을 띄우지 않아 GameObject로 받는다.
         [SerializeField] private GameObject _orbPrefab;
         [SerializeField] private EnemyVisual _visual;
@@ -44,6 +46,11 @@ namespace ExplodeIt.Enemies
         private float _entranceStartTime = -1f;
 
         protected override EnemyData Data => _data;
+        // 할퀴기 준비 자세(사각형이 차오르는 동안)가 예고다.
+        public override float TelegraphDuration => BossTempo.TelegraphTime(_data.TelegraphDuration);
+        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
+        // 할퀴기는 구르기로만 피하므로, 아무리 빨라져도 구르기가 다시 차기 전에 다음 할퀴기가 오지 않게 막는다.
+        private float ClawInterval => Mathf.Max(BossTempo.ActionTime(_data.ClawInterval), _data.MinClawInterval);
         protected override bool CanBePulled => false;
         public override Vector2 AimDirection => _clawDirection;
 
@@ -156,8 +163,8 @@ namespace ExplodeIt.Enemies
             Vector2 offset = new Vector2(Mathf.Cos(angle) * side, Mathf.Sin(angle)) * _data.LungeCircleRadius;
             _lungePoint = TargetPosition + offset;
 
-            _lungeDuration = Random.Range(_data.LungeDuration.x, _data.LungeDuration.y);
-            _pauseDuration = Random.Range(_data.LungePause.x, _data.LungePause.y);
+            _lungeDuration = BossTempo.ActionTime(Random.Range(_data.LungeDuration.x, _data.LungeDuration.y));
+            _pauseDuration = BossTempo.ActionTime(Random.Range(_data.LungePause.x, _data.LungePause.y));
             _lungeSpeed = Vector2.Distance(Body.position, _lungePoint) / Mathf.Max(_lungeDuration, 0.01f);
             _lungeTime = 0f;
         }
@@ -165,13 +172,13 @@ namespace ExplodeIt.Enemies
         // 간격은 최소 대기일 뿐이다. 간격이 찬 뒤에는 배회하다 공격 시작 거리 안에 들어오는 순간 준비해 돌진한다.
         protected override bool ShouldStartAttack()
         {
-            return _isFighting && _clawTimer >= _data.ClawInterval && IsTargetWithin(_data.AttackTriggerRange);
+            return _isFighting && _clawTimer >= ClawInterval && IsTargetWithin(_data.AttackTriggerRange);
         }
 
         // 준비 동안 제자리에 서서 방향을 바꾸지 않는다. 보이는 사각형이 곧 맞는 사각형이다.
         protected override void TickTelegraph(float deltaTime)
         {
-            float progress = StateTime / _data.TelegraphDuration;
+            float progress = StateTime / TelegraphDuration;
             _clawTelegraph.Show(Body.position, _clawDirection, _clawLength, _data.ClawWidth, progress);
         }
 
@@ -186,12 +193,22 @@ namespace ExplodeIt.Enemies
                 AudioManager.Play(_data.ClawSound);
                 _clawTimer = 0f;
                 _dashRemaining = _clawLength;
+                if (_clawSlash != null)
+                {
+                    _clawSlash.Begin(Body.position, _clawDirection, _data.ClawWidth);
+                }
             }
 
-            float step = Mathf.Min(_data.ClawDashSpeed * deltaTime, _dashRemaining);
+            float step = Mathf.Min(BossTempo.Speed(_data.ClawDashSpeed) * deltaTime, _dashRemaining);
             HitInBox(_clawDirection, step, _data.ClawWidth, true);
-            Body.MovePosition(Body.position + _clawDirection * step);
+            Vector2 next = Body.position + _clawDirection * step;
+            Body.MovePosition(next);
             _dashRemaining -= step;
+            if (_clawSlash != null)
+            {
+                _clawSlash.Reach(next);
+            }
+
             return _dashRemaining <= 0f;
         }
 
@@ -233,6 +250,11 @@ namespace ExplodeIt.Enemies
         {
             // 준비 소리는 할퀴기 준비 동안만 낸다. 할퀴든 그로기로 끊기든 준비를 벗어나면 멈춘다.
             StopReadySound();
+            // 돌진이 끝나거나 끊기면 자국은 잠깐 남았다가 흐려진다.
+            if (state != EnemyState.Attack && _clawSlash != null)
+            {
+                _clawSlash.Release();
+            }
 
             switch (state)
             {
@@ -279,7 +301,7 @@ namespace ExplodeIt.Enemies
             {
                 float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, Tier.OrbSpeed, _data, transform);
+                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, BossTempo.Speed(Tier.OrbSpeed), _data, transform);
             }
 
             _aliveOrbs = count;

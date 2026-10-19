@@ -360,6 +360,7 @@ Transform:
   m_Children:
   - {fileID: 1039618880718151173}
   - {fileID: 268786321193722041}
+  - {fileID: 3829689011697386649}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7509952471214978318
@@ -456,8 +457,10 @@ MonoBehaviour:
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 256
+  _moveCollider: {fileID: 0}
   _data: {fileID: 11400000, guid: f44ae2d192b0bea409994fcba08dd851, type: 2}
   _clawTelegraph: {fileID: 5001051421234659930}
+  _clawSlash: {fileID: 6531334619350409409}
   _orbPrefab: {fileID: 5437043043573061399, guid: a57e8cb478ec69949bbada590797bc4f, type: 3}
   _visual: {fileID: 5877868982524277718}
 --- !u!114 &5877868982524277718
@@ -479,3 +482,118 @@ MonoBehaviour:
   _attackSprite: {fileID: 21300000, guid: 36f54c8e02d754f409078a0adac3071f, type: 3}
   _stunnedSprite: {fileID: 21300000, guid: fe5fe147e54eddf43bd2caa490bc6d44, type: 3}
   _deathSprite: {fileID: 21300000, guid: 2e71f6c4958a62341905f797161f8db5, type: 3}
+--- !u!1 &6315004984980874330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3829689011697386649}
+  - component: {fileID: 6531334619350409409}
+  m_Layer: 0
+  m_Name: ClawSlash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3829689011697386649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315004984980874330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3224303925249979252}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6531334619350409409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315004984980874330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c34da12e5407a5a46a22bf37f0dfd740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ClawSlash
+  _streakCount: 3
+  _spacingRatio: 0.18
+  _outerShrinkRatio: 0.12
+  _width: 0.35
+  _widthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.35
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _color:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.95, b: 0.9, a: 0.9}
+    key1: {r: 1, g: 0.25, b: 0.2, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  _holdDuration: 0.08
+  _fadeDuration: 0.25
+  _material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  _sortingOrder: 3

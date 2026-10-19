@@ -94,7 +94,7 @@ namespace ExplodeIt.Enemies
 
         protected override void TickMove(float deltaTime)
         {
-            MoveTowardTarget(_data.MoveSpeed, deltaTime);
+            MoveTowardTarget(ChaseSpeed, deltaTime);
         }
 
         protected override bool ShouldStartAttack()
