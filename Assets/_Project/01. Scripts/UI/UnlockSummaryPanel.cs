@@ -129,6 +129,43 @@ namespace ExplodeIt.UI
             _inputBlocker.SetActive(false);
         }
 
+        // 여러 업적을 한꺼번에 따면 달성 순서대로 쌓여 종류가 섞인다. 무기 → 스킬 → 스킬 강화 → 아티팩트 순으로 보여 준다.
+        // 같은 종류끼리는 달성 순서를 지키고(삽입 정렬), 보상마다 붙은 획득 경로도 같이 옮긴다. 많아야 몇 장이라 단순하게 둔다.
+        private void SortByKind()
+        {
+            for (int i = 1; i < _rewards.Count; i++)
+            {
+                IUnlockable reward = _rewards[i];
+                AchievementData source = _sources[i];
+                int rank = KindRank(reward);
+                int j = i - 1;
+                while (j >= 0 && KindRank(_rewards[j]) > rank)
+                {
+                    _rewards[j + 1] = _rewards[j];
+                    _sources[j + 1] = _sources[j];
+                    j--;
+                }
+
+                _rewards[j + 1] = reward;
+                _sources[j + 1] = source;
+            }
+        }
+
+        private static int KindRank(IUnlockable reward)
+        {
+            if (reward is WeaponData)
+            {
+                return 0;
+            }
+
+            if (reward is AbilityData)
+            {
+                return 1;
+            }
+
+            return reward is AbilityUpgradeData ? 2 : 3;
+        }
+
         private void Show()
         {
             _hasShown = true;
@@ -148,6 +185,8 @@ namespace ExplodeIt.UI
                 _inputBlocker.SetActive(false);
                 return;
             }
+
+            SortByKind();
 
             _window.SetActive(true);
             _index = 0;

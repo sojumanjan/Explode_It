@@ -30,6 +30,7 @@ namespace ExplodeIt.Progression
         private int _useKills;
         private int _useThrows;
         private int _useShieldKills;
+        private bool _useKilledBoss;
         // 이번 판에 스킬을 썼는지, 빗나간 폭탄이 있었는지.
         private bool _hasUsedAbility;
         private bool _hasMissed;
@@ -243,6 +244,12 @@ namespace ExplodeIt.Progression
                 Check(AchievementCondition.BossKilledByDash, 1);
             }
 
+            // 처치 수 조건은 보스를 빼고 세지만, "아무도 못 잡기"는 보스를 잡아도 깨져야 한다.
+            if (_activeAbility != null && isBoss && IsUseKill(_activeAbility, source))
+            {
+                _useKilledBoss = true;
+            }
+
             if (_activeAbility != null && !isBoss && IsUseKill(_activeAbility, source))
             {
                 _useKills++;
@@ -330,6 +337,7 @@ namespace ExplodeIt.Progression
             _useKills = 0;
             _useThrows = 0;
             _useShieldKills = 0;
+            _useKilledBoss = false;
             _hasUsedAbility = true;
         }
 
@@ -353,7 +361,7 @@ namespace ExplodeIt.Progression
             }
 
             _activeAbility = null;
-            if (IsCounting && _useKills == 0)
+            if (IsCounting && _useKills == 0 && !_useKilledBoss)
             {
                 Check(AchievementCondition.AbilityUseWithoutKills, 1, ability);
             }
