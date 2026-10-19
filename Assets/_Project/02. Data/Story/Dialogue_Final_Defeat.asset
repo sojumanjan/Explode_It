@@ -109,8 +109,8 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 0
     _mood: 2
-    _text: "\uD06C\uD558\uD558\uD56B!! \uADF8\uB798\uADF8\uB798!\n\uB0B4 \uC798\uBABB\uC778\uB370
-      \uBB50 \uC5B4\uB54C~?"
+    _text: "\uD06C\uD558\uD558\uD56B!! \uADF8\uB798\uADF8\uB798! \uAD1C\uCC2E\uC544!\n\uB0B4
+      \uC798\uBABB\uC778\uB370 \uBB50 \uC5B4\uB54C~?"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
@@ -119,9 +119,9 @@ MonoBehaviour:
     _startAction: 0
     _endAction: 0
   - _speaker: 0
-    _mood: 8
-    _text: "\uD558\uC9C0\uB9CC.. \uADF8 \uB3C8\uC744 \uB2E4 \uAC1A\uAE30 \uC804\uC5D0\uB294\n\uC544\uBB34\uB370\uB3C4
-      \uBABB \uBCF4\uB0B4\uC8FC\uACA0\uB294\uB370...?"
+    _mood: 3
+    _text: "\uAD1C\uCC2E\uC740....\uB370..\n\uB0A0\uC544\uAC04 \uB3C8\uC774 \uB108\uBB34
+      \uC544\uAE4C\uC6CC...."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
@@ -133,6 +133,16 @@ MonoBehaviour:
     _mood: 8
     _text: "\uD2B9\uD788 \uB9C8\uBC95\uC0AC\uB294 \uC9C4\uC9DC \uBE44\uC30C\uB2E4\uACE0..!!\n\uB3C8
       \uB0B4\uB194!!"
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 2
+    _mood: 8
+    _text: "\u3147..\uC608....??? \uC544\uAE4C\uB294 \uAD1C\uCC2E\uB2E4\uACE0 \uD558\uC168..."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
