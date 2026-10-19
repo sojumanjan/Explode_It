@@ -20,6 +20,7 @@ namespace ExplodeIt.Progression
 
         private bool _isRunning;
         private bool _isDisabled;
+        private bool _isStoryMode;
         private int _runKills;
         private int _singleKillStreak;
         private int _frameKills;
@@ -57,7 +58,10 @@ namespace ExplodeIt.Progression
             GameEvents.ThrownBombExploded += OnThrownBombExploded;
             GameEvents.PlayerEvaded += OnPlayerEvaded;
             GameEvents.PlayerDied += OnRunEnded;
-            GameEvents.StageCleared += OnRunEnded;
+            GameEvents.StageCleared += OnStageCleared;
+            GameEvents.PlayerKilledBy += OnPlayerKilledBy;
+            GameEvents.EnemiesInArenaChanged += OnEnemiesInArenaChanged;
+            GameEvents.GolemLastStand += OnGolemLastStand;
             ProgressionEvents.AbilityStarted += OnAbilityStarted;
             ProgressionEvents.AbilityEnded += OnAbilityEnded;
         }
@@ -72,7 +76,10 @@ namespace ExplodeIt.Progression
             GameEvents.ThrownBombExploded -= OnThrownBombExploded;
             GameEvents.PlayerEvaded -= OnPlayerEvaded;
             GameEvents.PlayerDied -= OnRunEnded;
-            GameEvents.StageCleared -= OnRunEnded;
+            GameEvents.StageCleared -= OnStageCleared;
+            GameEvents.PlayerKilledBy -= OnPlayerKilledBy;
+            GameEvents.EnemiesInArenaChanged -= OnEnemiesInArenaChanged;
+            GameEvents.GolemLastStand -= OnGolemLastStand;
             ProgressionEvents.AbilityStarted -= OnAbilityStarted;
             ProgressionEvents.AbilityEnded -= OnAbilityEnded;
         }
@@ -80,15 +87,87 @@ namespace ExplodeIt.Progression
         private void OnStageStarted(bool isStoryMode)
         {
             _isRunning = true;
+            _isStoryMode = isStoryMode;
             _runKills = 0;
             _singleKillStreak = 0;
             _hasUsedAbility = false;
             _hasMissed = false;
+            // 예전 판에서 이미 다 해금했으면 여기서 챙긴다.
+            CheckAllUnlocked();
         }
 
         private void OnRunEnded()
         {
             _isRunning = false;
+        }
+
+        private void OnStageCleared()
+        {
+            if (IsCounting && _isStoryMode)
+            {
+                Check(AchievementCondition.StoryCleared, 1);
+            }
+
+            OnRunEnded();
+        }
+
+        // 사망 이벤트보다 먼저 오므로 아직 세는 중이다.
+        private void OnPlayerKilledBy(EnemyKind kind)
+        {
+            if (!IsCounting)
+            {
+                return;
+            }
+
+            AchievementData[] achievements = _catalog.Achievements;
+            for (int i = 0; i < achievements.Length; i++)
+            {
+                if (achievements[i].Condition == AchievementCondition.KilledByEnemy && achievements[i].EnemyKind == kind)
+                {
+                    TryComplete(achievements[i], achievements[i].Target);
+                }
+            }
+        }
+
+        private void OnEnemiesInArenaChanged(int count)
+        {
+            if (IsCounting)
+            {
+                Check(AchievementCondition.EnemiesInArenaAtOnce, count);
+            }
+        }
+
+        private void OnGolemLastStand(int seconds)
+        {
+            if (IsCounting)
+            {
+                Check(AchievementCondition.GolemLastStandSeconds, seconds);
+            }
+        }
+
+        // 보상으로 해금이 생길 때마다 본다. 업적이 하나도 없는 종류(빈 목록)는 다 해금한 것으로 본다.
+        private void CheckAllUnlocked()
+        {
+            if (!IsCounting || !AreAllUnlocked(_catalog.Weapons) || !AreAllUnlocked(_catalog.Abilities)
+                || !AreAllUnlocked(_catalog.Upgrades) || !AreAllUnlocked(_catalog.Artifacts))
+            {
+                return;
+            }
+
+            Check(AchievementCondition.AllUnlocked, 1);
+        }
+
+        private static bool AreAllUnlocked(IUnlockable[] items)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null && !items[i].IsUnlocked)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // 처치 수에 드는 처치(보스 제외). 한 판·누적 처치를 센다.
@@ -157,6 +236,11 @@ namespace ExplodeIt.Progression
             if (IsAbilitySource(source))
             {
                 CountAbilityKill(source, isBoss);
+            }
+
+            if (isBoss && source == DamageSource.Dodge)
+            {
+                Check(AchievementCondition.BossKilledByDash, 1);
             }
 
             if (_activeAbility != null && !isBoss && IsUseKill(_activeAbility, source))
@@ -313,7 +397,7 @@ namespace ExplodeIt.Progression
             }
         }
 
-        private static void TryComplete(AchievementData achievement, int value)
+        private void TryComplete(AchievementData achievement, int value)
         {
             if (value < achievement.Target || achievement.IsCompleted)
             {
@@ -344,6 +428,11 @@ namespace ExplodeIt.Progression
 
             SaveSystem.Save();
             ProgressionEvents.RaiseAchievementCompleted(achievement);
+            if (achievement.RewardWeapon != null || achievement.RewardAbility != null
+                || achievement.RewardUpgrade != null || achievement.RewardArtifact != null)
+            {
+                CheckAllUnlocked();
+            }
         }
     }
 }

@@ -23,6 +23,9 @@ namespace ExplodeIt.Enemies
         private float _slamTelegraph = 1f;
         // 마지막으로 몸에 반영한 남은 맷집. 그림 쪽 초기화가 끝난 뒤 반영하려고 Update에서 맞춘다.
         private int _appliedHits = -1;
+        // 한 대 남은 뒤 살아 있는 시간(초)과 마지막으로 알린 초.
+        private float _lastStandTime;
+        private int _lastStandReported;
 
         protected override EnemyData Data => _data;
         public override Vector2 AimDirection => _slamDirection;
@@ -37,6 +40,8 @@ namespace ExplodeIt.Enemies
             HideSlam();
             HitReceiver.Damaged += OnDamaged;
             _appliedHits = -1;
+            _lastStandTime = 0f;
+            _lastStandReported = 0;
         }
 
         protected override void OnDisable()
@@ -47,9 +52,26 @@ namespace ExplodeIt.Enemies
 
         private void Update()
         {
-            if (_appliedHits != HitReceiver.RemainingHits && CurrentState != EnemyState.Dead)
+            if (CurrentState == EnemyState.Dead)
+            {
+                return;
+            }
+
+            if (_appliedHits != HitReceiver.RemainingHits)
             {
                 ApplyStage();
+            }
+
+            // 한 대 남은 쪼꼬미로 버틴 시간을 1초마다 알린다.
+            if (HitReceiver.RemainingHits == 1)
+            {
+                _lastStandTime += Time.deltaTime;
+                int seconds = (int)_lastStandTime;
+                if (seconds > _lastStandReported)
+                {
+                    _lastStandReported = seconds;
+                    GameEvents.RaiseGolemLastStand(seconds);
+                }
             }
         }
 

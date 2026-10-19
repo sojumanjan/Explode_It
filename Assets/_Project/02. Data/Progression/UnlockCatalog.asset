@@ -59,4 +59,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4536bfe4cb2bc1948bb9b62c20e44898, type: 2}
   - {fileID: 11400000, guid: 0292ac3be7a20fd4f87e95ee6f6a4a2f, type: 2}
   - {fileID: 11400000, guid: e030681a4ec8d4b4e81c2536261794ce, type: 2}
+  - {fileID: 11400000, guid: ed467f0e56c201641846d14110f852ac, type: 2}
+  - {fileID: 11400000, guid: ea7c6dceecd249f4ba635b18c4be04c2, type: 2}
+  - {fileID: 11400000, guid: 5b8a8d13165e2c04082705dc2c689866, type: 2}
+  - {fileID: 11400000, guid: 2c48e7327c0cc3647803a0b6776668e5, type: 2}
+  - {fileID: 11400000, guid: c0ab0736959fc5b40bc5e12a329bd338, type: 2}
+  - {fileID: 11400000, guid: 2f920b5e37807a2438a36560cb000929, type: 2}
   _artifactSlots: 2

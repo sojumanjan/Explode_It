@@ -32,11 +32,14 @@ namespace ExplodeIt.Progression
         [Tooltip("달성 조건의 종류")]
         [SerializeField] private AchievementCondition _condition;
 
-        [Tooltip("목표 수. 연속 처치면 연속 횟수(번), 그 밖에는 처치 수(마리). 보스 막타·무처치 조건은 쓰지 않는다")]
+        [Tooltip("목표 수. 연속 처치면 연속 횟수(번), 골렘 살려 두기면 시간(초), 그 밖에는 처치·적 수(마리). 보스 막타·무처치·전부 해금·쓰러지기·스토리 클리어는 1")]
         [SerializeField, Min(1)] private int _target = 1;
 
         [Tooltip("스킬 조건(스킬 한 번 처치, 무처치, 보스 막타, 스킬 누적 처치)이 기준으로 삼는 스킬")]
         [SerializeField] private AbilityData _ability;
+
+        [Tooltip("적에게 쓰러지기 조건이 기준으로 삼는 적 부류")]
+        [SerializeField] private EnemyKind _enemyKind;
 
         [Header("보상 (모두 비워도 된다)")]
         [Tooltip("달성하면 해금되는 무기")]
@@ -64,6 +67,7 @@ namespace ExplodeIt.Progression
         public AbilityData RewardAbility => _rewardAbility;
         public AbilityUpgradeData RewardUpgrade => _rewardUpgrade;
         public AbilityData Ability => _ability;
+        public EnemyKind EnemyKind => _enemyKind;
 
         // 이 업적의 보상들을 담는다. 해금 알림이 종류를 몰라도 차례로 보여 줄 수 있게 한다.
         public void CollectRewards(List<IUnlockable> into)

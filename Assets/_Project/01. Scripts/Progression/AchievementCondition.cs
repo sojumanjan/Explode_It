@@ -31,6 +31,18 @@ namespace ExplodeIt.Progression
         // 스킬을 한 번도 쓰지 않은 판에서 처치한 수.
         KillsInOneRunWithoutAbility,
         // 빗나간 폭탄(아무도 못 잡고 터진, 직접 던진 폭탄) 없이 한 판에 처치한 수.
-        NoMissKillsInOneRun
+        NoMissKillsInOneRun,
+        // 대시 박치기(가죽 헬름)로 보스의 마지막 한 방을 넣기.
+        BossKilledByDash,
+        // 한 대만 남은 골렘을 살려 둔 시간 (초).
+        GolemLastStandSeconds,
+        // 맵 안에 들어와 진입 유예까지 끝낸 적(보스 제외)이 동시에 있는 수.
+        EnemiesInArenaAtOnce,
+        // 무기·스킬·스킬 강화·아티팩트를 모두 해금하기.
+        AllUnlocked,
+        // 업적에 정한 부류의 적이 직접 때린 공격에 쓰러지기.
+        KilledByEnemy,
+        // 스토리 모드 클리어(최종 보스 처치).
+        StoryCleared
     }
 }

@@ -272,6 +272,30 @@ namespace ExplodeIt.Core
             EnemyKilledBy?.Invoke(source, kind);
         }
 
+        // 플레이어를 쓰러뜨린 마지막 공격이 적이 직접 때린 것이면 그 적의 부류. 사망 이벤트보다 먼저 온다.
+        public static event Action<EnemyKind> PlayerKilledBy;
+
+        public static void RaisePlayerKilledBy(EnemyKind kind)
+        {
+            PlayerKilledBy?.Invoke(kind);
+        }
+
+        // 맵 안에 들어와 진입 유예까지 끝낸 적(보스 제외) 수가 바뀔 때. 동시에 몰려 있는 수를 세는 업적이 듣는다.
+        public static event Action<int> EnemiesInArenaChanged;
+
+        public static void RaiseEnemiesInArenaChanged(int count)
+        {
+            EnemiesInArenaChanged?.Invoke(count);
+        }
+
+        // 한 대만 남은 골렘이 살아 버틴 시간(초, 1초마다). 골렘을 일부러 살려 두는 업적이 듣는다.
+        public static event Action<int> GolemLastStand;
+
+        public static void RaiseGolemLastStand(int seconds)
+        {
+            GolemLastStand?.Invoke(seconds);
+        }
+
         // 도메인 리로드를 끈 플레이모드 설정에서도 이전 세션의 구독자가 남지 않게 한다.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetSubscribers()
@@ -284,6 +308,9 @@ namespace ExplodeIt.Core
             PlayerHealthChanged = null;
             EnemyKilled = null;
             EnemyKilledBy = null;
+            PlayerKilledBy = null;
+            EnemiesInArenaChanged = null;
+            GolemLastStand = null;
             AbilityChargeChanged = null;
             BombChargesChanged = null;
             ExplosionPitchChanged = null;

@@ -34,6 +34,9 @@ namespace ExplodeIt.Enemies
         private EnemyState _state;
         private float _stateTime;
         private float _arenaTime;
+        // 맵 안에 들어와 싸우는 적 수(보스 제외). 판 전체에서 하나라 정적으로 센다.
+        private static int _arenaCount;
+        private bool _isCountedInArena;
         private float _lastPulledTime;
         private float _stunDuration;
         // 공격 거리 안에서 플레이어가 계속 보인 시간 (초).
@@ -119,6 +122,39 @@ namespace ExplodeIt.Enemies
         protected virtual void OnDisable()
         {
             _hitReceiver.Died -= OnDied;
+            LeaveArenaCount();
+        }
+
+        // 도메인 리로드를 끈 채 플레이를 다시 눌러도 지난 판 수가 남지 않게 한다.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetArenaCount()
+        {
+            _arenaCount = 0;
+        }
+
+        // 진입 유예까지 끝내 실제로 싸움에 들어온 적만 센다. 보스는 따로 나오므로 뺀다.
+        private void JoinArenaCount()
+        {
+            if (_isCountedInArena || Kind == EnemyKind.Boss)
+            {
+                return;
+            }
+
+            _isCountedInArena = true;
+            _arenaCount++;
+            GameEvents.RaiseEnemiesInArenaChanged(_arenaCount);
+        }
+
+        private void LeaveArenaCount()
+        {
+            if (!_isCountedInArena)
+            {
+                return;
+            }
+
+            _isCountedInArena = false;
+            _arenaCount = Mathf.Max(0, _arenaCount - 1);
+            GameEvents.RaiseEnemiesInArenaChanged(_arenaCount);
         }
 
         // died: 죽는 순간(살아 있는 적 목록에서 빼기), release: 사망 연출이 끝난 뒤(풀로 돌려보내기).
@@ -441,6 +477,10 @@ namespace ExplodeIt.Enemies
             if (arena == null || arena.Contains(Body.position))
             {
                 _arenaTime += deltaTime;
+                if (HasEnteredArena())
+                {
+                    JoinArenaCount();
+                }
             }
         }
 
@@ -500,7 +540,7 @@ namespace ExplodeIt.Enemies
             {
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(center));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
                 }
             }
         }
@@ -520,7 +560,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(center));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
                 }
             }
         }
@@ -546,7 +586,7 @@ namespace ExplodeIt.Enemies
 
                 if (!isSafe && AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(Body.position));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(Body.position, Kind));
                 }
             }
         }
@@ -580,7 +620,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(center));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
                 }
             }
         }
@@ -612,7 +652,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(origin));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(origin, Kind));
                 }
             }
         }
@@ -638,6 +678,7 @@ namespace ExplodeIt.Enemies
         // 콜라이더를 꺼서 남은 몸이 폭탄 범위·블랙홀·길막에 끼어들지 않게 한다.
         private void OnDied(HitInfo hit)
         {
+            LeaveArenaCount();
             EnterState(EnemyState.Dead);
             _collider.enabled = false;
             if (Data.CountsAsKill)

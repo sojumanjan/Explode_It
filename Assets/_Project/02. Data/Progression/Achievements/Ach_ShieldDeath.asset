@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_ShieldDeath
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: shield_death
+  _displayName: "\uBA54\uC774\uC2A4 \uB9DB"
+  _description: "\uBC29\uD328\uBCD1\uC758 \uB0B4\uB824\uCE58\uAE30\uC5D0 \uB9DE\uC544
+    \uC4F0\uB7EC\uC9C0\uAE30"
+  _sticker: {fileID: 21300000, guid: 3f1eb9c63517c54469f974946a83e054, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: 3f1eb9c63517c54469f974946a83e054, type: 3}
+  _isHidden: 0
+  _condition: 18
+  _target: 1
+  _ability: {fileID: 0}
+  _enemyKind: 1
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
+  _rewardArtifact: {fileID: 0}
