@@ -16,9 +16,13 @@ MonoBehaviour:
   _displayName: "\uC77C\uB9DD\uD0C0\uC9C4"
   _description: "\uD3ED\uD0C4 \uD558\uB098\uB85C \uC801 5\uB9C8\uB9AC\uB97C \uD55C\uAEBC\uBC88\uC5D0
     \uCC98\uCE58\uD558\uAE30"
-  _sticker: {fileID: 0}
+  _sticker: {fileID: 21300000, guid: 14e680ff0e758f4478454767a6340da4, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: 1d4a5e87718fa4a4fa6193a7be5e07c1, type: 3}
   _isHidden: 0
   _condition: 2
   _target: 5
+  _ability: {fileID: 0}
   _rewardWeapon: {fileID: 11400000, guid: 704607521b200f14eb3d5c65cc2d416c, type: 2}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
   _rewardArtifact: {fileID: 0}

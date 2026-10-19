@@ -16,7 +16,8 @@ MonoBehaviour:
   _displayName: "\uB09C\uC0AC"
   _description: "\uC21C\uAC04\uD3ED\uD0C4 \uD55C \uBC88 \uB3D9\uC548 \uD3ED\uD0C4
     15\uBC88 \uB358\uC9C0\uAE30"
-  _sticker: {fileID: 0}
+  _sticker: {fileID: 21300000, guid: b15151525c13f3e4f875887d439a0901, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: 728e4c0b3fa4e5f468ca602b4cee658a, type: 3}
   _isHidden: 0
   _condition: 9
   _target: 15

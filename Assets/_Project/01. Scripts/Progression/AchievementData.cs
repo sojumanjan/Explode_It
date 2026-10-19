@@ -22,6 +22,9 @@ namespace ExplodeIt.Progression
         [Tooltip("달성하면 도감 칸에 붙는 스티커 그림")]
         [SerializeField] private Sprite _sticker;
 
+        [Tooltip("아직 못 딴 스티커 자리에 보여 줄 흰 실루엣. 비워 두면 스티커를 흐리게 보여 준다")]
+        [SerializeField] private Sprite _stickerSilhouette;
+
         [Tooltip("켜면 달성 전까지 이름·조건을 ???로 가린다. 찾아내는 재미를 주는 업적용")]
         [SerializeField] private bool _isHidden;
 
@@ -52,6 +55,7 @@ namespace ExplodeIt.Progression
         public string DisplayName => _displayName;
         public string Description => _description;
         public Sprite Sticker => _sticker;
+        public Sprite StickerSilhouette => _stickerSilhouette;
         public bool IsHidden => _isHidden;
         public AchievementCondition Condition => _condition;
         public int Target => _target;

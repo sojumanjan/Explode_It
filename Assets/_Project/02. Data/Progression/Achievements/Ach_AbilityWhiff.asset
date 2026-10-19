@@ -15,7 +15,8 @@ MonoBehaviour:
   _id: ability_whiff
   _displayName: "\uD5DB\uC190\uC9C8"
   _description: "\uC2A4\uD0AC\uC744 \uC368\uC11C \uC544\uBB34\uB3C4 \uBABB \uC7A1\uAE30"
-  _sticker: {fileID: 0}
+  _sticker: {fileID: 21300000, guid: 4936242d3f2d4774e94fefddd475b863, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: d836ec8a86609b643a689a9d5144ea97, type: 3}
   _isHidden: 0
   _condition: 6
   _target: 1
