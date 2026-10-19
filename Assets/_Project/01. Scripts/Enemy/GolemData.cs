@@ -38,6 +38,10 @@ namespace ExplodeIt.Enemies
             [Tooltip("예고 시간 (초). 원이 다 차면 내려친다")]
             [SerializeField, Min(0.1f)] private float _telegraphDuration = 1f;
 
+            // 내려치기 소리는 하나라, 높낮이로 큰 몸은 묵직하게 작은 몸은 가볍게 들리게 한다.
+            [Tooltip("내려치기 소리 높낮이 배율. 1보다 작으면 낮고 묵직하게, 크면 높고 가볍게 들린다. 소리 데이터의 무작위 높낮이에 곱한다")]
+            [SerializeField, Range(0.5f, 2f)] private float _slamPitch = 1f;
+
             public Sprite Sprite => _sprite;
             public float VisualScale => _visualScale;
             public float HitRadius => _hitRadius;
@@ -47,6 +51,7 @@ namespace ExplodeIt.Enemies
             public float SlamRadius => _slamRadius;
             public float SlamForward => _slamForward;
             public float TelegraphDuration => _telegraphDuration;
+            public float SlamPitch => _slamPitch;
         }
 
         [Header("단계 (1번 칸 = 마지막 한 대 남은 쪼꼬미, 마지막 칸 = 처음 왕건이)")]
@@ -75,7 +80,7 @@ namespace ExplodeIt.Enemies
         [Tooltip("내려치는 순간의 효과음")]
         [SerializeField] private SoundData _slamSound;
 
-        [Tooltip("맞고 버틴 순간의 효과음")]
+        [Tooltip("맞아서 단계가 줄어들 때와 마지막 한 대에 쓰러질 때의 효과음")]
         [SerializeField] private SoundData _hurtSound;
 
         public float HurtStun => _hurtStun;

@@ -21,6 +21,7 @@ namespace ExplodeIt.Enemies
         // 예고가 시작될 때의 단계 값. 예고 도중 단계가 바뀌면 멈칫으로 취소되지만, 보이는 원과 맞는 원이 어긋나지 않게 묶어 둔다.
         private float _slamRadius;
         private float _slamTelegraph = 1f;
+        private float _slamPitch = 1f;
         // 마지막으로 몸에 반영한 남은 맷집. 그림 쪽 초기화가 끝난 뒤 반영하려고 Update에서 맞춘다.
         private int _appliedHits = -1;
         // 한 대 남은 뒤 살아 있는 시간(초)과 마지막으로 알린 초.
@@ -121,7 +122,12 @@ namespace ExplodeIt.Enemies
         protected override bool TickAttack(float deltaTime)
         {
             HitOverlapping(_slamCenter, _slamRadius);
-            AudioManager.Play(_data.SlamSound);
+            SoundData slam = _data.SlamSound;
+            if (slam != null)
+            {
+                AudioManager.Play(slam, slam.PickPitch() * _slamPitch);
+            }
+
             return true;
         }
 
@@ -133,10 +139,17 @@ namespace ExplodeIt.Enemies
                 GolemData.Stage stage = CurrentStage;
                 _slamRadius = stage.SlamRadius;
                 _slamTelegraph = stage.TelegraphDuration;
+                _slamPitch = stage.SlamPitch;
                 _slamDirection = DirectionToTarget();
                 _slamCenter = (Vector2)transform.position + _slamDirection * stage.SlamForward;
                 ShowSlam();
                 return;
+            }
+
+            // 마지막 한 대(또는 블랙홀 한 방)에 쓰러질 때도 맞는 소리를 낸다. 버틸 때와 같은 소리로 "깨졌다"를 알린다.
+            if (state == EnemyState.Dead)
+            {
+                AudioManager.Play(_data.HurtSound);
             }
 
             HideSlam();
