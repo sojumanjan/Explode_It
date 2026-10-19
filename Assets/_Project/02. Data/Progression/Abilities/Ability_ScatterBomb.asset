@@ -18,7 +18,7 @@ MonoBehaviour:
   _description: "\uD3ED\uD0C4 10\uAC1C\uB97C \uC0AC\uBC29\uC73C\uB85C \uBFCC\uB9B0\uB2E4."
   _icon: {fileID: 21300000, guid: d0aa294fbcb65004ab9f38e9978fc300, type: 3}
   _kind: 1
-  _killsToCharge: 10
+  _killsToCharge: 18
   _maxCharges: 2
   _startCharges: 1
   _maxThrowRange: 15

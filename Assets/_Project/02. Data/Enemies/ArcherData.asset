@@ -23,7 +23,7 @@ MonoBehaviour:
   _telegraphDuration: 1.3
   _recoverDuration: 1
   _deathDuration: 0.5
-  _projectileSpeed: 35
+  _projectileSpeed: 25
   _projectileRange: 5.8
   _projectileHitRadius: 0.15
   _showAimLine: 1

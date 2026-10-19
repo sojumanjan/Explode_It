@@ -109,7 +109,7 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 0
     _mood: 2
-    _text: "\uD06C\uD558\uD558\uD56B!! \uADF8\uB798\uADF8\uB798! \uAD1C\uCC2E\uC544!\n\uB0B4
+    _text: "\uD06C\uD558\uD558\uD56B!! \uADF8\uB798\uADF8\uB798! \uAD1C\uCC2E\uC544~\n\uB0B4
       \uC798\uBABB\uC778\uB370 \uBB50 \uC5B4\uB54C~?"
     _spawnBoss: 0
     _startEntrance: 0
@@ -120,8 +120,8 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 0
     _mood: 3
-    _text: "\uAD1C\uCC2E\uC740....\uB370..\n\uB0A0\uC544\uAC04 \uB3C8\uC774 \uB108\uBB34
-      \uC544\uAE4C\uC6CC...."
+    _text: "\uAD1C\uCC2E\uAE34 \uD558\uC9C0\uB9CC...\n\uB0A0\uC544\uAC04 \uB3C8\uC774
+      \uB108\uBB34 \uC544\uAE4C\uC6CC...."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
@@ -193,7 +193,28 @@ MonoBehaviour:
     _endAction: 2
   - _speaker: 2
     _mood: 5
-    _text: "\uADF8\uB798..! \uD55C \uBC88 \uB6F0\uC5B4\uBCFC\uAE4C?"
+    _text: .....
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 2
+    _mood: 5
+    _text: "\uADF8\uB807\uAC8C \uC26C\uC6B4 \uBC29\uBC95\uC73C\uB85C\n\uB3CC\uC544\uAC08
+      \uC218\uAC00 \uC788\uB2E4\uACE0..?"
+    _spawnBoss: 0
+    _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
+  - _speaker: 2
+    _mood: 5
+    _text: "\uBB50.. \uC77C\uB2E8 \uB6F0\uC5B4\uB294 \uBCFC\uAE4C?"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
@@ -213,7 +234,7 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 2
     _mood: 5
-    _text: "\uBB50\uC57C..? \uC544\uBB34 \uC77C\uB3C4 \uC548\uC77C\uC5B4\uB098\uC796\uC544!"
+    _text: "\uBB50\uC57C..? \uC544\uBB34 \uC77C\uB3C4 \uC548\uC77C\uC5B4\uB098\uC796\uC544?"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}
@@ -223,7 +244,8 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 2
     _mood: 5
-    _text: "\uC774\uB7F0 \uC0AC\uAE30\uAFBC \uC784\uAE08\uAC00...\u314C\uD2B8.\u3147.\u3161\u3141\u314E\uC5B4\u3153\uC5B4\uC5C9\uB7EC\uC5B5\u3132\uC5CA\uC5B4\uBA38\uC624\u3157\uC5B4\uACE1\u3147\u3131\uACF5\uC5B4\uC5B5?!?!"
+    _text: "\uADF8\uB798 \uADF8\uB7F0 \uBB34\uC2DD\uD55C \uBC29\uBC95\uC73C\uB85C
+      \uB420 \uB9AC\uAC00 \uC5C6....\uC5B4\uC5C7\u3147\u3141.\u3147.\u3161\u3141\u314E\uC5B4\u3153\uC5B4\uC5C9\uB7EC\uC5B5\u3132\uC5CA\uC5B4\uBA38\uC624\u3157\uC5B4\uACE1\u3147\u3131\uACF5\uC5B4\uC5B5?!?!"
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}

@@ -20,7 +20,7 @@ MonoBehaviour:
     3\uBC30\uAC00 \uB41C\uB2E4."
   _icon: {fileID: 21300000, guid: 157d49b78c6e24441a9fc521a7129aa6, type: 3}
   _kind: 2
-  _killsToCharge: 12
+  _killsToCharge: 16
   _maxCharges: 2
   _startCharges: 1
   _maxThrowRange: 15
