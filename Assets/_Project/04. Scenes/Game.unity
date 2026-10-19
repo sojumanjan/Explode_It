@@ -22078,7 +22078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563a4319dd653204080695892b83687d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.BgmPlayer
-  _bgm: {fileID: 11400000, guid: 78b6d130ec357014599d0d8571302dc6, type: 2}
+  _bgm: {fileID: 11400000, guid: ac13001566529014ab69d318e3ef218b, type: 2}
 --- !u!4 &470241928
 Transform:
   m_ObjectHideFlags: 0
@@ -65056,7 +65056,7 @@ MonoBehaviour:
   _buttonLabel: {fileID: 2129454244}
   _nextText: "\uB2E4\uC74C"
   _closeText: "\uD655\uC778"
-  _sound: {fileID: 11400000, guid: be40ba72b07e02742b4847fb2853fbd6, type: 2}
+  _sound: {fileID: 11400000, guid: 8c3ae3c40687ef643a141e4d6e499103, type: 2}
   _pageSound: {fileID: 0}
   _weaponKind: "\uC0C8 \uBB34\uAE30"
   _abilityKind: "\uC0C8 \uC2A4\uD0AC"
