@@ -3051,10 +3051,10 @@ RectTransform:
   - {fileID: 265871144}
   m_Father: {fileID: 1638596857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 300, y: -70}
+  m_SizeDelta: {x: 180, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &170574397
 MonoBehaviour:
@@ -7168,10 +7168,10 @@ RectTransform:
   - {fileID: 1558872907}
   m_Father: {fileID: 1638596857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 102, y: -70}
+  m_SizeDelta: {x: 180, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &505324079
 MonoBehaviour:
@@ -10700,10 +10700,10 @@ RectTransform:
   - {fileID: 1493960365}
   m_Father: {fileID: 1638596857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 498, y: -70}
+  m_SizeDelta: {x: 180, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &741498894
 MonoBehaviour:
@@ -15259,10 +15259,10 @@ RectTransform:
   - {fileID: 720779480}
   m_Father: {fileID: 1638596857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 102, y: -228}
+  m_SizeDelta: {x: 180, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1072610104
 MonoBehaviour:
@@ -22332,7 +22332,7 @@ MonoBehaviour:
   _noArtifactsText: "\uC544\uD2F0\uD329\uD2B8\uB294 \uC900\uBE44 \uC911\uC774\uC5D0\uC694!"
   _endlessButton: {fileID: 696202501}
   _endlessLock: {fileID: 1908882492}
-  _isEndlessReady: 0
+  _isEndlessReady: 1
   _endlessLockedText: "\uC2A4\uD1A0\uB9AC \uBAA8\uB4DC\uB97C \uD074\uB9AC\uC5B4\uD558\uBA74
     \uC5F4\uB824\uC694!"
   _endlessNotReadyText: "\uBB34\uD55C \uBAA8\uB4DC\uB294 \uC900\uBE44 \uC911\uC774\uC5D0\uC694!"

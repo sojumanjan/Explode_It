@@ -290,6 +290,26 @@ namespace ExplodeIt.UI
                 IntroSequence.ClearSeen();
                 SceneFlow.LoadGame();
             }
+
+            // 메뉴를 거치지 않고 지금 장비 그대로 모드만 바꿔 판을 다시 연다.
+            GUILayout.Label($"Mode {RunSetup.Mode}");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Restart Story"))
+            {
+                RestartAs(RunMode.Story);
+            }
+
+            if (GUILayout.Button("Restart Endless"))
+            {
+                RestartAs(RunMode.Endless);
+            }
+            GUILayout.EndHorizontal();
+        }
+
+        private static void RestartAs(RunMode mode)
+        {
+            RunSetup.Set(mode, RunSetup.WeaponId, RunSetup.AbilityId, RunSetup.ArtifactIds);
+            SceneFlow.LoadGame();
         }
 
         // 저장 확인용. 초기화는 오프닝부터 다시 보도록 판을 새로 연다.

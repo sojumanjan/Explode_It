@@ -9,6 +9,7 @@ namespace ExplodeIt.Stage
     // 처치 수 기반 진행: 대기 → 웨이브(정해진 수 스폰) → 전부 처치 → 보스 등장 연출 → 보스전 → 웨이브 사이 간격 → 다음 웨이브.
     // 웨이브가 시작될 때 그 웨이브의 스폰을 "몇 초에, 어떤 적이, 어디서"로 미리 펼쳐 두고,
     // 시간이 되면 앞에서부터 꺼낸다. 전투 중에는 목록을 읽기만 하므로 할당이 없다.
+    // 무한 모드는 미리 펼치지 않고, 생성기가 웨이브 도중 낼 차례가 된 군집을 같은 목록에 이어 붙인다.
     public class StageRunner : MonoBehaviour
     {
         // 처치 대화 옆자리에 다 왔다고 보는 거리, 옆자리가 비어 있는지 볼 반지름 (유닛). 연출용 값이다.
@@ -53,8 +54,12 @@ namespace ExplodeIt.Stage
 
         private static readonly Comparison<SpawnEvent> ByTime = (a, b) =>
             a.Time != b.Time ? a.Time.CompareTo(b.Time) : a.Order.CompareTo(b.Order);
+        // 무한 모드는 웨이브 도중 목록 뒤쪽만 다시 정렬하는데, 구간 정렬은 IComparer만 받는다.
+        private static readonly IComparer<SpawnEvent> ByTimeComparer = Comparer<SpawnEvent>.Create(ByTime);
 
         [SerializeField] private StageData _stage;
+        // 메뉴에서 무한 모드로 시작한 판은 이 진행표로 바꿔 쓴다. 비워 두면 늘 위 진행표를 쓴다.
+        [SerializeField] private StageData _endlessStage;
         [SerializeField] private EnemySpawner _spawner;
         // 보스가 내려앉을 자리를 연출 동안 미리 보여주는 원. 비워 두면 표시 없이 나타난다.
         [SerializeField] private Transform _bossSpawnMarker;
@@ -69,6 +74,10 @@ namespace ExplodeIt.Stage
 
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
+        private readonly List<EndlessGroupOrder> _orders = new List<EndlessGroupOrder>(8);
+        // 무한 모드에서만 쓴다. 스토리 모드면 null.
+        private EndlessWaveGenerator _generator;
+        private int _eventOrder;
 
         private Phase _phase;
         private float _phaseTime;
@@ -109,7 +118,8 @@ namespace ExplodeIt.Stage
         public float PhaseTime => _phaseTime;
         // 지금까지 시작한 웨이브 수(1부터). 마지막 웨이브를 반복하면 데이터 번호보다 커진다.
         public int WaveNumber => _waveNumber;
-        public int WaveCount => _stage != null ? _stage.Waves.Count : 0;
+        // 무한 모드는 정해진 웨이브가 없어 0이다.
+        public int WaveCount => _stage != null && !_stage.IsEndless ? _stage.Waves.Count : 0;
 
         private void OnEnable()
         {
@@ -137,9 +147,14 @@ namespace ExplodeIt.Stage
 
         private void Start()
         {
+            if (RunSetup.Mode == RunMode.Endless && _endlessStage != null)
+            {
+                _stage = _endlessStage;
+            }
+
             // 구역을 추가할 때마다 인스펙터에 연결하지 않도록 시작할 때 씬에서 모두 찾는다.
             SpawnArea[] areas = FindObjectsByType<SpawnArea>();
-            if (areas.Length == 0 || _stage.Waves.Count == 0)
+            if (areas.Length == 0 || (!_stage.IsEndless && _stage.Waves.Count == 0))
             {
                 Debug.LogError("StageRunner: 스폰 구역이나 웨이브가 비어 있습니다.", this);
                 enabled = false;
@@ -149,7 +164,12 @@ namespace ExplodeIt.Stage
             IndexAreas(areas);
             // 보스 지정 자리도 구역처럼 씬에서 모두 찾는다. 없으면 기존 방식(플레이어 근처 넓은 쪽)으로 내려온다.
             _bossSpawnPointSets = FindObjectsByType<BossSpawnPoints>();
-            if (!ValidateWaves())
+            if (_stage.IsEndless)
+            {
+                _generator = new EndlessWaveGenerator(_stage.EndlessWaves, areas, _stage.SpawnsPerWave);
+            }
+
+            if (!(_stage.IsEndless ? ValidateEndless() : ValidateWaves()))
             {
                 enabled = false;
                 return;
@@ -222,6 +242,11 @@ namespace ExplodeIt.Stage
                     break;
 
                 case Phase.Spawning:
+                    if (_generator != null)
+                    {
+                        GenerateEndless();
+                    }
+
                     while (_nextEvent < _events.Count && _events[_nextEvent].Time <= _phaseTime)
                     {
                         SpawnEvent spawn = _events[_nextEvent];
@@ -234,7 +259,7 @@ namespace ExplodeIt.Stage
                     }
 
                     // 웨이브 사이는 처치로만 넘어간다. 다 나오고 다 잡혀야 보스전이다.
-                    if (_nextEvent >= _events.Count && _spawner.ActiveCount == 0)
+                    if (_nextEvent >= _events.Count && (_generator == null || _generator.IsDone) && _spawner.ActiveCount == 0)
                     {
                         GameEvents.RaiseWaveCleared(_waveNumber);
                         BeginBossIntro(_waveNumber);
@@ -341,6 +366,7 @@ namespace ExplodeIt.Stage
             _spawner.KillAll();
             _events.Clear();
             _nextEvent = 0;
+            _generator?.Stop();
             BeginBossIntro(bossNumber);
         }
 
@@ -583,8 +609,12 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            // 웨이브가 보스 수보다 적으면 마지막 웨이브를 반복한다.
-            _waveIndex = Mathf.Min(_waveIndex + 1, _stage.Waves.Count - 1);
+            // 웨이브가 보스 수보다 적으면 마지막 웨이브를 반복한다. 무한 모드는 웨이브 목록을 쓰지 않는다.
+            if (!_stage.IsEndless)
+            {
+                _waveIndex = Mathf.Min(_waveIndex + 1, _stage.Waves.Count - 1);
+            }
+
             BeginRest(_stage.WaveInterval);
         }
 
@@ -667,7 +697,10 @@ namespace ExplodeIt.Stage
                 PrepareBoss(n);
             }
 
-            PrepareBoss(_stage.FinalBossNumber);
+            if (!_stage.IsEndless)
+            {
+                PrepareBoss(_stage.FinalBossNumber);
+            }
         }
 
         private void PrepareBoss(int bossNumber)
@@ -705,7 +738,18 @@ namespace ExplodeIt.Stage
 
         private void StartWave()
         {
-            BuildWave(_stage.Waves[_waveIndex]);
+            if (_generator != null)
+            {
+                // 무한 모드는 적을 미리 펼치지 않고, 웨이브 도중 낼 차례가 될 때마다 만든다.
+                _events.Clear();
+                _eventOrder = 0;
+                _generator.BeginWave(_waveNumber + 1, _waveNumber * _stage.SpawnsPerWave);
+            }
+            else
+            {
+                BuildWave(_stage.Waves[_waveIndex]);
+            }
+
             _waveNumber++;
             GameEvents.RaiseWaveStarted(_waveNumber);
             _nextEvent = 0;
@@ -718,9 +762,7 @@ namespace ExplodeIt.Stage
         private void BuildWave(WaveData wave)
         {
             _events.Clear();
-            int order = 0;
-            float interval = _stage.SameAreaSpawnInterval;
-            float radius = _stage.ClusterRadius;
+            _eventOrder = 0;
 
             IReadOnlyList<WaveGroupEntry> entries = wave.Groups;
             for (int e = 0; e < entries.Count; e++)
@@ -744,25 +786,55 @@ namespace ExplodeIt.Stage
                     IReadOnlyList<SpawnGroupUnit> units = group.Units;
                     for (int u = 0; u < units.Count; u++)
                     {
-                        Enemy prefab = units[u].Enemy;
-                        for (int k = 0; k < units[u].Count; k++)
-                        {
-                            if (prefab != null)
-                            {
-                                float time = entries[e].StartTime + sequence * interval;
-                                Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
-                                bool hasEntry = area.HasEntrance;
-                                Vector2 entryPoint = hasEntry ? area.GetRandomEntrancePoint() : position;
-                                _events.Add(new SpawnEvent(time, order++, prefab, position, hasEntry, entryPoint));
-                            }
-
-                            sequence++;
-                        }
+                        sequence = AddUnitEvents(area, anchor, units[u].Enemy, units[u].Count, entries[e].StartTime, sequence);
                     }
                 }
             }
 
             _events.Sort(ByTime);
+        }
+
+        // 생성기가 이번에 낸 군집을 스토리 웨이브와 같은 방식(기준점 주변, 같은 구역 간격)으로 펼친다.
+        // 이미 펼쳐 둔 앞 군집의 남은 스폰과 시간이 섞이므로, 아직 안 나온 부분만 다시 정렬한다.
+        private void GenerateEndless()
+        {
+            _orders.Clear();
+            Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : Vector2.zero;
+            _generator.Tick(_phaseTime, player, _orders);
+            if (_orders.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _orders.Count; i++)
+            {
+                EndlessGroupOrder order = _orders[i];
+                AddUnitEvents(order.Area, order.Area.GetRandomPoint(), order.Prefab, order.Count, order.Time, 0);
+            }
+
+            _events.Sort(_nextEvent, _events.Count - _nextEvent, ByTimeComparer);
+        }
+
+        // 한 구역에서 같은 적 count마리를 기준점 주변에 같은 구역 간격을 두고 한 마리씩 낸다. 다음 순번을 돌려준다.
+        private int AddUnitEvents(SpawnArea area, Vector2 anchor, Enemy prefab, int count, float startTime, int sequence)
+        {
+            float interval = _stage.SameAreaSpawnInterval;
+            float radius = _stage.ClusterRadius;
+            for (int k = 0; k < count; k++)
+            {
+                if (prefab != null)
+                {
+                    float time = startTime + sequence * interval;
+                    Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
+                    bool hasEntry = area.HasEntrance;
+                    Vector2 entryPoint = hasEntry ? area.GetRandomEntrancePoint() : position;
+                    _events.Add(new SpawnEvent(time, _eventOrder++, prefab, position, hasEntry, entryPoint));
+                }
+
+                sequence++;
+            }
+
+            return sequence;
         }
 
         // 같은 번호를 단 구역이 여럿이면 그중 하나를 고른다.
@@ -876,9 +948,53 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 무한 모드 데이터 실수도 시작할 때 한 번에 알린다. 처음부터 낼 적이 하나도 없으면 시작을 막는다.
+        private bool ValidateEndless()
+        {
+            EndlessWaveData data = _stage.EndlessWaves;
+            int total = data.TotalSpawnCount;
+            if (total == 0)
+            {
+                Debug.LogError($"StageRunner: 무한 모드 데이터 '{data.name}'의 구간 마리 수가 모두 0입니다.", data);
+                return false;
+            }
+
+            if (total != _stage.SpawnsPerWave)
+            {
+                Debug.LogWarning($"StageRunner: 무한 모드 데이터 '{data.name}'의 구간 합계가 {total}마리입니다. 기준은 {_stage.SpawnsPerWave}마리입니다.", data);
+            }
+
+            IReadOnlyList<EndlessEnemyEntry> enemies = data.Enemies;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] != null && enemies[i].GetWeight(0, _stage.SpawnsPerWave) > 0f)
+                {
+                    return true;
+                }
+            }
+
+            Debug.LogError($"StageRunner: 무한 모드 데이터 '{data.name}'에 처음부터 나올 수 있는 적(등장 시작 0, 가중치 0 초과)이 없습니다.", data);
+            return false;
+        }
+
         private List<Enemy> CollectEnemyPrefabs()
         {
             var prefabs = new List<Enemy>();
+            if (_stage.IsEndless)
+            {
+                IReadOnlyList<EndlessEnemyEntry> enemies = _stage.EndlessWaves.Enemies;
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    Enemy enemy = enemies[i] != null ? enemies[i].Enemy : null;
+                    if (enemy != null && !prefabs.Contains(enemy))
+                    {
+                        prefabs.Add(enemy);
+                    }
+                }
+
+                return prefabs;
+            }
+
             IReadOnlyList<WaveData> waves = _stage.Waves;
             for (int w = 0; w < waves.Count; w++)
             {

@@ -69213,6 +69213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageRunner
   _stage: {fileID: 11400000, guid: 4204db0e73475cf4a9e4e692f81a46a8, type: 2}
+  _endlessStage: {fileID: 11400000, guid: bd23431c315a94640aea2726d4a6a6b6, type: 2}
   _spawner: {fileID: 216240368}
   _bossSpawnMarker: {fileID: 1835103571}
   _obstacleMask:

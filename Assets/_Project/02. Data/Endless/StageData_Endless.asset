@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b703a28dab122e45b9798cd48f2f33f, type: 3}
+  m_Name: StageData_Endless
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.StageData
+  _isStoryMode: 0
+  _firstWaveDelay: 2
+  _waveInterval: 5
+  _bossIntroDuration: 2
+  _spawnsPerWave: 100
+  _sameAreaSpawnInterval: 0.2
+  _clusterRadius: 1
+  _waves: []
+  _endlessWaves: {fileID: 11400000, guid: cabd74c1fa7232b42a8d9a0c4cbcda73, type: 2}
+  _bossRotation:
+  - {fileID: 5819474946675302735, guid: ba8234f74e4101a4f8f42543ecf83b55, type: 3}
+  - {fileID: 6048178650885375636, guid: 4d584cbc4d77f674d84f507e3e277766, type: 3}
+  - {fileID: 6048178650885375636, guid: 34b734dd630fd594280a0474dca718bd, type: 3}
+  _bossLaps: 3
+  _finalBoss: {fileID: 0}
+  _bossSpawnDistance: 5
+  _bossSpawnClearance: 1.5
+  _fixedSpawnMinDistance: 6
+  _bossRevealHold: 1
+  _bossCameraBlend: 0.6
+  _bossDialogues:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _finalBossDialogue: {fileID: 0}
+  _finalBossDefeatDialogue: {fileID: 0}
+  _defeatDialogueDelay: 2
+  _defeatTalkDistance: 3
+  _defeatTalkHeight: 0.4
+  _defeatWalkTimeout: 4
+  _defeatEndDelay: 1.5
+  _bossLandFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}

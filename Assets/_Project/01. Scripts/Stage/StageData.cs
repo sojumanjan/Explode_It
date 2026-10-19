@@ -41,6 +41,10 @@ namespace ExplodeIt.Stage
         [Tooltip("웨이브 목록. 위에서부터 차례로 진행하고, 마지막 웨이브는 계속 반복한다")]
         [SerializeField] private WaveData[] _waves;
 
+        [Header("무한 모드")]
+        [Tooltip("무한 모드 웨이브 생성 규칙. 넣으면 웨이브 목록 대신 이 규칙으로 실시간 생성하고, 최종 보스 없이 보스 순서를 끝없이 돈다")]
+        [SerializeField] private EndlessWaveData _endlessWaves;
+
         [Header("보스")]
         // 프리팹 칸은 오브젝트 피커가 컴포넌트 타입에 프리팹을 띄우지 않아 GameObject로 받는다.
         [Tooltip("보스 순서. 1번 칸이 100마리, 2번 칸이 200마리, 3번 칸이 300마리 보스다. 바퀴 수가 2 이상이면 다 돈 뒤 1번 칸부터 한 바퀴 더 강해져서 나온다. 빈 칸은 연출만 보여주고 넘어간다")]
@@ -107,7 +111,10 @@ namespace ExplodeIt.Stage
         public float BossCameraBlend => _bossCameraBlend;
 
         // 최종 보스는 모든 바퀴 다음 순번이다. 이 보스를 잡으면 판이 끝난다.
-        public int FinalBossNumber => BossKindCount * _bossLaps + 1;
+        // 무한 모드는 끝나지 않으므로 최종 보스 차례가 오지 않는다.
+        public int FinalBossNumber => IsEndless ? int.MaxValue : BossKindCount * _bossLaps + 1;
+        public bool IsEndless => _endlessWaves != null;
+        public EndlessWaveData EndlessWaves => _endlessWaves;
 
         // bossNumber(1부터)로 몇 번째 보스가 어느 바퀴로 나올지 정한다. 바퀴는 0부터.
         // 최종 보스 뒤로 가는 경우(개발자 패널 건너뛰기 등)는 마지막 바퀴의 보스 순서를 계속 돈다.
@@ -119,6 +126,13 @@ namespace ExplodeIt.Stage
             {
                 tier = 0;
                 return null;
+            }
+
+            // 무한 모드는 바퀴 수 제한 없이 바퀴마다 계속 강해진다. 보스 데이터에 정한 단계를 넘는 바퀴는 보스 쪽에서 처리한다.
+            if (IsEndless)
+            {
+                tier = index / kinds;
+                return ToEnemy(_bossRotation[index % kinds]);
             }
 
             if (index == kinds * _bossLaps)
