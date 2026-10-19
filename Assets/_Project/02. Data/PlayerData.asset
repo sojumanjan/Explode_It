@@ -16,10 +16,11 @@ MonoBehaviour:
   _acceleration: 80
   _deceleration: 100
   _storyHealth: 2
+  _endlessHealth: 2
   _hurtInvulnerability: 1.5
   _hurtAlpha: 0.45
   _hurtFeedback: {fileID: 11400000, guid: 2ddedcd46d256fb4f81690f42149901c, type: 2}
-  _deathSprite: {fileID: 21300000, guid: 3a5a694f34d060f4baedbc1c23151ede, type: 3}
+  _deathSprite: {fileID: 21300000, guid: 50ac4aebb321de845949039b237dc60d, type: 3}
   _deathZoom: 0.6
   _deathZoomTime: 0.8
   _deathSlowScale: 0.3
