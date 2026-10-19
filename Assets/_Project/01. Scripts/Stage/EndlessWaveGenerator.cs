@@ -149,7 +149,9 @@ namespace ExplodeIt.Stage
 
             _beatWeights[(int)Beat.Single] = segment.SingleWeight;
             _beatWeights[(int)Beat.Surround] = segment.SurroundWeight + _surroundBonus;
-            _beatWeights[(int)Beat.Clump] = Mathf.Max(0f, segment.ClumpWeight + _clumpBonus);
+            _beatWeights[(int)Beat.Clump] = segment.ClumpWeight > 0f
+                ? Mathf.Max(Mathf.Min(_data.MinClumpWeight, segment.ClumpWeight), segment.ClumpWeight + _clumpBonus)
+                : 0f;
             // 남은 마리가 하나면 포위·뭉치를 해도 한 마리라 단독과 같다.
             Beat beat = _segmentLeft > 1 ? (Beat)Mathf.Max(0, PickWeighted(_beatWeights)) : Beat.Single;
 

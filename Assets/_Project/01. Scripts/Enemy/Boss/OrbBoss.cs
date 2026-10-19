@@ -46,8 +46,8 @@ namespace ExplodeIt.Enemies
         private float _entranceStartTime = -1f;
 
         protected override EnemyData Data => _data;
-        // 할퀴기 준비 자세(사각형이 차오르는 동안)가 예고다.
-        public override float TelegraphDuration => BossTempo.TelegraphTime(_data.TelegraphDuration);
+        // 바퀴가 쌓여도 야수는 속도(원혼·돌진·배회·준비 자세)는 그대로 두고 쿨타임만 줄인다. 원혼까지 빨라지면 피로감만 커졌다.
+        public override float TelegraphDuration => _data.TelegraphDuration;
         protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
         // 할퀴기는 구르기로만 피하므로, 아무리 빨라져도 구르기가 다시 차기 전에 다음 할퀴기가 오지 않게 막는다.
         private float ClawInterval => Mathf.Max(BossTempo.ActionTime(_data.ClawInterval), _data.MinClawInterval);
@@ -163,7 +163,7 @@ namespace ExplodeIt.Enemies
             Vector2 offset = new Vector2(Mathf.Cos(angle) * side, Mathf.Sin(angle)) * _data.LungeCircleRadius;
             _lungePoint = TargetPosition + offset;
 
-            _lungeDuration = BossTempo.ActionTime(Random.Range(_data.LungeDuration.x, _data.LungeDuration.y));
+            _lungeDuration = Random.Range(_data.LungeDuration.x, _data.LungeDuration.y);
             _pauseDuration = BossTempo.ActionTime(Random.Range(_data.LungePause.x, _data.LungePause.y));
             _lungeSpeed = Vector2.Distance(Body.position, _lungePoint) / Mathf.Max(_lungeDuration, 0.01f);
             _lungeTime = 0f;
@@ -199,7 +199,7 @@ namespace ExplodeIt.Enemies
                 }
             }
 
-            float step = Mathf.Min(BossTempo.Speed(_data.ClawDashSpeed) * deltaTime, _dashRemaining);
+            float step = Mathf.Min(_data.ClawDashSpeed * deltaTime, _dashRemaining);
             HitInBox(_clawDirection, step, _data.ClawWidth, true);
             Vector2 next = Body.position + _clawDirection * step;
             Body.MovePosition(next);
@@ -301,7 +301,7 @@ namespace ExplodeIt.Enemies
             {
                 float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, BossTempo.Speed(Tier.OrbSpeed), _data, transform);
+                _orbs[i].Launch(center + direction * _data.OrbSpawnRadius, direction, Tier.OrbSpeed, _data, transform);
             }
 
             _aliveOrbs = count;

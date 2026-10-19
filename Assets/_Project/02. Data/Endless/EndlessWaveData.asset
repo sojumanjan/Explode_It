@@ -123,12 +123,12 @@ MonoBehaviour:
     _maxGroupSize: 3
   - _enemyPrefab: {fileID: 391103347237629061, guid: a9a08917254f8e149aa45265b55365d2, type: 3}
     _unlockKills: 400
-    _baseWeight: 0.3
+    _baseWeight: 0.7
     _weightPerWave: 0.1
     _maxWeight: 1
     _maxGroupSize: 1
   _weightGrowthStartKills: 300
-  _missWeightGrowth: 0.01
+  _missWeightGrowth: 0.03
   _areaDistanceWeight:
     serializedVersion: 2
     m_Curve:
@@ -233,10 +233,12 @@ MonoBehaviour:
   _mixedSurroundWeight: 4
   _surroundWeightPerWave: 3
   _clumpWeightPerWave: -1.5
+  _minClumpWeight: 5
   _beatShiftWaveCap: 10
   _durationScalePerWave: 0.95
   _minDurationScale: 0.6
   _wavesPerExtraArea: 3
-  _speedUpStartWave: 11
+  _speedUpStartWave: 7
   _speedUpPerWave: 0.04
+  _speedUpMax: 1.5
   _maxExtraAreas: 2

@@ -80,13 +80,19 @@ namespace ExplodeIt.Core
         // 판정을 건너뛰고 바로 죽인다. 개발자 패널의 적 전멸처럼 여러 번 맞아야 하는 적도 한 번에 지울 때 쓴다.
         public void Kill()
         {
+            Kill(new HitInfo(transform.position));
+        }
+
+        // 맞은 공격 그대로 쓰러뜨린다. 처치 출처(블랙홀 등)가 업적에 그대로 넘어가야 할 때 쓴다.
+        public void Kill(in HitInfo hit)
+        {
             if (_isDead)
             {
                 return;
             }
 
             _isDead = true;
-            Died?.Invoke(new HitInfo(transform.position));
+            Died?.Invoke(hit);
         }
 
         // 이 피격이 먹히는지 결정한다. 무적·실드·방패는 여기서 피격을 흡수한다. 먹힌 뒤 남은 수가 0이면 죽는다.

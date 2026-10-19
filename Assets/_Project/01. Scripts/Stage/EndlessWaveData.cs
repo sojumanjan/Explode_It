@@ -60,6 +60,9 @@ namespace ExplodeIt.Stage
         [Tooltip("웨이브마다 뭉치 박자 가중치에 더하는 값. 음수면 줄어들고, 0 밑으로는 내려가지 않는다")]
         [SerializeField] private float _clumpWeightPerWave = -1.5f;
 
+        [Tooltip("웨이브가 쌓여 뭉치 가중치가 줄어도 지킬 하한. 구간에 뭉치가 원래 없으면(0) 그대로 0이다")]
+        [SerializeField, Min(0f)] private float _minClumpWeight = 5f;
+
         [Tooltip("박자 가중치가 더 이상 오르지 않는 웨이브 수 (웨이브). 10이면 11웨이브부터는 그대로다")]
         [SerializeField, Min(0)] private int _beatShiftWaveCap = 10;
 
@@ -73,10 +76,14 @@ namespace ExplodeIt.Stage
         [SerializeField, Min(0)] private int _wavesPerExtraArea = 3;
 
         [Tooltip("적 이동 속도가 오르기 시작하는 웨이브 (웨이브). 물량·배치 상승이 멈추는 쯤부터 속도로 계속 어려워진다")]
-        [SerializeField, Min(1)] private int _speedUpStartWave = 11;
+        [SerializeField, Min(1)] private int _speedUpStartWave = 7;
 
-        [Tooltip("시작 웨이브부터 웨이브마다 적 이동 속도에 곱하는 증가율. 0.04면 웨이브마다 4%씩 빨라지고 상한은 없다")]
+        [Tooltip("시작 웨이브부터 웨이브마다 적 이동 속도에 곱하는 증가율. 0.04면 웨이브마다 4%씩 빨라진다")]
         [SerializeField, Min(0f)] private float _speedUpPerWave = 0.04f;
+
+        // 끝없이 빨라지면 예측이 아니라 반사신경 싸움이 되므로 상한을 둔다.
+        [Tooltip("적 이동 속도 배율 상한. 1.5면 원래 속도의 1.5배에서 더 오르지 않는다")]
+        [SerializeField, Min(1f)] private float _speedUpMax = 1.5f;
 
         [Tooltip("웨이브가 쌓여 늘어나는 포위 구역 수 최대 (개)")]
         [SerializeField, Min(0)] private int _maxExtraAreas = 2;
@@ -94,6 +101,7 @@ namespace ExplodeIt.Stage
         public float MixedSurroundWeight => _mixedSurroundWeight;
         public float SurroundWeightPerWave => _surroundWeightPerWave;
         public float ClumpWeightPerWave => _clumpWeightPerWave;
+        public float MinClumpWeight => _minClumpWeight;
         public int BeatShiftWaveCap => _beatShiftWaveCap;
 
         public int TotalSpawnCount
@@ -125,7 +133,7 @@ namespace ExplodeIt.Stage
         public float GetEnemySpeedMultiplier(int waveNumber)
         {
             int waves = waveNumber - _speedUpStartWave + 1;
-            return waves > 0 ? Mathf.Pow(1f + _speedUpPerWave, waves) : 1f;
+            return waves > 0 ? Mathf.Min(Mathf.Pow(1f + _speedUpPerWave, waves), _speedUpMax) : 1f;
         }
 
         public float GetFrontAngleWeight(float normalizedAngle)

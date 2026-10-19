@@ -53,6 +53,11 @@ namespace ExplodeIt.Enemies
         [Tooltip("남은 맷집별 몸. 칸 수가 맞아야 할 횟수(공통 항목)와 같아야 한다")]
         [SerializeField] private Stage[] _stages = { new Stage(), new Stage(), new Stage() };
 
+        // 스킬은 원래 방패를 뚫는 강한 수단이지만, 다발·순간폭탄까지 한 방이면 골렘이 의미 없어진다.
+        [Header("한 방에 쓰러뜨리는 공격")]
+        [Tooltip("이 출처에 맞으면 남은 맷집과 상관없이 바로 쓰러진다")]
+        [SerializeField] private DamageSource[] _instantKillSources = { DamageSource.BlackHole };
+
         [Header("맞았을 때")]
         [Tooltip("맞고 버틴 뒤 멈칫하는 시간 (초). 예고 중이었으면 내려치기가 취소된다")]
         [SerializeField, Min(0f)] private float _hurtStun = 0.3f;
@@ -74,6 +79,19 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SoundData _hurtSound;
 
         public float HurtStun => _hurtStun;
+
+        public bool IsInstantKill(DamageSource source)
+        {
+            for (int i = 0; i < _instantKillSources.Length; i++)
+            {
+                if (_instantKillSources[i] == source)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public FeedbackData HurtFeedback => _hurtFeedback;
         public Color HurtFlashColor => _hurtFlashColor;
         public float HurtFlashDuration => _hurtFlashDuration;

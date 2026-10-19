@@ -88,6 +88,12 @@ namespace ExplodeIt.Enemies
         // 버티고 맞으면 몸을 바로 바꾸고 멈칫한다. 예고 중이었으면 내려치기가 취소된다.
         private void OnDamaged(HitInfo hit)
         {
+            if (_data.IsInstantKill(hit.Source))
+            {
+                HitReceiver.Kill(hit);
+                return;
+            }
+
             ApplyStage();
             FeedbackPlayer.Play(_data.HurtFeedback, transform.position);
             AudioManager.Play(_data.HurtSound);
