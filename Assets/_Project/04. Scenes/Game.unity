@@ -70639,7 +70639,7 @@ GameObject:
   - component: {fileID: 1456756929}
   - component: {fileID: 1456756930}
   - component: {fileID: 1456756931}
-  - component: {fileID: 1456756933}
+  - component: {fileID: 1456756932}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -70656,7 +70656,7 @@ Transform:
   m_GameObject: {fileID: 1456756919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.883, z: 0}
+  m_LocalPosition: {x: 0, y: 2.68, z: 0}
   m_LocalScale: {x: 1.0619, y: 1.0619, z: 1.0619}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -70827,8 +70827,8 @@ MonoBehaviour:
   _dodge: {fileID: 1456756930}
   _motion: {fileID: 11400000, guid: 64d7c0c9b057b0b4eaa818bcce6400c2, type: 2}
   _artFacesRight: 0
---- !u!70 &1456756933
-CapsuleCollider2D:
+--- !u!58 &1456756932
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -70861,9 +70861,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.058537006, y: -0.34842247}
-  m_Size: {x: 1.1390166, y: 1.1963792}
-  m_Direction: 0
+  m_Offset: {x: -0.09900096, y: 0.4565041}
+  m_Radius: 0.41749924
 --- !u!1 &1457916977
 GameObject:
   m_ObjectHideFlags: 0
@@ -100104,7 +100103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2026531880
 RectTransform:
   m_ObjectHideFlags: 0
