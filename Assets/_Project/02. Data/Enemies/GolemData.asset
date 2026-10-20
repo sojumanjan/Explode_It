@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2b63f068d46a94db8992ff731002b6, type: 3}
   m_Name: GolemData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.GolemData
+  _displayName: "\uACE8\uB818"
+  _portrait: {fileID: 21300000, guid: 255cabf73013fcb49b5bc465d6672623, type: 3}
   _moveSpeed: 1
   _hitsToDie: 3
   _attackTriggerRange: 2.5
@@ -35,9 +37,9 @@ MonoBehaviour:
     _telegraphDuration: 0.5
     _slamPitch: 1.3
   - _sprite: {fileID: 21300000, guid: e4027937f5346c144b782750d30a5cc7, type: 3}
-    _visualScale: 0.8
-    _hitRadius: 0.65
-    _hitOffset: {x: 0, y: 0.45}
+    _visualScale: 0.96000004
+    _hitRadius: 0.78000003
+    _hitOffset: {x: 0, y: 0.54}
     _moveSpeed: 2
     _attackTriggerRange: 3
     _slamRadius: 2
