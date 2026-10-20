@@ -10,6 +10,9 @@ namespace ExplodeIt.UI
         [SerializeField] private GameStateController _gameState;
         // 씬을 넘기기 전에 화면을 검게 덮는다. 비워 두면 바로 넘어간다.
         [SerializeField] private ScreenFader _fader;
+        // 화면이 덮이는 동안 게임 곡을 미리 줄여, 메뉴 곡으로 뚝 끊겨 바뀌지 않게 한다. 메뉴에서 다음 곡이 같은 시간에 걸쳐 올라온다.
+        [Tooltip("메인 메뉴로 나갈 때 게임 배경음이 줄어드는 시간 (초, 실제 시간)")]
+        [SerializeField, Min(0.05f)] private float _menuBgmFadeTime = 1.2f;
 
         private bool _isLeaving;
 
@@ -25,6 +28,11 @@ namespace ExplodeIt.UI
 
         public void GoToMainMenu()
         {
+            if (!_isLeaving)
+            {
+                AudioManager.FadeOutBgm(_menuBgmFadeTime);
+            }
+
             Leave(SceneFlow.LoadMainMenu);
         }
 

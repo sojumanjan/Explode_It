@@ -26,6 +26,9 @@ namespace ExplodeIt.UI
         [SerializeField] private float _shownY;
         [SerializeField, Min(0f)] private float _slideDuration = 0.3f;
         [SerializeField, Min(0f)] private float _moodPunch = 0.15f;
+        // 쓰러지는 연출(슬로모션·확대)을 먼저 보여 준 뒤 왕이 놀리러 올라오게 한다.
+        [Tooltip("플레이어가 쓰러진 뒤 왕 컷인이 나오기까지 기다리는 시간 (초, 실제 시간)")]
+        [SerializeField, Min(0f)] private float _deathRemarkDelay = 1f;
 
         private readonly List<KingRemarkData> _candidates = new List<KingRemarkData>();
         private bool _isStoryMode;
@@ -40,6 +43,7 @@ namespace ExplodeIt.UI
         private float _currentHold;
         private Sequence _sequence;
         private Tween _punch;
+        private Tween _deathDelay;
         private TweenCallback _onSlidIn;
         private TweenCallback _onSlidOut;
         // 인스펙터에 잡아 둔 왕 그림 높이(캔버스 단위). 표정 그림마다 가로세로 비율만 맞춘다.
@@ -86,6 +90,7 @@ namespace ExplodeIt.UI
             GameEvents.PlayerHintRequested -= OnPlayerHintRequested;
             _sequence?.Kill();
             _punch?.Kill();
+            _deathDelay?.Kill();
         }
 
         private void OnStageStarted(bool isStoryMode)
@@ -124,6 +129,12 @@ namespace ExplodeIt.UI
         }
 
         private void OnPlayerDied()
+        {
+            _deathDelay?.Kill();
+            _deathDelay = DOVirtual.DelayedCall(_deathRemarkDelay, ShowDeathRemark).SetUpdate(true).SetLink(gameObject);
+        }
+
+        private void ShowDeathRemark()
         {
             TryShow(KingRemarkTrigger.PlayerDied, 0);
         }

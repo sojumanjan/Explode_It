@@ -9,8 +9,8 @@ namespace ExplodeIt.UI
     // 출전 준비 화면의 무기·아티팩트 카드 한 장. 잠긴 카드는 회색 실루엣으로 보이고, 눌러도 고르지 않고 해금 조건만 보여 준다.
     public class ItemCard : MonoBehaviour
     {
-        // 잠긴 카드는 그림을 거의 검게 칠해 모양만 알아보게 한다.
-        private static readonly Color LockedTint = new Color(0.08f, 0.06f, 0.05f, 0.92f);
+        // 잠긴 카드는 그림을 거의 검게 칠해 모양만 알아보게 한다. 결과 화면 할 일 칸도 같은 실루엣을 쓴다.
+        public static readonly Color LockedTint = new Color(0.08f, 0.06f, 0.05f, 0.92f);
         // 다른 칸에 이미 끼운 카드는 칸째 회색으로 칠한다. 눌러서 설명은 볼 수 있다.
         private static readonly Color DimmedTint = new Color(0.55f, 0.55f, 0.55f, 1f);
 

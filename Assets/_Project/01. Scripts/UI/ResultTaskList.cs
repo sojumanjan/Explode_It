@@ -6,71 +6,72 @@ using UnityEngine.UI;
 
 namespace ExplodeIt.UI
 {
-    // 결과 화면의 "할 일": 아직 못 깬 업적을 몇 개 골라 다음에 노릴 목표로 보여 준다.
-    // 보상(무기·스킬·강화·아티팩트)이 걸린 업적을 먼저, 도감 순서대로 고른다. 숨김 업적은 내용이 드러나므로 뺀다.
+    // 결과 화면의 "할 일": 무기·스킬·아티팩트 칸마다 다음에 노릴 해금 업적을 하나씩 보여 준다.
+    // 아이콘은 그 업적으로 얻을 물건을 메인 메뉴 책의 잠긴 칸과 같은 실루엣으로 보여 줘, 무엇이 열리는지 궁금하게 만든다.
+    // 칸마다 깨기 쉬운 순서로 업적을 늘어놓고, 아직 못 깬 첫 업적을 띄운다. 스킬을 다 열었으면 스킬 칸은 스킬 강화로 넘어간다.
+    // 한 칸의 업적을 모두 깼으면 "모든 무기 해금"처럼 다 열었다고 알린다.
     public class ResultTaskList : MonoBehaviour
     {
         [Serializable]
         private class Row
         {
-            public GameObject Root;
             public Image Icon;
             public TMP_Text Title;
             public TMP_Text Detail;
             public TMP_Text Progress;
         }
 
-        [SerializeField] private UnlockCatalog _catalog;
-        [SerializeField] private Row[] _rows;
-        [Tooltip("보여 줄 할 일이 하나도 없을 때 켜는 문구")]
-        [SerializeField] private GameObject _emptyText;
+        [Serializable]
+        private class Category
+        {
+            [Tooltip("칸 제목 (예: 무기)")]
+            public string Label;
+            [Tooltip("이 분류의 업적을 다 깼을 때 문구")]
+            public string DoneText;
+            [Tooltip("깨기 쉬운 순서로 늘어놓은 해금 업적. 앞에서부터 아직 못 깬 것을 띄운다")]
+            public AchievementData[] Order;
+        }
+
+        [SerializeField] private Row _weaponRow;
+        [SerializeField] private Row _skillRow;
+        [SerializeField] private Row _artifactRow;
+
+        [SerializeField] private Category _weapons;
+        [SerializeField] private Category _skills;
+        [Tooltip("스킬 업적을 다 깬 뒤 스킬 칸에 이어서 보여 줄 스킬 강화 업적")]
+        [SerializeField] private Category _upgrades;
+        [SerializeField] private Category _artifacts;
 
         private void OnEnable()
         {
-            int filled = Fill(0, true);
-            filled = Fill(filled, false);
-            for (int i = filled; i < _rows.Length; i++)
-            {
-                _rows[i].Root.SetActive(false);
-            }
-
-            _emptyText.SetActive(filled == 0);
+            Show(_weaponRow, _weapons);
+            Show(_skillRow, FindNext(_skills) != null ? _skills : _upgrades);
+            Show(_artifactRow, _artifacts);
         }
 
-        // 조건(보상 유무)에 맞는 업적으로 빈 줄을 채우고, 채운 줄 수를 돌려준다.
-        private int Fill(int filled, bool rewardedOnly)
+        private static void Show(Row row, Category category)
         {
-            AchievementData[] achievements = _catalog.Achievements;
-            for (int i = 0; i < achievements.Length && filled < _rows.Length; i++)
-            {
-                AchievementData achievement = achievements[i];
-                if (achievement == null || achievement.IsCompleted || achievement.IsHidden
-                    || HasReward(achievement) != rewardedOnly)
-                {
-                    continue;
-                }
-
-                Show(_rows[filled], achievement);
-                filled++;
-            }
-
-            return filled;
-        }
-
-        private static void Show(Row row, AchievementData achievement)
-        {
-            row.Root.SetActive(true);
-            Sprite icon = RewardIcon(achievement);
+            AchievementData next = FindNext(category);
+            Sprite icon = next != null ? RewardIcon(next) : null;
             row.Icon.sprite = icon;
             row.Icon.enabled = icon != null;
+            row.Icon.color = ItemCard.LockedTint;
             row.Icon.preserveAspect = true;
-            row.Title.text = achievement.DisplayName;
-            row.Detail.text = achievement.Description;
 
-            int progress = AchievementTracker.GetProgress(achievement);
+            if (next == null)
+            {
+                row.Title.text = category.DoneText;
+                row.Detail.text = "";
+                row.Progress.SetText("");
+                return;
+            }
+
+            row.Title.text = category.Label;
+            row.Detail.text = next.Description;
+            int progress = AchievementTracker.GetProgress(next);
             if (progress >= 0)
             {
-                row.Progress.SetText("{0} / {1}", Mathf.Min(progress, achievement.Target), achievement.Target);
+                row.Progress.SetText("{0} / {1}", Mathf.Min(progress, next.Target), next.Target);
             }
             else
             {
@@ -78,13 +79,29 @@ namespace ExplodeIt.UI
             }
         }
 
-        private static bool HasReward(AchievementData achievement)
+        // 스킬 강화 업적은 그 스킬을 아직 못 열었으면 깰 수 없으므로 건너뛴다.
+        private static AchievementData FindNext(Category category)
         {
-            return achievement.RewardWeapon != null || achievement.RewardAbility != null
-                || achievement.RewardUpgrade != null || achievement.RewardArtifact != null;
+            AchievementData[] order = category.Order;
+            for (int i = 0; i < order.Length; i++)
+            {
+                AchievementData achievement = order[i];
+                if (achievement == null || achievement.IsCompleted)
+                {
+                    continue;
+                }
+
+                if (achievement.Ability != null && !achievement.Ability.IsUnlocked)
+                {
+                    continue;
+                }
+
+                return achievement;
+            }
+
+            return null;
         }
 
-        // 보상이 있으면 보상 그림, 없으면 도감 스티커 실루엣.
         private static Sprite RewardIcon(AchievementData achievement)
         {
             if (achievement.RewardWeapon != null)
@@ -102,12 +119,7 @@ namespace ExplodeIt.UI
                 return achievement.RewardUpgrade.Icon;
             }
 
-            if (achievement.RewardArtifact != null)
-            {
-                return achievement.RewardArtifact.Icon;
-            }
-
-            return achievement.StickerSilhouette != null ? achievement.StickerSilhouette : achievement.Sticker;
+            return achievement.RewardArtifact != null ? achievement.RewardArtifact.Icon : null;
         }
     }
 }

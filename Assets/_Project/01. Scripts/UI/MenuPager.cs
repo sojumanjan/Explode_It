@@ -32,6 +32,8 @@ namespace ExplodeIt.UI
         [SerializeField, Min(0.05f)] private float _revealTime = 0.5f;
         [Tooltip("게임에서 메인 메뉴로 돌아왔을 때 검은 화면이 걷히는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _returnRevealTime = 0.8f;
+        [Tooltip("게임에서 돌아왔을 때 메인 메뉴 배경음이 올라오는 시간 (초, 실제 시간)")]
+        [SerializeField, Min(0.05f)] private float _returnBgmFadeTime = 1.2f;
 
         [Header("배경음 (타이틀과 책이 다르다)")]
         [SerializeField] private BgmData _titleBgm;
@@ -60,7 +62,8 @@ namespace ExplodeIt.UI
 
         private void Start()
         {
-            CanvasGroup first = _hasPassedFirstPage && _returnPage != null ? _returnPage : _firstPage;
+            bool isReturning = _hasPassedFirstPage || SceneFlow.IsReturningFromGame;
+            CanvasGroup first = isReturning && _returnPage != null ? _returnPage : _firstPage;
             Show(first, false);
             if (first == _firstPage)
             {
@@ -70,7 +73,7 @@ namespace ExplodeIt.UI
 
             // 게임에서 돌아온 경우. 검은 화면에서 천천히 책이 드러나고 배경음도 같이 올라온다.
             _fader.FadeIn(_returnRevealTime);
-            AudioManager.PlayBgm(_menuBgm, _returnRevealTime);
+            AudioManager.PlayBgm(_menuBgm, _returnBgmFadeTime);
         }
 
         // 책의 "메인화면" 버튼. 어디서 왔든(게임에서 돌아와 기록이 비어 있어도) 타이틀로 돌아간다.

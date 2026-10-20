@@ -39,6 +39,13 @@ namespace ExplodeIt.UI
         [SerializeField, TextArea] private string _endlessLockedText = "스토리 모드를 클리어하면 열려요!";
         [SerializeField, TextArea] private string _endlessNotReadyText = "무한 모드는 준비 중이에요!";
 
+        [Header("승천")]
+        // 무한 모드에 거는 저주·난이도 칸. 무한 모드처럼 스토리를 클리어해야 열린다.
+        [SerializeField] private RectTransform _ascensionSlot;
+        [SerializeField] private GameObject _ascensionLock;
+        [SerializeField, TextArea] private string _ascensionLockedText = "스토리 모드를 클리어하면 열려요!";
+        [SerializeField, TextArea] private string _ascensionNotReadyText = "승천은 준비 중이에요!";
+
         [Header("알림")]
         // 잠겼거나 준비 중이라 못 누를 때 소리.
         [SerializeField] private SoundData _errorSound;
@@ -50,6 +57,7 @@ namespace ExplodeIt.UI
         public void OnPageOpened()
         {
             _endlessLock.SetActive(!SaveSystem.Data.StoryCleared);
+            _ascensionLock.SetActive(!SaveSystem.Data.StoryCleared);
             _notice.alpha = 0f;
             _noticeUntil = 0f;
             RefreshSlots();
@@ -98,6 +106,20 @@ namespace ExplodeIt.UI
             }
 
             BeginRun(RunMode.Endless);
+        }
+
+        // 승천 칸 버튼. 저주 고르기 페이지가 생기기 전까지는 열려 있어도 준비 중 알림만 띄운다.
+        public void OpenAscension()
+        {
+            if (!SaveSystem.Data.StoryCleared)
+            {
+                ShowNotice(_ascensionLockedText);
+                _ascensionSlot.DOKill(true);
+                _ascensionSlot.DOShakeAnchorPos(0.35f, new Vector2(LockShake, 0f), 20).SetUpdate(true).SetLink(gameObject);
+                return;
+            }
+
+            ShowNotice(_ascensionNotReadyText);
         }
 
         private void BeginRun(RunMode mode)

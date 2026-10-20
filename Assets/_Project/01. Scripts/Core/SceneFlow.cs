@@ -11,13 +11,25 @@ namespace ExplodeIt.Core
         private const string MenuScene = "Title";
         private const string GameScene = "Game";
 
+        // 게임 씬에서 메뉴로 넘어왔는지. 메뉴는 이 값으로 타이틀을 건너뛰고 메인 메뉴(책)부터 연다.
+        // 메뉴에서 페이지를 넘긴 기록만 보면, 게임 씬에서 바로 시작한 판에서 나갈 때 타이틀로 돌아가 버린다.
+        public static bool IsReturningFromGame { get; private set; }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatic()
+        {
+            IsReturningFromGame = false;
+        }
+
         public static void LoadMainMenu()
         {
+            IsReturningFromGame = true;
             Load(MenuScene);
         }
 
         public static void LoadGame()
         {
+            IsReturningFromGame = false;
             Load(GameScene);
         }
 
