@@ -14,6 +14,15 @@ namespace ExplodeIt.Progression
         private bool _isRunning;
         private bool _isStoryMode;
 
+        // 방금 끝난 판의 기록과 그 모드의 최고 기록(이번 판 반영 후). 결과 화면이 켜질 때 읽는다.
+        // 결과 화면은 판이 끝난 뒤에 켜지므로 기록을 저장하기 전 값을 따로 들고 있어야 "신기록"을 알 수 있다.
+        public bool LastIsStoryMode { get; private set; }
+        // 클리어면 클리어 시간과 최단 클리어 시간, 아니면 버틴 시간과 최장 생존 시간.
+        public float LastBestTime { get; private set; }
+        public bool LastIsNewTime { get; private set; }
+        public int LastBestKills { get; private set; }
+        public bool LastIsNewKills { get; private set; }
+
         private void OnEnable()
         {
             GameEvents.StageStarted += OnStageStarted;
@@ -56,18 +65,30 @@ namespace ExplodeIt.Progression
             _isRunning = false;
             SaveData data = SaveSystem.Data;
             data.TotalKills += _stats.Kills;
+            LastIsStoryMode = _isStoryMode;
             if (_isStoryMode)
             {
+                LastIsNewKills = data.TryRecordStoryKills(_stats.Kills);
                 if (isCleared)
                 {
                     data.StoryCleared = true;
-                    data.TryRecordStoryTime(_stats.Elapsed);
+                    LastIsNewTime = data.TryRecordStoryTime(_stats.Elapsed);
+                    LastBestTime = data.BestStoryTime;
                 }
             }
             else
             {
-                data.TryRecordEndlessKills(_stats.Kills);
+                LastIsNewKills = data.TryRecordEndlessKills(_stats.Kills);
             }
+
+            // 클리어한 판은 "버틴 시간"이 아니므로 생존 기록에 넣지 않는다.
+            if (!isCleared)
+            {
+                LastIsNewTime = data.TryRecordSurvival(_isStoryMode, _stats.Elapsed);
+                LastBestTime = data.BestSurvival(_isStoryMode);
+            }
+
+            LastBestKills = data.BestKills(_isStoryMode);
 
             SaveSystem.Save();
         }

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc59129ab02085647ae6e86ff598e976, type: 3}
   m_Name: WarriorData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.WarriorData
+  _displayName: "\uC804\uC0AC"
+  _portrait: {fileID: 21300000, guid: a3a12b9528b963643b3ad306fa51ca68, type: 3}
   _moveSpeed: 5
   _hitsToDie: 1
   _attackTriggerRange: 2

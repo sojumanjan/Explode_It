@@ -15,6 +15,16 @@ namespace ExplodeIt.Stage
         public float Elapsed { get; private set; }
         // 폭탄 하나로 동시에 맞힌 최대 수. 예측이 잘 맞았는지 보는 지표다.
         public int BestMultiKill { get; private set; }
+        // 직접 던진 폭탄(일반·순간폭탄) 수와 그중 한 마리라도 맞힌 수. 스킬 폭탄은 세지 않는다(빗나감 업적과 같은 기준).
+        public int Throws { get; private set; }
+        public int HitThrows { get; private set; }
+        // 맞힌 비율 (0~1). 던진 적이 없으면 0.
+        public float Accuracy => Throws > 0 ? (float)HitThrows / Throws : 0f;
+        // 플레이어를 쓰러뜨린 적. 모르면 null.
+        public IKillerProfile Killer { get; private set; }
+
+        // 직접 던진 폭탄이 터졌다는 알림이 바로 뒤 폭발 알림과 짝을 이룬다.
+        private bool _isThrownExplosion;
 
         public event Action<int> KillsChanged;
 
@@ -22,6 +32,8 @@ namespace ExplodeIt.Stage
         {
             GameEvents.EnemyKilled += OnEnemyKilled;
             GameEvents.BombExploded += OnBombExploded;
+            GameEvents.ThrownBombExploded += OnThrownBombExploded;
+            GameEvents.PlayerKillerKnown += OnPlayerKillerKnown;
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.StageStarted += OnStageStarted;
             GameEvents.StageTimerStopped += OnStageTimerStopped;
@@ -31,6 +43,8 @@ namespace ExplodeIt.Stage
         {
             GameEvents.EnemyKilled -= OnEnemyKilled;
             GameEvents.BombExploded -= OnBombExploded;
+            GameEvents.ThrownBombExploded -= OnThrownBombExploded;
+            GameEvents.PlayerKillerKnown -= OnPlayerKillerKnown;
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.StageStarted -= OnStageStarted;
             GameEvents.StageTimerStopped -= OnStageTimerStopped;
@@ -65,6 +79,25 @@ namespace ExplodeIt.Stage
         private void OnBombExploded(Vector2 position, float radius, int hitCount)
         {
             BestMultiKill = Mathf.Max(BestMultiKill, hitCount);
+            if (_isThrownExplosion)
+            {
+                _isThrownExplosion = false;
+                Throws++;
+                if (hitCount > 0)
+                {
+                    HitThrows++;
+                }
+            }
+        }
+
+        private void OnThrownBombExploded()
+        {
+            _isThrownExplosion = true;
+        }
+
+        private void OnPlayerKillerKnown(IKillerProfile killer)
+        {
+            Killer = killer;
         }
 
         private void OnGameStateChanged(GameState previous, GameState current)

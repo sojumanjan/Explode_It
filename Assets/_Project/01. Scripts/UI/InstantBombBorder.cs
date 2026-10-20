@@ -8,6 +8,7 @@ namespace ExplodeIt.UI
     // 순간폭탄이 발동하는 동안 화면 테두리를 맥박치듯 물들여 "지금 스킬 중"임을 알린다.
     // 폭탄이 바로 터지는 것만으로는 발동 중인지 헷갈리고, 화면 가운데를 가리면 예측 플레이를 방해하므로 가장자리만 쓴다.
     // 테두리 그림은 처음 한 번만 코드로 만든다(가장자리에서 안쪽으로 옅어지는 흰 그림을 색으로 물들인다).
+    // 오브젝트가 꺼져 있으면 스킬 신호를 못 받으므로 오브젝트는 켜 두고, 편집 중 화면을 가리지 않게 그림(RawImage)만 씬에서 꺼 둔다.
     public class InstantBombBorder : MonoBehaviour
     {
         private const int TextureSize = 128;

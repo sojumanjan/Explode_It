@@ -1,10 +1,18 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
     // 모든 적이 공유하는 수치. 적 고유 수치는 하위 클래스에 둔다.
-    public abstract class EnemyData : ScriptableObject
+    public abstract class EnemyData : ScriptableObject, IKillerProfile
     {
+        [Header("결과 화면")]
+        [Tooltip("이 적에게 쓰러졌을 때 결과 화면에 보이는 이름 (예: 궁수)")]
+        [SerializeField] private string _displayName;
+
+        [Tooltip("이 적에게 쓰러졌을 때 결과 화면 카드에 보이는 그림. 보통 적의 기본 그림을 넣는다")]
+        [SerializeField] private Sprite _portrait;
+
         [Header("공통")]
         [Tooltip("이동 상태에서의 속도 (유닛/초)")]
         [SerializeField, Min(0f)] private float _moveSpeed = 2f;
@@ -47,6 +55,8 @@ namespace ExplodeIt.Enemies
         [Tooltip("사망 연출 시간 (초). 밀려남 → 부풀기 → 줄어들기가 이 시간 안에 끝난다")]
         [SerializeField, Min(0.05f)] private float _deathDuration = 0.5f;
 
+        public string KillerName => _displayName;
+        public Sprite KillerPortrait => _portrait;
         public float MoveSpeed => _moveSpeed;
         public int HitsToDie => _hitsToDie;
         public float AttackTriggerRange => _attackTriggerRange;

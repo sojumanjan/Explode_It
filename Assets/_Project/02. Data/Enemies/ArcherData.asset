@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ccbd133157ff54c9dc4cfbb564ecb7, type: 3}
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.ArcherData
+  _displayName: "\uAD81\uC218"
+  _portrait: {fileID: 21300000, guid: 15aba1a078f39b84aabaff394a5899bd, type: 3}
   _moveSpeed: 4
   _hitsToDie: 1
   _attackTriggerRange: 5.5

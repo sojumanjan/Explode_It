@@ -37,10 +37,10 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        public void Fire(Vector2 origin, Vector2 direction, float speed, float range, float hitRadius)
+        public void Fire(Vector2 origin, Vector2 direction, float speed, float range, float hitRadius, IKillerProfile shooter)
         {
             EnemyProjectile projectile = _pool.Get(origin);
-            projectile.Launch(direction, speed, range, hitRadius, _release);
+            projectile.Launch(direction, speed, range, hitRadius, _release, shooter);
         }
 
         private void Release(EnemyProjectile projectile)

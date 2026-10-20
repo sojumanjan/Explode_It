@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9214cb73415f2d428f135e32e362967, type: 3}
   m_Name: MantisData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.MantisData
+  _displayName: "\uC0AC\uB9C8\uADC0"
+  _portrait: {fileID: 21300000, guid: 88d62bb951ee34349aa173228fc7008f, type: 3}
   _moveSpeed: 5
   _hitsToDie: 1
   _attackTriggerRange: 1.5

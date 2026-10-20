@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5656b8fe700134b8ab57925b40ae6b, type: 3}
   m_Name: Boss1_FireMage
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.FireMageData
+  _displayName: "\uD654\uC5FC \uB9C8\uBC95\uC0AC"
+  _portrait: {fileID: 21300000, guid: a8fa7ca02fe751c498b7387821282438, type: 3}
   _moveSpeed: 0
   _hitsToDie: 1
   _attackTriggerRange: 4
@@ -51,8 +53,8 @@ MonoBehaviour:
   _fireballSpeed: 33
   _fireballHitRadius: 0.4
   _fireballRange: 40
-  _fireballCount: 10
-  _fireballBurstInterval: 0.12
+  _fireballCount: 8
+  _fireballBurstInterval: 0.14
   _fireballSpread: 2
   _fireballIgnoresWalls: 1
   _meteorCastSound: {fileID: 0}

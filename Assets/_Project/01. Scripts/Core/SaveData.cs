@@ -21,6 +21,10 @@ namespace ExplodeIt.Core
         [SerializeField] private int _bestEndlessKills;
         // 스토리 최단 클리어 시간 (초). 0이면 아직 기록이 없다.
         [SerializeField] private float _bestStoryTime;
+        // 모드별 가장 오래 버틴 시간 (초)과 스토리 최고 처치 수. 결과 화면의 최고 기록 칸에 쓴다.
+        [SerializeField] private float _bestStorySurvival;
+        [SerializeField] private float _bestEndlessSurvival;
+        [SerializeField] private int _bestStoryKills;
         // 업적 등으로 해금한 무기 ID. 처음부터 열린 무기는 무기 데이터 쪽 표시로 판단하므로 여기 넣지 않는다.
         [SerializeField] private List<string> _unlockedWeapons = new List<string>();
         [SerializeField] private string _selectedWeapon = "";
@@ -62,6 +66,10 @@ namespace ExplodeIt.Core
 
         public int BestEndlessKills => _bestEndlessKills;
         public float BestStoryTime => _bestStoryTime;
+        public int BestStoryKills => _bestStoryKills;
+
+        public float BestSurvival(bool isStoryMode) => isStoryMode ? _bestStorySurvival : _bestEndlessSurvival;
+        public int BestKills(bool isStoryMode) => isStoryMode ? _bestStoryKills : _bestEndlessKills;
 
         public string SelectedWeapon
         {
@@ -104,6 +112,37 @@ namespace ExplodeIt.Core
             }
 
             _bestEndlessKills = kills;
+            return true;
+        }
+
+        public bool TryRecordStoryKills(int kills)
+        {
+            if (kills <= _bestStoryKills)
+            {
+                return false;
+            }
+
+            _bestStoryKills = kills;
+            return true;
+        }
+
+        public bool TryRecordSurvival(bool isStoryMode, float seconds)
+        {
+            float best = BestSurvival(isStoryMode);
+            if (seconds <= best)
+            {
+                return false;
+            }
+
+            if (isStoryMode)
+            {
+                _bestStorySurvival = seconds;
+            }
+            else
+            {
+                _bestEndlessSurvival = seconds;
+            }
+
             return true;
         }
 

@@ -112,6 +112,8 @@ namespace ExplodeIt.Player
                 GameEvents.RaisePlayerKilledBy(hit.Attacker);
             }
 
+            GameEvents.RaisePlayerKillerKnown(hit.Killer);
+
             GameEvents.RaisePlayerDied();
 
             // 사망 알림을 받은 쪽(판 상태·연출 재생기)이 속도를 되돌린 뒤에 건다.

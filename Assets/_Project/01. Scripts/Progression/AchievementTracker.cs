@@ -378,6 +378,26 @@ namespace ExplodeIt.Progression
             return source == DamageSource.BlackHole || source == DamageSource.ScatterBomb || source == DamageSource.InstantBomb;
         }
 
+        // 모든 판에 걸쳐 쌓이는 업적의 지금 진행 수. 판 하나 안에서 끝나는 업적은 진행을 보여 줄 수 없어 -1.
+        // 결과 화면의 "할 일"이 "812 / 1000"처럼 얼마 남았는지 보여 줄 때 쓴다.
+        public static int GetProgress(AchievementData achievement)
+        {
+            SaveData data = SaveSystem.Data;
+            switch (achievement.Condition)
+            {
+                case AchievementCondition.TotalKills:
+                    return data.TotalKills;
+                case AchievementCondition.EvadesTotal:
+                    return data.GetStat(EvadesStat);
+                case AchievementCondition.AbilityKillsTotal:
+                    return achievement.Ability == null
+                        ? data.GetStat(AnyAbilityKillsStat)
+                        : data.GetStat(AbilityKillsStatPrefix + SourceOf(achievement.Ability.Kind));
+                default:
+                    return -1;
+            }
+        }
+
         private static DamageSource SourceOf(AbilityKind kind)
         {
             switch (kind)

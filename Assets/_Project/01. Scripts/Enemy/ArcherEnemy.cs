@@ -42,7 +42,7 @@ namespace ExplodeIt.Enemies
         protected override bool TickAttack(float deltaTime)
         {
             EnemyProjectilePool.Current.Fire(Body.position, _aimDirection,
-                _data.ProjectileSpeed, _shotLength, _data.ProjectileHitRadius);
+                _data.ProjectileSpeed, _shotLength, _data.ProjectileHitRadius, _data);
             AudioManager.Play(_data.ShotSound);
             return true;
         }

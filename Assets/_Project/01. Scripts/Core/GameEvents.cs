@@ -280,6 +280,14 @@ namespace ExplodeIt.Core
             PlayerKilledBy?.Invoke(kind);
         }
 
+        // 플레이어를 쓰러뜨린 마지막 공격을 낸 적의 이름·얼굴. 모르면(지형 등) null. 사망 이벤트보다 먼저 온다. 결과 화면이 쓴다.
+        public static event Action<IKillerProfile> PlayerKillerKnown;
+
+        public static void RaisePlayerKillerKnown(IKillerProfile killer)
+        {
+            PlayerKillerKnown?.Invoke(killer);
+        }
+
         // 맵 안에 들어와 진입 유예까지 끝낸 적(보스 제외) 수가 바뀔 때. 동시에 몰려 있는 수를 세는 업적이 듣는다.
         public static event Action<int> EnemiesInArenaChanged;
 
@@ -309,6 +317,7 @@ namespace ExplodeIt.Core
             EnemyKilled = null;
             EnemyKilledBy = null;
             PlayerKilledBy = null;
+            PlayerKillerKnown = null;
             EnemiesInArenaChanged = null;
             GolemLastStand = null;
             AbilityChargeChanged = null;

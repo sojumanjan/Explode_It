@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dac8a2bd4d84cd49ad019ac1e4ce3b5, type: 3}
   m_Name: Boss4_AwakenedKing
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.AwakenedKingData
+  _displayName: "\uAC01\uC131\uD55C \uC655"
+  _portrait: {fileID: 21300000, guid: 698e18b70bcbfb648b541e709e6a4534, type: 3}
   _moveSpeed: 3.5
   _hitsToDie: 1
   _attackTriggerRange: 2
@@ -91,10 +93,14 @@ MonoBehaviour:
   _crownlessWalkSpeed: 1.2
   _leapCount: 5
   _leapRiseTime: 0.2
+  _leapAirDistanceMin: 6
+  _leapAirDistanceMax: 8
+  _leapAirAngle: 150
+  _leapScreenMargin: 1
   _leapTrackTime: 0.2
-  _leapTrackSpeed: 50
   _leapLockTime: 0.6
   _leapFallTime: 0.12
+  _leapVerticalSlamAngle: 30
   _leapRadius: 2.2
   _leapFlashColor: {r: 1, g: 0.25, b: 0.15, a: 0.22}
   _leapFlashTime: 0.25

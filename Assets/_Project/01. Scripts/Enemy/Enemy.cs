@@ -540,7 +540,7 @@ namespace ExplodeIt.Enemies
             {
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind, Data));
                 }
             }
         }
@@ -560,7 +560,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind, Data));
                 }
             }
         }
@@ -586,7 +586,7 @@ namespace ExplodeIt.Enemies
 
                 if (!isSafe && AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(HitInfo.FromEnemy(Body.position, Kind));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(Body.position, Kind, Data));
                 }
             }
         }
@@ -620,7 +620,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(center, Kind, Data));
                 }
             }
         }
@@ -652,7 +652,7 @@ namespace ExplodeIt.Enemies
 
                 if (AttackBuffer[i].TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(HitInfo.FromEnemy(origin, Kind));
+                    hittable.ReceiveHit(HitInfo.FromEnemy(origin, Kind, Data));
                 }
             }
         }

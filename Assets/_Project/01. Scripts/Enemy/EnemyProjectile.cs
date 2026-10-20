@@ -17,6 +17,8 @@ namespace ExplodeIt.Enemies
         private float _speed;
         private float _remainingDistance;
         private float _hitRadius;
+        // 쏜 적. 플레이어가 이 탄에 쓰러지면 결과 화면이 누구에게 당했는지 보여 준다.
+        private IKillerProfile _shooter;
 
         private void Awake()
         {
@@ -25,8 +27,10 @@ namespace ExplodeIt.Enemies
             _hitFilter.useTriggers = true;
         }
 
-        public void Launch(Vector2 direction, float speed, float range, float hitRadius, Action<EnemyProjectile> release)
+        public void Launch(Vector2 direction, float speed, float range, float hitRadius, Action<EnemyProjectile> release,
+            IKillerProfile shooter)
         {
+            _shooter = shooter;
             _direction = direction;
             _speed = speed;
             _remainingDistance = range;
@@ -65,7 +69,7 @@ namespace ExplodeIt.Enemies
             {
                 if (HitBuffer[i].collider.TryGetComponent(out IHittable hittable))
                 {
-                    hittable.ReceiveHit(new HitInfo(HitBuffer[i].centroid));
+                    hittable.ReceiveHit(new HitInfo(HitBuffer[i].centroid, killer: _shooter));
                     return true;
                 }
             }

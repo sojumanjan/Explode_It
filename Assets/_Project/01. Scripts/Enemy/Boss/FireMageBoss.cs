@@ -340,7 +340,7 @@ namespace ExplodeIt.Enemies
 
             fireball.transform.position = Body.position;
             fireball.gameObject.SetActive(true);
-            fireball.Launch(direction, _data.FireballSpeed, length, _data.FireballHitRadius, _releaseFireball);
+            fireball.Launch(direction, _data.FireballSpeed, length, _data.FireballHitRadius, _releaseFireball, _data);
             AudioManager.Play(_data.FireballShotSound);
         }
 
