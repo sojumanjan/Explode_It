@@ -40,7 +40,7 @@ MonoBehaviour:
     _visualScale: 0.96000004
     _hitRadius: 0.78000003
     _hitOffset: {x: 0, y: 0.54}
-    _moveSpeed: 2
+    _moveSpeed: 3.2
     _attackTriggerRange: 3
     _slamRadius: 2
     _slamForward: 0.3
@@ -50,7 +50,7 @@ MonoBehaviour:
     _visualScale: 1
     _hitRadius: 0.95
     _hitOffset: {x: 0, y: 0.9}
-    _moveSpeed: 1.5
+    _moveSpeed: 2.3
     _attackTriggerRange: 2.5
     _slamRadius: 3
     _slamForward: 0.2
