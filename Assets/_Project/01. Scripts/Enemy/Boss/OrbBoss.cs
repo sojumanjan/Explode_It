@@ -47,8 +47,8 @@ namespace ExplodeIt.Enemies
 
         protected override EnemyData Data => _data;
         // 바퀴가 쌓여도 야수는 속도(원혼·돌진·배회·준비 자세)는 그대로 두고 쿨타임만 줄인다. 원혼까지 빨라지면 피로감만 커졌다.
-        public override float TelegraphDuration => _data.TelegraphDuration;
-        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
+        protected override float BaseTelegraphDuration => _data.TelegraphDuration;
+        protected override float BaseRecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
         // 할퀴기는 구르기로만 피하므로, 아무리 빨라져도 구르기가 다시 차기 전에 다음 할퀴기가 오지 않게 막는다.
         private float ClawInterval => Mathf.Max(BossTempo.ActionTime(_data.ClawInterval), _data.MinClawInterval);
         protected override bool CanBePulled => false;

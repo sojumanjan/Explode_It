@@ -30,7 +30,9 @@ namespace ExplodeIt.Enemies
 
         protected override EnemyData Data => _data;
         public override Vector2 AimDirection => _slamDirection;
-        public override float TelegraphDuration => _slamTelegraph;
+        protected override float BaseTelegraphDuration => _slamTelegraph;
+        // 남은 맞을 수(3·2·1)가 곧 단계라, 데이터의 단계 순서와 같게 센다.
+        protected override int AttackStageIndex => HitReceiver.RemainingHits - 1;
         protected override float ChaseSpeed => CurrentStage.MoveSpeed * EnemyTempo.MoveSpeedMultiplier;
 
         private GolemData.Stage CurrentStage => _data.GetStage(HitReceiver.RemainingHits);

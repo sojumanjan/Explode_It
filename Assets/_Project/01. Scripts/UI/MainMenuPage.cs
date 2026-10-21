@@ -44,8 +44,10 @@ namespace ExplodeIt.UI
         [SerializeField] private RectTransform _ascensionSlot;
         [SerializeField] private GameObject _ascensionLock;
         [SerializeField] private CanvasGroup _cursePage;
-        // 건 저주 수. 하나도 안 걸었으면 숨긴다.
+        // 장착한 저주 수. 저주가 잠겨 있으면(스토리 미클리어) 숨긴다.
         [SerializeField] private TMP_Text _curseCountText;
+        [Tooltip("장착한 저주 수 표시. {0} = 장착 수, {1} = 전체 수 (??? 칸 제외)")]
+        [SerializeField] private string _curseCountFormat = "{0} / {1}";
         [SerializeField, TextArea] private string _ascensionLockedText = "스토리 모드를 클리어하면 열려요!";
 
         [Header("알림")]
@@ -60,9 +62,8 @@ namespace ExplodeIt.UI
         {
             _endlessLock.SetActive(!SaveSystem.Data.StoryCleared);
             _ascensionLock.SetActive(!SaveSystem.Data.StoryCleared);
-            int curses = _catalog.EquippedCurseCount;
-            _curseCountText.gameObject.SetActive(SaveSystem.Data.StoryCleared && curses > 0);
-            _curseCountText.SetText("{0}", curses);
+            _curseCountText.gameObject.SetActive(SaveSystem.Data.StoryCleared);
+            _curseCountText.SetText(_curseCountFormat, _catalog.EquippedCurseCount, _catalog.CurseCountWithoutKing);
             _notice.alpha = 0f;
             _noticeUntil = 0f;
             RefreshSlots();

@@ -44,6 +44,8 @@ namespace ExplodeIt.Enemies
         private Collider2D _collider;
         // 맵 입구로 먼저 걸어가는 중인지. 다 걸어가면 평소 이동(플레이어 추적)으로 넘어간다.
         private bool _hasEntryPoint;
+        private float[] _telegraphOverrides;
+        private float _recoverOverride;
         private Vector2 _entryPoint;
         private float _entryTime;
 
@@ -78,10 +80,18 @@ namespace ExplodeIt.Enemies
         // 오브젝트 위치를 노리면 조준·추적이 몸통보다 위로 치우쳐, 위로 피할 때만 불리해졌다.
         public Vector2 TargetPosition => _target == null ? Body.position
             : _targetCollider != null && _targetCollider.enabled ? (Vector2)_targetCollider.bounds.center : (Vector2)_target.position;
+        // 예고 길이. 저주 "광폭"이 덮어쓰면 그 값을, 아니면 적마다 정한 값을 쓴다. 예고 표시도 이 값을 읽는다.
+        public float TelegraphDuration => _telegraphOverrides != null && _telegraphOverrides.Length > 0
+            ? _telegraphOverrides[Mathf.Clamp(AttackStageIndex, 0, _telegraphOverrides.Length - 1)]
+            : BaseTelegraphDuration;
         // 패턴마다 예고 길이가 다른 적(여러 기술을 쓰는 보스)은 지금 쓰는 패턴의 길이로 바꾼다.
-        public virtual float TelegraphDuration => Data.TelegraphDuration;
-        // 공격 뒤 쉬는 시간. 무한 모드 보스는 바퀴마다 줄인다.
-        protected virtual float RecoverDuration => Data.RecoverDuration;
+        protected virtual float BaseTelegraphDuration => Data.TelegraphDuration;
+        // 공격 뒤 쉬는 시간. 저주 "광폭"이 덮어쓰면 그 값을 쓴다.
+        protected float RecoverDuration => _recoverOverride > 0f ? _recoverOverride : BaseRecoverDuration;
+        // 무한 모드 보스는 바퀴마다 줄인다.
+        protected virtual float BaseRecoverDuration => Data.RecoverDuration;
+        // 단계마다 예고 길이가 다른 적(골렘)의 지금 단계. 광폭 예고 배열에서 몇 번째 값을 쓸지 정한다.
+        protected virtual int AttackStageIndex => 0;
         // 예고·공격 중 그림이 바라볼 방향. 예고한 방향과 그림이 어긋나면 어디로 칠지 읽기 어렵다.
         public virtual Vector2 AimDirection => DirectionToTarget();
         // 움직이는 중에도 그림이 플레이어 쪽을 보게 할지. 뒷걸음질·뒷도약처럼 가는 방향과 보는 방향이 반대일 때 켠다.
@@ -114,6 +124,8 @@ namespace ExplodeIt.Enemies
             _hitReceiver.ResetHits(Data.HitsToDie);
             _hitReceiver.Died += OnDied;
             SpeedOverride = 0f;
+            _telegraphOverrides = null;
+            _recoverOverride = 0f;
             _arenaTime = 0f;
             _hasEntryPoint = false;
             _collider.enabled = true;
@@ -410,6 +422,14 @@ namespace ExplodeIt.Enemies
         protected float MoveTempo => SpeedOverride > 0f
             ? SpeedOverride / Mathf.Max(Data.MoveSpeed, 0.01f) * EnemyTempo.MoveSpeedMultiplier
             : EnemyTempo.MoveSpeedMultiplier;
+
+        // 저주 "광폭"이 공격 박자를 당긴다. telegraphs는 단계별 예고 길이(단계가 없으면 하나), recover는 쉬는 시간(초).
+        // 예고 자체는 남기므로 모든 공격에 예고가 있다는 규칙은 그대로다. 풀에서 다시 나올 때 지운다.
+        public void SetAttackOverride(float[] telegraphs, float recover)
+        {
+            _telegraphOverrides = telegraphs;
+            _recoverOverride = recover;
+        }
 
         // 처치 수에 들어가는 일반 적인지. 보스는 저주(광폭 등) 대상에서 뺀다.
         public bool CountsAsKill => Data.CountsAsKill;

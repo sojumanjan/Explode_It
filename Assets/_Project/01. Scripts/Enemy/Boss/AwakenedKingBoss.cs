@@ -365,7 +365,7 @@ namespace ExplodeIt.Enemies
         public override Vector2 AimDirection =>
             State == EnemyState.Telegraph || State == EnemyState.Attack ? _aimDirection : DirectionToTarget();
         // 유성우·천지 가르기는 예고 상태에서 자세만 잡고, 실제 예고(원, 웨이브)는 공격 단계 안에서 보인다.
-        public override float TelegraphDuration =>
+        protected override float BaseTelegraphDuration =>
             _pattern == Pattern.Crown ? _data.CrownWindup : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
 
         private bool IsDodging => _dodge != DodgePhase.None;

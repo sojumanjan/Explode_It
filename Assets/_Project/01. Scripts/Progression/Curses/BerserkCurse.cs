@@ -57,6 +57,12 @@ namespace ExplodeIt.Progression
             }
 
             enemy.SpeedOverride = Data.MoveSpeed;
+            float[] telegraphs = Data.GetTelegraphs(enemy.EnemyData);
+            if (telegraphs != null)
+            {
+                enemy.SetAttackOverride(telegraphs, Data.RecoverDuration);
+            }
+
             // 나올 때 한 번만 찾는다. 몸 색은 그림 쪽이 매 프레임 유지 색으로 칠한다.
             EnemyVisual visual = enemy.GetComponentInChildren<EnemyVisual>();
             if (visual != null)

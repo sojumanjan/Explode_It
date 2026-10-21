@@ -105,7 +105,7 @@ namespace ExplodeIt.Enemies
         // 범위가 다 차는 순간 내려친다. 보이는 원이 곧 맞는 원이다.
         protected override void TickTelegraph(float deltaTime)
         {
-            float progress = Mathf.Clamp01(StateTime / _data.TelegraphDuration);
+            float progress = Mathf.Clamp01(StateTime / TelegraphDuration);
             _slamFill.SetRadius(_data.SlamRadius * progress);
         }
 

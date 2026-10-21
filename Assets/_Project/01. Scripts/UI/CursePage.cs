@@ -16,24 +16,21 @@ namespace ExplodeIt.UI
 
         [Header("왼쪽 페이지 (씬에 미리 놓은 칸, 카탈로그 저주 목록과 같은 순서)")]
         [SerializeField] private ItemCard[] _cards;
-        [SerializeField] private TMP_Text _countText;
-        [Tooltip("건 저주 수 표시. {0} = 건 수, {1} = 전체 수 (왕 칸 제외)")]
-        [SerializeField] private string _countFormat = "건 저주 {0} / {1}";
 
         [Header("오른쪽 페이지")]
         [SerializeField] private Image _previewIcon;
         [SerializeField] private TMP_Text _previewName;
         [SerializeField] private TMP_Text _previewText;
         [SerializeField] private Button _equipButton;
-        // "걸려 있음"에 마우스를 올리면 "풀기"로 바꿔 보인다.
+        // 장비 고르기 페이지와 같은 말을 쓴다. "장착 중"에 마우스를 올리면 "장착 해제"로 바꿔 보인다.
         [SerializeField] private HoverLabel _equipHover;
-        [SerializeField] private string _equipText = "저주 걸기";
-        [SerializeField] private string _equippedText = "걸려 있음";
-        [SerializeField] private string _unequipText = "저주 풀기";
-        [SerializeField] private string _kingBlockedText = "모든 저주를 걸어야 해요";
+        [SerializeField] private string _equipText = "장착";
+        [SerializeField] private string _equippedText = "장착 중";
+        [SerializeField] private string _unequipText = "장착 해제";
+        [SerializeField] private string _kingBlockedText = "모든 저주를 장착해야 해요";
         // 잠긴 칸은 이름을 가리고 해금 조건만 보여 준다. 바로 다음 차례가 아닌 칸은 조건도 가린다.
         [Tooltip("다음 차례 저주의 해금 조건. {0} = 걸어야 하는 저주 수, {1} = 처치 수")]
-        [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 걸고 한 판에 {1}마리 처치";
+        [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
         [SerializeField, TextArea] private string _laterUnlockText = "<b>해금 조건</b>\n앞의 저주를 먼저 열어야 해요.";
         [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
         [SerializeField] private SoundData _clickSound;
@@ -124,7 +121,6 @@ namespace ExplodeIt.UI
                 _cards[i].SetSelected(curse.IsEquipped);
             }
 
-            _countText.SetText(_countFormat, _catalog.EquippedCurseCount, _catalog.CurseCountWithoutKing);
             ShowPreview(_preview);
         }
 

@@ -67,9 +67,9 @@ namespace ExplodeIt.Enemies
         protected override bool RequiresLineOfSight => false;
         public override Vector2 AimDirection => _aimDirection;
         // 화염구 모으기는 조준선이 보이는 예고라 덜 줄이고, 메테오 시전은 경고 원이 떨어진 뒤 따로 있으니 행동으로 줄인다.
-        public override float TelegraphDuration =>
+        protected override float BaseTelegraphDuration =>
             _currentPattern == Pattern.Fireball ? FireballChargeTime : BossTempo.ActionTime(_data.MeteorCastTime);
-        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
+        protected override float BaseRecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
         private float FireballChargeTime => BossTempo.TelegraphTime(_data.FireballChargeTime);
 
         private FireMageData.Tier Tier => _data.GetTier(_tier);

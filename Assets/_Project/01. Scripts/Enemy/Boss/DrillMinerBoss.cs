@@ -73,8 +73,8 @@ namespace ExplodeIt.Enemies
 
         protected override EnemyData Data => _data;
         // 구멍이 차오르는 동안이 분출 예고다.
-        public override float TelegraphDuration => BossTempo.TelegraphTime(_data.TelegraphDuration);
-        protected override float RecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
+        protected override float BaseTelegraphDuration => BossTempo.TelegraphTime(_data.TelegraphDuration);
+        protected override float BaseRecoverDuration => BossTempo.ActionTime(_data.RecoverDuration);
         protected override bool CanBePulled => false;
         protected override bool RequiresLineOfSight => false;
         // 도약은 플레이어를 바라본 채 뒤로 뛰는 뒷도약이다.

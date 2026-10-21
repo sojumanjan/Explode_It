@@ -23,6 +23,26 @@ MonoBehaviour:
   _chance: 0.1
   _moveSpeed: 10
   _targets: []
+  _attackTempos:
+  - Enemy: {fileID: 11400000, guid: 306e16ed38910e04fa9e4c90edf27927, type: 2}
+    TelegraphDurations:
+    - 0.45
+  - Enemy: {fileID: 11400000, guid: 541a8345f06cdbd428c0f12bcadee283, type: 2}
+    TelegraphDurations:
+    - 0.35
+  - Enemy: {fileID: 11400000, guid: a028ff6a814a21f438fc2e8ce4c91e18, type: 2}
+    TelegraphDurations:
+    - 0.2
+  - Enemy: {fileID: 11400000, guid: 45e0f178c2a697142b62662c3f6422f0, type: 2}
+    TelegraphDurations:
+    - 0.3
+  - Enemy: {fileID: 11400000, guid: e528d580cc65b624c99af1f1138a751f, type: 2}
+    TelegraphDurations:
+    - 0.4
+    - 0.7
+    - 0.9
+  _recoverDuration: 0.5
+  _minTelegraph: 0.2
   _tint: {r: 1, g: 0.35, b: 0.3, a: 1}
   _trailOffset: {x: 0, y: 0.05}
   _spawnSound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}
