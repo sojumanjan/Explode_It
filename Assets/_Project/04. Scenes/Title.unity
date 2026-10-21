@@ -7358,8 +7358,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279905868
-  m_fontColor: {r: 0.85, g: 0.22, b: 0.15, a: 1}
+    rgba: 4278193276
+  m_fontColor: {r: 0.4867924, g: 0.048951186, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -33432,7 +33432,7 @@ MonoBehaviour:
   _equippedText: "\uAC78\uB824 \uC788\uC74C"
   _unequipText: "\uC800\uC8FC \uD480\uAE30"
   _kingBlockedText: "\uBAA8\uB4E0 \uC800\uC8FC\uB97C \uAC78\uC5B4\uC57C \uD574\uC694"
-  _unlockFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC800\uC8FC {0}\uAC1C\uB97C
+  _unlockFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC800\uC8FC {0}\uAC1C \uC774\uC0C1\uC744
     \uAC78\uACE0 \uD55C \uD310\uC5D0 {1}\uB9C8\uB9AC \uCC98\uCE58"
   _laterUnlockText: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC55E\uC758 \uC800\uC8FC\uB97C
     \uBA3C\uC800 \uC5F4\uC5B4\uC57C \uD574\uC694."

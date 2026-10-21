@@ -33,7 +33,7 @@ namespace ExplodeIt.UI
         [SerializeField] private string _kingBlockedText = "모든 저주를 걸어야 해요";
         // 잠긴 칸은 이름을 가리고 해금 조건만 보여 준다. 바로 다음 차례가 아닌 칸은 조건도 가린다.
         [Tooltip("다음 차례 저주의 해금 조건. {0} = 걸어야 하는 저주 수, {1} = 처치 수")]
-        [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개를 걸고 한 판에 {1}마리 처치";
+        [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 걸고 한 판에 {1}마리 처치";
         [SerializeField, TextArea] private string _laterUnlockText = "<b>해금 조건</b>\n앞의 저주를 먼저 열어야 해요.";
         [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
         [SerializeField] private SoundData _clickSound;

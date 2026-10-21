@@ -65812,6 +65812,7 @@ MonoBehaviour:
   _detail: {fileID: 2118989527}
   _sound: {fileID: 11400000, guid: be40ba72b07e02742b4847fb2853fbd6, type: 2}
   _titleFormat: "\uC5C5\uC801 \uB2EC\uC131 \xB7 {0}"
+  _curseTitleFormat: "\uC800\uC8FC \uD574\uAE08 \xB7 {0}"
 --- !u!1 &1184903112
 GameObject:
   m_ObjectHideFlags: 0
@@ -77461,6 +77462,7 @@ GameObject:
   - component: {fileID: 1379085494}
   - component: {fileID: 1379085493}
   - component: {fileID: 1379085492}
+  - component: {fileID: 1379085500}
   m_Layer: 0
   m_Name: Curses
   m_TagString: Untagged
@@ -77618,6 +77620,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1379085500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1794996a8a780c643901e38af6ce9c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.CurseUnlockTracker
+  _catalog: {fileID: 11400000, guid: 1a90652f710aab84a9ffa223e9c2943a, type: 2}
 --- !u!1 &1379724800
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,7 +54,8 @@ namespace ExplodeIt.Progression
                 curse.ApplyRunModifiers();
             }
 
-            if (hasKing && RunCurses.Count == _catalog.CurseCountWithoutKing)
+            RunCurses.HasAll = RunCurses.Count > 0 && RunCurses.Count == _catalog.CurseCountWithoutKing;
+            if (hasKing && RunCurses.HasAll)
             {
                 RunCurses.Add(CurseKind.King);
             }

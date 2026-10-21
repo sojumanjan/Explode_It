@@ -37,6 +37,8 @@ namespace ExplodeIt.Progression
         private int _nextIndex;
         private bool _hasPlaced;
         private int _frame = -1;
+        // 저주 시간으로 센 흐른 시간. 프레임 넘기기에 쓴다(연출 동안 바람도 멈춘다).
+        private float _clock;
 
         protected override void Awake()
         {
@@ -79,7 +81,9 @@ namespace ExplodeIt.Progression
                 return;
             }
 
-            TickFades(Time.deltaTime);
+            float deltaTime = RunCurses.DeltaTime;
+            _clock += deltaTime;
+            TickFades(deltaTime);
             TickFrames();
             RunCurses.PlayerMoveMultiplier = IsInSwamp(PlayerPosition) ? Data.MoveMultiplier : 1f;
             if (!IsRunning)
@@ -108,7 +112,7 @@ namespace ExplodeIt.Progression
                 return;
             }
 
-            int frame = (int)(Time.time / Data.FrameTime);
+            int frame = (int)(_clock / Data.FrameTime);
             if (frame == _frame)
             {
                 return;

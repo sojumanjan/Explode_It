@@ -1,5 +1,6 @@
 using System;
 using ExplodeIt.Bombs;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Enemies
@@ -24,6 +25,8 @@ namespace ExplodeIt.Enemies
         private Action<Meteor> _onImpact;
 
         public Vector2 Position => _position;
+        // 저주 운석이면 저주 시간을 따른다(보스 등장 연출 동안 멈춘다). 보스 운석은 평소 시간 그대로다.
+        public bool UsesCurseClock { get; set; }
         public float Radius => _radius;
 
         public void Launch(Vector2 position, float duration, float radius, Action<Meteor> onImpact)
@@ -51,7 +54,7 @@ namespace ExplodeIt.Enemies
 
         private void Update()
         {
-            _time += Time.deltaTime;
+            _time += UsesCurseClock ? RunCurses.DeltaTime : Time.deltaTime;
             float t = _time / _duration;
             _fill.SetRadius(_radius * Mathf.Clamp01(t));
             PlaceVisual(t);

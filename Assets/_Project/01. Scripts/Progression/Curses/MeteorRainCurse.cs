@@ -72,6 +72,7 @@ namespace ExplodeIt.Progression
         {
             Vector2 point = PointAround(PlayerPosition, Data.MinDistance, Data.MaxDistance);
             Meteor meteor = _pool.Get(point);
+            meteor.UsesCurseClock = true;
             meteor.Launch(point, Data.FallTime, Data.Radius, _onImpact);
         }
 

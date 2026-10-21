@@ -304,6 +304,15 @@ namespace ExplodeIt.Core
             GolemLastStand?.Invoke(seconds);
         }
 
+        // 플레이어 폭발(폭탄·다발·순간·블랙홀)이 터진 자리와 반경. 덫처럼 폭발에 부서지는 것이 듣는다.
+        // BombExploded는 처치 수·정확도 집계에 쓰여 블랙홀을 넣지 않으므로 따로 둔다.
+        public static event Action<Vector2, float> PlayerBlastExploded;
+
+        public static void RaisePlayerBlastExploded(Vector2 position, float radius)
+        {
+            PlayerBlastExploded?.Invoke(position, radius);
+        }
+
         // 적이 구역 밖(플레이어 근처)에서 나오기 전에 자리를 알린다. 위치, 반경(유닛), 나오기까지 남은 시간(초). 저주 "기습".
         public static event Action<Vector2, float, float> SpawnWarned;
 
@@ -344,6 +353,7 @@ namespace ExplodeIt.Core
             BombLanded = null;
             WaveStarted = null;
             SpawnWarned = null;
+            PlayerBlastExploded = null;
         }
     }
 }

@@ -22,6 +22,8 @@ namespace ExplodeIt.Progression
         public bool LastIsNewTime { get; private set; }
         public int LastBestKills { get; private set; }
         public bool LastIsNewKills { get; private set; }
+        // 저주를 모두 건 판이었는지. 결과 화면이 "저주 기록"으로 보여 줄 때 쓴다.
+        public bool LastIsCursed { get; private set; }
 
         private void OnEnable()
         {
@@ -76,6 +78,11 @@ namespace ExplodeIt.Progression
                     LastBestTime = data.BestStoryTime;
                 }
             }
+            else if (RunCurses.HasAll)
+            {
+                // 저주를 모두 건 판은 따로 겨룬다. 몇 개만 건 판은 일반 무한 기록과 같이 센다.
+                LastIsNewKills = data.TryRecordCursedKills(_stats.Kills);
+            }
             else
             {
                 LastIsNewKills = data.TryRecordEndlessKills(_stats.Kills);
@@ -84,11 +91,13 @@ namespace ExplodeIt.Progression
             // 클리어한 판은 "버틴 시간"이 아니므로 생존 기록에 넣지 않는다.
             if (!isCleared)
             {
-                LastIsNewTime = data.TryRecordSurvival(_isStoryMode, _stats.Elapsed);
-                LastBestTime = data.BestSurvival(_isStoryMode);
+                bool isCursed = !_isStoryMode && RunCurses.HasAll;
+                LastIsNewTime = isCursed ? data.TryRecordCursedSurvival(_stats.Elapsed) : data.TryRecordSurvival(_isStoryMode, _stats.Elapsed);
+                LastBestTime = isCursed ? data.BestCursedSurvival : data.BestSurvival(_isStoryMode);
             }
 
-            LastBestKills = data.BestKills(_isStoryMode);
+            LastIsCursed = !_isStoryMode && RunCurses.HasAll;
+            LastBestKills = LastIsCursed ? data.BestCursedKills : data.BestKills(_isStoryMode);
 
             SaveSystem.Save();
         }

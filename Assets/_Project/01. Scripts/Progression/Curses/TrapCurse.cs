@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ExplodeIt.Progression
 {
     // 저주 "덫"을 게임 씬에서 돌린다. 주기마다 플레이어 둘레 빈자리에 덫을 깔고, 밟는 순간 덫이 닫히며 플레이어를 친다.
-    // 대시 중에는 뛰어넘는다. 플레이어 폭탄이나 운석에 휩쓸린 덫은 부서져 사라지므로 미리 치워 둘 수 있다.
+    // 대시 중에는 뛰어넘는다. 플레이어 폭발(폭탄·스킬)이나 운석에 휩쓸린 덫은 부서져 사라지므로 미리 치워 둘 수 있다.
     // 깔린 직후 정해진 시간 동안은 반투명하고 밟아도 발동하지 않는다. 밟지 않은 덫은 수명이 다하면 사라진다.
     public class TrapCurse : CurseBehaviour<TrapCurseData>
     {
@@ -31,7 +31,6 @@ namespace ExplodeIt.Progression
         private ComponentPool<CurseCircle> _pool;
         private Action<CurseCircle> _onVanished;
         private Action<Vector2, float> _onBlast;
-        private Action<Vector2, float, int> _onBombExploded;
         private float _nextTime = float.PositiveInfinity;
 
         protected override void Awake()
@@ -48,20 +47,19 @@ namespace ExplodeIt.Progression
             _pool.Prewarm(capacity);
             _onVanished = Release;
             _onBlast = BreakWithin;
-            _onBombExploded = OnBombExploded;
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            GameEvents.BombExploded += _onBombExploded;
+            GameEvents.PlayerBlastExploded += _onBlast;
             MeteorRainCurse.Impacted += _onBlast;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            GameEvents.BombExploded -= _onBombExploded;
+            GameEvents.PlayerBlastExploded -= _onBlast;
             MeteorRainCurse.Impacted -= _onBlast;
         }
 
@@ -74,7 +72,7 @@ namespace ExplodeIt.Progression
 
         private void Update()
         {
-            TickTraps(Time.deltaTime);
+            TickTraps(RunCurses.DeltaTime);
             if (!IsRunning)
             {
                 _nextTime += Time.deltaTime;
@@ -164,11 +162,6 @@ namespace ExplodeIt.Progression
             circle.HideRange();
             circle.PlaySpriteSnap(Data.SnapVanishTime);
             circle.Countdown(Data.SnapVanishTime, false, 0f, _onVanished);
-        }
-
-        private void OnBombExploded(Vector2 position, float radius, int hitCount)
-        {
-            BreakWithin(position, radius);
         }
 
         // 폭발 범위 안에 중심이 든 덫을 부순다(폭탄과 같은 규칙).

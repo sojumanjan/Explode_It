@@ -22,9 +22,10 @@ MonoBehaviour:
   _unlockKills: 100
   _interval: 5
   _firstDelay: 3
-  _count: 1
-  _areaRadius: 3
-  _radius: 1.8
+  _count: 3
+  _minDistance: 1.5
+  _maxDistance: 6
+  _radius: 1.7
   _fallTime: 1.2
   _impactFeedback: {fileID: 11400000, guid: 73d51ffe459e55643b64633db4838796, type: 2}
   _impactSound: {fileID: 11400000, guid: ceb51ec362f39514380edc3005726baf, type: 2}

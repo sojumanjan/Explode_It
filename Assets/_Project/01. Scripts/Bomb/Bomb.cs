@@ -205,6 +205,7 @@ namespace ExplodeIt.Bombs
             }
 
             GameEvents.RaiseBombExploded(position, _radius, hitCount);
+            GameEvents.RaisePlayerBlastExploded(position, _radius);
             _onExploded?.Invoke(position);
         }
 

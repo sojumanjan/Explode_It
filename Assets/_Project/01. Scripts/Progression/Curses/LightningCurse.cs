@@ -58,7 +58,7 @@ namespace ExplodeIt.Progression
 
         private void Update()
         {
-            TickBolts(Time.deltaTime);
+            TickBolts(RunCurses.DeltaTime);
             if (!IsRunning)
             {
                 _nextTime += Time.deltaTime;

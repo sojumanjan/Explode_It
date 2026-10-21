@@ -14,6 +14,14 @@ namespace ExplodeIt.Progression
             AchievementCompleted?.Invoke(achievement);
         }
 
+        // 승천 저주를 새로 해금했다(저장은 이미 끝난 뒤다). 알림 UI가 듣는다.
+        public static event Action<CurseData> CurseUnlocked;
+
+        public static void RaiseCurseUnlocked(CurseData curse)
+        {
+            CurseUnlocked?.Invoke(curse);
+        }
+
         // 스킬 발동 시작·끝(블랙홀이 터져 사라질 때, 다발폭탄이 모두 터졌을 때, 순간폭탄 시간이 끝났을 때).
         // 스킬 강화 업적이 "한 번 발동하는 동안"을 센다.
         public static event Action<AbilityData> AbilityStarted;
@@ -34,6 +42,7 @@ namespace ExplodeIt.Progression
         private static void ResetSubscribers()
         {
             AchievementCompleted = null;
+            CurseUnlocked = null;
             AbilityStarted = null;
             AbilityEnded = null;
         }

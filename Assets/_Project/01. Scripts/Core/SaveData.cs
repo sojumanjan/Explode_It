@@ -25,6 +25,9 @@ namespace ExplodeIt.Core
         [SerializeField] private float _bestStorySurvival;
         [SerializeField] private float _bestEndlessSurvival;
         [SerializeField] private int _bestStoryKills;
+        // 저주 9개를 모두 건 무한 모드 기록. 그보다 적게 건 판은 일반 무한 기록에 들어간다.
+        [SerializeField] private int _bestCursedKills;
+        [SerializeField] private float _bestCursedSurvival;
         // 업적 등으로 해금한 무기 ID. 처음부터 열린 무기는 무기 데이터 쪽 표시로 판단하므로 여기 넣지 않는다.
         [SerializeField] private List<string> _unlockedWeapons = new List<string>();
         [SerializeField] private string _selectedWeapon = "";
@@ -74,6 +77,30 @@ namespace ExplodeIt.Core
         public int BestStoryKills => _bestStoryKills;
 
         public float BestSurvival(bool isStoryMode) => isStoryMode ? _bestStorySurvival : _bestEndlessSurvival;
+        public int BestCursedKills => _bestCursedKills;
+        public float BestCursedSurvival => _bestCursedSurvival;
+
+        public bool TryRecordCursedKills(int kills)
+        {
+            if (kills <= _bestCursedKills)
+            {
+                return false;
+            }
+
+            _bestCursedKills = kills;
+            return true;
+        }
+
+        public bool TryRecordCursedSurvival(float seconds)
+        {
+            if (seconds <= _bestCursedSurvival)
+            {
+                return false;
+            }
+
+            _bestCursedSurvival = seconds;
+            return true;
+        }
         public int BestKills(bool isStoryMode) => isStoryMode ? _bestStoryKills : _bestEndlessKills;
 
         public string SelectedWeapon

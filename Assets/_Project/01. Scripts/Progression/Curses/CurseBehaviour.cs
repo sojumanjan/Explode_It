@@ -1,3 +1,4 @@
+using DG.Tweening;
 using ExplodeIt.Core;
 using ExplodeIt.Stage;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace ExplodeIt.Progression
 {
     // 게임 씬에서 저주 하나를 실제로 돌리는 컴포넌트의 공통 틀. 이번 판에 그 저주가 걸리지 않았으면 스스로 꺼진다.
     // 판이 진행 중이고 연출로 조작이 막히지 않았을 때만 새 공격을 낸다(보스 등장 대화 중에 운석이 떨어지면 억울하다).
-    // 이미 깔아 둔 공격(예고 중인 원)은 멈추지 않고 끝까지 간다.
+    // 연출 동안에는 이미 깔아 둔 공격(예고 원·운석·덫·바람)까지 저주 시간 전체가 멈췄다가, 풀리는 순간 이어서 흐른다.
     public abstract class CurseBehaviour<TData> : MonoBehaviour where TData : CurseData
     {
         [SerializeField] private TData _data;
@@ -66,9 +67,19 @@ namespace ExplodeIt.Progression
             _isPlaying = current == GameState.Playing;
         }
 
+        // 연출로 조작이 막히면 저주 시간 전체를 멈춘다. 저주 컴포넌트가 여럿이라 여러 번 불려도 같은 값을 넣을 뿐이다.
         private void OnControlLockChanged(bool isLocked)
         {
             _isLocked = isLocked;
+            RunCurses.IsFrozen = isLocked;
+            if (isLocked)
+            {
+                DOTween.Pause(RunCurses.TweenId);
+            }
+            else
+            {
+                DOTween.Play(RunCurses.TweenId);
+            }
         }
 
         // 맵 안이고 구조물과 겹치지 않는 자리인지. 맵에 무언가를 까는 저주가 자리를 고를 때 쓴다.

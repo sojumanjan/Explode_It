@@ -114,6 +114,7 @@ namespace ExplodeIt.Progression
             sequence.Append(body.DOScale(Vector3.zero, Data.FlagVanishTime).SetEase(Ease.InBack))
                 .Join(flag.DOFade(0f, Data.FlagVanishTime))
                 .OnComplete(() => _flagPool.Release(flag))
+                .SetId(RunCurses.TweenId)
                 .SetLink(flag.gameObject);
         }
 

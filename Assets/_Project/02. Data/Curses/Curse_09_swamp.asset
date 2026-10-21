@@ -21,8 +21,8 @@ MonoBehaviour:
   _unlockedByDefault: 0
   _requiredCurses: 6
   _unlockKills: 100
-  _count: 3
-  _radius: 2.5
+  _count: 5
+  _radius: 3.5
   _heightRatio: 0.85
   _moveMultiplier: 0.5
   _moveInterval: 12

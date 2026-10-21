@@ -50,7 +50,7 @@ MonoBehaviour:
   _meteorRadius: 1.3
   _fireballChargeTime: 1.5
   _fireballAimLockTime: 0
-  _fireballSpeed: 33
+  _fireballSpeed: 25
   _fireballHitRadius: 0.4
   _fireballRange: 40
   _fireballCount: 8

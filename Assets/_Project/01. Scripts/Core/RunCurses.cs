@@ -20,6 +20,16 @@ namespace ExplodeIt.Core
         public static float AmbushMinRadius;
         public static float AmbushMaxRadius;
         public static float AmbushWarning;
+        // 저주를 9개 모두 건 판인지. 기록을 따로 남긴다.
+        public static bool HasAll;
+        // 연출(보스 등장 대화 등)로 조작이 막힌 동안 저주 시간이 멈춘다. 예고 원·떨어지는 운석·덫·바람이 모두 그 자리에 선다.
+        public static bool IsFrozen;
+        // 저주 연출이 쓰는 트윈 표시. 멈출 때 이 표시가 붙은 트윈만 함께 멈춘다.
+        public const string TweenId = "Curse";
+
+        // 저주가 쓰는 프레임 시간. 멈춘 동안은 0이다.
+        public static float DeltaTime => IsFrozen ? 0f : Time.deltaTime;
+
         // 플레이어 이동속도 배율. 늪(저주 "수렁")에 들어가 있는 동안만 1보다 작아진다. 매 프레임 늪 쪽이 갱신한다.
         public static float PlayerMoveMultiplier = 1f;
 
@@ -54,6 +64,8 @@ namespace ExplodeIt.Core
             AmbushMaxRadius = 0f;
             AmbushWarning = 0f;
             PlayerMoveMultiplier = 1f;
+            HasAll = false;
+            IsFrozen = false;
         }
     }
 }

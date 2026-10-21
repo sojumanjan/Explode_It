@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using ExplodeIt.Bombs;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Progression
@@ -78,6 +79,7 @@ namespace ExplodeIt.Progression
                 .Append(body.DOScale(snap, 0.06f).SetEase(Ease.OutQuad))
                 .Append(body.DOScale(_spriteScale * 0.55f, vanishTime).SetEase(Ease.InQuad))
                 .Join(_sprite.DOFade(0f, vanishTime).SetEase(Ease.InQuad))
+                .SetId(RunCurses.TweenId)
                 .SetLink(gameObject);
         }
 
@@ -100,7 +102,7 @@ namespace ExplodeIt.Progression
             }
 
             transform.localScale = Vector3.zero;
-            transform.DOScale(Vector3.one, duration).SetEase(ease).SetLink(gameObject);
+            transform.DOScale(Vector3.one, duration).SetEase(ease).SetId(RunCurses.TweenId).SetLink(gameObject);
         }
 
         // 안쪽 원을 끝까지 채운 채 둔다(늪처럼 시간 없이 깔려 있는 영역).
@@ -210,7 +212,7 @@ namespace ExplodeIt.Progression
                 return;
             }
 
-            _time += Time.deltaTime;
+            _time += RunCurses.DeltaTime;
             if (_fills)
             {
                 _fill.SetRadius(_radius * Mathf.Clamp01(_time / _duration));

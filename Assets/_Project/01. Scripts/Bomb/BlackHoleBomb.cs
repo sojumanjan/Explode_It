@@ -223,6 +223,7 @@ namespace ExplodeIt.Bombs
             _fuseFill.SetColor(_explodeFlashColor);
             AudioManager.Play(_explodeSound);
             FeedbackPlayer.Play(_explodeFeedback, position);
+            GameEvents.RaisePlayerBlastExploded(position, _radius);
         }
 
         private void GrowFill(float radius)
