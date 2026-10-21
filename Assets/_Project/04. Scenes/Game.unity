@@ -10272,7 +10272,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5b8e3f4d1539b9847ba4d55dedb129b3, type: 2}
   - {fileID: 11400000, guid: 52bfdc92ee160974fa9b8f25cc8ff3c2, type: 2}
   - {fileID: 11400000, guid: 0514e5c54734432468c857c5c6b351ba, type: 2}
-  _playerPortrait: {fileID: 21300000, guid: f1846212bcb13384bbde30636004ea9f, type: 3}
+  _playerPortrait: {fileID: 21300000, guid: 51f2de5c91cbaf94987a52c6693ba516, type: 3}
   _multiKillCooldown: 8
   _hiddenY: -520
   _shownY: 0
