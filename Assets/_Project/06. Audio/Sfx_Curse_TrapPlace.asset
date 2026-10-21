@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
   - {fileID: 8300000, guid: 49655d91bc298bf43914ee990e48e8bc, type: 3}
-  _volume: 0.5
-  _pitchMin: 0.95
-  _pitchMax: 1.05
+  _volume: 0.3
+  _pitchMin: 0.8
+  _pitchMax: 0.85
   _maxInstances: 3
   _minInterval: 0.03
   _maxInterval: 0
