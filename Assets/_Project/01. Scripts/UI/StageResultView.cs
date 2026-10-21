@@ -39,6 +39,13 @@ namespace ExplodeIt.UI
 
         private void OnEnable()
         {
+            // 결과 창을 처음 본 순간부터 첫 판이 끝난 것으로 친다. 이때부터 타이틀에서 책(메인 메뉴)으로 들어간다.
+            if (!SaveSystem.Data.FirstRunDone)
+            {
+                SaveSystem.Data.FirstRunDone = true;
+                SaveSystem.Save();
+            }
+
             TimeText.Write(_timeText, _buffer, (int)_stats.Elapsed);
             _killsText.SetText("{0}", _stats.Kills);
             _accuracyText.SetText("{0:1}%", _stats.Accuracy * 100f);

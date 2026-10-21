@@ -76,6 +76,11 @@ namespace ExplodeIt.Core
                 Debug.LogWarning($"[SaveSystem] 저장을 읽지 못해 새로 시작합니다: {exception.Message}");
                 _data = new SaveData();
             }
+
+            if (_data.UpgradeToCurrent())
+            {
+                Save();
+            }
         }
 
         private static void MigrateLegacy()

@@ -9,11 +9,15 @@ namespace ExplodeIt.Core
     [Serializable]
     public class SaveData
     {
-        public const int CurrentVersion = 1;
+        // 2: 첫 판 결과 창을 봤는지(_firstRunDone)를 따로 둔다.
+        public const int CurrentVersion = 2;
 
         // 저장 형식이 크게 바뀌어 옛 값을 옮겨야 할 때 어느 형식인지 알아보는 데 쓴다.
         [SerializeField] private int _version = CurrentVersion;
         [SerializeField] private bool _introSeen;
+        // 첫 판 결과 창을 봤는지. 보기 전에는 타이틀의 시작하기가 책 대신 곧장 첫 판으로 들어간다.
+        // 결과 창을 보기 전에 강제로 끄면 꺼진 채로 남아 다음에도 첫 판부터 한다.
+        [SerializeField] private bool _firstRunDone;
         // 스토리 클리어. 무한 모드 해금 조건이다.
         [SerializeField] private bool _storyCleared;
         // 지금까지 모든 판에서 처치한 수 (업적용).
@@ -58,6 +62,30 @@ namespace ExplodeIt.Core
         {
             get => _introSeen;
             set => _introSeen = value;
+        }
+
+        public bool FirstRunDone
+        {
+            get => _firstRunDone;
+            set => _firstRunDone = value;
+        }
+
+        // 옛 형식으로 저장된 값을 지금 형식으로 옮긴다. 불러온 직후 한 번 부른다. 옮겼으면 true.
+        public bool UpgradeToCurrent()
+        {
+            if (_version >= CurrentVersion)
+            {
+                return false;
+            }
+
+            // 첫 판 표시가 없던 저장: 이미 인트로를 봤거나 스토리를 깬 사람은 첫 판을 끝낸 것으로 본다.
+            if (_version < 2)
+            {
+                _firstRunDone = _introSeen || _storyCleared;
+            }
+
+            _version = CurrentVersion;
+            return true;
         }
 
         public bool StoryCleared

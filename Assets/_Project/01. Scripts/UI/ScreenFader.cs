@@ -75,11 +75,17 @@ namespace ExplodeIt.UI
         // 다 덮으면 onCovered를 부른다. 덮는 동안은 클릭이 아래로 새지 않는다.
         public void FadeOut(Action onCovered)
         {
+            FadeOut(_fadeTime, onCovered);
+        }
+
+        // 기본 시간 대신 duration 동안 덮는다.
+        public void FadeOut(float duration, Action onCovered)
+        {
             _isFadingIn = false;
             _group.DOKill();
             _group.gameObject.SetActive(true);
             _group.blocksRaycasts = true;
-            _group.DOFade(1f, _fadeTime).SetUpdate(true).SetLink(gameObject).OnComplete(() => onCovered?.Invoke());
+            _group.DOFade(1f, duration).SetUpdate(true).SetLink(gameObject).OnComplete(() => onCovered?.Invoke());
         }
 
         // 검게 덮고, 다 덮이면 onCovered로 화면을 바꾼 뒤 다시 걷어 낸다. 같은 씬 안에서 배경이 통째로 바뀔 때 쓴다.

@@ -23,6 +23,9 @@ namespace ExplodeIt.Stage
         [Tooltip("스킬 과제. 우클릭으로 블랙홀을 던지면 체크된다. 이 과제가 뜨기 전에는 스킬을 쓸 수 없다")]
         [SerializeField, TextArea] private string _abilityTask = "<color=#FFD54A>우클릭</color>으로 강력한 스킬 사용하기";
 
+        [Tooltip("스킬 과제를 해낸 뒤 체크된 채로 바뀌는 설명. 블랙홀이 터져 사라질 때까지 떠 있다")]
+        [SerializeField, TextArea] private string _abilityDoneText = "<color=#FFD54A>블랙홀</color>은 적들을 가운데로 끌어모아 한 방에 터뜨립니다!";
+
         [Tooltip("블랙홀이 터진 뒤 화면 아래 게이지를 밝게 강조하며 뜨는 설명. 이 설명이 걷히면 첫 웨이브가 시작된다")]
         [SerializeField, TextArea] private string _gaugeText = "게이지 한 칸이 가득 차면 스킬을 사용할 수 있습니다.\n적을 처치해 게이지를 쌓아 스킬을 사용하세요!";
 
@@ -50,6 +53,7 @@ namespace ExplodeIt.Stage
         public string DashTask => _dashTask;
         public string DashDoneText => _dashDoneText;
         public string AbilityTask => _abilityTask;
+        public string AbilityDoneText => _abilityDoneText;
         public string GaugeText => _gaugeText;
         public float StartDelay => _startDelay;
         public float MoveDistance => _moveDistance;

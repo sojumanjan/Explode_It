@@ -10,6 +10,9 @@ namespace ExplodeIt.UI
     {
         [SerializeField] private ScreenFader _fader;
         [SerializeField] private SoundData _clickSound;
+        // 첫 판은 타이틀에서 책을 거치지 않고 바로 넘어가므로, 책을 펼칠 때와 같은 길이로 천천히 덮는다.
+        [Tooltip("첫 판(타이틀에서 바로 시작)일 때 화면을 덮는 시간 (초, 실제 시간)")]
+        [SerializeField, Min(0.05f)] private float _firstRunFadeTime = 1.5f;
 
         private bool _isLaunching;
 
@@ -25,7 +28,14 @@ namespace ExplodeIt.UI
             _isLaunching = true;
             AudioManager.Play(_clickSound);
             RunSetup.Set(mode, weaponId, abilityId, artifactIds, curseIds);
-            _fader.FadeOut(SceneFlow.LoadGame);
+            if (SaveSystem.Data.FirstRunDone)
+            {
+                _fader.FadeOut(SceneFlow.LoadGame);
+            }
+            else
+            {
+                _fader.FadeOut(_firstRunFadeTime, SceneFlow.LoadGame);
+            }
         }
     }
 }

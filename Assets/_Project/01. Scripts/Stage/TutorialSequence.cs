@@ -208,12 +208,12 @@ namespace ExplodeIt.Stage
             }
         }
 
-        // 블랙홀을 던지면 체크하고, 터져 사라질 때까지 체크된 채로 둔다.
+        // 블랙홀을 던지면 체크하고 블랙홀 설명으로 바꾼다. 터져 사라질 때까지 체크된 채로 두어, 적이 빨려 드는 걸 보며 읽게 한다.
         private void OnAbilityUsed()
         {
             if (_step == Step.Ability)
             {
-                Check(null);
+                Check(_data.AbilityDoneText);
                 EnterStep(Step.BlackHole);
             }
         }

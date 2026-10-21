@@ -7109,6 +7109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.TitlePage
   _pager: {fileID: 1413785940}
   _bookPage: {fileID: 1626104604}
+  _mainMenu: {fileID: 1626104605}
   _goblin: {fileID: 131608786}
 --- !u!224 &343654696
 RectTransform:
