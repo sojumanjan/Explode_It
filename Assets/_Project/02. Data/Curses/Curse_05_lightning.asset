@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ad0f37b7937a4448520ac473f0a92c, type: 3}
+  m_Name: Curse_05_lightning
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.LightningCurseData
+  _id: lightning
+  _displayName: "\uB099\uB8B0"
+  _description: "18\uCD08\uB9C8\uB2E4 \uC544\uC8FC \uB113\uC740 \uACF3\uC5D0 \uBC88\uAC1C\uAC00
+    \uB0B4\uB9AC\uCE5C\uB2E4."
+  _icon: {fileID: 21300000, guid: 6aa6efa2f95c98b49a99539b0ede349e, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 2
+  _unlockKills: 100
+  _interval: 18
+  _firstDelay: 10
+  _minDistance: 0
+  _maxDistance: 2
+  _radius: 10
+  _warningTime: 5
+  _flashTime: 0.5
+  _appearTime: 2
+  _appearEase: 3
+  _rangeColor: {r: 0.55, g: 0.75, b: 1, a: 0.18}
+  _flashColor: {r: 0.9, g: 0.95, b: 1, a: 0.55}
+  _boltFrames:
+  - {fileID: 21300000, guid: dc53fdcbdda22f547aade55a3866d7a1, type: 3}
+  - {fileID: 21300000, guid: c87428a107a4da44aa4c17b7b767a241, type: 3}
+  - {fileID: 21300000, guid: b89875082e25ed0469d9a991288861ce, type: 3}
+  - {fileID: 21300000, guid: 30ae732bb8e65b84c8c80bfe2e8cc823, type: 3}
+  _boltFrameTime: 0.05
+  _boltDuration: 0.45
+  _boltCount: 5
+  _boltSpread: 0.75
+  _boltHeight: 8
+  _warnSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}
+  _strikeFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
+  _strikeSound: {fileID: 11400000, guid: 044fd5aa335ed344bab56dd4cd91ac2a, type: 2}

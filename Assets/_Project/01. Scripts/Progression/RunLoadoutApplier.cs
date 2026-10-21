@@ -26,6 +26,52 @@ namespace ExplodeIt.Progression
                     Apply(artifact);
                 }
             }
+
+            ApplyCurses();
+        }
+
+        // 해금한 저주만 건다. 왕 칸은 나머지 저주가 모두 걸렸을 때만 인정한다.
+        private void ApplyCurses()
+        {
+            RunCurses.Reset();
+            IReadOnlyList<string> ids = RunSetup.CurseIds;
+            bool hasKing = false;
+            for (int i = 0; i < ids.Count; i++)
+            {
+                CurseData curse = FindUnlockedCurse(ids[i]);
+                if (curse == null)
+                {
+                    continue;
+                }
+
+                if (curse.Kind == CurseKind.King)
+                {
+                    hasKing = true;
+                    continue;
+                }
+
+                RunCurses.Add(curse.Kind);
+                curse.ApplyRunModifiers();
+            }
+
+            if (hasKing && RunCurses.Count == _catalog.CurseCountWithoutKing)
+            {
+                RunCurses.Add(CurseKind.King);
+            }
+        }
+
+        private CurseData FindUnlockedCurse(string id)
+        {
+            CurseData[] curses = _catalog.Curses;
+            for (int i = 0; i < curses.Length; i++)
+            {
+                if (curses[i].Id == id && curses[i].IsUnlocked)
+                {
+                    return curses[i];
+                }
+            }
+
+            return null;
         }
 
         // 같은 종류를 두 칸에 낄 수는 없지만(칸끼리 맞바꿈), 값은 더해 두어 겹쳐도 자연스럽게 커지게 한다.

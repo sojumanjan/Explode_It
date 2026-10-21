@@ -66,4 +66,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0ab0736959fc5b40bc5e12a329bd338, type: 2}
   - {fileID: 11400000, guid: 2f920b5e37807a2438a36560cb000929, type: 2}
   - {fileID: 11400000, guid: f28a940e5ab5afb4f933c760ab5aed2d, type: 2}
+  _curses:
+  - {fileID: 11400000, guid: 40bd889ad4ad9c941b38dd07ff1b0a7c, type: 2}
+  - {fileID: 11400000, guid: f6abab22d373a0c42b0dd96f3953afa2, type: 2}
+  - {fileID: 11400000, guid: 57a2c22597d7fa14ab2caae21909f5e9, type: 2}
+  - {fileID: 11400000, guid: 7789087e40c8d304899fdb789afe84cb, type: 2}
+  - {fileID: 11400000, guid: 8372e9ee8c7332e40abd1c92cee1c942, type: 2}
+  - {fileID: 11400000, guid: fa1650fe9dcbcd143ad79a933929072f, type: 2}
+  - {fileID: 11400000, guid: 62aa7493ab1c3b249accd1870dcb66a9, type: 2}
+  - {fileID: 11400000, guid: 898332fbbd602864fae03ae6b65b249c, type: 2}
+  - {fileID: 11400000, guid: d7e2ef05fe19d5f4090c917b80996eb1, type: 2}
+  - {fileID: 11400000, guid: e3adac71482a424498bfca4ca26de967, type: 2}
   _artifactSlots: 2

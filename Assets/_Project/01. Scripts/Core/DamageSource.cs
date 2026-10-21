@@ -10,6 +10,8 @@ namespace ExplodeIt.Core
         ScatterBomb,
         InstantBomb,
         // 아티팩트(가죽 헬름)로 대시 중 부딪혀 처치.
-        Dodge
+        Dodge,
+        // 승천 저주(운석·낙뢰 등)에 맞음. 처치 수에는 들어가지만 무기·스킬 업적에는 들어가지 않는다.
+        Curse
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56044b4a0cf219f4ea3212ae9a854673, type: 3}
+  m_Name: Curse_04_berserk
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.BerserkCurseData
+  _id: berserk
+  _displayName: "\uAD11\uD3ED"
+  _description: "\uAC00\uB054 \uBD89\uAC8C \uB2EC\uC544\uC624\uB978 \uC801\uC774\n\uB9E4\uC6B0
+    \uBE60\uB974\uAC8C \uB2EC\uB824\uB4E0\uB2E4."
+  _icon: {fileID: 21300000, guid: c4ee6e0bf14c4e843b9eb865198b395e, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 1
+  _unlockKills: 100
+  _chance: 0.1
+  _moveSpeed: 9
+  _targets: []
+  _tint: {r: 1, g: 0.35, b: 0.3, a: 1}
+  _trailOffset: {x: 0, y: 0.05}
+  _spawnSound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}

@@ -304,6 +304,14 @@ namespace ExplodeIt.Core
             GolemLastStand?.Invoke(seconds);
         }
 
+        // 적이 구역 밖(플레이어 근처)에서 나오기 전에 자리를 알린다. 위치, 반경(유닛), 나오기까지 남은 시간(초). 저주 "기습".
+        public static event Action<Vector2, float, float> SpawnWarned;
+
+        public static void RaiseSpawnWarned(Vector2 position, float radius, float duration)
+        {
+            SpawnWarned?.Invoke(position, radius, duration);
+        }
+
         // 도메인 리로드를 끈 플레이모드 설정에서도 이전 세션의 구독자가 남지 않게 한다.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetSubscribers()
@@ -335,6 +343,7 @@ namespace ExplodeIt.Core
             StageStarted = null;
             BombLanded = null;
             WaveStarted = null;
+            SpawnWarned = null;
         }
     }
 }

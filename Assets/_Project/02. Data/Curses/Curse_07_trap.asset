@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8af95b8abda496d498b6f8abdb1fe051, type: 3}
+  m_Name: Curse_07_trap
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.TrapCurseData
+  _id: trap
+  _displayName: "\uB36B"
+  _description: "10\uCD08\uB9C8\uB2E4 \uB0B4 \uADFC\uCC98\uC5D0 \uB36B 3\uAC1C\uAC00
+    \uAE54\uB9B0\uB2E4.\n\uBC1F\uC73C\uBA74 \uBC14\uB85C \uB2E4\uCE5C\uB2E4. \uB300\uC2DC\uB85C
+    \uB6F0\uC5B4\uB118\uAC70\uB098 \uD3ED\uD0C4\uC73C\uB85C \uBD80\uC220 \uC218 \uC788\uB2E4."
+  _icon: {fileID: 21300000, guid: b7eee035cdebe8f428a98dee751b3c2d, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 4
+  _unlockKills: 100
+  _interval: 10
+  _firstDelay: 5
+  _count: 3
+  _minRadius: 1.5
+  _maxRadius: 4
+  _appearTime: 0.5
+  _lifetime: 25
+  _maxTraps: 9
+  _triggerRadius: 0.35
+  _trapSprite: {fileID: 21300000, guid: 38650bd34b8194b4da07cc8524137162, type: 3}
+  _snapVanishTime: 0.35
+  _idleColor: {r: 0.3, g: 0.15, b: 0.05, a: 0.35}
+  _placeSound: {fileID: 11400000, guid: bf7cb4cb18b4a3c4a9faab17825bf0f0, type: 2}
+  _triggerSound: {fileID: 11400000, guid: 44c2a00060ac70c46ae051fdd0007e9b, type: 2}
+  _triggerFeedback: {fileID: 0}
+  _breakFeedback: {fileID: 11400000, guid: 54a486c39a923b34f9b671c75ac6d997, type: 2}
+  _breakSound: {fileID: 11400000, guid: 8e883999be2b60f4589801337ffc432c, type: 2}

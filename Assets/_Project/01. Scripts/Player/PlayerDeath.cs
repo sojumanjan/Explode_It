@@ -35,6 +35,12 @@ namespace ExplodeIt.Player
             _baseColor = _sprite.color;
             _bodyScale = _sprite.transform.localScale;
             _maxHealth = (RunSetup.Mode == RunMode.Story ? _data.StoryHealth : _data.EndlessHealth) + RunModifiers.ExtraHealth;
+            // 저주 "한 방"은 팬던트까지 무시하고 칸 수를 고정한다. 저주로만 체력이 줄어드는 유일한 예외다.
+            if (RunCurses.HealthOverride > 0)
+            {
+                _maxHealth = RunCurses.HealthOverride;
+            }
+
             _hitReceiver.ResetHits(_maxHealth);
         }
 

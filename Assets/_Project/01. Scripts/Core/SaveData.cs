@@ -39,6 +39,11 @@ namespace ExplodeIt.Core
         // 칸 순서대로 장착한 아티팩트 ID. 빈 칸은 빈 문자열이다.
         [SerializeField] private List<string> _selectedArtifacts = new List<string>();
         [SerializeField] private List<string> _completedAchievements = new List<string>();
+        // 승천 저주. 처음부터 열린 저주는 저주 데이터 쪽 표시로 판단하므로 해금 목록에 넣지 않는다.
+        [SerializeField] private List<string> _unlockedCurses = new List<string>();
+        [SerializeField] private List<string> _equippedCurses = new List<string>();
+        // 모든 저주를 끼고 각성한 왕을 쓰러뜨려 진짜 엔딩을 봤는지.
+        [SerializeField] private bool _trueEndingSeen;
         [SerializeField] private float _sfxVolume = 1f;
         [SerializeField] private float _bgmVolume = 1f;
         // 화면 흔들림이 어지러운 사람을 위해 끌 수 있게 한다.
@@ -102,6 +107,13 @@ namespace ExplodeIt.Core
         }
 
         public IReadOnlyList<string> SelectedArtifacts => _selectedArtifacts;
+        public IReadOnlyList<string> EquippedCurses => _equippedCurses;
+
+        public bool TrueEndingSeen
+        {
+            get => _trueEndingSeen;
+            set => _trueEndingSeen = value;
+        }
 
         // 기록을 넘었으면 갱신하고 true를 돌려준다. 결과 화면에서 "신기록"을 띄우는 데 쓴다.
         public bool TryRecordEndlessKills(int kills)
@@ -163,12 +175,26 @@ namespace ExplodeIt.Core
         public bool IsUpgradeUnlocked(string id) => Has(_unlockedUpgrades, id);
         public bool IsUpgradeEquipped(string id) => Has(_equippedUpgrades, id);
         public bool IsAchievementCompleted(string id) => Has(_completedAchievements, id);
+        public bool IsCurseUnlocked(string id) => Has(_unlockedCurses, id);
+        public bool IsCurseEquipped(string id) => Has(_equippedCurses, id);
 
         // 새로 해금·달성했으면 true. 이미 있으면 false라 알림을 두 번 띄우지 않는다.
         public bool UnlockWeapon(string id) => TryAdd(_unlockedWeapons, id);
         public bool UnlockArtifact(string id) => TryAdd(_unlockedArtifacts, id);
         public bool UnlockAbility(string id) => TryAdd(_unlockedAbilities, id);
         public bool UnlockUpgrade(string id) => TryAdd(_unlockedUpgrades, id);
+        public bool UnlockCurse(string id) => TryAdd(_unlockedCurses, id);
+
+        public void SetCurseEquipped(string id, bool isEquipped)
+        {
+            if (isEquipped)
+            {
+                TryAdd(_equippedCurses, id);
+                return;
+            }
+
+            _equippedCurses.Remove(id);
+        }
 
         public void SetUpgradeEquipped(string id, bool isEquipped)
         {
@@ -224,6 +250,9 @@ namespace ExplodeIt.Core
             _selectedWeapon = "";
             _selectedAbility = "";
             _selectedArtifacts.Clear();
+            _unlockedCurses.Clear();
+            _equippedCurses.Clear();
+            _trueEndingSeen = false;
         }
 
         public string GetArtifactInSlot(int slot)

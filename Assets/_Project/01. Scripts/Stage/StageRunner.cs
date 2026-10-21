@@ -72,6 +72,10 @@ namespace ExplodeIt.Stage
         // 첫 판 조작 튜토리얼. 오프닝을 본 판에만 이어서 하고, 끝나야 첫 웨이브를 연다. 비워 두면 바로 시작한다.
         [SerializeField] private TutorialSequence _tutorial;
 
+        // 기습 자리를 찾는 횟수와, 군집 반경 바깥으로 더 비워 둘 여유 (유닛). 자리 고르기 안전장치라 데이터로 빼지 않는다.
+        private const int AmbushAttempts = 12;
+        private const float AmbushClearMargin = 0.4f;
+
         private readonly List<SpawnEvent> _events = new List<SpawnEvent>(128);
         private readonly Dictionary<int, List<SpawnArea>> _areasById = new Dictionary<int, List<SpawnArea>>();
         private readonly List<EndlessGroupOrder> _orders = new List<EndlessGroupOrder>(8);
@@ -818,13 +822,51 @@ namespace ExplodeIt.Stage
             for (int i = 0; i < _orders.Count; i++)
             {
                 EndlessGroupOrder order = _orders[i];
+                if (TryAmbush(order, player))
+                {
+                    continue;
+                }
+
                 AddUnitEvents(order.Area, order.Area.GetRandomPoint(), order.Prefab, order.Count, order.Time, 0);
             }
 
             _events.Sort(_nextEvent, _events.Count - _nextEvent, ByTimeComparer);
         }
 
+        // 저주 "기습": 확률로 군집을 구역 대신 플레이어 근처 빈자리에 낸다. 나오기 전에 자리를 표시하고, 표시 시간만큼 늦게 나온다.
+        // 맵 안이고 구조물과 겹치지 않는 자리를 몇 번 찾아보고, 못 찾으면 원래 구역에서 낸다.
+        private bool TryAmbush(EndlessGroupOrder order, Vector2 player)
+        {
+            if (RunCurses.AmbushChance <= 0f || UnityEngine.Random.value >= RunCurses.AmbushChance)
+            {
+                return false;
+            }
+
+            float clearRadius = _stage.ClusterRadius + AmbushClearMargin;
+            ArenaBounds arena = ArenaBounds.Current;
+            for (int attempt = 0; attempt < AmbushAttempts; attempt++)
+            {
+                Vector2 direction = UnityEngine.Random.insideUnitCircle.normalized;
+                float distance = UnityEngine.Random.Range(RunCurses.AmbushMinRadius, RunCurses.AmbushMaxRadius);
+                Vector2 anchor = player + direction * distance;
+                if ((arena != null && !arena.Contains(anchor)) || Physics2D.OverlapCircle(anchor, clearRadius, _obstacleMask) != null)
+                {
+                    continue;
+                }
+
+                // 표시 시간은 실제 시간인데, 스폰 시계는 아티팩트·저주로 빨리 돌 수 있어 그 배율만큼 늘려 맞춘다.
+                float clock = RunModifiers.SpawnIntervalMultiplier > 0f ? RunModifiers.SpawnIntervalMultiplier : 1f;
+                float startTime = Mathf.Max(order.Time, _phaseTime) + RunCurses.AmbushWarning / clock;
+                GameEvents.RaiseSpawnWarned(anchor, clearRadius, RunCurses.AmbushWarning);
+                AddUnitEvents(null, anchor, order.Prefab, order.Count, startTime, 0);
+                return true;
+            }
+
+            return false;
+        }
+
         // 한 구역에서 같은 적 count마리를 기준점 주변에 같은 구역 간격을 두고 한 마리씩 낸다. 다음 순번을 돌려준다.
+        // area가 없으면(기습) 입구 없이 그 자리에서 바로 쫓는다.
         private int AddUnitEvents(SpawnArea area, Vector2 anchor, Enemy prefab, int count, float startTime, int sequence)
         {
             float interval = _stage.SameAreaSpawnInterval;
@@ -835,7 +877,7 @@ namespace ExplodeIt.Stage
                 {
                     float time = startTime + sequence * interval;
                     Vector2 position = anchor + UnityEngine.Random.insideUnitCircle * radius;
-                    bool hasEntry = area.HasEntrance;
+                    bool hasEntry = area != null && area.HasEntrance;
                     Vector2 entryPoint = hasEntry ? area.GetRandomEntrancePoint() : position;
                     _events.Add(new SpawnEvent(time, _eventOrder++, prefab, position, hasEntry, entryPoint));
                 }

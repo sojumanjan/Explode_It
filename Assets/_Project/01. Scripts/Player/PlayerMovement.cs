@@ -65,7 +65,8 @@ namespace ExplodeIt.Player
             }
         }
 
-        // 아티팩트 보너스를 더한 이동속도. 보너스끼리는 더한다(+10%와 +20%면 +30%).
+        // 아티팩트 보너스를 더한 이동속도. 보너스끼리는 더한다(+10%와 +20%면 +30%). 늪(저주)에 빠지면 배율만큼 느려진다.
+        // 대시는 따로 속도를 정하므로 늪에서도 그대로다(빠져나갈 수단을 남긴다).
         private float CurrentMoveSpeed()
         {
             float bonus = 0f;
@@ -79,7 +80,7 @@ namespace ExplodeIt.Player
                 bonus += RunModifiers.MoveSpeedBonusAfterAbility;
             }
 
-            return _data.MoveSpeed * (1f + bonus);
+            return _data.MoveSpeed * (1f + bonus) * RunCurses.PlayerMoveMultiplier;
         }
 
         private void OnWalkCancelled()

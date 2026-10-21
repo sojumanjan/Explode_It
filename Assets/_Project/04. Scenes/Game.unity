@@ -10275,6 +10275,7 @@ MonoBehaviour:
   _shownY: 0
   _slideDuration: 0.3
   _moodPunch: 0.15
+  _deathRemarkDelay: 1
 --- !u!1 &169187013
 GameObject:
   m_ObjectHideFlags: 0
@@ -77444,6 +77445,178 @@ Transform:
   - {fileID: 252224282}
   m_Father: {fileID: 1679562923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1379085491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1379085499}
+  - component: {fileID: 1379085498}
+  - component: {fileID: 1379085497}
+  - component: {fileID: 1379085496}
+  - component: {fileID: 1379085495}
+  - component: {fileID: 1379085494}
+  - component: {fileID: 1379085493}
+  - component: {fileID: 1379085492}
+  m_Layer: 0
+  m_Name: Curses
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1379085492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 719128b3b9f3230479382cd2b23b1437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.SwampCurse
+  _data: {fileID: 11400000, guid: d7e2ef05fe19d5f4090c917b80996eb1, type: 2}
+  _player: {fileID: 1456756921}
+  _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &1379085493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4402dc949c632e4aabb542371d46c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.TrapCurse
+  _data: {fileID: 11400000, guid: 62aa7493ab1c3b249accd1870dcb66a9, type: 2}
+  _player: {fileID: 1456756921}
+  _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _dodge: {fileID: 1456756930}
+--- !u!114 &1379085494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3caa5cc08cfa7843a30bec1746f7dab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AmbushCurse
+  _data: {fileID: 11400000, guid: fa1650fe9dcbcd143ad79a933929072f, type: 2}
+  _player: {fileID: 1456756921}
+  _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _prewarm: 6
+  _maxCircles: 24
+--- !u!114 &1379085495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b0d568b6c74474aa1326a8b1faa4f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.LightningCurse
+  _data: {fileID: 11400000, guid: 8372e9ee8c7332e40abd1c92cee1c942, type: 2}
+  _player: {fileID: 1456756921}
+  _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _boltPrefab: {fileID: 6803580631984904504, guid: 6761072f68f568f4bb12d1b89addced0, type: 3}
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 192
+--- !u!114 &1379085496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f08d56d2a8f4b408ef98fd4e5798f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.BerserkCurse
+  _data: {fileID: 11400000, guid: 7789087e40c8d304899fdb789afe84cb, type: 2}
+  _player: {fileID: 1456756921}
+  _spawner: {fileID: 216240368}
+  _trailPrefab: {fileID: 1176468988929969, guid: 238ce412b02ed7f498845cb63c898fb4, type: 3}
+  _prewarm: 12
+  _maxTrails: 64
+--- !u!114 &1379085497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742de21bfe18c9240ae7efaf6db744dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.MeteorRainCurse
+  _data: {fileID: 11400000, guid: 57a2c22597d7fa14ab2caae21909f5e9, type: 2}
+  _player: {fileID: 1456756921}
+  _meteorPrefab: {fileID: 3757728967919781112, guid: fa19d19d1c015a4408a8a8b004d41fce, type: 3}
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 192
+  _prewarm: 4
+  _maxMeteors: 16
+--- !u!114 &1379085498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42efc3a891276d49bed260c711fed71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.ChainBlastCurse
+  _data: {fileID: 11400000, guid: f6abab22d373a0c42b0dd96f3953afa2, type: 2}
+  _player: {fileID: 1456756921}
+  _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _prewarm: 48
+  _maxCircles: 160
+--- !u!4 &1379085499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379085491}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1379724800
 GameObject:
   m_ObjectHideFlags: 0
@@ -101393,18 +101566,18 @@ MonoBehaviour:
     Progress: {fileID: 460759370}
   _weapons:
     Label: "\uBB34\uAE30"
-    DoneText: "\uBAA8\uB4E0 \uBB34\uAE30 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uBB34\uAE30 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: 27b62fe804d7eb248893da64a587c002, type: 2}
     - {fileID: 11400000, guid: 698be6d3cca133b4f9ed5176e5747f9b, type: 2}
   _skills:
     Label: "\uC2A4\uD0AC"
-    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: 1806c4894501de04185ad65a8b61b340, type: 2}
   _upgrades:
     Label: "\uC2A4\uD0AC \uAC15\uD654"
-    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uAC15\uD654 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uAC15\uD654 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: d8d131aea6cba33489732a0559aaff1b, type: 2}
     - {fileID: 11400000, guid: d729abbac40e170459f4565e801f7b6d, type: 2}
@@ -101414,7 +101587,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7cc70d4884b1fdc4f90464a2a6de6822, type: 2}
   _artifacts:
     Label: "\uC544\uD2F0\uD329\uD2B8"
-    DoneText: "\uBAA8\uB4E0 \uC544\uD2F0\uD329\uD2B8 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC544\uD2F0\uD329\uD2B8 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: e030681a4ec8d4b4e81c2536261794ce, type: 2}
     - {fileID: 11400000, guid: 3c48afa0f99afb749a1cd8e44a614349, type: 2}
@@ -109796,18 +109969,18 @@ MonoBehaviour:
     Progress: {fileID: 909466274}
   _weapons:
     Label: "\uBB34\uAE30"
-    DoneText: "\uBAA8\uB4E0 \uBB34\uAE30 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uBB34\uAE30 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: 27b62fe804d7eb248893da64a587c002, type: 2}
     - {fileID: 11400000, guid: 698be6d3cca133b4f9ed5176e5747f9b, type: 2}
   _skills:
     Label: "\uC2A4\uD0AC"
-    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: 1806c4894501de04185ad65a8b61b340, type: 2}
   _upgrades:
     Label: "\uC2A4\uD0AC \uAC15\uD654"
-    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uAC15\uD654 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC2A4\uD0AC \uAC15\uD654 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: d8d131aea6cba33489732a0559aaff1b, type: 2}
     - {fileID: 11400000, guid: d729abbac40e170459f4565e801f7b6d, type: 2}
@@ -109817,7 +109990,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7cc70d4884b1fdc4f90464a2a6de6822, type: 2}
   _artifacts:
     Label: "\uC544\uD2F0\uD329\uD2B8"
-    DoneText: "\uBAA8\uB4E0 \uC544\uD2F0\uD329\uD2B8 \uD574\uAE08"
+    DoneText: "\uBAA8\uB4E0 \uC544\uD2F0\uD329\uD2B8 \uD574\uAE08 \uC644\uB8CC"
     Order:
     - {fileID: 11400000, guid: e030681a4ec8d4b4e81c2536261794ce, type: 2}
     - {fileID: 11400000, guid: 3c48afa0f99afb749a1cd8e44a614349, type: 2}
@@ -119406,3 +119579,4 @@ SceneRoots:
   - {fileID: 2019267939}
   - {fileID: 1520778938}
   - {fileID: 26641698}
+  - {fileID: 1379085499}

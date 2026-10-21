@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51e69b9716f288a4a8f7e9b98c0e3ba5, type: 3}
+  m_Name: Curse_09_swamp
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.SwampCurseData
+  _id: swamp
+  _displayName: "\uBA3C\uC9C0\uBC14\uB78C"
+  _description: "\uB9F5 \uACF3\uACF3\uC5D0 \uBA3C\uC9C0\uBC14\uB78C\uC774 \uBD84\uB2E4.\n\uBC14\uB78C
+    \uC548\uC5D0\uC11C\uB294 \uBC1C\uC774 30% \uB290\uB824\uC9C0\uACE0, \uBC14\uB78C\uC740
+    \uACC4\uC18D \uC790\uB9AC\uB97C \uC62E\uAE34\uB2E4."
+  _icon: {fileID: 21300000, guid: 6f1e38ca0f69e4546920b8dd5be2253a, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 6
+  _unlockKills: 100
+  _count: 3
+  _radius: 2.5
+  _heightRatio: 0.85
+  _moveMultiplier: 0.5
+  _moveInterval: 12
+  _fadeTime: 1
+  _gap: 0.5
+  _minDistance: 3
+  _maxDistance: 12
+  _frames:
+  - {fileID: 21300000, guid: e46824d2f9cbd324ead83c232b804fb3, type: 3}
+  - {fileID: 21300000, guid: b21b4e99e0e62d44ebfb6997f1122128, type: 3}
+  - {fileID: 21300000, guid: f0be32002e77a6547bd058226148d448, type: 3}
+  _frameTime: 0.12
+  _spriteAlpha: 0.6
+  _spriteSizeRatio: 1.1
+  _appearEase: 27
+  _disappearEase: 26

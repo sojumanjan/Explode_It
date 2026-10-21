@@ -1,4 +1,5 @@
 using ExplodeIt.Bombs;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Progression
@@ -23,6 +24,9 @@ namespace ExplodeIt.Progression
         [Tooltip("도감에 붙는 업적")]
         [SerializeField] private AchievementData[] _achievements = new AchievementData[0];
 
+        [Tooltip("승천 저주. 이 순서대로 하나씩 해금된다. 마지막 칸(왕)은 다른 저주를 모두 껴야 낄 수 있다")]
+        [SerializeField] private CurseData[] _curses = new CurseData[0];
+
         [Tooltip("판 시작 전 고를 수 있는 아티팩트 칸 수")]
         [SerializeField, Min(0)] private int _artifactSlots = 2;
 
@@ -30,6 +34,46 @@ namespace ExplodeIt.Progression
         public AbilityData[] Abilities => _abilities;
         public AbilityUpgradeData[] Upgrades => _upgrades;
         public ArtifactData[] Artifacts => _artifacts;
+        public CurseData[] Curses => _curses;
+
+        // 다음에 해금할 저주. 목록 순서대로 하나씩 열리므로 아직 잠긴 맨 앞 저주다. 다 열었으면 null.
+        public CurseData NextLockedCurse
+        {
+            get
+            {
+                for (int i = 0; i < _curses.Length; i++)
+                {
+                    if (!_curses[i].IsUnlocked)
+                    {
+                        return _curses[i];
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        // 왕 칸을 뺀 저주 중 장착한 수와 전체 수.
+        public int EquippedCurseCount => CountCurses(true);
+        public int CurseCountWithoutKing => CountCurses(false);
+
+        private int CountCurses(bool equippedOnly)
+        {
+            int count = 0;
+            for (int i = 0; i < _curses.Length; i++)
+            {
+                CurseData curse = _curses[i];
+                if (curse.Kind != CurseKind.King && (!equippedOnly || curse.IsEquipped))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        // 왕 칸은 다른 저주를 모두 끼고 있어야 낄 수 있다.
+        public bool CanEquipKing => EquippedCurseCount == CurseCountWithoutKing;
 
         // 저장된 ID가 지워졌거나 잠긴 스킬을 가리키면 처음부터 열린 맨 앞 스킬을 돌려준다.
         public AbilityData FindUsableAbility(string id)

@@ -113,6 +113,7 @@ namespace ExplodeIt.Enemies
         {
             _hitReceiver.ResetHits(Data.HitsToDie);
             _hitReceiver.Died += OnDied;
+            SpeedOverride = 0f;
             _arenaTime = 0f;
             _hasEntryPoint = false;
             _collider.enabled = true;
@@ -389,6 +390,19 @@ namespace ExplodeIt.Enemies
 
         // 플레이어를 쫓아 걷는 속도. 무한 모드에서 웨이브가 쌓이면 판 전체 배율만큼 빨라진다.
         protected virtual float ChaseSpeed => Data.MoveSpeed * EnemyTempo.MoveSpeedMultiplier;
+
+        // 0보다 크면 적 종류·웨이브 배율과 상관없이 이 속도로 쫓는다(저주 "광폭"). 풀에서 다시 나올 때 지운다.
+        public float SpeedOverride { get; set; }
+
+        // 실제로 걷는 속도. 하위 클래스는 ChaseSpeed 대신 이것으로 걷는다.
+        protected float CurrentChaseSpeed => SpeedOverride > 0f ? SpeedOverride : ChaseSpeed;
+
+        // 걸음 대신 멈춤·돌진으로 움직이는 적(사마귀)이 쓰는 빠르기 배율. 광폭이면 원래 속도 대비 배율만큼 빨라진다.
+        protected float MoveTempo => SpeedOverride > 0f ? SpeedOverride / Mathf.Max(Data.MoveSpeed, 0.01f) : EnemyTempo.MoveSpeedMultiplier;
+
+        // 처치 수에 들어가는 일반 적인지. 보스는 저주(광폭 등) 대상에서 뺀다.
+        public bool CountsAsKill => Data.CountsAsKill;
+        public EnemyData EnemyData => Data;
 
         // 이름은 그대로지만 입구로 들어오는 중에는 입구 점으로 간다. 걷는 속도·밀어내기는 같다.
         protected void MoveTowardTarget(float speed, float deltaTime)

@@ -29,7 +29,7 @@ namespace ExplodeIt.Enemies
 
         protected override void TickMove(float deltaTime)
         {
-            MoveTowardTarget(ChaseSpeed, deltaTime);
+            MoveTowardTarget(CurrentChaseSpeed, deltaTime);
         }
 
         protected override bool ShouldStartAttack()

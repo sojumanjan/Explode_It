@@ -341,7 +341,7 @@ namespace ExplodeIt.UI
 
         private static void RestartAs(RunMode mode)
         {
-            RunSetup.Set(mode, RunSetup.WeaponId, RunSetup.AbilityId, RunSetup.ArtifactIds);
+            RunSetup.Set(mode, RunSetup.WeaponId, RunSetup.AbilityId, RunSetup.ArtifactIds, SaveSystem.Data.EquippedCurses);
             SceneFlow.LoadGame();
         }
 
@@ -376,6 +376,11 @@ namespace ExplodeIt.UI
                     for (int i = 0; i < _catalog.Artifacts.Length; i++)
                     {
                         data.UnlockArtifact(_catalog.Artifacts[i].Id);
+                    }
+
+                    for (int i = 0; i < _catalog.Curses.Length; i++)
+                    {
+                        data.UnlockCurse(_catalog.Curses[i].Id);
                     }
                 }
 

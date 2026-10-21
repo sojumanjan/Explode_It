@@ -20,6 +20,9 @@ namespace ExplodeIt.Stage
         private readonly List<Enemy> _active = new List<Enemy>(256);
         private Action<Enemy> _removeActive;
 
+        // 적이 나온 직후. 저주(광폭 등)가 나온 적을 바꿀 때 쓴다.
+        public event Action<Enemy> Spawned;
+
         public int ActiveCount => _active.Count;
         public Transform Target => _target;
 
@@ -65,6 +68,7 @@ namespace ExplodeIt.Stage
             Enemy enemy = pool.Get(position);
             enemy.Initialize(_target, _removeActive, _releases[prefab]);
             _active.Add(enemy);
+            Spawned?.Invoke(enemy);
             return enemy;
         }
 

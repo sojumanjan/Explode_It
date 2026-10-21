@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f0d436898d83c846b9ae3c853be11c9, type: 3}
+  m_Name: Curse_10_king
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.KingCurseData
+  _id: king
+  _displayName: ???
+  _description: "\uBAA8\uB4E0 \uC800\uC8FC\uB97C \uC9CA\uC5B4\uC9C4 \uC790\uC5D0\uAC8C\n\uADF8\uBD84\uC774
+    \uC9C1\uC811 \uCC3E\uC544\uC628\uB2E4."
+  _icon: {fileID: 21300000, guid: 3739a6c05bd57f44196f19ed1e3e4156, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 9
+  _unlockKills: 100

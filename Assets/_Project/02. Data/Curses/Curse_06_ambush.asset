@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7fa6f57842b144486fb17c00327793, type: 3}
+  m_Name: Curse_06_ambush
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AmbushCurseData
+  _id: ambush
+  _displayName: "\uAE30\uC2B5"
+  _description: "50%\uD655\uB960\uB85C \uC801\uC774 \uD50C\uB808\uC774\uC5B4 \uADFC\uCC98\uC5D0\uC11C
+    \uC2A4\uD3F0\uB41C\uB2E4."
+  _icon: {fileID: 21300000, guid: 38115045e6824c14ca7b83d878d37ce8, type: 3}
+  _unlockedByDefault: 0
+  _requiredCurses: 3
+  _unlockKills: 100
+  _chance: 0.5
+  _minRadius: 4
+  _maxRadius: 10
+  _warningTime: 2
+  _rangeColor: {r: 0.55, g: 0.1, b: 0.45, a: 0.25}
+  _fillColor: {r: 0.75, g: 0.2, b: 0.65, a: 0.35}
+  _warnSound: {fileID: 11400000, guid: 4c8f60dbe2ff0d246b8642f1b7855467, type: 2}

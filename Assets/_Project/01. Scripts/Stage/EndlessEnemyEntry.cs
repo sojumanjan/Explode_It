@@ -1,4 +1,5 @@
 using System;
+using ExplodeIt.Core;
 using ExplodeIt.Enemies;
 using UnityEngine;
 
@@ -57,7 +58,18 @@ namespace ExplodeIt.Stage
         // 그보다 늦게 처음 나오는 적은 등장한 웨이브에는 기본 가중치로 나오고 다음 웨이브부터 오른다.
         public float GetWeight(int kills, int spawnsPerWave, int growthStartKills)
         {
-            if (Enemy == null || kills < _unlockKills)
+            if (Enemy == null)
+            {
+                return 0f;
+            }
+
+            // 저주 "총공세": 등장 시작을 기다리지 않고 처음부터 가장 자주 나온다.
+            if (RunCurses.EnemiesAtMaxWeight)
+            {
+                return _maxWeight;
+            }
+
+            if (kills < _unlockKills)
             {
                 return 0f;
             }
