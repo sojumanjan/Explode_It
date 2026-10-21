@@ -77523,8 +77523,9 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: fa1650fe9dcbcd143ad79a933929072f, type: 2}
   _player: {fileID: 1456756921}
   _circlePrefab: {fileID: 4454840631430980159, guid: 303d62ad9f1946945ae0ca784bbf98fa, type: 3}
+  _flagPrefab: {fileID: 7994816036123215460, guid: 5f3e4b5303878eb4d8de142dc5781c36, type: 3}
   _prewarm: 6
-  _maxCircles: 24
+  _maxMarkers: 24
 --- !u!114 &1379085495
 MonoBehaviour:
   m_ObjectHideFlags: 0

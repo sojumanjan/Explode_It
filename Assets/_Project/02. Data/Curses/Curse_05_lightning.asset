@@ -38,7 +38,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 30ae732bb8e65b84c8c80bfe2e8cc823, type: 3}
   _boltFrameTime: 0.05
   _boltDuration: 0.45
-  _boltCount: 5
+  _boltCount: 1
   _boltSpread: 0.75
   _boltHeight: 8
   _warnSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}

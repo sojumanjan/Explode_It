@@ -21,7 +21,7 @@ MonoBehaviour:
   _requiredCurses: 1
   _unlockKills: 100
   _chance: 0.1
-  _moveSpeed: 9
+  _moveSpeed: 10
   _targets: []
   _tint: {r: 1, g: 0.35, b: 0.3, a: 1}
   _trailOffset: {x: 0, y: 0.05}

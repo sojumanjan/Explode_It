@@ -24,7 +24,31 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(0f)] private float _warningTime = 2f;
 
         [Header("표시")]
-        [Tooltip("나올 자리 바깥 원 색")]
+        [Tooltip("나올 자리에 꽂히는 깃발 그림. 기준점은 깃대 밑동(땅)이다. 비워 두면 아래 색의 원으로 표시한다")]
+        [SerializeField] private Sprite _flagSprite;
+
+        [Tooltip("깃발 키 (유닛)")]
+        [SerializeField, Min(0.1f)] private float _flagHeight = 1.3f;
+
+        [Tooltip("깃발 그림이 바라보는 쪽. 켜면 오른쪽, 끄면 왼쪽. 플레이어 쪽을 보도록 좌우를 뒤집는 기준이다")]
+        [SerializeField] private bool _flagFacesRight;
+
+        [Tooltip("깃발이 떨어지기 시작하는 높이 (유닛, 꽂힐 자리 위)")]
+        [SerializeField, Min(0f)] private float _flagDropHeight = 1.5f;
+
+        [Tooltip("깃발이 떨어져 꽂히기까지 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _flagDropTime = 0.22f;
+
+        [Tooltip("꽂힌 뒤 좌우로 흔들리는 각도 (도)")]
+        [SerializeField, Min(0f)] private float _flagSwayAngle = 5f;
+
+        [Tooltip("한 번 흔들리는 데 걸리는 시간 (초, 왼쪽→오른쪽)")]
+        [SerializeField, Min(0.05f)] private float _flagSwayTime = 0.45f;
+
+        [Tooltip("적이 나올 때 깃발이 작아지며 사라지는 시간 (초)")]
+        [SerializeField, Min(0.01f)] private float _flagVanishTime = 0.18f;
+
+        [Tooltip("나올 자리 바깥 원 색 (그림이 없을 때)")]
         [SerializeField] private Color _rangeColor = new Color(0.55f, 0.1f, 0.45f, 0.25f);
 
         [Tooltip("남은 시간만큼 차오르는 안쪽 원 색")]
@@ -34,6 +58,14 @@ namespace ExplodeIt.Progression
         [SerializeField] private SoundData _warnSound;
 
         public override CurseKind Kind => CurseKind.Ambush;
+        public Sprite FlagSprite => _flagSprite;
+        public float FlagHeight => _flagHeight;
+        public bool FlagFacesRight => _flagFacesRight;
+        public float FlagDropHeight => _flagDropHeight;
+        public float FlagDropTime => _flagDropTime;
+        public float FlagSwayAngle => _flagSwayAngle;
+        public float FlagSwayTime => _flagSwayTime;
+        public float FlagVanishTime => _flagVanishTime;
         public Color RangeColor => _rangeColor;
         public Color FillColor => _fillColor;
         public SoundData WarnSound => _warnSound;

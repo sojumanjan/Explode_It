@@ -27,8 +27,14 @@ namespace ExplodeIt.Progression
         [Tooltip("플레이어에게서 최대 이만큼 떨어진 곳까지 깔린다 (유닛)")]
         [SerializeField, Min(0f), FormerlySerializedAs("_maxRadius")] private float _maxDistance = 4f;
 
-        [Tooltip("깔리고 나서 밟아도 발동하지 않는 시간 (초). 그동안 서서히 나타난다")]
+        [Tooltip("깔린 덫이 서서히 나타나는 시간 (초)")]
         [SerializeField, Min(0f)] private float _appearTime = 0.5f;
+
+        [Tooltip("깔리고 나서 밟아도 발동하지 않는 시간 (초). 그동안 덫이 반투명하게 보인다")]
+        [SerializeField, Min(0f)] private float _armDelay = 2f;
+
+        [Tooltip("발동 전 반투명할 때 투명도 (0~1)")]
+        [SerializeField, Range(0f, 1f)] private float _unarmedAlpha = 0.45f;
 
         [Tooltip("밟지 않은 덫이 사라지기까지 시간 (초)")]
         [SerializeField, Min(1f)] private float _lifetime = 25f;
@@ -67,6 +73,8 @@ namespace ExplodeIt.Progression
         public float MinDistance => _minDistance;
         public float MaxDistance => Mathf.Max(_minDistance, _maxDistance);
         public float AppearTime => _appearTime;
+        public float ArmDelay => _armDelay;
+        public float UnarmedAlpha => _unarmedAlpha;
         public float Lifetime => _lifetime;
         public int MaxTraps => _maxTraps;
         public float TriggerRadius => _triggerRadius;

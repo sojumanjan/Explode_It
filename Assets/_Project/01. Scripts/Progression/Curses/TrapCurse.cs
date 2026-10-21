@@ -8,7 +8,7 @@ namespace ExplodeIt.Progression
 {
     // 저주 "덫"을 게임 씬에서 돌린다. 주기마다 플레이어 둘레 빈자리에 덫을 깔고, 밟는 순간 덫이 닫히며 플레이어를 친다.
     // 대시 중에는 뛰어넘는다. 플레이어 폭탄이나 운석에 휩쓸린 덫은 부서져 사라지므로 미리 치워 둘 수 있다.
-    // 깔린 직후에는 서서히 나타나며 밟아도 발동하지 않는다. 밟지 않은 덫은 수명이 다하면 사라진다.
+    // 깔린 직후 정해진 시간 동안은 반투명하고 밟아도 발동하지 않는다. 밟지 않은 덫은 수명이 다하면 사라진다.
     public class TrapCurse : CurseBehaviour<TrapCurseData>
     {
         private class Trap
@@ -136,11 +136,15 @@ namespace ExplodeIt.Progression
                     continue;
                 }
 
-                if (trap.Age < Data.AppearTime)
+                // 발동 전에는 반투명하게 보여 "아직 안전하다"는 걸 알리고, 발동하는 순간 진해진다.
+                if (trap.Age < Data.ArmDelay)
                 {
-                    trap.Circle.SetOpacity(Data.AppearTime > 0f ? trap.Age / Data.AppearTime : 1f);
+                    float appear = Data.AppearTime > 0f ? Mathf.Clamp01(trap.Age / Data.AppearTime) : 1f;
+                    trap.Circle.SetOpacity(appear * Data.UnarmedAlpha);
                     continue;
                 }
+
+                trap.Circle.SetOpacity(1f);
 
                 if (canStep && (player - trap.Circle.Position).sqrMagnitude <= sqrTrigger)
                 {

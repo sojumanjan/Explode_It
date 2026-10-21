@@ -167,6 +167,14 @@ namespace ExplodeIt.Enemies
             _release = release;
         }
 
+        // 맵 안 한가운데에 바로 나온 적(저주 "기습")은 맵 밖에서 걸어 들어오지 않으므로 진입 유예 없이 곧바로 싸움에 든다.
+        // 나오기 전 깃발 표시가 예고 역할을 한다. 스폰 직후 호출한다.
+        public void SkipArenaEntryDelay()
+        {
+            _arenaTime = Data.ArenaEntryDelay;
+            JoinArenaCount();
+        }
+
         // 스폰 직후 호출된다. 맵 밖 구역에서 바로 플레이어를 쫓으면 맵 바깥을 돌아 아무 틈으로나 들어오므로,
         // 이 점(맵 입구)까지 곧장 걸어간 뒤 평소 이동을 시작한다. 걸어가는 동안은 공격하지 않는다.
         public void SetEntryPoint(Vector2 point)
