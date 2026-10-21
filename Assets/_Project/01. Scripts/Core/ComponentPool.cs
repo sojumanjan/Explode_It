@@ -62,8 +62,14 @@ namespace ExplodeIt.Core
             item.gameObject.SetActive(false);
         }
 
+        // 플레이를 끌 때 Unity가 남은 풀을 비우는데, 그 전에 씬과 함께 이미 지워진 항목이 섞여 있다.
         private static void OnDestroyItem(T item)
         {
+            if (item == null)
+            {
+                return;
+            }
+
             Object.Destroy(item.gameObject);
         }
     }

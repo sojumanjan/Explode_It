@@ -7039,7 +7039,7 @@ MonoBehaviour:
   _statusText: {fileID: 1369928341}
   _conditionText: {fileID: 83495339}
   _lockedStatus: "\uC544\uC9C1 \uD574\uAE08\uB418\uC9C0 \uC54A\uC74C"
-  _completedStatus: "\uD68D\uB4DD!"
+  _completedStatus: "\uD574\uAE08"
   _lockedColor: {r: 0.55, g: 0.45, b: 0.38, a: 1}
   _completedColor: {r: 0.85, g: 0.45, b: 0.1, a: 1}
   _conditionFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n{0}"
@@ -37235,6 +37235,14 @@ MonoBehaviour:
   _gameState: {fileID: 0}
   _fader: {fileID: 0}
   _menuBgmFadeTime: 1.2
+  _player: {fileID: 0}
+  _confirm: {fileID: 0}
+  _mainMenuMessage: "\uBA54\uC778 \uBA54\uB274\uB85C \uB098\uAC08\uAE4C\uC694?\n\uC774\uBC88
+    \uD310\uC740 \uC5EC\uAE30\uC11C \uB05D\uB098\uC694."
+  _titleMessage: "\uD0C0\uC774\uD2C0\uB85C \uB098\uAC08\uAE4C\uC694?\n\uC774\uBC88
+    \uD310\uC740 \uC5EC\uAE30\uC11C \uB05D\uB098\uC694."
+  _resultLeaveLabels: []
+  _resultTitleText: "\uD0C0\uC774\uD2C0\uB85C"
 --- !u!114 &1886729998
 MonoBehaviour:
   m_ObjectHideFlags: 0
