@@ -517,6 +517,12 @@ namespace ExplodeIt.Stage
             _kingBubble.Hide();
             _playerBubble.Hide();
             GameEvents.RaisePlayerWalkCancelled();
+            // 맵으로 넘어가는 순간 곡도 함께 바꾼다. 화면이 덮였다 걷히는 동안 넘어가 있어야, 걸어 나온 뒤에 곡이 바뀌어 어색하지 않다.
+            if (_data.ArenaBgm != null)
+            {
+                AudioManager.PlayBgm(_data.ArenaBgm, fadeIn + _data.BlackHoldTime);
+            }
+
             SetFade(Color.black, _fade.color.a);
             _sequence = DOTween.Sequence()
                 .Append(_fade.DOFade(1f, fadeIn))
@@ -565,11 +571,6 @@ namespace ExplodeIt.Stage
         private void Finish()
         {
             EnterStep(Step.None);
-            if (_data.ArenaBgm != null)
-            {
-                AudioManager.PlayBgm(_data.ArenaBgm);
-            }
-
             GameEvents.RaisePlayerWalkCancelled();
             SaveSystem.Data.IntroSeen = true;
             SaveSystem.Save();

@@ -121,7 +121,7 @@ MonoBehaviour:
   - _speaker: 0
     _mood: 3
     _text: "\uAD1C\uCC2E\uAE34 \uD558\uC9C0\uB9CC...\n\uB0A0\uC544\uAC04 \uB3C8\uC774
-      \uB108\uBB34 \uC544\uAE4C\uC6CC...."
+      \uB108\uBB34 \uC544\uAE5D\uAE34\uD55C\uB370...."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}

@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace ExplodeIt.UI
 {
-    // 말풍선 하나. 대사 길이에 맞춰 상자 크기를 정하고 글자를 타자 치듯 보여 준다.
+    // 말풍선 하나. 대사 길이에 맞춰 상자 너비를 정하고 글자를 타자 치듯 보여 준다.
+    // 높이는 처음엔 한 줄이고, 글자가 다음 줄로 넘어갈 때마다 한 줄씩 부드럽게 커진다. 처음부터 다 큰 상자가 뜨면 남은 줄이 빈칸으로 보여 어색하다.
     // 맵 위 보스 등장 대화(월드 캔버스)와 우측 하단 왕 컷인(화면 캔버스)이 같이 쓴다.
     public class SpeechBubble : MonoBehaviour
     {
@@ -24,6 +25,8 @@ namespace ExplodeIt.UI
         [SerializeField] private RectTransform _nextMark;
         [SerializeField, Min(0f)] private float _nextMarkBob = 6f;
         [SerializeField, Min(0f)] private float _nextMarkRate = 2.5f;
+        [Tooltip("줄이 늘어날 때 상자 높이가 따라 커지는 빠르기 (캔버스 단위/초)")]
+        [SerializeField, Min(1f)] private float _growSpeed = 400f;
 
         private float _shown;
         private int _total;
@@ -36,6 +39,11 @@ namespace ExplodeIt.UI
         private Vector3 _boxPosition;
         private Vector3 _tailBackPosition;
         private Vector3 _tailBackScale;
+        // 지금 보이는 줄까지의 글 높이(목표)와 상자가 실제로 그리고 있는 글 높이.
+        private float _targetTextHeight;
+        private float _textHeight;
+        private float _textWidth;
+        private int _visibleLines;
 
         private void Awake()
         {
@@ -63,15 +71,21 @@ namespace ExplodeIt.UI
             gameObject.SetActive(true);
             _waitsForClick = waitsForClick;
             _text.text = line;
+            // 보이는 줄만큼만 상자를 키우므로, 글은 위에서부터 차고 아래 줄은 상자 밖에 숨어 있다(보이지 않는 글자).
+            _text.verticalAlignment = VerticalAlignmentOptions.Top;
+            _text.overflowMode = TextOverflowModes.Overflow;
             Vector2 preferred = _text.GetPreferredValues(line, _maxTextWidth, 0f);
-            float width = Mathf.Min(preferred.x, _maxTextWidth);
-            _text.rectTransform.sizeDelta = new Vector2(width, preferred.y);
-            _box.sizeDelta = new Vector2(width + _padding.x * 2f, preferred.y + _padding.y * 2f);
+            _textWidth = Mathf.Min(preferred.x, _maxTextWidth);
+            _text.rectTransform.sizeDelta = new Vector2(_textWidth, preferred.y);
 
             _text.ForceMeshUpdate();
             _total = _text.textInfo.characterCount;
             _shown = 0f;
             _text.maxVisibleCharacters = 0;
+            _visibleLines = 0;
+            UpdateVisibleLines(1);
+            _textHeight = _targetTextHeight;
+            ApplyHeight();
             SetNextMark(false);
 
             _pop?.Kill();
@@ -83,6 +97,33 @@ namespace ExplodeIt.UI
         {
             _shown = _total;
             _text.maxVisibleCharacters = _total;
+            UpdateVisibleLines(_text.textInfo.lineCount);
+        }
+
+        // 보이는 줄 수가 바뀌면 그 줄까지의 높이를 목표로 잡는다. 줄 높이는 글꼴이 정한 값을 그대로 더한다.
+        private void UpdateVisibleLines(int lines)
+        {
+            TMP_TextInfo info = _text.textInfo;
+            lines = Mathf.Clamp(lines, 1, Mathf.Max(1, info.lineCount));
+            if (lines == _visibleLines)
+            {
+                return;
+            }
+
+            _visibleLines = lines;
+            float height = 0f;
+            for (int i = 0; i < lines && i < info.lineCount; i++)
+            {
+                height += info.lineInfo[i].lineHeight;
+            }
+
+            _targetTextHeight = height > 0f ? height : _text.rectTransform.sizeDelta.y;
+        }
+
+        private void ApplyHeight()
+        {
+            _text.rectTransform.sizeDelta = new Vector2(_textWidth, _textHeight);
+            _box.sizeDelta = new Vector2(_textWidth + _padding.x * 2f, _textHeight + _padding.y * 2f);
         }
 
         public void Hide()
@@ -107,6 +148,7 @@ namespace ExplodeIt.UI
         private void Update()
         {
             float deltaTime = _useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            GrowHeight(deltaTime);
             if (!IsTyping)
             {
                 BobNextMark(deltaTime);
@@ -114,7 +156,23 @@ namespace ExplodeIt.UI
             }
 
             _shown += _charsPerSecond * deltaTime;
-            _text.maxVisibleCharacters = Mathf.Min(_total, (int)_shown);
+            int visible = Mathf.Min(_total, (int)_shown);
+            _text.maxVisibleCharacters = visible;
+            if (visible > 0)
+            {
+                UpdateVisibleLines(_text.textInfo.characterInfo[visible - 1].lineNumber + 1);
+            }
+        }
+
+        private void GrowHeight(float deltaTime)
+        {
+            if (Mathf.Approximately(_textHeight, _targetTextHeight))
+            {
+                return;
+            }
+
+            _textHeight = Mathf.MoveTowards(_textHeight, _targetTextHeight, _growSpeed * deltaTime);
+            ApplyHeight();
         }
 
         private void BobNextMark(float deltaTime)
