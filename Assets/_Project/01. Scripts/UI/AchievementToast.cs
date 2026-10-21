@@ -10,7 +10,6 @@ namespace ExplodeIt.UI
 {
     // 업적을 달성하면 좌측 하단에서 띠가 쓱 올라왔다가 잠시 뒤 내려간다(스팀 업적 알림처럼). 여러 개면 차례로 띄운다.
     // 업적 이름과 달성 방법만 보여 준다. 무엇을 해금했는지는 판이 끝난 뒤 해금 창에서 한 번에 알린다.
-    // 승천 저주를 해금했을 때도 같은 띠로 저주 이름과 효과를 알린다.
     // 슬로모션·일시정지와 상관없이 실제 시간으로 움직인다.
     public class AchievementToast : MonoBehaviour
     {
@@ -31,9 +30,8 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _detail;
         [SerializeField] private SoundData _sound;
         [SerializeField] private string _titleFormat = "업적 달성 · {0}";
-        [SerializeField] private string _curseTitleFormat = "저주 해금 · {0}";
 
-        // 띠 하나에 들어갈 내용. 업적과 저주가 같은 줄에 차례로 선다.
+        // 띠 하나에 들어갈 내용.
         private readonly struct Toast
         {
             public readonly Sprite Icon;
@@ -68,13 +66,11 @@ namespace ExplodeIt.UI
         private void OnEnable()
         {
             ProgressionEvents.AchievementCompleted += OnAchievementCompleted;
-            ProgressionEvents.CurseUnlocked += OnCurseUnlocked;
         }
 
         private void OnDisable()
         {
             ProgressionEvents.AchievementCompleted -= OnAchievementCompleted;
-            ProgressionEvents.CurseUnlocked -= OnCurseUnlocked;
             _sequence?.Kill();
         }
 
@@ -82,11 +78,6 @@ namespace ExplodeIt.UI
         {
             Sprite icon = achievement.Sticker != null ? achievement.Sticker : _fallbackSticker;
             Enqueue(new Toast(icon, string.Format(_titleFormat, achievement.DisplayName), achievement.Description));
-        }
-
-        private void OnCurseUnlocked(CurseData curse)
-        {
-            Enqueue(new Toast(curse.Icon, string.Format(_curseTitleFormat, curse.DisplayName), curse.Description));
         }
 
         private void Enqueue(Toast toast)

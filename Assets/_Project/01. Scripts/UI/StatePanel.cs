@@ -15,6 +15,16 @@ namespace ExplodeIt.UI
         [SerializeField, Min(0f)] private float _fadeDuration = 0.2f;
         // 결과 패널(사망·클리어)에서 켠다. 패널이 뜨면 적 공격 소리 등 게임 소리를 끄고 화면 소리만 남긴다.
         [SerializeField] private bool _muteWorldSounds;
+        // 켜질 때 옆에서 밀려 들어올 판(일시정지 메뉴의 왼쪽 판 등). 비워 두면 패널 전체가 제자리에서 나타나기만 한다.
+        [SerializeField] private RectTransform _slideIn;
+        [Tooltip("밀려 들어오기 시작하는 가로 거리 (UI 단위). 음수면 왼쪽에서 들어온다")]
+        [SerializeField] private float _slideOffset = -500f;
+        [Tooltip("밀려 들어오는 시간 (초, 실제 시간)")]
+        [SerializeField, Min(0.01f)] private float _slideTime = 0.25f;
+
+        private float _slideBaseX;
+        private bool _hasSlideBase;
+        private Tween _slideTween;
 
         private CanvasGroup _group;
         private Tween _tween;
@@ -26,6 +36,7 @@ namespace ExplodeIt.UI
         private void OnDisable()
         {
             _tween?.Kill();
+            _slideTween?.Kill();
         }
 
         // 일시정지 중에는 timeScale이 0이므로 실제 시간으로 연출한다.
@@ -37,10 +48,34 @@ namespace ExplodeIt.UI
             Group.interactable = false;
             Group.blocksRaycasts = false;
             gameObject.SetActive(true);
+            PlaySlideIn();
             _tween = Group.DOFade(1f, _fadeDuration)
                 .SetDelay(_showDelay)
                 .OnStart(OnShowStarted)
                 .OnComplete(OnShown)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+        }
+
+        private void PlaySlideIn()
+        {
+            if (_slideIn == null)
+            {
+                return;
+            }
+
+            if (!_hasSlideBase)
+            {
+                _slideBaseX = _slideIn.anchoredPosition.x;
+                _hasSlideBase = true;
+            }
+
+            _slideTween?.Kill();
+            Vector2 position = _slideIn.anchoredPosition;
+            _slideIn.anchoredPosition = new Vector2(_slideBaseX + _slideOffset, position.y);
+            _slideTween = _slideIn.DOAnchorPosX(_slideBaseX, _slideTime)
+                .SetDelay(_showDelay)
+                .SetEase(Ease.OutCubic)
                 .SetUpdate(true)
                 .SetLink(gameObject);
         }

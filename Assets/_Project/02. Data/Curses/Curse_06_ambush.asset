@@ -35,4 +35,4 @@ MonoBehaviour:
   _flagVanishTime: 0.18
   _rangeColor: {r: 0.55, g: 0.1, b: 0.45, a: 0.25}
   _fillColor: {r: 0.75, g: 0.2, b: 0.65, a: 0.35}
-  _warnSound: {fileID: 11400000, guid: 4c8f60dbe2ff0d246b8642f1b7855467, type: 2}
+  _warnSound: {fileID: 11400000, guid: c72f15fd13e1cda40b666f8865ab2a67, type: 2}

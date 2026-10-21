@@ -101,6 +101,7 @@ namespace ExplodeIt.Player
             color.a = _data.HurtAlpha;
             _sprite.color = color;
             FeedbackPlayer.Play(_data.HurtFeedback, transform.position);
+            AudioManager.Play(_data.HurtSound);
             GameEvents.RaisePlayerHealthChanged(_hitReceiver.RemainingHits, _maxHealth);
         }
 
@@ -109,6 +110,7 @@ namespace ExplodeIt.Player
             _hurtUntil = 0f;
             _sprite.color = _baseColor;
             PlayDeathPose();
+            AudioManager.Play(_data.HurtSound);
 
             GameEvents.RaiseCameraFocusRequested(transform.position, _data.DeathZoomTime);
             GameEvents.RaiseCameraZoomRequested(_data.DeathZoom, _data.DeathZoomTime);

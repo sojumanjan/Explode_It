@@ -62,11 +62,19 @@ namespace ExplodeIt.UI
 
         private void Start()
         {
-            bool isReturning = _hasPassedFirstPage || SceneFlow.IsReturningFromGame;
+            bool isReturning = !SceneFlow.OpensTitle && (_hasPassedFirstPage || SceneFlow.IsReturningFromGame);
             CanvasGroup first = isReturning && _returnPage != null ? _returnPage : _firstPage;
             Show(first, false);
             if (first == _firstPage)
             {
+                // 게임에서 "타이틀로"로 나온 경우도 검은 화면에서 드러난다.
+                if (SceneFlow.OpensTitle)
+                {
+                    _fader.FadeIn(_returnRevealTime);
+                    AudioManager.PlayBgm(_titleBgm, _returnBgmFadeTime);
+                    return;
+                }
+
                 AudioManager.PlayBgm(_titleBgm);
                 return;
             }

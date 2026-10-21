@@ -45,4 +45,4 @@ MonoBehaviour:
   _minTelegraph: 0.2
   _tint: {r: 1, g: 0.35, b: 0.3, a: 1}
   _trailOffset: {x: 0, y: 0.05}
-  _spawnSound: {fileID: 11400000, guid: 04077bbbbff1c62428fe716f2613610e, type: 2}
+  _spawnSound: {fileID: 0}

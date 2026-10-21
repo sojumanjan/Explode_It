@@ -22,9 +22,9 @@ MonoBehaviour:
   _unlockKills: 100
   _interval: 18
   _firstDelay: 10
-  _minDistance: 0
-  _maxDistance: 2
-  _radius: 10
+  _minDistance: 2
+  _maxDistance: 8
+  _radius: 11
   _warningTime: 5
   _flashTime: 0.5
   _appearTime: 2
@@ -41,6 +41,6 @@ MonoBehaviour:
   _boltCount: 1
   _boltSpread: 0.75
   _boltHeight: 8
-  _warnSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}
+  _warnSound: {fileID: 11400000, guid: 0c209ea8f9f9f304a9c5978cb46b6056, type: 2}
   _strikeFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
-  _strikeSound: {fileID: 11400000, guid: 044fd5aa335ed344bab56dd4cd91ac2a, type: 2}
+  _strikeSound: {fileID: 11400000, guid: 71c79272012c1db44bfd4254796b69d6, type: 2}

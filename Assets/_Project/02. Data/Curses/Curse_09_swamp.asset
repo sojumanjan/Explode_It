@@ -21,15 +21,15 @@ MonoBehaviour:
   _unlockedByDefault: 0
   _requiredCurses: 6
   _unlockKills: 100
-  _count: 5
+  _count: 4
   _radius: 3.5
   _heightRatio: 0.85
-  _moveMultiplier: 0.5
+  _moveMultiplier: 0.7
   _moveInterval: 12
   _fadeTime: 1
   _gap: 0.5
   _minDistance: 3
-  _maxDistance: 12
+  _maxDistance: 20
   _frames:
   - {fileID: 21300000, guid: e46824d2f9cbd324ead83c232b804fb3, type: 3}
   - {fileID: 21300000, guid: b21b4e99e0e62d44ebfb6997f1122128, type: 3}

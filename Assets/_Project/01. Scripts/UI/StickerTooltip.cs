@@ -17,7 +17,7 @@ namespace ExplodeIt.UI
 
         [Header("글")]
         [SerializeField] private string _lockedStatus = "아직 해금되지 않음";
-        [SerializeField] private string _completedStatus = "획득!";
+        [SerializeField] private string _completedStatus = "해금";
         [SerializeField] private Color _lockedColor = new Color(0.55f, 0.45f, 0.38f, 1f);
         [SerializeField] private Color _completedColor = new Color(0.85f, 0.45f, 0.1f, 1f);
         [SerializeField] private string _conditionFormat = "<b>해금 조건</b>\n{0}";

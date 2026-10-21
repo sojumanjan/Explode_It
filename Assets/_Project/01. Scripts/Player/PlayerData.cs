@@ -32,6 +32,9 @@ namespace ExplodeIt.Player
         [Tooltip("맞고 살아남은 순간의 연출 (흔들림, 히트스톱, 소리 등). 비워 두면 연출 없음")]
         [SerializeField] private FeedbackData _hurtFeedback;
 
+        [Tooltip("맞았을 때 소리. 살아남든 쓰러지든 맞는 순간 난다. 비워 두면 소리 없음")]
+        [SerializeField] private SoundData _hurtSound;
+
         [Header("사망 연출")]
         [Tooltip("쓰러진 고블린 그림. 비워 두면 기본 그림을 어둡게 칠한다")]
         [SerializeField] private Sprite _deathSprite;
@@ -59,6 +62,7 @@ namespace ExplodeIt.Player
         public int EndlessHealth => _endlessHealth;
         public float HurtInvulnerability => _hurtInvulnerability;
         public FeedbackData HurtFeedback => _hurtFeedback;
+        public SoundData HurtSound => _hurtSound;
         public float Acceleration => _acceleration;
         public float Deceleration => _deceleration;
     }

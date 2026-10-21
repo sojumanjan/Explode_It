@@ -11,6 +11,7 @@ namespace ExplodeIt.UI
 {
     // 판이 끝나면(사망·클리어) 결과 창 위에 "이번 판에 새로 해금한 것" 창을 겹쳐 띄운다. 판 도중 알림을 놓쳐도 잊지 않게 한다.
     // 여러 개를 해금했으면 한 장에 하나씩 크게 보여 주고, 버튼을 누를 때마다 다음 장으로 넘긴다. 마지막 장에서 누르면 닫힌다.
+    // 판 도중 해금한 저주도 여기서 함께 보여 준다(저주는 판 도중 알림을 띄우지 않는다).
     // 이번 판에 해금한 게 없으면 뜨지 않는다. 이 컴포넌트는 늘 켜 두고 이벤트를 들으며, 창(_window)만 켜고 끈다.
     public class UnlockSummaryPanel : MonoBehaviour
     {
@@ -49,10 +50,14 @@ namespace ExplodeIt.UI
         [SerializeField] private string _abilityKind = "새 스킬";
         [SerializeField] private string _upgradeKind = "스킬 강화";
         [SerializeField] private string _artifactKind = "새 아티팩트";
+        [SerializeField] private string _curseKind = "새 저주";
+        [Tooltip("저주의 획득 경로 문구. {0} = 장착한 저주 수 기준, {1} = 처치 수")]
+        [SerializeField] private string _curseSourceFormat = "저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
 
         private readonly List<AchievementData> _completed = new List<AchievementData>();
+        private readonly List<CurseData> _curses = new List<CurseData>();
         private readonly List<IUnlockable> _rewards = new List<IUnlockable>();
-        // 보상마다 그 보상을 준 업적. _rewards와 같은 순서다.
+        // 보상마다 그 보상을 준 업적. _rewards와 같은 순서다. 저주는 업적 없이 열리므로 null이다.
         private readonly List<AchievementData> _sources = new List<AchievementData>();
         private float _showAt = -1f;
         private bool _hasShown;
@@ -69,12 +74,14 @@ namespace ExplodeIt.UI
         private void OnEnable()
         {
             ProgressionEvents.AchievementCompleted += OnAchievementCompleted;
+            ProgressionEvents.CurseUnlocked += OnCurseUnlocked;
             GameEvents.GameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
             ProgressionEvents.AchievementCompleted -= OnAchievementCompleted;
+            ProgressionEvents.CurseUnlocked -= OnCurseUnlocked;
             GameEvents.GameStateChanged -= OnGameStateChanged;
             _box.DOKill();
             _slide.DOKill();
@@ -85,10 +92,15 @@ namespace ExplodeIt.UI
             _completed.Add(achievement);
         }
 
+        private void OnCurseUnlocked(CurseData curse)
+        {
+            _curses.Add(curse);
+        }
+
         private void OnGameStateChanged(GameState previous, GameState current)
         {
             bool isOver = current == GameState.PlayerDead || current == GameState.StageClear;
-            if (isOver && !_hasShown && _completed.Count > 0)
+            if (isOver && !_hasShown && (_completed.Count > 0 || _curses.Count > 0))
             {
                 _showAt = Time.unscaledTime + _showDelay;
                 _inputBlocker.SetActive(true);
@@ -153,6 +165,11 @@ namespace ExplodeIt.UI
 
         private static int KindRank(IUnlockable reward)
         {
+            if (reward is CurseData)
+            {
+                return 4;
+            }
+
             if (reward is WeaponData)
             {
                 return 0;
@@ -180,6 +197,12 @@ namespace ExplodeIt.UI
                 }
             }
 
+            for (int i = 0; i < _curses.Count; i++)
+            {
+                _rewards.Add(_curses[i]);
+                _sources.Add(null);
+            }
+
             if (_rewards.Count == 0)
             {
                 _inputBlocker.SetActive(false);
@@ -203,16 +226,25 @@ namespace ExplodeIt.UI
             _icon.sprite = reward.Icon;
             _icon.enabled = reward.Icon != null;
             _kindText.text = reward is WeaponData ? _weaponKind : reward is AbilityData ? _abilityKind
-                : reward is AbilityUpgradeData ? _upgradeKind : _artifactKind;
+                : reward is AbilityUpgradeData ? _upgradeKind : reward is CurseData ? _curseKind : _artifactKind;
             // 강화는 이름("블랙홀 범위 +30%")이 설명과 겹치므로 이름 줄을 빼고 설명만 보여 준다.
             bool showsName = !(reward is AbilityUpgradeData);
             _nameText.gameObject.SetActive(showsName);
             _nameText.text = reward.DisplayName;
             _descriptionText.text = reward.Description;
             AchievementData source = _sources[_index];
-            _sourceSticker.sprite = source.Sticker != null ? source.Sticker : _fallbackSticker;
-            _sourceSticker.enabled = _sourceSticker.sprite != null;
-            _sourceText.text = source.Description;
+            if (reward is CurseData curse)
+            {
+                // 저주는 업적 스티커가 없으므로 경로 그림을 숨기고 해금 조건만 적는다.
+                _sourceSticker.enabled = false;
+                _sourceText.text = string.Format(_curseSourceFormat, curse.RequiredCurses, curse.UnlockKills);
+            }
+            else
+            {
+                _sourceSticker.sprite = source.Sticker != null ? source.Sticker : _fallbackSticker;
+                _sourceSticker.enabled = _sourceSticker.sprite != null;
+                _sourceText.text = source.Description;
+            }
             _buttonLabel.text = _index + 1 < _rewards.Count ? _nextText : _closeText;
         }
     }

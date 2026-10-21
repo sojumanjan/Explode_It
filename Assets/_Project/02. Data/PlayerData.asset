@@ -20,6 +20,7 @@ MonoBehaviour:
   _hurtInvulnerability: 1.5
   _hurtAlpha: 0.45
   _hurtFeedback: {fileID: 11400000, guid: 2ddedcd46d256fb4f81690f42149901c, type: 2}
+  _hurtSound: {fileID: 11400000, guid: f055bf63702105246ba79703e52f48b0, type: 2}
   _deathSprite: {fileID: 21300000, guid: 50ac4aebb321de845949039b237dc60d, type: 3}
   _deathZoom: 0.6
   _deathZoomTime: 0.8
