@@ -266,6 +266,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.25, b: 0.2, a: 0.45}
   _sortingOrder: 3
+  _outlineWidth: 0
+  _outlineDarken: 0.5
+  _outlineAlphaRatio: 4
 --- !u!1 &3175436638046131467
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +559,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.25, b: 0.2, a: 0.18}
   _sortingOrder: 2
+  _outlineWidth: 0.12
+  _outlineDarken: 0.3
+  _outlineAlphaRatio: 6
 --- !u!1 &5196256231259916953
 GameObject:
   m_ObjectHideFlags: 0

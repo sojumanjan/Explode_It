@@ -250,6 +250,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.3, b: 0.15, a: 0.5}
   _sortingOrder: 3
+  _outlineWidth: 0
+  _outlineDarken: 0.5
+  _outlineAlphaRatio: 4
 --- !u!1 &216957964967537871
 GameObject:
   m_ObjectHideFlags: 0
@@ -7666,6 +7669,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.78, b: 0.15, a: 0.22}
   _sortingOrder: 2
+  _outlineWidth: 0.12
+  _outlineDarken: 0.3
+  _outlineAlphaRatio: 6
 --- !u!1 &4186394767666238081
 GameObject:
   m_ObjectHideFlags: 0
@@ -8048,6 +8054,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.78, b: 0.15, a: 0.5}
   _sortingOrder: 3
+  _outlineWidth: 0
+  _outlineDarken: 0.5
+  _outlineAlphaRatio: 4
 --- !u!1 &4451692049694587029
 GameObject:
   m_ObjectHideFlags: 0
@@ -8832,6 +8841,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.25, b: 0.15, a: 0.22}
   _sortingOrder: 2
+  _outlineWidth: 0.12
+  _outlineDarken: 0.3
+  _outlineAlphaRatio: 6
 --- !u!1 &4795958684135753674
 GameObject:
   m_ObjectHideFlags: 0

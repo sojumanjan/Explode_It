@@ -13,6 +13,14 @@ namespace ExplodeIt.Bombs
         [SerializeField] private Color _color = Color.white;
         [SerializeField] private int _sortingOrder;
 
+        // 적·저주 공격 범위는 테두리를 둘러 플레이어 폭탄 범위와 한눈에 구분되게 한다. 0이면 테두리 없음(플레이어 폭탄).
+        [Tooltip("테두리 굵기 (유닛). 0이면 테두리를 그리지 않는다. 적·저주 공격 범위에만 켠다")]
+        [SerializeField, Min(0f)] private float _outlineWidth;
+        [Tooltip("테두리 색 = 채움 색에 이 배율을 곱한 색. 작을수록 진하고 어둡다 (하늘색 채움 → 진한 파랑 테두리)")]
+        [SerializeField, Range(0f, 1f)] private float _outlineDarken = 0.5f;
+        [Tooltip("테두리 투명도 = 채움 투명도에 이 배율을 곱한 값. 채움이 옅어도 테두리는 또렷하게 보인다")]
+        [SerializeField, Min(1f)] private float _outlineAlphaRatio = 4f;
+
         private Mesh _mesh;
         private Vector3[] _vertices;
         private Color32[] _colors;
@@ -22,6 +30,7 @@ namespace ExplodeIt.Bombs
         private MeshRenderer _renderer;
         private Material _material;
         private bool _isInitialized;
+        private bool _hasOutline;
 
         private void Awake()
         {
@@ -46,11 +55,14 @@ namespace ExplodeIt.Bombs
             _renderer.sharedMaterial = _material;
 
             // 정점 수, 방향, 삼각형 구성은 바뀌지 않으므로 한 번만 만들고, 이후엔 정점 위치와 색만 덮어쓴다.
-            _vertices = new Vector3[_segments + 1];
-            _colors = new Color32[_segments + 1];
+            // 테두리가 있으면 채움 뒤에 바깥 고리·안쪽 고리 정점을 붙인다. 같은 메쉬 안에서 뒤에 그려 채움 위에 얹힌다.
+            _hasOutline = _outlineWidth > 0f;
+            int vertexCount = _segments + 1 + (_hasOutline ? _segments * 2 : 0);
+            _vertices = new Vector3[vertexCount];
+            _colors = new Color32[vertexCount];
             _directions = new Vector2[_segments];
             _limits = new float[_segments];
-            var triangles = new int[_segments * 3];
+            var triangles = new int[_segments * 3 + (_hasOutline ? _segments * 6 : 0)];
 
             float step = Mathf.PI * 2f / _segments;
             for (int i = 0; i < _segments; i++)
@@ -61,6 +73,21 @@ namespace ExplodeIt.Bombs
                 triangles[i * 3] = 0;
                 triangles[i * 3 + 1] = i + 1;
                 triangles[i * 3 + 2] = (i + 1) % _segments + 1;
+                if (_hasOutline)
+                {
+                    int next = (i + 1) % _segments;
+                    int outer = OuterIndex(i);
+                    int outerNext = OuterIndex(next);
+                    int inner = InnerIndex(i);
+                    int innerNext = InnerIndex(next);
+                    int t = _segments * 3 + i * 6;
+                    triangles[t] = inner;
+                    triangles[t + 1] = outer;
+                    triangles[t + 2] = outerNext;
+                    triangles[t + 3] = inner;
+                    triangles[t + 4] = outerNext;
+                    triangles[t + 5] = innerNext;
+                }
             }
 
             _mesh = new Mesh();
@@ -142,9 +169,17 @@ namespace ExplodeIt.Bombs
             float scale = Mathf.Abs(transform.lossyScale.x);
             float toLocal = scale > 0.0001f ? 1f / scale : 1f;
             _vertices[0] = Vector3.zero;
+            float width = _outlineWidth;
             for (int i = 0; i < _segments; i++)
             {
-                _vertices[i + 1] = _directions[i] * (Mathf.Min(radius, _limits[i]) * toLocal);
+                float edge = Mathf.Min(radius, _limits[i]);
+                _vertices[i + 1] = _directions[i] * (edge * toLocal);
+                if (_hasOutline)
+                {
+                    // 벽에 잘린 방향도 잘린 자리를 따라 테두리를 그린다. 원이 테두리보다 작으면 가운데까지만.
+                    _vertices[OuterIndex(i)] = _vertices[i + 1];
+                    _vertices[InnerIndex(i)] = _directions[i] * (Mathf.Max(0f, edge - width) * toLocal);
+                }
             }
 
             _mesh.vertices = _vertices;
@@ -155,9 +190,19 @@ namespace ExplodeIt.Bombs
         {
             EnsureInitialized();
             Color32 color32 = color;
-            for (int i = 0; i < _colors.Length; i++)
+            int fillCount = _segments + 1;
+            for (int i = 0; i < fillCount; i++)
             {
                 _colors[i] = color32;
+            }
+
+            if (_hasOutline)
+            {
+                Color32 outline = OutlineColor(color);
+                for (int i = fillCount; i < _colors.Length; i++)
+                {
+                    _colors[i] = outline;
+                }
             }
 
             _mesh.colors32 = _colors;
@@ -167,6 +212,23 @@ namespace ExplodeIt.Bombs
         {
             EnsureInitialized();
             SetColor(_color);
+        }
+
+        // 채움 색을 어둡게 한 색. 채움이 사라지면(투명도 0) 테두리도 함께 사라진다.
+        private Color OutlineColor(Color fill)
+        {
+            return new Color(fill.r * _outlineDarken, fill.g * _outlineDarken, fill.b * _outlineDarken,
+                Mathf.Clamp01(fill.a * _outlineAlphaRatio));
+        }
+
+        private int OuterIndex(int segment)
+        {
+            return _segments + 1 + segment;
+        }
+
+        private int InnerIndex(int segment)
+        {
+            return _segments * 2 + 1 + segment;
         }
 
         // 폭발 후 사라지는 연출용. 기본 색의 알파에 비율을 곱한다.
