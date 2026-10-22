@@ -46,6 +46,9 @@ namespace ExplodeIt.Core
         // 칸 순서대로 장착한 아티팩트 ID. 빈 칸은 빈 문자열이다.
         [SerializeField] private List<string> _selectedArtifacts = new List<string>();
         [SerializeField] private List<string> _completedAchievements = new List<string>();
+        // 해금했지만 아직 고르기 화면에서 눌러 보지 않은 무기·스킬·강화·아티팩트 ID. 메뉴에 NEW 표시를 띄운다.
+        // 처음부터 열린 것과 이 칸이 생기기 전에 해금한 것은 들어 있지 않아 NEW가 뜨지 않는다.
+        [SerializeField] private List<string> _newItems = new List<string>();
         // 승천 저주. 처음부터 열린 저주는 저주 데이터 쪽 표시로 판단하므로 해금 목록에 넣지 않는다.
         [SerializeField] private List<string> _unlockedCurses = new List<string>();
         [SerializeField] private List<string> _equippedCurses = new List<string>();
@@ -234,10 +237,15 @@ namespace ExplodeIt.Core
         public bool IsCurseEquipped(string id) => Has(_equippedCurses, id);
 
         // 새로 해금·달성했으면 true. 이미 있으면 false라 알림을 두 번 띄우지 않는다.
-        public bool UnlockWeapon(string id) => TryAdd(_unlockedWeapons, id);
-        public bool UnlockArtifact(string id) => TryAdd(_unlockedArtifacts, id);
-        public bool UnlockAbility(string id) => TryAdd(_unlockedAbilities, id);
-        public bool UnlockUpgrade(string id) => TryAdd(_unlockedUpgrades, id);
+        public bool UnlockWeapon(string id) => UnlockNew(_unlockedWeapons, id);
+        public bool UnlockArtifact(string id) => UnlockNew(_unlockedArtifacts, id);
+        public bool UnlockAbility(string id) => UnlockNew(_unlockedAbilities, id);
+        public bool UnlockUpgrade(string id) => UnlockNew(_unlockedUpgrades, id);
+
+        public bool IsNew(string id) => Has(_newItems, id);
+
+        // 고르기 화면에서 눌러 봤으면 NEW를 끈다. 꺼졌으면 true라 그때만 저장하면 된다.
+        public bool MarkSeen(string id) => _newItems.Remove(id);
         public bool UnlockCurse(string id) => TryAdd(_unlockedCurses, id);
 
         public void SetCurseEquipped(string id, bool isEquipped)
@@ -296,6 +304,7 @@ namespace ExplodeIt.Core
         public void ResetAchievements()
         {
             _completedAchievements.Clear();
+            _newItems.Clear();
             _unlockedWeapons.Clear();
             _unlockedArtifacts.Clear();
             _unlockedAbilities.Clear();
@@ -329,6 +338,17 @@ namespace ExplodeIt.Core
         private static bool Has(List<string> list, string id)
         {
             return !string.IsNullOrEmpty(id) && list.Contains(id);
+        }
+
+        private bool UnlockNew(List<string> list, string id)
+        {
+            if (!TryAdd(list, id))
+            {
+                return false;
+            }
+
+            TryAdd(_newItems, id);
+            return true;
         }
 
         private static bool TryAdd(List<string> list, string id)

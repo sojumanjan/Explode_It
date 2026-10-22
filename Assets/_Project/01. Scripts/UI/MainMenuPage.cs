@@ -143,12 +143,30 @@ namespace ExplodeIt.UI
             _weaponSlot.Setup(weapon, weapon != null ? weapon.Icon : null, weapon != null ? weapon.DisplayName : _emptySlotText, false, OnWeaponSlotClicked);
             AbilityData ability = _catalog.FindUsableAbility(data.SelectedAbility);
             _abilitySlot.Setup(ability, ability != null ? ability.Icon : null, ability != null ? ability.DisplayName : _emptySlotText, false, OnAbilitySlotClicked);
+            // 칸 안의 것이 아니라 그 칸에서 고를 수 있는 것 중 새것이 있으면 NEW. 첫 판 뒤 어디를 눌러 볼지 알려 준다.
+            _weaponSlot.SetNew(HasNew(_catalog.Weapons));
+            _abilitySlot.SetNew(HasNew(_catalog.Abilities) || HasNew(_catalog.Upgrades));
 
+            bool hasNewArtifact = HasNew(_catalog.Artifacts);
             for (int i = 0; i < _artifactSlots.Length && i < _catalog.ArtifactSlots; i++)
             {
                 ArtifactData artifact = _catalog.FindUsableArtifact(data.GetArtifactInSlot(i));
                 _artifactSlots[i].Setup(artifact, artifact != null ? artifact.Icon : null, artifact != null ? artifact.DisplayName : _emptySlotText, false, OnArtifactSlotClicked);
+                _artifactSlots[i].SetNew(hasNewArtifact);
             }
+        }
+
+        private static bool HasNew(IUnlockable[] items)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null && items[i].IsUnlocked && SaveSystem.Data.IsNew(items[i].Id))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OnWeaponSlotClicked(ItemCard slot)

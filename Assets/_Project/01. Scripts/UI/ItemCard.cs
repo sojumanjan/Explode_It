@@ -19,6 +19,12 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _name;
         [SerializeField] private GameObject _lockMark;
         [SerializeField] private GameObject _selectedMark;
+        // 새로 해금하고 아직 눌러 보지 않았다는 표시. 비워 두면(저주 카드 등) NEW를 쓰지 않는다.
+        [SerializeField] private RectTransform _newMark;
+
+        // NEW 표시가 숨 쉬듯 커졌다 작아지는 세기(비율)와 한 번 커지는 시간(초). 눈에 띄게만 하는 연출 값이다.
+        private const float NewPulse = 0.12f;
+        private const float NewPulseTime = 0.5f;
 
         // 두 번 누른 것으로 보는 간격 (초, 실제 시간). 운영체제 기본 더블클릭 간격과 비슷하게 둔다.
         private const float DoubleClickTime = 0.3f;
@@ -75,6 +81,24 @@ namespace ExplodeIt.UI
             _lockMark.SetActive(isLocked);
             SetDimmed(false);
             SetSelected(false);
+        }
+
+        // Setup이 끄지 않는다. 목록을 다시 그릴 때마다 꺼졌다 켜지면 숨 쉬는 연출이 처음부터 다시 시작돼 튀어 보인다.
+        public void SetNew(bool isNew)
+        {
+            if (_newMark == null || _newMark.gameObject.activeSelf == isNew)
+            {
+                return;
+            }
+
+            _newMark.DOKill();
+            _newMark.localScale = Vector3.one;
+            _newMark.gameObject.SetActive(isNew);
+            if (isNew)
+            {
+                _newMark.DOScale(1f + NewPulse, NewPulseTime).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo)
+                    .SetUpdate(true).SetLink(_newMark.gameObject);
+            }
         }
 
         public void SetDimmed(bool isDimmed)

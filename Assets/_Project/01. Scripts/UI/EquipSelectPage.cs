@@ -311,6 +311,7 @@ namespace ExplodeIt.UI
                 cards[i].Setup(item, item.Icon, item.DisplayName, !item.IsUnlocked, OnCardClicked, OnCardDoubleClicked);
                 // 노란 표시는 "지금 장착 중"에만 쓴다. 눌러 보기만 한 카드에 칠하면 장착된 줄 헷갈린다.
                 cards[i].SetSelected(item == equipped);
+                cards[i].SetNew(item.IsUnlocked && SaveSystem.Data.IsNew(item.Id));
                 // 다른 칸에 끼운 아티팩트는 회색으로 칠한다(눌러서 설명은 볼 수 있다). 노란색은 지금 고르는 칸의 것에만 쓴다.
                 cards[i].SetDimmed(item.IsUnlocked && item != equipped && IsInOtherSlot(item));
             }
@@ -347,6 +348,7 @@ namespace ExplodeIt.UI
                 _upgradeCells[i].Setup(upgrade, upgrade.Icon, label, !upgrade.IsUnlocked, OnUpgradeCellClicked, OnUpgradeCellDoubleClicked);
                 // 강화 칸의 표시는 "보고 있는 것"이 아니라 "장착한 것"이다.
                 _upgradeCells[i].SetSelected(upgrade.IsEquipped);
+                _upgradeCells[i].SetNew(upgrade.IsUnlocked && SaveSystem.Data.IsNew(upgrade.Id));
             }
         }
 
@@ -363,6 +365,7 @@ namespace ExplodeIt.UI
                 return;
             }
 
+            MarkSeen(cell);
             _upgradePreview = upgrade;
             ShowPreview(upgrade);
             ShowUpgradeButtons();
@@ -410,9 +413,20 @@ namespace ExplodeIt.UI
                 return;
             }
 
+            MarkSeen(card);
             _upgradePreview = null;
             _preview = item;
             Refresh();
+        }
+
+        // 해금한 것을 한 번 눌러 보면 NEW를 끈다. 메인 메뉴 칸의 NEW도 이 기록을 읽는다.
+        private static void MarkSeen(ItemCard card)
+        {
+            if (SaveSystem.Data.MarkSeen(((IUnlockable)card.Item).Id))
+            {
+                SaveSystem.Save();
+                card.SetNew(false);
+            }
         }
 
         private void ShowPreview(IUnlockable item)
