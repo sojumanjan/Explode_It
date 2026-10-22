@@ -29,7 +29,7 @@ namespace ExplodeIt.UI
         [SerializeField] private EnemySpawner _spawner;
         [SerializeField] private PlayerAbility _ability;
         [SerializeField] private HitReceiver _playerHitReceiver;
-        // 패널로 무언가를 바꾼 판은 업적을 세지 않는다. 치트로 해금되면 해금하는 재미가 사라진다.
+        // 패널을 써도 업적은 센다(엔딩·해금 흐름을 패널로 바로 시험하기 위해). 상태 줄에 지금 세는 중인지만 보여 준다.
         [SerializeField] private AchievementTracker _achievements;
         // Unlock All이 스킬·강화·아티팩트까지 풀 때 목록을 본다.
         [SerializeField] private UnlockCatalog _catalog;
@@ -118,29 +118,15 @@ namespace ExplodeIt.UI
             GUILayout.BeginArea(new Rect(Margin, Margin, PanelWidth, height), GUI.skin.box);
             _scroll = GUILayout.BeginScrollView(_scroll);
 
-            // 버튼·슬라이더·토글을 건드리면 GUI.changed가 켜진다. 무기 칸은 중간에 이 값을 따로 쓰므로 그 안에서도 확인한다.
-            GUI.changed = false;
             DrawStatus();
             DrawWeapon();
             DrawStage();
             DrawCheats();
             DrawSave();
             DrawCommon();
-            if (GUI.changed)
-            {
-                MarkCheated();
-            }
 
             GUILayout.EndScrollView();
             GUILayout.EndArea();
-        }
-
-        private void MarkCheated()
-        {
-            if (_achievements != null)
-            {
-                _achievements.DisableForThisRun();
-            }
         }
 
         private void DrawStatus()
@@ -160,11 +146,7 @@ namespace ExplodeIt.UI
             DrawWeaponButtons();
             WeaponStats stats = _launcher.Stats;
 
-            if (GUI.changed)
-            {
-                MarkCheated();
-            }
-
+            // 아래 슬라이더를 움직였을 때만 무기 수치를 다시 적용한다.
             GUI.changed = false;
             stats.FuseDelay = Slider("Fuse Delay (s)", stats.FuseDelay, 0.3f, 2f);
             stats.ExplosionRadius = Slider("Explosion Radius", stats.ExplosionRadius, 0.5f, 4f);
@@ -200,7 +182,6 @@ namespace ExplodeIt.UI
                     if (GUILayout.Button(label))
                     {
                         _launcher.Equip(option.Data);
-                        MarkCheated();
                     }
                 }
                 GUILayout.EndHorizontal();

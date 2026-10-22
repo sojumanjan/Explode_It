@@ -12,6 +12,7 @@ namespace ExplodeIt.UI
     // 판이 끝나면(사망·클리어) 결과 창 위에 "이번 판에 새로 해금한 것" 창을 겹쳐 띄운다. 판 도중 알림을 놓쳐도 잊지 않게 한다.
     // 여러 개를 해금했으면 한 장에 하나씩 크게 보여 주고, 버튼을 누를 때마다 다음 장으로 넘긴다. 마지막 장에서 누르면 닫힌다.
     // 판 도중 해금한 저주도 여기서 함께 보여 준다(저주는 판 도중 알림을 띄우지 않는다).
+    // 스토리를 처음 깬 판에는 이 모든 것보다 먼저 "무한 모드 해금" 특수 화면을 띄운다.
     // 이번 판에 해금한 게 없으면 뜨지 않는다. 이 컴포넌트는 늘 켜 두고 이벤트를 들으며, 창(_window)만 켜고 끈다.
     public class UnlockSummaryPanel : MonoBehaviour
     {
@@ -54,6 +55,19 @@ namespace ExplodeIt.UI
         [Tooltip("저주의 획득 경로 문구. {0} = 장착한 저주 수 기준, {1} = 처치 수")]
         [SerializeField] private string _curseSourceFormat = "저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
 
+        [Header("무한 모드 해금 (스토리 첫 클리어, 다른 해금보다 먼저)")]
+        [SerializeField] private GameObject _modeWindow;
+        [SerializeField] private RectTransform _modeBox;
+        [SerializeField] private RectTransform _modeTitle;
+        [SerializeField] private Image _modeSticker;
+        [SerializeField] private TMP_Text _modeAchievementText;
+        [Tooltip("스토리 클리어 업적을 땄을 때 업적 줄 문구. {0} = 업적 이름")]
+        [SerializeField] private string _modeAchievementFormat = "업적 달성 - {0}";
+        [Tooltip("처음 클리어했는데 스토리 클리어 업적이 이번 판에 들어오지 않았을 때(예: 업적만 이미 딴 저장) 업적 줄 대신 보이는 문구")]
+        [SerializeField] private string _modeFallbackText = "스토리 모드 클리어";
+        // 비워 두면 해금 소리를 낸다.
+        [SerializeField] private SoundData _modeSound;
+
         private readonly List<AchievementData> _completed = new List<AchievementData>();
         private readonly List<CurseData> _curses = new List<CurseData>();
         private readonly List<IUnlockable> _rewards = new List<IUnlockable>();
@@ -63,12 +77,20 @@ namespace ExplodeIt.UI
         private bool _hasShown;
         private int _index;
         private float _slideBaseX;
+        // 이 판을 시작할 때 이미 스토리를 깬 상태였는지. 이번 판이 첫 클리어일 때만 무한 모드 해금 화면을 띄운다.
+        private bool _wasStoryCleared;
 
         private void Awake()
         {
             _window.SetActive(false);
+            _modeWindow.SetActive(false);
             _inputBlocker.SetActive(false);
             _slideBaseX = _slide.anchoredPosition.x;
+        }
+
+        private void Start()
+        {
+            _wasStoryCleared = SaveSystem.Data.StoryCleared;
         }
 
         private void OnEnable()
@@ -100,7 +122,9 @@ namespace ExplodeIt.UI
         private void OnGameStateChanged(GameState previous, GameState current)
         {
             bool isOver = current == GameState.PlayerDead || current == GameState.StageClear;
-            if (isOver && !_hasShown && (_completed.Count > 0 || _curses.Count > 0))
+            // 첫 클리어 여부는 저장이 끝난 뒤(Show)에 다시 확인한다. 여기서는 그럴 가능성만 보고 막을 친다.
+            bool mayUnlockMode = current == GameState.StageClear && !_wasStoryCleared;
+            if (isOver && !_hasShown && (_completed.Count > 0 || _curses.Count > 0 || mayUnlockMode))
             {
                 _showAt = Time.unscaledTime + _showDelay;
                 _inputBlocker.SetActive(true);
@@ -137,8 +161,26 @@ namespace ExplodeIt.UI
         {
             _box.DOKill();
             _slide.DOKill();
+            _modeBox.DOKill();
+            _modeTitle.DOKill();
             _window.SetActive(false);
+            _modeWindow.SetActive(false);
             _inputBlocker.SetActive(false);
+        }
+
+        // 무한 모드 해금 화면의 버튼. 다른 해금이 있으면 이어서 보여 주고, 없으면 닫는다.
+        public void CloseModeWindow()
+        {
+            _modeBox.DOKill();
+            _modeTitle.DOKill();
+            _modeWindow.SetActive(false);
+            if (_rewards.Count == 0)
+            {
+                Close();
+                return;
+            }
+
+            ShowRewards();
         }
 
         // 여러 업적을 한꺼번에 따면 달성 순서대로 쌓여 종류가 섞인다. 무기 → 스킬 → 스킬 강화 → 아티팩트 순으로 보여 준다.
@@ -203,14 +245,25 @@ namespace ExplodeIt.UI
                 _sources.Add(null);
             }
 
-            if (_rewards.Count == 0)
+            bool unlocksMode = !_wasStoryCleared && SaveSystem.Data.StoryCleared;
+            if (_rewards.Count == 0 && !unlocksMode)
             {
                 _inputBlocker.SetActive(false);
                 return;
             }
 
             SortByKind();
+            if (unlocksMode)
+            {
+                ShowModeWindow();
+                return;
+            }
 
+            ShowRewards();
+        }
+
+        private void ShowRewards()
+        {
             _window.SetActive(true);
             _index = 0;
             ShowSlide();
@@ -218,6 +271,33 @@ namespace ExplodeIt.UI
             _box.DOKill();
             _box.localScale = Vector3.one * 0.8f;
             _box.DOScale(1f, PopTime).SetEase(Ease.OutBack).SetUpdate(true).SetLink(gameObject);
+        }
+
+        // 스토리를 처음 깬 판에는 무엇보다 먼저 무한 모드가 열렸다는 걸 크게 알린다. 엔딩 편지의 "갚으러 오든지"에 바로 답하는 자리다.
+        private void ShowModeWindow()
+        {
+            AchievementData story = null;
+            for (int i = 0; i < _completed.Count; i++)
+            {
+                if (_completed[i].Condition == AchievementCondition.StoryCleared)
+                {
+                    story = _completed[i];
+                }
+            }
+
+            _modeSticker.sprite = story != null && story.Sticker != null ? story.Sticker : _fallbackSticker;
+            _modeSticker.enabled = _modeSticker.sprite != null;
+            _modeAchievementText.text = story != null ? string.Format(_modeAchievementFormat, story.DisplayName) : _modeFallbackText;
+
+            _modeWindow.SetActive(true);
+            AudioManager.Play(_modeSound != null ? _modeSound : _sound);
+            _modeBox.DOKill();
+            _modeBox.localScale = Vector3.one * 0.6f;
+            _modeBox.DOScale(1f, PopTime * 1.6f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(gameObject);
+            // 제목은 상자가 다 커진 뒤 한 번 더 쿵 튀어 "특별한 해금"인 걸 드러낸다.
+            _modeTitle.DOKill();
+            _modeTitle.localScale = Vector3.one;
+            _modeTitle.DOPunchScale(Vector3.one * 0.15f, 0.4f, 5).SetDelay(PopTime * 1.6f).SetUpdate(true).SetLink(gameObject);
         }
 
         private void ShowSlide()

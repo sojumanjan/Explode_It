@@ -38,6 +38,9 @@ namespace ExplodeIt.Stage
         [Header("엔딩 연출 (처치 대화)")]
         // 왕이 던지는 스티커 책. 바닥에 놓여 고블린이 뛰어든다.
         [SerializeField] private SpriteRenderer _book;
+
+        // 고블린이 빨려 들어간 책 자리. 엔딩이 이쪽으로 카메라를 당긴다.
+        public Vector2 BookPosition => _book.transform.position;
         // 책이 날아가 떨어지는 시간(초)과 포물선 높이(유닛), 왕이 하늘로 날아가는 시간(초)과 높이(유닛).
         [SerializeField, Min(0.05f)] private float _throwDuration = 0.6f;
         [SerializeField, Min(0f)] private float _throwArc = 2f;
@@ -258,7 +261,7 @@ namespace ExplodeIt.Stage
             _punch?.Kill();
             _king.gameObject.SetActive(false);
 
-            ShowSkipButton(0f);
+            // 처치 대화부터 엔딩까지는 한 번밖에 못 보는 장면이라 건너뛰기 버튼을 띄우지 않는다.
             NextLine();
         }
 

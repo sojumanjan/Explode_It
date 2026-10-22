@@ -75,6 +75,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private IntroSequence _intro;
         // 첫 판 조작 튜토리얼. 오프닝을 본 판에만 이어서 하고, 끝나야 첫 웨이브를 연다. 비워 두면 바로 시작한다.
         [SerializeField] private TutorialSequence _tutorial;
+        // 스토리 엔딩 연출. 끝날 때까지 판 끝(결과 창)을 미뤄야 해서 직접 참조한다. 비워 두면 바로 끝난다.
+        [SerializeField] private OutroSequence _outro;
 
         // 기습 자리를 찾는 횟수와 적 한 마리 둘레로 비워 둘 반경, 같은 군집 적끼리 떨어뜨릴 거리 (유닛).
         private const int AmbushAttempts = 12;
@@ -113,6 +115,7 @@ namespace ExplodeIt.Stage
         private float _defeatStartTime;
         private bool _isDefeatTalking;
         private float _farewellTime = -1f;
+        private bool _isPlayingOutro;
         // 고블린이 쓰러진 왕 쪽으로 걸어가기 시작한 실제 시각. 음수면 걷는 중이 아니다.
         private float _walkStartTime = -1f;
         // 처치 대화 때 고블린이 설 왕 옆자리.
@@ -494,6 +497,7 @@ namespace ExplodeIt.Stage
             _defeatStartTime = Time.unscaledTime;
             _isDefeatTalking = false;
             _farewellTime = -1f;
+            _isPlayingOutro = false;
             _walkStartTime = -1f;
             GameEvents.RaisePlayerControlLockChanged(true);
             _isControlReleased = false;
@@ -513,12 +517,23 @@ namespace ExplodeIt.Stage
         {
             if (_farewellTime >= 0f)
             {
-                if (Time.unscaledTime - _farewellTime >= _stage.DefeatEndDelay)
+                if (_isPlayingOutro || Time.unscaledTime - _farewellTime < _stage.DefeatEndDelay)
                 {
-                    ReleaseEntrance();
-                    FinishBoss();
+                    return;
                 }
 
+                // 엔딩 동안은 조작을 묶어 둔다. 만화를 넘기는 클릭에 폭탄이 나가면 안 된다.
+                if (_outro != null && _stage.Ending != null)
+                {
+                    _isPlayingOutro = true;
+                    Transform player = _spawner.Target;
+                    Vector2 book = _dialoguePlayer != null ? _dialoguePlayer.BookPosition
+                        : player != null ? (Vector2)player.position : Vector2.zero;
+                    _outro.Play(_stage.Ending, book, EndAfterOutro);
+                    return;
+                }
+
+                EndAfterOutro();
                 return;
             }
 
@@ -614,6 +629,12 @@ namespace ExplodeIt.Stage
             }
 
             return Physics2D.OverlapCircle(point, TalkPointClearance, _obstacleMask) || Physics2D.Linecast(boss, point, _obstacleMask);
+        }
+
+        private void EndAfterOutro()
+        {
+            ReleaseEntrance();
+            FinishBoss();
         }
 
         private void SendFarewell()

@@ -7,7 +7,7 @@ namespace ExplodeIt.Progression
     // 폭탄 하나로 잡은 수: 폭탄이 터질 때 맞은 적의 처치 이벤트가 같은 프레임 안에서 폭발 이벤트보다 먼저 온다.
     // 그래서 이번 프레임에 쌓인 "일반 폭탄으로 잡은" 처치 수를 폭발 이벤트가 가져간다. 스킬 폭탄 처치는 섞이지 않는다.
     // 스킬 조건은 발동 시작~끝 사이의 처치와, 처치 출처(블랙홀·다발폭탄·순간폭탄)로 센다.
-    // 개발자 패널을 쓴 판은 세지 않는다.
+    // 개발자 패널을 쓴 판도 센다(엔딩·해금 흐름을 패널로 바로 시험할 수 있게).
     public class AchievementTracker : MonoBehaviour
     {
         // 스킬별 누적 처치를 저장하는 이름 앞부분. 뒤에 처치 출처 이름이 붙는다.
@@ -19,7 +19,6 @@ namespace ExplodeIt.Progression
         [SerializeField] private UnlockCatalog _catalog;
 
         private bool _isRunning;
-        private bool _isDisabled;
         private bool _isStoryMode;
         private int _runKills;
         private int _singleKillStreak;
@@ -36,18 +35,7 @@ namespace ExplodeIt.Progression
         private bool _hasMissed;
 
         // 이번 판에 업적을 세는 중인지. 개발자 패널이 상태 줄에 보여 준다.
-        public bool IsCounting => _isRunning && !_isDisabled;
-
-        public void DisableForThisRun()
-        {
-            if (_isDisabled)
-            {
-                return;
-            }
-
-            _isDisabled = true;
-            Debug.Log("[AchievementTracker] 개발자 패널을 써서 이번 판은 업적을 세지 않습니다.");
-        }
+        public bool IsCounting => _isRunning;
 
         private void OnEnable()
         {

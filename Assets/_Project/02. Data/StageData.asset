@@ -16,6 +16,7 @@ MonoBehaviour:
   _firstWaveDelay: 2
   _waveInterval: 5
   _bossIntroDuration: 2
+  _repeatBossIntroSpeed: 3
   _spawnsPerWave: 100
   _sameAreaSpawnInterval: 0.2
   _clusterRadius: 1
@@ -24,6 +25,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 73ebdf7d16d95be489365e34c20e0a0b, type: 2}
   - {fileID: 11400000, guid: 673b8a5e5efdffe4099a08467e67dcd7, type: 2}
   - {fileID: 11400000, guid: 38d473f88f0867e439452c29133d8f6c, type: 2}
+  _bossTempoPerLap: 0
+  _bossTelegraphShare: 0.5
+  _bossActionMinRatio: 0.4
+  _bossTelegraphMinRatio: 0.5
+  _bossSpeedMaxMultiplier: 1.8
+  _endlessWaves: {fileID: 0}
   _bossRotation:
   - {fileID: 5819474946675302735, guid: ba8234f74e4101a4f8f42543ecf83b55, type: 3}
   - {fileID: 6048178650885375636, guid: 4d584cbc4d77f674d84f507e3e277766, type: 3}
@@ -42,5 +49,9 @@ MonoBehaviour:
   _finalBossDialogue: {fileID: 11400000, guid: 1e6f40ea633444a459e614ee6da9708c, type: 2}
   _finalBossDefeatDialogue: {fileID: 11400000, guid: 43df911393f36ef45a53947b0cfc2713, type: 2}
   _defeatDialogueDelay: 2
+  _defeatTalkDistance: 3
+  _defeatTalkHeight: 0.4
+  _defeatWalkTimeout: 4
   _defeatEndDelay: 1.5
+  _ending: {fileID: 11400000, guid: 5a2980792d3bfa94086e666a79e75305, type: 2}
   _bossLandFeedback: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}

@@ -6,7 +6,7 @@ namespace ExplodeIt.Stage
 {
     // 첫 판 오프닝: 만화 컷 4장(마을에서 책 속으로 빨려 들어감) → 정원(책에서 튀어나온 고블린, 놀란 왕, 병사) → 아레나로 도망쳐 들어옴.
     [CreateAssetMenu(fileName = "IntroData", menuName = "Explode It/Story/Intro Data")]
-    public class IntroData : ScriptableObject
+    public class IntroData : ScriptableObject, IComicData
     {
         [Serializable]
         public struct Line

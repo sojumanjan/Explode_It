@@ -142,7 +142,7 @@ MonoBehaviour:
     _endAction: 0
   - _speaker: 2
     _mood: 8
-    _text: "\u3147..\uC608....??? \uC544\uAE4C\uB294 \uAD1C\uCC2E\uB2E4\uACE0 \uD558\uC168..."
+    _text: "\u3147..\uC608....???\n\uC544\uAE4C\uB294 \uAD1C\uCC2E\uB2E4\uACE0 \uD558\uC168..."
     _spawnBoss: 0
     _startEntrance: 0
     _bossSprite: {fileID: 0}

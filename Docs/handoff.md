@@ -91,7 +91,7 @@
 - `Progression/UnlockCatalog.cs` (+ `02. Data/Progression/UnlockCatalog.asset`): 모든 무기·스킬·강화·아티팩트·업적 목록. **고르기 화면 카드 순서 = 여기 목록 순서.**
 - `Progression/AchievementData.cs`: 조건 + 목표 + (스킬 지정) + 보상(무기·스킬·강화·아티팩트 각각 하나씩 여러 개 가능) + 스티커 그림.
 - `Progression/AchievementCondition.cs`: 조건 종류. **새 조건은 맨 뒤에만 추가**(에셋이 번호로 기억).
-- `Progression/AchievementTracker.cs`: 판 도중 조건을 세고 달성 시 해금·저장. 개발자 패널을 쓴 판은 세지 않음.
+- `Progression/AchievementTracker.cs`: 판 도중 조건을 세고 달성 시 해금·저장. 개발자 패널을 쓴 판도 센다(10/22 변경).
 - 처치 출처: `Core/DamageSource.cs`(Bomb·BlackHole·ScatterBomb·InstantBomb·Dodge), 적 부류 `Core/EnemyKind.cs`(Normal·ShieldBearer·Boss). `GameEvents.EnemyKilledBy(source, kind)`.
 
 ### 무기
@@ -124,7 +124,7 @@
 
 ### 개발자 패널 (`UI/DevPanel.cs`, Game 씬)
 - 무기 교체·수치 조정, 보스 바로가기(Final Boss, King Groggy/Defeat), Replay Intro, **Unlock All**(무기·스킬·강화·아티팩트 전부), **Reset Achv**(업적·해금·장착만 초기화), Log Save, Reset Save, Fill Ability, Kill All, 배속.
-- 패널을 쓴 판은 업적을 세지 않는다.
+- 패널을 쓴 판도 업적을 센다(10/22 변경).
 
 ---
 

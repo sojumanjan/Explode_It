@@ -116,6 +116,9 @@ namespace ExplodeIt.Stage
         [Tooltip("처치 대화가 끝나 왕이 사라진 뒤 스테이지가 끝나기까지 (초)")]
         [SerializeField, Min(0f)] private float _defeatEndDelay = 1.5f;
 
+        [Tooltip("최종 보스 처치 대화가 끝나고 판이 끝나기 전에 보여 줄 엔딩(만화·편지). 결과 창은 엔딩이 끝난 뒤에 뜬다. 비워 두면 바로 끝난다")]
+        [SerializeField] private OutroData _ending;
+
         [Tooltip("보스가 내려앉는 순간의 연출 (흔들림 등). 비워 두면 연출 없이 나타난다")]
         [SerializeField] private FeedbackData _bossLandFeedback;
 
@@ -177,6 +180,7 @@ namespace ExplodeIt.Stage
         public BossDialogueData FinalBossDefeatDialogue => _finalBossDefeatDialogue;
         public float DefeatDialogueDelay => _defeatDialogueDelay;
         public float DefeatEndDelay => _defeatEndDelay;
+        public OutroData Ending => _ending;
         public float DefeatTalkDistance => _defeatTalkDistance;
         public float DefeatTalkHeight => _defeatTalkHeight;
         public float DefeatWalkTimeout => _defeatWalkTimeout;

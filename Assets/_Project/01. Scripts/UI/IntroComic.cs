@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 namespace ExplodeIt.UI
 {
-    // 오프닝 만화 페이지. 2×2 칸이 차례로 튀어나오고, 칸 아래 상자에 대사가 타자 치듯 나온다.
+    // 만화 페이지(오프닝·엔딩 공용). 2×2 칸이 차례로 튀어나오고, 칸 아래 상자에 대사가 타자 치듯 나온다.
     // 클릭해야만 다음 칸으로 넘어간다. 대사가 다 나오면 페이지 구석에 "클릭" 표시가 통통 튀어 넘길 수 있음을 알리고,
-    // 넘기는 순간 지금 칸이 꾹 눌렸다 돌아오며 딸깍 소리가 난다. 클릭 판정은 연출 감독(IntroSequence)이 한다.
+    // 넘기는 순간 지금 칸이 꾹 눌렸다 돌아오며 딸깍 소리가 난다. 클릭 판정은 연출 감독(IntroSequence·OutroSequence)이 한다.
     // 대사는 그림에 그리지 않고 여기서 얹는다. 대사를 고칠 때 그림을 다시 만들지 않아도 된다.
     public class IntroComic : MonoBehaviour
     {
@@ -30,7 +30,7 @@ namespace ExplodeIt.UI
         // 대사가 다 나오면 뜨는 "클릭" 표시.
         [SerializeField] private RectTransform _nextHint;
 
-        private IntroData _data;
+        private IComicData _data;
         private Action _onDone;
         private int _index;
         private float _shown;
@@ -39,6 +39,11 @@ namespace ExplodeIt.UI
         private Tween _press;
         private Vector2 _hintHome;
         private bool _hasHintHome;
+        // 데이터의 몇 번째 컷부터, 몇 장을 이 페이지에 보여 줄지.
+        private int _first;
+        private int _count;
+        // 씬에 놓은 2×2 칸 자리. 한 줄 페이지는 이 자리의 가로 위치와 전체 세로 가운데를 쓴다.
+        private Vector2[] _panelHomes;
 
         // 씬에서는 꺼 둔다. 켜지는 순간 Awake가 돌기 때문에 Awake에서 끄면 Play로 켠 직후 다시 꺼진다.
         private void OnDisable()
@@ -47,15 +52,35 @@ namespace ExplodeIt.UI
             _press?.Kill();
         }
 
-        public void Play(IntroData data, Action onDone)
+        // 기본은 모든 컷을 2×2로 보여 준다(오프닝). 엔딩은 컷을 두 장씩 끊어 가로 한 줄(세로 가운데)로 보여 준다.
+        public void Play(IComicData data, Action onDone, int first = 0, int count = -1, bool isRow = false)
         {
             _data = data;
             _onDone = onDone;
+            _first = first;
+            _count = count < 0 ? data.PanelCount - first : count;
             gameObject.SetActive(true);
             _group.alpha = 1f;
+            if (_panelHomes == null)
+            {
+                _panelHomes = new Vector2[_panels.Length];
+                for (int i = 0; i < _panels.Length; i++)
+                {
+                    _panelHomes[i] = _panels[i].anchoredPosition;
+                }
+            }
+
+            float middleY = 0f;
+            for (int i = 0; i < _panelHomes.Length; i++)
+            {
+                middleY += _panelHomes[i].y / _panelHomes.Length;
+            }
+
             for (int i = 0; i < _panels.Length; i++)
             {
                 _panels[i].gameObject.SetActive(false);
+                _panels[i].localScale = Vector3.one;
+                _panels[i].anchoredPosition = isRow ? new Vector2(_panelHomes[i].x, middleY) : _panelHomes[i];
             }
 
             if (!_hasHintHome)
@@ -128,10 +153,11 @@ namespace ExplodeIt.UI
 
         private void ShowNext()
         {
-            int count = Mathf.Min(_data.PanelCount, _panels.Length);
+            int count = Mathf.Min(Mathf.Min(_count, _data.PanelCount - _first), _panels.Length);
             if (_index + 1 >= count)
             {
                 _isPlaying = false;
+                _nextHint.gameObject.SetActive(false);
                 _onDone?.Invoke();
                 return;
             }
@@ -140,7 +166,7 @@ namespace ExplodeIt.UI
             _shown = 0f;
             _nextHint.gameObject.SetActive(false);
 
-            Sprite sprite = _data.GetPanelSprite(_index);
+            Sprite sprite = _data.GetPanelSprite(_first + _index);
             if (sprite != null)
             {
                 _pictures[_index].sprite = sprite;
@@ -148,7 +174,7 @@ namespace ExplodeIt.UI
             }
 
             TMP_Text caption = _captions[_index];
-            caption.text = _data.GetPanelLine(_index);
+            caption.text = _data.GetPanelLine(_first + _index);
             caption.ForceMeshUpdate();
             caption.maxVisibleCharacters = 0;
 
