@@ -19,12 +19,18 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _name;
         [SerializeField] private GameObject _lockMark;
         [SerializeField] private GameObject _selectedMark;
-        // 새로 해금하고 아직 눌러 보지 않았다는 표시. 비워 두면(저주 카드 등) NEW를 쓰지 않는다.
+        // 새로 해금하고 아직 눌러 보지 않았다는 NEW 도장. 비워 두면(저주 카드 등) NEW를 쓰지 않는다.
         [SerializeField] private RectTransform _newMark;
 
-        // NEW 표시가 숨 쉬듯 커졌다 작아지는 세기(비율)와 한 번 커지는 시간(초). 눈에 띄게만 하는 연출 값이다.
-        private const float NewPulse = 0.12f;
-        private const float NewPulseTime = 0.5f;
+        // NEW 도장은 가만히 있다가 이 간격(초)마다 한 번 피융: 커졌다(NewPop) → 원래보다 작아졌다(NewPopUnder) → 제자리.
+        // 계속 움직이면 거슬려서 가끔만 눈길을 끈다. NewPopTime은 세 단계를 합친 시간(초)이다.
+        private const float NewPopInterval = 2.5f;
+        private const float NewPop = 0.18f;
+        private const float NewPopUnder = 0.1f;
+        private const float NewPopTime = 0.5f;
+        // 처음 보일 때 도장을 쾅 찍듯 이 배율에서 줄어들며 나타난다.
+        private const float NewStampScale = 1.5f;
+        private const float NewStampTime = 0.2f;
 
         // 두 번 누른 것으로 보는 간격 (초, 실제 시간). 운영체제 기본 더블클릭 간격과 비슷하게 둔다.
         private const float DoubleClickTime = 0.3f;
@@ -83,7 +89,7 @@ namespace ExplodeIt.UI
             SetSelected(false);
         }
 
-        // Setup이 끄지 않는다. 목록을 다시 그릴 때마다 꺼졌다 켜지면 숨 쉬는 연출이 처음부터 다시 시작돼 튀어 보인다.
+        // Setup이 끄지 않는다. 목록을 다시 그릴 때마다 꺼졌다 켜지면 찍히는 연출이 매번 다시 나와 튀어 보인다.
         public void SetNew(bool isNew)
         {
             if (_newMark == null || _newMark.gameObject.activeSelf == isNew)
@@ -94,11 +100,25 @@ namespace ExplodeIt.UI
             _newMark.DOKill();
             _newMark.localScale = Vector3.one;
             _newMark.gameObject.SetActive(isNew);
-            if (isNew)
+            if (!isNew)
             {
-                _newMark.DOScale(1f + NewPulse, NewPulseTime).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo)
-                    .SetUpdate(true).SetLink(_newMark.gameObject);
+                return;
             }
+
+            // 무한 반복은 시퀀스 안에 넣을 수 없어서, 찍히는 연출이 끝난 뒤 피융을 따로 시작한다.
+            _newMark.localScale = Vector3.one * NewStampScale;
+            _newMark.DOScale(1f, NewStampTime).SetEase(Ease.InQuad).SetUpdate(true).SetLink(_newMark.gameObject)
+                .OnComplete(StartNewPop);
+        }
+
+        private void StartNewPop()
+        {
+            DOTween.Sequence()
+                .AppendInterval(NewPopInterval)
+                .Append(_newMark.DOScale(1f + NewPop, NewPopTime * 0.3f).SetEase(Ease.OutQuad))
+                .Append(_newMark.DOScale(1f - NewPopUnder, NewPopTime * 0.3f).SetEase(Ease.InOutQuad))
+                .Append(_newMark.DOScale(1f, NewPopTime * 0.4f).SetEase(Ease.OutQuad))
+                .SetLoops(-1).SetTarget(_newMark).SetUpdate(true).SetLink(_newMark.gameObject);
         }
 
         public void SetDimmed(bool isDimmed)
