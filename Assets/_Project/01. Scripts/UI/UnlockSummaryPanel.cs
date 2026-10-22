@@ -12,7 +12,7 @@ namespace ExplodeIt.UI
     // 판이 끝나면(사망·클리어) 결과 창 위에 "이번 판에 새로 해금한 것" 창을 겹쳐 띄운다. 판 도중 알림을 놓쳐도 잊지 않게 한다.
     // 여러 개를 해금했으면 한 장에 하나씩 크게 보여 주고, 버튼을 누를 때마다 다음 장으로 넘긴다. 마지막 장에서 누르면 닫힌다.
     // 판 도중 해금한 저주도 여기서 함께 보여 준다(저주는 판 도중 알림을 띄우지 않는다).
-    // 스토리를 처음 깬 판에는 이 모든 것보다 먼저 "무한 모드 해금" 특수 화면을 띄운다.
+    // 스토리 클리어 업적을 딴 판(또는 저장상 처음 깬 판)에는 이 모든 것보다 먼저 "무한 모드 해금" 특수 화면을 띄운다.
     // 이번 판에 해금한 게 없으면 뜨지 않는다. 이 컴포넌트는 늘 켜 두고 이벤트를 들으며, 창(_window)만 켜고 끈다.
     public class UnlockSummaryPanel : MonoBehaviour
     {
@@ -77,7 +77,7 @@ namespace ExplodeIt.UI
         private bool _hasShown;
         private int _index;
         private float _slideBaseX;
-        // 이 판을 시작할 때 이미 스토리를 깬 상태였는지. 이번 판이 첫 클리어일 때만 무한 모드 해금 화면을 띄운다.
+        // 이 판을 시작할 때 이미 스토리를 깬 상태였는지. 업적이 들어오지 않아도 저장상 첫 클리어면 무한 모드 해금 화면을 띄우는 데 쓴다.
         private bool _wasStoryCleared;
 
         private void Awake()
@@ -122,8 +122,8 @@ namespace ExplodeIt.UI
         private void OnGameStateChanged(GameState previous, GameState current)
         {
             bool isOver = current == GameState.PlayerDead || current == GameState.StageClear;
-            // 첫 클리어 여부는 저장이 끝난 뒤(Show)에 다시 확인한다. 여기서는 그럴 가능성만 보고 막을 친다.
-            bool mayUnlockMode = current == GameState.StageClear && !_wasStoryCleared;
+            // 클리어 판은 늘 막을 친다. 스토리 클리어 업적이 이 상태 전환보다 늦게 들어올 수 있어서, 무엇을 띄울지는 Show에서 정한다.
+            bool mayUnlockMode = current == GameState.StageClear;
             if (isOver && !_hasShown && (_completed.Count > 0 || _curses.Count > 0 || mayUnlockMode))
             {
                 _showAt = Time.unscaledTime + _showDelay;
@@ -245,7 +245,8 @@ namespace ExplodeIt.UI
                 _sources.Add(null);
             }
 
-            bool unlocksMode = !_wasStoryCleared && SaveSystem.Data.StoryCleared;
+            // 스토리 클리어 업적을 이번 판에 땄거나(업적 초기화 뒤 다시 깬 판 포함), 저장상 처음 깬 판이면 띄운다.
+            bool unlocksMode = FindStoryAchievement() != null || (!_wasStoryCleared && SaveSystem.Data.StoryCleared);
             if (_rewards.Count == 0 && !unlocksMode)
             {
                 _inputBlocker.SetActive(false);
@@ -274,17 +275,22 @@ namespace ExplodeIt.UI
         }
 
         // 스토리를 처음 깬 판에는 무엇보다 먼저 무한 모드가 열렸다는 걸 크게 알린다. 엔딩 편지의 "갚으러 오든지"에 바로 답하는 자리다.
-        private void ShowModeWindow()
+        private AchievementData FindStoryAchievement()
         {
-            AchievementData story = null;
             for (int i = 0; i < _completed.Count; i++)
             {
                 if (_completed[i].Condition == AchievementCondition.StoryCleared)
                 {
-                    story = _completed[i];
+                    return _completed[i];
                 }
             }
 
+            return null;
+        }
+
+        private void ShowModeWindow()
+        {
+            AchievementData story = FindStoryAchievement();
             _modeSticker.sprite = story != null && story.Sticker != null ? story.Sticker : _fallbackSticker;
             _modeSticker.enabled = _modeSticker.sprite != null;
             _modeAchievementText.text = story != null ? string.Format(_modeAchievementFormat, story.DisplayName) : _modeFallbackText;

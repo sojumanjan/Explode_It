@@ -32,6 +32,8 @@ namespace ExplodeIt.UI
         [Tooltip("다음 차례 저주의 해금 조건. {0} = 걸어야 하는 저주 수, {1} = 처치 수")]
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
         [SerializeField, TextArea] private string _laterUnlockText = "<b>해금 조건</b>\n앞의 저주를 먼저 열어야 해요.";
+        // 마지막 칸(왕)은 순서가 아니라 "모든 저주"가 조건이라, 차례와 상관없이 따로 암시만 준다.
+        [SerializeField, TextArea] private string _kingUnlockText = "<b>해금 조건</b>\n모든 저주를 짊어진 자에게 자격이 주어진다.";
         [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
         [SerializeField] private SoundData _clickSound;
 
@@ -150,8 +152,8 @@ namespace ExplodeIt.UI
             _previewIcon.enabled = curse.Icon != null;
             _previewIcon.color = _silhouetteColor;
             _previewName.text = "???";
-            _previewText.text = curse == _catalog.NextLockedCurse
-                ? string.Format(_unlockFormat, curse.RequiredCurses, curse.UnlockKills)
+            _previewText.text = curse.Kind == CurseKind.King ? _kingUnlockText
+                : curse == _catalog.NextLockedCurse ? string.Format(_unlockFormat, curse.RequiredCurses, curse.UnlockKills)
                 : _laterUnlockText;
             _equipButton.gameObject.SetActive(false);
         }

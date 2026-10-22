@@ -8,6 +8,9 @@ namespace ExplodeIt.Stage
     public class OutroData : ScriptableObject, IComicData
     {
         [Header("책으로 넘어가기")]
+        [Tooltip("확대하기 전에 카메라가 책을 화면 가운데에 놓도록 옮겨 가는 시간 (초). 가운데에 오기 전에 확대하면 책 위쪽 엉뚱한 곳이 확대된다")]
+        [SerializeField, Min(0.05f)] private float _bookMoveTime = 0.5f;
+
         [Tooltip("고블린이 빨려 들어간 책 쪽으로 카메라를 당기는 배율. 1이면 평소 크기, 작을수록 가깝게 비춘다. 책이 화면을 가득 채울 만큼 작게 둔다")]
         [SerializeField, Range(0.02f, 1f)] private float _bookZoom = 0.06f;
 
@@ -72,12 +75,19 @@ namespace ExplodeIt.Stage
         [Tooltip("까맣게 덮이는 시간이자 끝 글이 나타나는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _endFadeTime = 0.8f;
 
-        [Tooltip("끝 글이 다 나타난 뒤 클릭을 받기 시작할 때까지 (초). 여운을 주고, 편지를 넘기던 연타에 바로 지나가지 않게 한다")]
-        [SerializeField, Min(0f)] private float _endHoldTime = 1f;
+        [Tooltip("끝 글이 다 나타난 뒤 클릭을 받기 시작할 때까지 (초). 편지를 넘기던 연타에 바로 지나가지 않게 한다")]
+        [SerializeField, Min(0f)] private float _endHoldTime = 0.3f;
+
+        [Tooltip("끝 글이 다 나타난 뒤 클릭하지 않아도 저절로 넘어갈 때까지 (초)")]
+        [SerializeField, Min(0f)] private float _endAutoTime = 2.5f;
+
+        [Tooltip("끝 글을 넘긴 뒤 결과 창이 뜨기까지 (초). 그 사이 까만 화면 위에 스토리 클리어 업적 알림이 먼저 올라온다")]
+        [SerializeField, Min(0f)] private float _clearDelay = 1f;
 
         public int PanelCount => Mathf.Min(_panelSprites.Length, _panelLines.Length);
         public Sprite GetPanelSprite(int index) => _panelSprites[index];
         public string GetPanelLine(int index) => _panelLines[index];
+        public float BookMoveTime => _bookMoveTime;
         public float BookZoom => _bookZoom;
         public float BookZoomTime => _bookZoomTime;
         public float WhiteInTime => _whiteInTime;
@@ -97,5 +107,7 @@ namespace ExplodeIt.Stage
         public string EndText => _endText;
         public float EndFadeTime => _endFadeTime;
         public float EndHoldTime => _endHoldTime;
+        public float EndAutoTime => _endAutoTime;
+        public float ClearDelay => _clearDelay;
     }
 }

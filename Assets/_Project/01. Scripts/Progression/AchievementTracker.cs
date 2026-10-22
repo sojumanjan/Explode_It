@@ -48,6 +48,7 @@ namespace ExplodeIt.Progression
             GameEvents.PlayerEvaded += OnPlayerEvaded;
             GameEvents.PlayerDied += OnRunEnded;
             GameEvents.StageCleared += OnStageCleared;
+            GameEvents.StoryEndingFinished += OnStoryEndingFinished;
             GameEvents.PlayerKilledBy += OnPlayerKilledBy;
             GameEvents.EnemiesInArenaChanged += OnEnemiesInArenaChanged;
             GameEvents.GolemLastStand += OnGolemLastStand;
@@ -66,6 +67,7 @@ namespace ExplodeIt.Progression
             GameEvents.PlayerEvaded -= OnPlayerEvaded;
             GameEvents.PlayerDied -= OnRunEnded;
             GameEvents.StageCleared -= OnStageCleared;
+            GameEvents.StoryEndingFinished -= OnStoryEndingFinished;
             GameEvents.PlayerKilledBy -= OnPlayerKilledBy;
             GameEvents.EnemiesInArenaChanged -= OnEnemiesInArenaChanged;
             GameEvents.GolemLastStand -= OnGolemLastStand;
@@ -90,13 +92,19 @@ namespace ExplodeIt.Progression
             _isRunning = false;
         }
 
-        private void OnStageCleared()
+        // 엔딩이 있으면 THE END를 넘기는 순간(결과 창 전) 미리 달성해 까만 화면 위에 알림을 먼저 띄운다.
+        // 엔딩이 없으면 판이 끝나는 순간에 달성한다. 이미 달성한 업적은 다시 달성되지 않는다.
+        private void OnStoryEndingFinished()
         {
             if (IsCounting && _isStoryMode)
             {
                 Check(AchievementCondition.StoryCleared, 1);
             }
+        }
 
+        private void OnStageCleared()
+        {
+            OnStoryEndingFinished();
             OnRunEnded();
         }
 

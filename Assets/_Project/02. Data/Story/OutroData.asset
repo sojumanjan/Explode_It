@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159e6993f3e80424b965fb1af055b0fd, type: 3}
   m_Name: OutroData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.OutroData
+  _bookMoveTime: 0.5
   _bookZoom: 0.06
   _bookZoomTime: 1.2
   _whiteInTime: 0.4
@@ -49,4 +50,6 @@ MonoBehaviour:
   _letterSound: {fileID: 0}
   _endText: THE END...?
   _endFadeTime: 0.8
-  _endHoldTime: 1
+  _endHoldTime: 0.3
+  _endAutoTime: 2.5
+  _clearDelay: 1

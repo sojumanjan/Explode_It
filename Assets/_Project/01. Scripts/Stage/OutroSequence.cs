@@ -4,8 +4,10 @@ using DG.Tweening;
 using ExplodeIt.Core;
 using ExplodeIt.UI;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace ExplodeIt.Stage
 {
@@ -31,6 +33,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private IntroComic _comic;
         // 책 속으로 넘어갈 때 화면 전체를 덮는 하얀 판. 만화 페이지보다 위에 둔다.
         [SerializeField] private CanvasGroup _flash;
+        // 책이 맵 가장자리에 있어도 화면 가운데에 놓이도록, 책으로 다가가는 동안만 카메라 범위 제한을 끈다.
+        [SerializeField] private CinemachineConfiner2D _confiner;
 
         [Header("편지")]
         // 화면 전체를 살짝 어둡게 덮고 그 위에 편지를 띄운다.
@@ -38,6 +42,8 @@ namespace ExplodeIt.Stage
         // 펼쳐지는 연출을 줄 편지 종이.
         [SerializeField] private RectTransform _letterPaper;
         [SerializeField] private TMP_Text _letterText;
+        // 편지는 이 버튼으로만 닫는다. 컷을 넘기던 연타에 편지를 읽기도 전에 지나가지 않게 한다.
+        [SerializeField] private Button _letterCloseButton;
 
         [Header("까만 화면")]
         // 화면 전체를 까맣게 덮는 판과 그 위의 글. 낮 → 밤 사이("그날 밤…")와 마지막(THE END...?)에 함께 쓴다.
@@ -48,6 +54,7 @@ namespace ExplodeIt.Stage
         private Action _onFinished;
         private Step _step;
         private float _endReadyTime;
+        private float _endAutoTime;
         private Sequence _sequence;
 
         private void Awake()
@@ -55,6 +62,16 @@ namespace ExplodeIt.Stage
             _flash.gameObject.SetActive(false);
             _letter.gameObject.SetActive(false);
             _end.gameObject.SetActive(false);
+            _letterCloseButton.onClick.AddListener(OnLetterClose);
+        }
+
+        // 버튼에 클릭음이 따로 붙어 있어 여기서는 소리를 내지 않는다.
+        private void OnLetterClose()
+        {
+            if (_step == Step.Letter)
+            {
+                CloseToEnd();
+            }
         }
 
         private void OnDisable()
@@ -68,13 +85,20 @@ namespace ExplodeIt.Stage
             _data = data;
             _onFinished = onFinished;
             _step = Step.Book;
-            GameEvents.RaiseCameraFocusRequested(bookPoint, data.BookZoomTime);
-            GameEvents.RaiseCameraZoomRequested(data.BookZoom, data.BookZoomTime);
+            // 먼저 책을 화면 가운데로 옮겨 놓고, 그다음 확대한다. 둘을 같이 하면 카메라가 따라가는 동안 책 위쪽이 확대된다.
+            if (_confiner != null)
+            {
+                _confiner.enabled = false;
+            }
+
+            GameEvents.RaiseCameraFocusRequested(bookPoint, data.BookMoveTime);
 
             _flash.gameObject.SetActive(true);
             _flash.alpha = 0f;
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
+                .AppendInterval(data.BookMoveTime)
+                .AppendCallback(() => GameEvents.RaiseCameraZoomRequested(data.BookZoom, data.BookZoomTime))
                 .AppendInterval(Mathf.Max(0f, data.BookZoomTime - data.WhiteInTime))
                 .Append(_flash.DOFade(1f, data.WhiteInTime).SetEase(Ease.InQuad))
                 .AppendCallback(ShowComicUnderWhite)
@@ -93,6 +117,10 @@ namespace ExplodeIt.Stage
         {
             GameEvents.RaiseCameraFocusReleased(0f);
             GameEvents.RaiseCameraZoomRequested(1f, 0f);
+            if (_confiner != null)
+            {
+                _confiner.enabled = true;
+            }
             _comic.Play(_data, OnFirstPageDone, 0, _data.FirstPageCount, true);
         }
 
@@ -131,6 +159,13 @@ namespace ExplodeIt.Stage
 
         private void Update()
         {
+            // 끝 글은 클릭하지 않아도 잠시 뒤 저절로 넘어간다.
+            if (_step == Step.End && Time.unscaledTime >= _endAutoTime)
+            {
+                Finish();
+                return;
+            }
+
             if (_step == Step.None || Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame)
             {
                 return;
@@ -140,11 +175,6 @@ namespace ExplodeIt.Stage
             {
                 case Step.Comic:
                     _comic.Advance();
-                    break;
-
-                case Step.Letter:
-                    AudioManager.Play(_data.ClickSound);
-                    CloseToEnd();
                     break;
 
                 case Step.End:
@@ -201,20 +231,24 @@ namespace ExplodeIt.Stage
                 {
                     _step = Step.End;
                     _endReadyTime = Time.unscaledTime + _data.EndHoldTime;
+                    _endAutoTime = Time.unscaledTime + _data.EndAutoTime;
                 })
                 .SetLink(gameObject);
         }
 
-        // 까만 화면은 그대로 두고 글만 걷은 뒤 진행 흐름에 넘긴다. 결과·해금 창이 까만 화면 위에 뜬다.
+        // 까만 화면은 그대로 두고 글만 걷는다. 그 순간 스토리 클리어 업적 알림이 까만 화면 위에 먼저 올라오고,
+        // 잠시 뒤 진행 흐름에 넘겨 결과·해금 창을 띄운다. 알림과 결과 창이 한꺼번에 뜨면 알림이 묻힌다.
         // 화면을 걷으면 엔딩 직후 갑자기 아레나가 드러나 여운이 끊긴다. 결과 창 다음은 씬이 바뀌므로 걷을 일이 없다.
         private void Finish()
         {
             _step = Step.None;
+            GameEvents.RaiseStoryEndingFinished();
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
                 .Append(_endText.DOFade(0f, _data.EndFadeTime))
+                .AppendInterval(Mathf.Max(0f, _data.ClearDelay - _data.EndFadeTime))
+                .AppendCallback(() => _onFinished?.Invoke())
                 .SetLink(gameObject);
-            _onFinished?.Invoke();
         }
     }
 }

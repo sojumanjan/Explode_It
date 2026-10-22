@@ -58,6 +58,8 @@ namespace ExplodeIt.Core
         }
         // 마지막 웨이브까지 다 나오고 적이 모두 처치된 순간. 상점, 포탈, 과열 구간이 여기서 시작한다.
         public static event Action StageCleared;
+        // 스토리 엔딩(THE END...?)을 넘긴 순간. 판이 끝나기(StageCleared) 직전에 온다. 스토리 클리어 업적을 결과 창보다 먼저 알리려고 쓴다.
+        public static event Action StoryEndingFinished;
         // 몇 번째 웨이브(1부터)를 다 잡았는지. 업적·승천 조건이 구독한다.
         public static event Action<int> WaveCleared;
         // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
@@ -237,6 +239,11 @@ namespace ExplodeIt.Core
             StageCleared?.Invoke();
         }
 
+        public static void RaiseStoryEndingFinished()
+        {
+            StoryEndingFinished?.Invoke();
+        }
+
         public static void RaiseAbilityChargeChanged(int current, int perCharge, int maxCharges)
         {
             AbilityChargeChanged?.Invoke(current, perCharge, maxCharges);
@@ -342,6 +349,7 @@ namespace ExplodeIt.Core
             ExplosionPitchChanged = null;
             BombThrown = null;
             StageCleared = null;
+            StoryEndingFinished = null;
             WaveCleared = null;
             BossIntroStarted = null;
             BossDefeated = null;
