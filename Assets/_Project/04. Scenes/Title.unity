@@ -7164,14 +7164,14 @@ RectTransform:
   m_GameObject: {fileID: 347197958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3266066, y: 1.3266066, z: 1.3266066}
+  m_LocalScale: {x: 1.0803486, y: 1.0803486, z: 1.0803486}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1626104606}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -324, y: -264}
+  m_AnchoredPosition: {x: -329, y: -289}
   m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &347197960
@@ -26247,6 +26247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.RunLauncher
   _fader: {fileID: 1886730002}
   _clickSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
+  _firstRunFadeTime: 1.5
 --- !u!1 &1421242578
 GameObject:
   m_ObjectHideFlags: 0
@@ -31460,7 +31461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &1626104604
 CanvasGroup:
   m_ObjectHideFlags: 0
