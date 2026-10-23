@@ -11,6 +11,8 @@ namespace ExplodeIt.Core
         private float _resumeTimeScale = 1f;
 
         public GameState Current { get; private set; } = GameState.None;
+        // 엔딩 연출(크레딧 등) 동안 Esc로 일시정지 창이 뜨지 않게 막는다. 연출이 켜고, 씬이 바뀌면 새 컨트롤러라 저절로 풀린다.
+        public bool IsPauseBlocked { get; set; }
 
         private void OnEnable()
         {
@@ -36,7 +38,7 @@ namespace ExplodeIt.Core
 
         private void OnPauseInput(InputAction.CallbackContext context)
         {
-            if (Current == GameState.Playing)
+            if (Current == GameState.Playing && !IsPauseBlocked)
             {
                 Pause();
             }

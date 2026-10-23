@@ -74,6 +74,9 @@ namespace ExplodeIt.Stage
         private Transform _boss;
         // 처치 대화에서 고블린 말풍선을 띄울 플레이어. 등장 대화에서는 비어 있다.
         private Transform _player;
+        // 고블린 줄의 말풍선을 띄울 플레이어. 처치 대화는 위 _player와 같고, 등장 대화에서도 고블린이 말할 수 있게 따로 둔다.
+        // _player는 "처치 대화 중"이라는 표시도 겸해서 등장 대화에 채우면 왕 말풍선 자리가 바뀐다.
+        private Transform _speakingPlayer;
         // 처치 대화에서 쓰러진 각성 왕이 2등신 왕으로 돌아왔는지. 돌아온 뒤에는 2등신 왕 그림이 말하고 스티커처럼 퇴장한다.
         private bool _isReverted;
         private Vector3 _bookScale;
@@ -169,7 +172,7 @@ namespace ExplodeIt.Stage
         }
 
         // bossPoint: 보스가 내려앉을 자리. 보스는 아직 없고, 표시한 줄에서 진행 흐름이 불러낸 뒤 SetBoss로 알려 준다.
-        public void Play(BossDialogueData data, Vector2 bossPoint, Vector2 player)
+        public void Play(BossDialogueData data, Vector2 bossPoint, Vector2 player, Transform speakingPlayer = null)
         {
             if (data == null || data.LineCount == 0)
             {
@@ -179,6 +182,7 @@ namespace ExplodeIt.Stage
             _data = data;
             _boss = null;
             _player = null;
+            _speakingPlayer = speakingPlayer;
             _isReverted = false;
             _bossPoint = bossPoint;
             _bossTopOffset = _emptyBossHeight;
@@ -246,6 +250,7 @@ namespace ExplodeIt.Stage
             _data = data;
             _boss = boss;
             _player = player;
+            _speakingPlayer = player;
             _isReverted = false;
             _playerScale = player != null ? player.localScale : Vector3.one;
             if (_book != null)
@@ -431,9 +436,9 @@ namespace ExplodeIt.Stage
             _autoSuckReadyTime = IsAutoSuckLine() ? Time.unscaledTime : -1f;
             // 저절로 넘어가는 줄에는 클릭을 부르는 ▼를 띄우지 않는다.
             bool waitsForClick = !IsAutoSuckLine();
-            if (line.Speaker == DialogueSpeaker.Player && _player != null)
+            if (line.Speaker == DialogueSpeaker.Player && _speakingPlayer != null)
             {
-                _kingBubble.transform.position = new Vector3(_player.position.x, TopOf(_player) + _bubbleGap, 0f);
+                _kingBubble.transform.position = new Vector3(_speakingPlayer.position.x, TopOf(_speakingPlayer) + _bubbleGap, 0f);
                 _kingBubble.Show(line.Text, waitsForClick);
             }
             else if (UsesKingBubble(line))
@@ -739,7 +744,7 @@ namespace ExplodeIt.Stage
         private SpeechBubble CurrentBubble()
         {
             BossDialogueData.Line line = _data.GetLine(_line);
-            return UsesKingBubble(line) || (line.Speaker == DialogueSpeaker.Player && _player != null) ? _kingBubble : _bossBubble;
+            return UsesKingBubble(line) || (line.Speaker == DialogueSpeaker.Player && _speakingPlayer != null) ? _kingBubble : _bossBubble;
         }
 
         // 왕이 보스로 바뀐 뒤의 왕 대사는 보스 머리 위에 띄운다.

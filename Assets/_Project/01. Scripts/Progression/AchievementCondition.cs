@@ -43,6 +43,8 @@ namespace ExplodeIt.Progression
         // 업적에 정한 부류의 적이 직접 때린 공격에 쓰러지기.
         KilledByEnemy,
         // 스토리 모드 클리어(최종 보스 처치).
-        StoryCleared
+        StoryCleared,
+        // 저주를 모두 걸고 왕관까지 낀 무한 모드에서 각성한 왕을 쓰러뜨리고 크레딧까지 보기(찐엔딩).
+        TrueEndingCleared
     }
 }

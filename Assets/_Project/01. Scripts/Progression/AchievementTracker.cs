@@ -49,6 +49,7 @@ namespace ExplodeIt.Progression
             GameEvents.PlayerDied += OnRunEnded;
             GameEvents.StageCleared += OnStageCleared;
             GameEvents.StoryEndingFinished += OnStoryEndingFinished;
+            GameEvents.TrueEndingFinished += OnTrueEndingFinished;
             GameEvents.PlayerKilledBy += OnPlayerKilledBy;
             GameEvents.EnemiesInArenaChanged += OnEnemiesInArenaChanged;
             GameEvents.GolemLastStand += OnGolemLastStand;
@@ -68,6 +69,7 @@ namespace ExplodeIt.Progression
             GameEvents.PlayerDied -= OnRunEnded;
             GameEvents.StageCleared -= OnStageCleared;
             GameEvents.StoryEndingFinished -= OnStoryEndingFinished;
+            GameEvents.TrueEndingFinished -= OnTrueEndingFinished;
             GameEvents.PlayerKilledBy -= OnPlayerKilledBy;
             GameEvents.EnemiesInArenaChanged -= OnEnemiesInArenaChanged;
             GameEvents.GolemLastStand -= OnGolemLastStand;
@@ -99,6 +101,14 @@ namespace ExplodeIt.Progression
             if (IsCounting && _isStoryMode)
             {
                 Check(AchievementCondition.StoryCleared, 1);
+            }
+        }
+
+        private void OnTrueEndingFinished()
+        {
+            if (IsCounting)
+            {
+                Check(AchievementCondition.TrueEndingCleared, 1);
             }
         }
 

@@ -66,6 +66,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0ab0736959fc5b40bc5e12a329bd338, type: 2}
   - {fileID: 11400000, guid: 2f920b5e37807a2438a36560cb000929, type: 2}
   - {fileID: 11400000, guid: f28a940e5ab5afb4f933c760ab5aed2d, type: 2}
+  - {fileID: 11400000, guid: 06ca505a701eec643976ca15238200ed, type: 2}
   _curses:
   - {fileID: 11400000, guid: 40bd889ad4ad9c941b38dd07ff1b0a7c, type: 2}
   - {fileID: 11400000, guid: f6abab22d373a0c42b0dd96f3953afa2, type: 2}

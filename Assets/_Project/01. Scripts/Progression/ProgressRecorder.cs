@@ -66,6 +66,13 @@ namespace ExplodeIt.Progression
             SaveData data = SaveSystem.Data;
             data.TotalKills += _stats.Kills;
             LastIsStoryMode = _isStoryMode;
+            // 찐엔딩 판(왕관)은 웨이브 없이 왕과만 싸워 처치·생존 기록이 무한 모드와 견줄 수 없으므로 남기지 않는다.
+            if (!_isStoryMode && RunCurses.Has(CurseKind.King))
+            {
+                SaveSystem.Save();
+                return;
+            }
+
             if (_isStoryMode)
             {
                 LastIsNewKills = data.TryRecordStoryKills(_stats.Kills);

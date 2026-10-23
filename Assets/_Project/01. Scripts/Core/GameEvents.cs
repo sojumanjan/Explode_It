@@ -60,6 +60,8 @@ namespace ExplodeIt.Core
         public static event Action StageCleared;
         // 스토리 엔딩(THE END...?)을 넘긴 순간. 판이 끝나기(StageCleared) 직전에 온다. 스토리 클리어 업적을 결과 창보다 먼저 알리려고 쓴다.
         public static event Action StoryEndingFinished;
+        // 찐엔딩 크레딧이 끝난 순간. 판이 끝나기(StageCleared) 직전에 온다. 찐엔딩 업적을 결과 창보다 먼저 알리려고 쓴다.
+        public static event Action TrueEndingFinished;
         // 몇 번째 웨이브(1부터)를 다 잡았는지. 업적·승천 조건이 구독한다.
         public static event Action<int> WaveCleared;
         // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
@@ -244,6 +246,11 @@ namespace ExplodeIt.Core
             StoryEndingFinished?.Invoke();
         }
 
+        public static void RaiseTrueEndingFinished()
+        {
+            TrueEndingFinished?.Invoke();
+        }
+
         public static void RaiseAbilityChargeChanged(int current, int perCharge, int maxCharges)
         {
             AbilityChargeChanged?.Invoke(current, perCharge, maxCharges);
@@ -350,6 +357,7 @@ namespace ExplodeIt.Core
             BombThrown = null;
             StageCleared = null;
             StoryEndingFinished = null;
+            TrueEndingFinished = null;
             WaveCleared = null;
             BossIntroStarted = null;
             BossDefeated = null;

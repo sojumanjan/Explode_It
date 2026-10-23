@@ -1,0 +1,157 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f91cbe68d1a6c42bce227f2a3f4b91, type: 3}
+  m_Name: TrueEndingData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.TrueEndingData
+  _king: {fileID: 4511829112722997646, guid: b273a0763e659b64d98e08c0f9b169ee, type: 3}
+  _dialogue: {fileID: 11400000, guid: 10e437e2b0ca025428eae880b8432630, type: 2}
+  _startDelay: 1.5
+  _defeatHold: 0
+  _zoom: 0.12
+  _zoomTime: 4
+  _coverTime: 2
+  _creditsBgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
+  _bgmFadeTime: 2
+  _revealTime: 1
+  _entries:
+  - _kind: 0
+    _text: Explode It
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 4
+    _text: 
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 1
+    _text: "\uAE30\uD68D / \uD504\uB85C\uADF8\uB798\uBC0D / \uC5F0\uCD9C"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: "\uD55C\uC9C0\uD6C8"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 4
+    _text: 
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 1
+    _text: "\uCE90\uC2A4\uD2B8"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 3
+    _text: "\uACE0\uBE14\uB9B0"
+    _subText: "\uCC45 \uC77D\uB2E4 \uBE68\uB824 \uB4E4\uC5B4\uC628 \uCC29\uD55C \uACE0\uBE14\uB9B0"
+    _sprite: {fileID: 21300000, guid: 51f2de5c91cbaf94987a52c6693ba516, type: 3}
+  - _kind: 3
+    _text: "\uC655"
+    _subText: "\uC778\uAC04 \uC655\uAD6D\uC758 \uC655 (2\uB4F1\uC2E0)"
+    _sprite: {fileID: 21300000, guid: 62e0af15a9cd841419083d85ba9ea31f, type: 3}
+  - _kind: 3
+    _text: "\uAC01\uC131\uD55C \uC655"
+    _subText: "\uC9C4\uC2EC\uC744 \uB0B8 \uC655"
+    _sprite: {fileID: 21300000, guid: 698e18b70bcbfb648b541e709e6a4534, type: 3}
+  - _kind: 3
+    _text: "\uD654\uC5FC \uB9C8\uBC95\uC0AC"
+    _subText: "\uC81C\uC77C \uBE44\uC2FC \uC6A9\uBCD1"
+    _sprite: {fileID: 21300000, guid: a8fa7ca02fe751c498b7387821282438, type: 3}
+  - _kind: 3
+    _text: "\uB4DC\uB9B4 \uAD11\uBD80"
+    _subText: "\uB545 \uD30C\uB294 \uC6A9\uBCD1"
+    _sprite: {fileID: 21300000, guid: aba4e2524e0784a489c100e257255f85, type: 3}
+  - _kind: 3
+    _text: "\uC57C\uC218"
+    _subText: "\uC655\uC758 \uC560\uC644\uB3D9\uBB3C"
+    _sprite: {fileID: 21300000, guid: c02c3088f6d1e1a40bb36852f87670e4, type: 3}
+  - _kind: 3
+    _text: "\uC804\uC0AC"
+    _subText: "\uC655\uAD6D \uBCD1\uC0AC"
+    _sprite: {fileID: 21300000, guid: a3a12b9528b963643b3ad306fa51ca68, type: 3}
+  - _kind: 3
+    _text: "\uAD81\uC218"
+    _subText: "\uC655\uAD6D \uBCD1\uC0AC"
+    _sprite: {fileID: 21300000, guid: 15aba1a078f39b84aabaff394a5899bd, type: 3}
+  - _kind: 3
+    _text: "\uC800\uACA9\uC218"
+    _subText: "\uC655\uAD6D \uBCD1\uC0AC"
+    _sprite: {fileID: 21300000, guid: 94db402d9876e1d48aa6907773f11eae, type: 3}
+  - _kind: 3
+    _text: "\uC0AC\uB9C8\uADC0"
+    _subText: "\uC5B4\uB514\uC11C \uC654\uB294\uC9C0 \uBAA8\uB984"
+    _sprite: {fileID: 21300000, guid: 88d62bb951ee34349aa173228fc7008f, type: 3}
+  - _kind: 3
+    _text: "\uBC29\uD328\uBCD1"
+    _subText: "\uC655\uAD6D \uBCD1\uC0AC"
+    _sprite: {fileID: 21300000, guid: 28db608ef7025c940b268044fcacc798, type: 3}
+  - _kind: 3
+    _text: "\uB3CC\uACA9\uBCD1"
+    _subText: "\uC655\uAD6D \uBCD1\uC0AC"
+    _sprite: {fileID: 21300000, guid: 4772be66c98ec474e8794e8aecca21a3, type: 3}
+  - _kind: 3
+    _text: "\uACE8\uB818"
+    _subText: "\uB3CC\uB369\uC774"
+    _sprite: {fileID: 21300000, guid: 255cabf73013fcb49b5bc465d6672623, type: 3}
+  - _kind: 4
+    _text: 
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 1
+    _text: "\uC0AC\uC6A9\uD55C \uB3C4\uAD6C"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: Unity 6
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: DOTween (Demigiant)
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: Cinemachine
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: Claude Code (Anthropic)
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: "\uBC14\uB974\uCF54 \uC774\uBBF8\uC9C0"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: "\uBC14\uB974\uCF54 \uC0AC\uC6B4\uB4DC"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 4
+    _text: 
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 1
+    _text: "\uB3C4\uC6C0 \uC8FC\uC2E0 \uBD84\uB4E4"
+    _subText: 
+    _sprite: {fileID: 0}
+  - _kind: 2
+    _text: "(\uCC44\uC6CC \uB123\uAE30)"
+    _subText: 
+    _sprite: {fileID: 0}
+  _spaceHeight: 120
+  _castSpriteHeight: 150
+  _scrollSpeed: 96
+  _holdSpeedMultiplier: 3
+  _skipHint: "\uC2A4\uD398\uC774\uC2A4: \uAC74\uB108\uB6F0\uAE30"
+  _finalGap: 2.5
+  _finalText: "\uADF8\uB9AC\uACE0, \uBAA8\uB4E0 \uC800\uC8FC\uB97C \uC9CA\uC5B4\uC9C4
+    \uCC44 \uC655\uC744 \uC4F0\uB7EC\uD2B8\uB9B0 \uB2F9\uC2E0\uAED8 \uAC10\uC0AC\uB97C."
+  _finalFadeTime: 1.5
+  _finalHoldTime: 4
+  _endFadeTime: 1.5
+  _clearDelay: 1

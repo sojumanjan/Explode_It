@@ -77,6 +77,10 @@ namespace ExplodeIt.Stage
         [SerializeField] private TutorialSequence _tutorial;
         // 스토리 엔딩 연출. 끝날 때까지 판 끝(결과 창)을 미뤄야 해서 직접 참조한다. 비워 두면 바로 끝난다.
         [SerializeField] private OutroSequence _outro;
+        // 찐엔딩(저주를 모두 걸고 왕관까지 낀 무한 모드): 웨이브 없이 왕과 대화한 뒤 각성한 왕과 싸우고, 쓰러뜨리면 크레딧으로 끝난다.
+        // 둘 중 하나라도 비워 두면 왕관을 껴도 평소 무한 모드로 진행한다.
+        [SerializeField] private TrueEndingData _trueEnding;
+        [SerializeField] private TrueEndingSequence _trueEndingSequence;
 
         // 기습 자리를 찾는 횟수와 적 한 마리 둘레로 비워 둘 반경, 같은 군집 적끼리 떨어뜨릴 거리 (유닛).
         private const int AmbushAttempts = 12;
@@ -120,6 +124,7 @@ namespace ExplodeIt.Stage
         private float _walkStartTime = -1f;
         // 처치 대화 때 고블린이 설 왕 옆자리.
         private Vector2 _talkPoint;
+        private bool _isTrueEnding;
         // 오프닝·튜토리얼이 끝나기를 기다리는 중. 그동안은 웨이브 시계를 돌리지 않는다.
         private bool _isWaitingIntro;
         private System.Action _onIntroFinished;
@@ -165,6 +170,9 @@ namespace ExplodeIt.Stage
             {
                 _stage = _endlessStage;
             }
+
+            _isTrueEnding = RunSetup.Mode == RunMode.Endless && RunCurses.Has(CurseKind.King)
+                && _trueEnding != null && _trueEnding.King != null && _trueEndingSequence != null && _dialoguePlayer != null;
 
             // 정적 값이라 다시 하기(씬 다시 불러오기)에도 지난 판 속도가 남으므로 판마다 되돌린다.
             EnemyTempo.MoveSpeedMultiplier = 1f;
@@ -236,7 +244,7 @@ namespace ExplodeIt.Stage
         private void BeginStage()
         {
             GameEvents.RaiseStageStarted(_stage.IsStoryMode);
-            BeginRest(_stage.FirstWaveDelay);
+            BeginRest(_isTrueEnding ? _trueEnding.StartDelay : _stage.FirstWaveDelay);
         }
 
         private void Update()
@@ -255,7 +263,14 @@ namespace ExplodeIt.Stage
                 case Phase.Rest:
                     if (_phaseTime >= _restDuration)
                     {
-                        StartWave();
+                        if (_isTrueEnding)
+                        {
+                            BeginTrueEndingBoss();
+                        }
+                        else
+                        {
+                            StartWave();
+                        }
                     }
                     break;
 
@@ -364,7 +379,11 @@ namespace ExplodeIt.Stage
                 case Phase.Boss:
                     if (_isBossDefeated)
                     {
-                        if (_bossNumber >= _stage.FinalBossNumber)
+                        if (_isTrueEnding)
+                        {
+                            BeginTrueEndingDefeat();
+                        }
+                        else if (_bossNumber >= _stage.FinalBossNumber)
                         {
                             BeginDefeat();
                         }
@@ -376,7 +395,11 @@ namespace ExplodeIt.Stage
                     break;
 
                 case Phase.BossDefeat:
-                    TickDefeat();
+                    // 찐엔딩은 처치 대화 없이 연출 감독이 끝을 알려 온다.
+                    if (!_isTrueEnding)
+                    {
+                        TickDefeat();
+                    }
                     break;
             }
         }
@@ -397,14 +420,27 @@ namespace ExplodeIt.Stage
 
         private void BeginBossIntro(int bossNumber)
         {
+            Enemy prefab = _stage.GetBoss(bossNumber, out int tier);
+            BossDialogueData dialogue = _stage.IsStoryMode && _dialoguePlayer != null ? _stage.GetBossDialogue(bossNumber) : null;
+            BeginBossIntro(bossNumber, prefab, tier, dialogue);
+        }
+
+        // 찐엔딩 결전. 보스 번호는 보스 순서와 상관없으므로 1로 둔다(처치 알림에만 쓰인다).
+        private void BeginTrueEndingBoss()
+        {
+            BeginBossIntro(1, _trueEnding.King, 0, _trueEnding.Dialogue);
+        }
+
+        private void BeginBossIntro(int bossNumber, Enemy prefab, int tier, BossDialogueData dialogue)
+        {
             _bossNumber = bossNumber;
-            _bossPrefab = _stage.GetBoss(bossNumber, out _bossTier);
+            _bossPrefab = prefab;
+            _bossTier = tier;
             _stage.ApplyBossTempo(_bossTier);
             _isBossDefeated = false;
             _bossEnemy = null;
             _boss = null;
             _hasPlayedEntrance = false;
-            BossDialogueData dialogue = _stage.IsStoryMode && _dialoguePlayer != null ? _stage.GetBossDialogue(bossNumber) : null;
             _dialogue = dialogue;
             if (_bossPrefab != null || dialogue != null)
             {
@@ -420,7 +456,7 @@ namespace ExplodeIt.Stage
             if (dialogue != null)
             {
                 Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
-                _dialoguePlayer.Play(dialogue, _bossSpawnPoint, player);
+                _dialoguePlayer.Play(dialogue, _bossSpawnPoint, player, _spawner.Target);
                 EnterPhase(Phase.BossDialogue);
                 return;
             }
@@ -511,6 +547,22 @@ namespace ExplodeIt.Stage
             {
                 SendFarewell();
             }
+        }
+
+        // 찐엔딩 결전 승리. 대화 없이 조작을 묶고(저주도 함께 멈춘다) 연출 감독에게 넘긴다. 판 시간도 여기서 멈춘다.
+        private void BeginTrueEndingDefeat()
+        {
+            EnterPhase(Phase.BossDefeat);
+            GameEvents.RaiseStageTimerStopped();
+            GameEvents.RaisePlayerControlLockChanged(true);
+            _isControlReleased = false;
+            _trueEndingSequence.Play(_trueEnding, EndTrueEnding);
+        }
+
+        private void EndTrueEnding()
+        {
+            _isRunning = false;
+            GameEvents.RaiseStageCleared();
         }
 
         private void TickDefeat()
@@ -744,6 +796,11 @@ namespace ExplodeIt.Stage
             if (!_stage.IsEndless)
             {
                 PrepareBoss(_stage.FinalBossNumber);
+            }
+
+            if (_isTrueEnding)
+            {
+                _spawner.Prepare(_trueEnding.King, 1);
             }
         }
 
