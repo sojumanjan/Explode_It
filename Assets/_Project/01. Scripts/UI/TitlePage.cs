@@ -16,12 +16,19 @@ namespace ExplodeIt.UI
         // 첫 판으로 바로 들어갈 때 장착 확인과 판 시작을 메인 메뉴와 똑같이 하려고 메인 메뉴 페이지를 빌려 쓴다.
         [SerializeField] private MainMenuPage _mainMenu;
         [SerializeField] private RectTransform _goblin;
+        // 처음 켰을 때 타이틀 위에 띄우는 플레이 기록 수집 동의 창.
+        [SerializeField] private AnalyticsConsentDialog _consent;
 
         private Vector2 _goblinHome;
 
         private void Awake()
         {
             _goblinHome = _goblin.anchoredPosition;
+        }
+
+        private void Start()
+        {
+            _consent.ShowIfNeeded();
         }
 
         private void Update()

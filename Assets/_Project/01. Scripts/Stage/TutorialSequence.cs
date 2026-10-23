@@ -238,6 +238,7 @@ namespace ExplodeIt.Stage
 
         private void Check(string doneText)
         {
+            GameEvents.RaiseTutorialStepCompleted(_step.ToString());
             if (!string.IsNullOrEmpty(doneText))
             {
                 _labelText.text = doneText;

@@ -71,6 +71,9 @@ namespace ExplodeIt.Stage
         private int _shotIndex = -1;
         // 카메라를 순간 이동한 뒤 몇 프레임은 이전 자리에서 미끄러져 오지 않게 막는다.
         private int _cameraCutFrames;
+        // 크레딧이 흐른 시간과 그중 꾹 눌러 빨리 감은 시간(실제 시간). 플레이 기록에 비율로 남긴다.
+        private float _rollTime;
+        private float _fastTime;
 
         private void Awake()
         {
@@ -164,13 +167,19 @@ namespace ExplodeIt.Stage
 
             if (_canSkip && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                ShowFinal(0f);
+                ShowFinal(0f, true);
                 return;
             }
 
             bool isHolding = Mouse.current != null && Mouse.current.leftButton.isPressed;
             float tempo = isHolding ? _data.HoldSpeedMultiplier : 1f;
             float speed = _data.ScrollSpeed * tempo;
+            _rollTime += Time.unscaledDeltaTime;
+            if (isHolding)
+            {
+                _fastTime += Time.unscaledDeltaTime;
+            }
+
             // 빨리 감는 동안 왼쪽 장면도 같은 배율로 흘러야 크레딧과 장면 길이가 어긋나지 않는다.
             if (_shotSequence != null && _shotSequence.IsActive())
             {
@@ -188,13 +197,14 @@ namespace ExplodeIt.Stage
             // 마지막 줄까지 화면 위로 다 빠져나가면 빈 화면으로 잠시 둔 뒤 마지막 문구.
             if (position.y >= _content.rect.height)
             {
-                ShowFinal(_data.FinalGap);
+                ShowFinal(_data.FinalGap, false);
             }
         }
 
-        private void ShowFinal(float gap)
+        private void ShowFinal(float gap, bool isSkipped)
         {
             _step = Step.Final;
+            GameEvents.RaiseCreditsFinished(isSkipped, _rollTime > 0f ? _fastTime / _rollTime : 0f);
             StopShots();
             _content.gameObject.SetActive(false);
             _skipHint.gameObject.SetActive(false);

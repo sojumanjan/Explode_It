@@ -55,6 +55,12 @@ namespace ExplodeIt.Core
         [SerializeField] private float _bgmVolume = 1f;
         // 화면 흔들림이 어지러운 사람을 위해 끌 수 있게 한다.
         [SerializeField] private bool _shakeEnabled = true;
+        // 플레이 기록 수집. 처음 켤 때 한 번 묻고(물었는지), 답(동의했는지)은 설정에서 바꿀 수 있다.
+        [SerializeField] private bool _analyticsAsked;
+        [SerializeField] private bool _analyticsEnabled;
+        // 지금까지 시작한 판 수와 판에서 보낸 시간 (초). 플레이 기록에서 "이 사람이 얼마나 해 봤는지"를 붙이는 데 쓴다.
+        [SerializeField] private int _runCount;
+        [SerializeField] private float _totalPlaySeconds;
 
         public int Version => _version;
 
@@ -139,6 +145,36 @@ namespace ExplodeIt.Core
 
         public IReadOnlyList<string> SelectedArtifacts => _selectedArtifacts;
         public IReadOnlyList<string> EquippedCurses => _equippedCurses;
+
+        public bool AnalyticsAsked
+        {
+            get => _analyticsAsked;
+            set => _analyticsAsked = value;
+        }
+
+        public bool AnalyticsEnabled
+        {
+            get => _analyticsEnabled;
+            set => _analyticsEnabled = value;
+        }
+
+        public int RunCount
+        {
+            get => _runCount;
+            set => _runCount = Mathf.Max(0, value);
+        }
+
+        public float TotalPlaySeconds
+        {
+            get => _totalPlaySeconds;
+            set => _totalPlaySeconds = Mathf.Max(0f, value);
+        }
+
+        public int EquippedUpgradeCount => _equippedUpgrades.Count;
+
+        // 업적 등으로 해금한 무기·스킬·강화·아티팩트·저주 수. 처음부터 열린 것은 세지 않는다.
+        public int UnlockedCount => _unlockedWeapons.Count + _unlockedAbilities.Count + _unlockedUpgrades.Count
+            + _unlockedArtifacts.Count + _unlockedCurses.Count;
 
         public bool TrueEndingSeen
         {

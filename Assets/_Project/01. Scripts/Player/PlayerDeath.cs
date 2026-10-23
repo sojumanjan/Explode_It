@@ -103,6 +103,7 @@ namespace ExplodeIt.Player
             FeedbackPlayer.Play(_data.HurtFeedback, transform.position);
             AudioManager.Play(_data.HurtSound);
             GameEvents.RaisePlayerHealthChanged(_hitReceiver.RemainingHits, _maxHealth);
+            GameEvents.RaisePlayerHit(hit, _hitReceiver.RemainingHits);
         }
 
         private void OnDied(HitInfo hit)
@@ -115,6 +116,7 @@ namespace ExplodeIt.Player
             GameEvents.RaiseCameraFocusRequested(transform.position, _data.DeathZoomTime);
             GameEvents.RaiseCameraZoomRequested(_data.DeathZoom, _data.DeathZoomTime);
             GameEvents.RaisePlayerHealthChanged(0, _maxHealth);
+            GameEvents.RaisePlayerHit(hit, 0);
             if (hit.IsFromEnemy)
             {
                 GameEvents.RaisePlayerKilledBy(hit.Attacker);

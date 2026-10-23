@@ -453,6 +453,10 @@ namespace ExplodeIt.Stage
             }
 
             GameEvents.RaiseBossIntroStarted(bossNumber);
+            if (_bossPrefab != null)
+            {
+                GameEvents.RaiseBossAppeared(_bossPrefab.name, _bossTier);
+            }
             if (dialogue != null)
             {
                 Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;

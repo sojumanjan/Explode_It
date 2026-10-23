@@ -62,6 +62,14 @@ namespace ExplodeIt.Core
         public static event Action StoryEndingFinished;
         // 찐엔딩 크레딧이 끝난 순간. 판이 끝나기(StageCleared) 직전에 온다. 찐엔딩 업적을 결과 창보다 먼저 알리려고 쓴다.
         public static event Action TrueEndingFinished;
+        // 찐엔딩 크레딧이 끝난 순간. 건너뛰었는지와 꾹 눌러 빨리 감은 시간 비율(0~1). 플레이 기록이 쓴다.
+        public static event Action<bool, float> CreditsFinished;
+        // 플레이어가 맞은 순간(쓰러지는 마지막 한 대 포함). 무엇에 맞았는지와 남은 체력. 플레이 기록이 쓴다.
+        public static event Action<HitInfo, int> PlayerHit;
+        // 튜토리얼 과제 하나를 끝낸 순간. 과제 이름. 플레이 기록이 어디서 그만두는지 본다.
+        public static event Action<string> TutorialStepCompleted;
+        // 보스가 등장하는 순간. 보스 프리팹 이름과 바퀴(0부터). 보스전 시작(BossIntroStarted)은 번호만 알린다.
+        public static event Action<string, int> BossAppeared;
         // 몇 번째 웨이브(1부터)를 다 잡았는지. 업적·승천 조건이 구독한다.
         public static event Action<int> WaveCleared;
         // 몇 번째 보스전(1부터)이 시작되는지. 보스 등장 연출 UI가 구독한다.
@@ -251,6 +259,26 @@ namespace ExplodeIt.Core
             TrueEndingFinished?.Invoke();
         }
 
+        public static void RaiseCreditsFinished(bool isSkipped, float fastForwardRatio)
+        {
+            CreditsFinished?.Invoke(isSkipped, fastForwardRatio);
+        }
+
+        public static void RaisePlayerHit(HitInfo hit, int remainingHits)
+        {
+            PlayerHit?.Invoke(hit, remainingHits);
+        }
+
+        public static void RaiseTutorialStepCompleted(string step)
+        {
+            TutorialStepCompleted?.Invoke(step);
+        }
+
+        public static void RaiseBossAppeared(string boss, int lap)
+        {
+            BossAppeared?.Invoke(boss, lap);
+        }
+
         public static void RaiseAbilityChargeChanged(int current, int perCharge, int maxCharges)
         {
             AbilityChargeChanged?.Invoke(current, perCharge, maxCharges);
@@ -358,6 +386,10 @@ namespace ExplodeIt.Core
             StageCleared = null;
             StoryEndingFinished = null;
             TrueEndingFinished = null;
+            CreditsFinished = null;
+            PlayerHit = null;
+            TutorialStepCompleted = null;
+            BossAppeared = null;
             WaveCleared = null;
             BossIntroStarted = null;
             BossDefeated = null;

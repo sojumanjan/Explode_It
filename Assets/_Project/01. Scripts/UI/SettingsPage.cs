@@ -4,13 +4,15 @@ using UnityEngine.UI;
 
 namespace ExplodeIt.UI
 {
-    // 설정: 효과음·배경음 크기, 화면 흔들림, 저장 초기화.
+    // 설정: 효과음·배경음 크기, 화면 흔들림, 플레이 기록 보내기, 저장 초기화.
     // 슬라이더를 끄는 동안은 값만 바꾸고, 페이지를 닫을 때 한 번 저장한다(웹은 저장마다 디스크에 쓴다).
     public class SettingsPage : MonoBehaviour, IMenuPage
     {
         [SerializeField] private Slider _sfxSlider;
         [SerializeField] private Slider _bgmSlider;
         [SerializeField] private Toggle _shakeToggle;
+        // 처음 켤 때 동의 창에서 고른 답을 여기서 바꾼다.
+        [SerializeField] private Toggle _analyticsToggle;
         [SerializeField] private ConfirmDialog _dialog;
         // 효과음 크기를 바꿀 때 바로 들려 줄 소리.
         [SerializeField] private SoundData _previewSound;
@@ -22,6 +24,7 @@ namespace ExplodeIt.UI
             _sfxSlider.onValueChanged.AddListener(OnSfxChanged);
             _bgmSlider.onValueChanged.AddListener(OnBgmChanged);
             _shakeToggle.onValueChanged.AddListener(OnShakeChanged);
+            _analyticsToggle.onValueChanged.AddListener(OnAnalyticsChanged);
         }
 
         public void OnPageOpened()
@@ -43,6 +46,8 @@ namespace ExplodeIt.UI
         private void ResetSave()
         {
             SaveSystem.ResetAll();
+            // 동의 답도 지워지므로 수집을 멈춘다. 다음에 타이틀을 열면 다시 묻는다.
+            PlayAnalytics.Apply();
             AudioManager.SfxVolume = SaveSystem.Data.SfxVolume;
             AudioManager.BgmVolume = SaveSystem.Data.BgmVolume;
             Refresh();
@@ -54,6 +59,7 @@ namespace ExplodeIt.UI
             _sfxSlider.SetValueWithoutNotify(data.SfxVolume);
             _bgmSlider.SetValueWithoutNotify(data.BgmVolume);
             _shakeToggle.SetIsOnWithoutNotify(data.ShakeEnabled);
+            _analyticsToggle.SetIsOnWithoutNotify(data.AnalyticsEnabled);
         }
 
         private void OnSfxChanged(float value)
@@ -70,6 +76,11 @@ namespace ExplodeIt.UI
         private void OnShakeChanged(bool isOn)
         {
             SaveSystem.Data.ShakeEnabled = isOn;
+        }
+
+        private void OnAnalyticsChanged(bool isOn)
+        {
+            PlayAnalytics.SetConsent(isOn);
         }
     }
 }
