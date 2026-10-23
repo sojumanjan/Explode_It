@@ -35,7 +35,7 @@ namespace ExplodeIt.UI
         {
             if (!Core.SaveSystem.Data.FirstRunDone)
             {
-                _mainMenu.PlayStory();
+                _mainMenu.StartFirstRun();
                 return;
             }
 

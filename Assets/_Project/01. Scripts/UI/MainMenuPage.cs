@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ExplodeIt.UI
 {
     // 메인 메뉴. 책 왼쪽 페이지에 지금 장착한 무기·스킬·아티팩트 칸이 보이고, 칸을 누르면 고르기 페이지로 간다.
-    // 오른쪽 페이지에서 모드를 누르면 장착한 그대로 바로 판을 시작한다.
+    // 오른쪽 페이지에서 모드를 누르면 그 모드의 기록 창이 뜨고, 창의 시작 버튼으로 장착한 그대로 판을 시작한다.
     // 무한 모드는 스토리를 클리어해야 열리고, 열렸어도 아직 구현 전이면 "준비 중"만 알린다.
     public class MainMenuPage : MonoBehaviour, IMenuPage
     {
@@ -19,6 +19,8 @@ namespace ExplodeIt.UI
         [SerializeField] private UnlockCatalog _catalog;
         [SerializeField] private MenuPager _pager;
         [SerializeField] private RunLauncher _launcher;
+        // 모드를 누르면 바로 시작하지 않고 기록 창을 띄워, 창의 시작 버튼으로 들어간다.
+        [SerializeField] private ModeRecordPopup _recordPopup;
 
         [Header("장비 칸")]
         [SerializeField] private ItemCard _weaponSlot;
@@ -92,6 +94,12 @@ namespace ExplodeIt.UI
 
         public void PlayStory()
         {
+            _recordPopup.Show(RunMode.Story, () => BeginRun(RunMode.Story));
+        }
+
+        // 첫 판은 보여 줄 기록이 없으니 창 없이 곧장 들어간다.
+        public void StartFirstRun()
+        {
             BeginRun(RunMode.Story);
         }
 
@@ -111,7 +119,7 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            BeginRun(RunMode.Endless);
+            _recordPopup.Show(RunMode.Endless, () => BeginRun(RunMode.Endless));
         }
 
         // 승천 칸 버튼. 스토리를 클리어했으면 저주 고르기 페이지로 간다.

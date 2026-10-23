@@ -142,6 +142,8 @@ namespace ExplodeIt.Stage
             _end.alpha = 0f;
 
             float fade = _data.NightFadeTime;
+            // 화면이 까매지고 글이 떠오르는 동안 곡이 넘어가야 낮 곡이 밤 컷까지 새지 않는다.
+            AudioManager.PlayBgm(_data.NightBgm, fade * 2f);
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
                 .Append(_end.DOFade(1f, fade))

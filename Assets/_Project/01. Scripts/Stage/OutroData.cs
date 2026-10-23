@@ -58,6 +58,9 @@ namespace ExplodeIt.Stage
         [Tooltip("글이 다 나타난 뒤 다음 페이지로 넘어가기까지 (초)")]
         [SerializeField, Min(0f)] private float _nightHoldTime = 1f;
 
+        [Tooltip("까맣게 덮이기 시작할 때 바꿀 밤 곡. 덮이고 글이 나타나는 동안 바뀐다. 비워 두면 곡을 바꾸지 않는다")]
+        [SerializeField] private BgmData _nightBgm;
+
         [Header("편지")]
         [Tooltip("마지막 컷을 넘기면 편지가 펼쳐지는 시간 (초). 짧을수록 탁 뜬다")]
         [SerializeField, Min(0.05f)] private float _letterOpenTime = 0.25f;
@@ -101,6 +104,7 @@ namespace ExplodeIt.Stage
         public string NightText => _nightText;
         public float NightFadeTime => _nightFadeTime;
         public float NightHoldTime => _nightHoldTime;
+        public BgmData NightBgm => _nightBgm;
         public float LetterOpenTime => _letterOpenTime;
         public string LetterText => _letterText;
         public SoundData LetterSound => _letterSound;

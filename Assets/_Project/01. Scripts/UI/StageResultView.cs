@@ -35,6 +35,13 @@ namespace ExplodeIt.UI
         [Tooltip("누구에게 당했는지 모를 때의 문구")]
         [SerializeField] private string _unknownKillerCaption = "쓰러짐";
 
+        [Header("이번 판에 건 저주 (무한 모드)")]
+        // 어떤 저주를 짊어지고 이 기록을 냈는지 한눈에 보여 줘, 결과 화면을 찍어 자랑하게 한다. 비워 두면 보이지 않는다.
+        [SerializeField] private UnlockCatalog _catalog;
+        [SerializeField] private GameObject _curseRow;
+        // 저주 칸 수만큼 미리 놓아 둔다. 남는 칸은 숨긴다.
+        [SerializeField] private Image[] _curseIcons;
+
         private readonly char[] _buffer = new char[5];
 
         private void OnEnable()
@@ -63,6 +70,37 @@ namespace ExplodeIt.UI
             _newTimeMark.SetActive(_recorder.LastIsNewTime);
             _newKillsMark.SetActive(_recorder.LastIsNewKills);
             ShowCard();
+            ShowCurses();
+        }
+
+        // 저주 고르기 페이지 순서대로, 이번 판에 걸린 저주만 앞에서부터 채운다. 하나도 없으면(스토리 포함) 줄째 숨긴다.
+        private void ShowCurses()
+        {
+            if (_curseRow == null)
+            {
+                return;
+            }
+
+            CurseData[] curses = _catalog.Curses;
+            int shown = 0;
+            for (int i = 0; i < curses.Length && shown < _curseIcons.Length; i++)
+            {
+                if (!RunCurses.Has(curses[i].Kind))
+                {
+                    continue;
+                }
+
+                _curseIcons[shown].sprite = curses[i].Icon;
+                _curseIcons[shown].gameObject.SetActive(true);
+                shown++;
+            }
+
+            for (int i = shown; i < _curseIcons.Length; i++)
+            {
+                _curseIcons[i].gameObject.SetActive(false);
+            }
+
+            _curseRow.SetActive(shown > 0);
         }
 
         private void ShowCard()

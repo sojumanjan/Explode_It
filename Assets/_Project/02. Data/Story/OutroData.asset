@@ -37,6 +37,7 @@ MonoBehaviour:
   _nightText: "\uADF8\uB0A0 \uBC24\u2026"
   _nightFadeTime: 0.6
   _nightHoldTime: 1
+  _nightBgm: {fileID: 11400000, guid: ebea3f689d421be44a38c5636009be9e, type: 2}
   _letterOpenTime: 0.25
   _letterText: "<align=center><size=140%><b>\uCCAD \uAD6C \uC11C</b></size></align>\n\n\uACE0\uBE14\uB9B0
     \uADC0\uD558\n\n\uC9D0\uC758 \uC815\uC6D0\uC5D0\uC11C \uBC8C\uC778 \uC18C\uB3D9\uC5D0

@@ -115,7 +115,7 @@ MonoBehaviour:
     _startEntrance: 0
     _bossSprite: {fileID: 0}
     _revertToKing: 1
-    _bgm: {fileID: 11400000, guid: 86ec6eb5eb0ded647bede6f50b0d1095, type: 2}
+    _bgm: {fileID: 11400000, guid: 4b72e3fdd18ec7648a14f0c79cc06c2d, type: 2}
     _startAction: 0
     _endAction: 0
   - _speaker: 0

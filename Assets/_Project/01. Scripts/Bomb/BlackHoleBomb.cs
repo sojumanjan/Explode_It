@@ -110,7 +110,6 @@ namespace ExplodeIt.Bombs
 
             _sequence = DOTween.Sequence()
                 .Append(transform.DOJump(target, weapon.ArcHeight, 1, weapon.FlightDuration).SetEase(Ease.Linear))
-                .Join(_body.transform.DOLocalRotate(new Vector3(0f, 0f, -360f), weapon.FlightDuration, RotateMode.FastBeyond360))
                 .OnComplete(_onStartFuse);
         }
 
@@ -152,7 +151,6 @@ namespace ExplodeIt.Bombs
             _sequence = DOTween.Sequence()
                 .AppendCallback(_onLanded)
                 .Append(DOVirtual.Float(0f, _radius, _pullDuration, _onFillGrow).SetEase(Ease.Linear))
-                .Join(_body.transform.DOLocalRotate(new Vector3(0f, 0f, -1080f), _pullDuration, RotateMode.FastBeyond360).SetEase(Ease.InQuad))
                 .AppendCallback(_onExplode)
                 .Append(DOVirtual.Float(1f, 0f, _explosionFxDuration, _onFade))
                 .OnComplete(_onComplete);

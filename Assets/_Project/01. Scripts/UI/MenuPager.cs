@@ -23,6 +23,8 @@ namespace ExplodeIt.UI
         [SerializeField] private InputActionReference _backAction;
         // 확인 창이 떠 있으면 뒤로가기는 페이지 대신 창을 닫는다.
         [SerializeField] private ConfirmDialog _dialog;
+        // 모드 기록 창도 같다.
+        [SerializeField] private ModeRecordPopup _recordPopup;
         [SerializeField] private SoundData _pageSound;
         // 타이틀 ↔ 메인처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막.
         [SerializeField] private ScreenFader _fader;
@@ -147,6 +149,12 @@ namespace ExplodeIt.UI
             if (_dialog != null && _dialog.IsOpen)
             {
                 _dialog.Cancel();
+                return;
+            }
+
+            if (_recordPopup != null && _recordPopup.IsOpen)
+            {
+                _recordPopup.Close();
                 return;
             }
 
