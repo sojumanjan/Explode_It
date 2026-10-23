@@ -24,6 +24,8 @@ namespace ExplodeIt.Stage
         private Vector3[] _homeScales;
         private Sprite[] _homeSprites;
         private bool[] _homeFlips;
+        // 처음부터 꺼 둔 배우는 나타나기 동작으로 등장한다(땅에서 솟는 흙더미 등).
+        private bool[] _homeActive;
         private bool[] _hiddenWasActive;
 
         public CreditsShotData Data => _data;
@@ -62,7 +64,7 @@ namespace ExplodeIt.Stage
 
                 // 콩콩·옮기기는 끝 자리를 미리 정해 두는 트윈이라, 앞서 옮겨 간 만큼을 더해 그 자리에서 움직이게 한다.
                 Vector3 position = _homePositions[step.Actor] + offsets[step.Actor];
-                Tween tween = BuildTween(actor.transform, step, position, _homeScales[step.Actor]);
+                Tween tween = BuildTween(actor, step, position, _homeScales[step.Actor]);
                 if (step.Action == CreditsShotAction.Move || step.Action == CreditsShotAction.Hop)
                 {
                     offsets[step.Actor] += (Vector3)step.Move;
@@ -93,14 +95,16 @@ namespace ExplodeIt.Stage
                 actor.localScale = _homeScales[i];
                 _actors[i].sprite = _homeSprites[i];
                 _actors[i].flipX = _homeFlips[i];
+                _actors[i].gameObject.SetActive(_homeActive[i]);
             }
 
             SetHidden(false);
             gameObject.SetActive(false);
         }
 
-        private static Tween BuildTween(Transform actor, CreditsShotStep step, Vector3 position, Vector3 homeScale)
+        private static Tween BuildTween(SpriteRenderer renderer, CreditsShotStep step, Vector3 position, Vector3 homeScale)
         {
+            Transform actor = renderer.transform;
             switch (step.Action)
             {
                 case CreditsShotAction.Punch:
@@ -112,6 +116,13 @@ namespace ExplodeIt.Stage
                     return actor.DOLocalJump(position + (Vector3)step.Move, step.Strength, step.Count, step.Duration).SetEase(Ease.Linear);
                 case CreditsShotAction.Move:
                     return actor.DOLocalMove(position + (Vector3)step.Move, step.Duration).SetEase(Ease.InOutQuad);
+                // 크기 트윈은 시작 값을 트윈이 처음 돌 때 잡아서, 꺼져 있던 배우를 켜며 0부터 키우려면 값을 직접 넣는다.
+                case CreditsShotAction.Appear:
+                    return DOVirtual.Float(0f, 1f, step.Duration, t => actor.localScale = homeScale * t)
+                        .SetEase(Ease.OutBack)
+                        .OnStart(() => renderer.gameObject.SetActive(true));
+                case CreditsShotAction.Vanish:
+                    return DOVirtual.Float(1f, 0f, step.Duration, t => actor.localScale = homeScale * t).SetEase(Ease.InBack);
                 default:
                     return null;
             }
@@ -124,12 +135,14 @@ namespace ExplodeIt.Stage
             _homeScales = new Vector3[count];
             _homeSprites = new Sprite[count];
             _homeFlips = new bool[count];
+            _homeActive = new bool[count];
             for (int i = 0; i < count; i++)
             {
                 _homePositions[i] = _actors[i].transform.localPosition;
                 _homeScales[i] = _actors[i].transform.localScale;
                 _homeSprites[i] = _actors[i].sprite;
                 _homeFlips[i] = _actors[i].flipX;
+                _homeActive[i] = _actors[i].gameObject.activeSelf;
             }
         }
 

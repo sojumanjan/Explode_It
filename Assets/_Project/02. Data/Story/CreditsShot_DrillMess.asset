@@ -1,0 +1,338 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ad330b138fbb14f9d1bb5b0dd64b98, type: 3}
+  m_Name: CreditsShot_DrillMess
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.CreditsShotData
+  _zoom: 0.64
+  _fadeTime: 0.8
+  _holdTime: 12
+  _steps:
+  - _time: 0
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.05
+    _move: {x: 0, y: 0}
+    _duration: 0.5
+    _count: 1
+  - _time: 0.3
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.1
+    _move: {x: 6.4, y: 0.2}
+    _duration: 2.2
+    _count: 7
+  - _time: 0.7
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 1
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 4
+    _strength: 0
+    _move: {x: 2.6, y: -2.4}
+    _duration: 0.05
+    _count: 1
+  - _time: 1.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 1.3
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 1.7
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.05
+    _move: {x: 0, y: 0}
+    _duration: 0.4
+    _count: 1
+  - _time: 2.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 2.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 4
+    _strength: 0
+    _move: {x: -4.6, y: -0.4}
+    _duration: 0.05
+    _count: 1
+  - _time: 2.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 2.9
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 2.9
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: a302b3b82b774b64489caf664add24ca, type: 3}
+    _action: 1
+    _strength: 0.3
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.2
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.5
+    _move: {x: 0, y: 0}
+    _duration: 0.7
+    _count: 2
+  - _time: 3.2
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 3.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.12
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.04
+    _move: {x: 0, y: 0}
+    _duration: 0.6
+    _count: 1
+  - _time: 4
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: cbcf0366a32108d43b82c5966fdbf3b0, type: 3}
+    _action: 1
+    _strength: 0.25
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.2
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.9
+    _count: 1
+  - _time: 4.4
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 4.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 4
+    _strength: 0
+    _move: {x: 3.4, y: 3.4}
+    _duration: 0.05
+    _count: 1
+  - _time: 5.1
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 1
+    _count: 3
+  - _time: 5.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 5.3
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 5.7
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.05
+    _move: {x: 0, y: 0}
+    _duration: 0.4
+    _count: 1
+  - _time: 6.2
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: a4ed1fc916e29554181e6749201417f3, type: 3}
+    _action: 1
+    _strength: 0.2
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 6.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 6.5
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.05
+    _move: {x: 0, y: 0}
+    _duration: 5.3
+    _count: 1
+  - _time: 6.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 4
+    _strength: 0
+    _move: {x: 3, y: -1.6}
+    _duration: 0.05
+    _count: 1
+  - _time: 6.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 6.9
+    _actor: 5
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 7.3
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.05
+    _move: {x: 0, y: 0}
+    _duration: 0.4
+    _count: 1
+  - _time: 7.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.2
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 4
+    _strength: 0
+    _move: {x: -7.8, y: 2}
+    _duration: 0.05
+    _count: 1
+  - _time: 8.5
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.5
+    _actor: 6
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.1
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 9.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 10
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1

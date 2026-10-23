@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ad330b138fbb14f9d1bb5b0dd64b98, type: 3}
+  m_Name: CreditsShot_Reconcile
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.CreditsShotData
+  _zoom: 0.45
+  _fadeTime: 0.8
+  _holdTime: 11
+  _steps:
+  - _time: 0
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.03
+    _move: {x: 0, y: 0}
+    _duration: 3
+    _count: 1
+  - _time: 0.5
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.1
+    _move: {x: 3.4, y: 0}
+    _duration: 2
+    _count: 6
+  - _time: 2.7
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 3
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: a302b3b82b774b64489caf664add24ca, type: 3}
+    _action: 1
+    _strength: 0.25
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.6
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: 8c19511e0d3f6e24eb5c462f1dac6912, type: 3}
+    _action: 1
+    _strength: 0.2
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.8
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.3
+    _move: {x: 0, y: 0}
+    _duration: 0.7
+    _count: 2
+  - _time: 4.6
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.4
+    _move: {x: 1.2, y: 1.5}
+    _duration: 0.5
+    _count: 1
+  - _time: 5.6
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: 43ace0c964476a045898ebe304967242, type: 3}
+    _action: 1
+    _strength: 0.1
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 6.2
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.02
+    _move: {x: 0, y: 0}
+    _duration: 4
+    _count: 1
+  - _time: 6.4
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.02
+    _move: {x: 0, y: 0}
+    _duration: 4
+    _count: 1
