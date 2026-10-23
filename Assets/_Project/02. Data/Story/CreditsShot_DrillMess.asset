@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.CreditsShotData
   _zoom: 0.64
   _fadeTime: 0.8
-  _holdTime: 12
+  _holdTime: 10.4
   _steps:
   - _time: 0
     _actor: 1
@@ -160,7 +160,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.9
     _count: 1
-  - _time: 4.4
+  - _time: 5.4
     _actor: 1
     _sprite: {fileID: 0}
     _action: 5
@@ -168,7 +168,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.1
     _count: 1
-  - _time: 4.6
+  - _time: 5.6
     _actor: 1
     _sprite: {fileID: 0}
     _action: 6
@@ -176,7 +176,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 4.9
+  - _time: 5.9
     _actor: 1
     _sprite: {fileID: 0}
     _action: 4
@@ -184,7 +184,7 @@ MonoBehaviour:
     _move: {x: 3.4, y: 3.4}
     _duration: 0.05
     _count: 1
-  - _time: 5.1
+  - _time: 6.1
     _actor: 0
     _sprite: {fileID: 0}
     _action: 3
@@ -192,7 +192,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 1
     _count: 3
-  - _time: 5.3
+  - _time: 6.3
     _actor: 1
     _sprite: {fileID: 0}
     _action: 7
@@ -200,7 +200,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 5.3
+  - _time: 6.3
     _actor: 4
     _sprite: {fileID: 0}
     _action: 7
@@ -208,7 +208,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 5.7
+  - _time: 6.7
     _actor: 1
     _sprite: {fileID: 0}
     _action: 2
@@ -216,7 +216,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.4
     _count: 1
-  - _time: 6.2
+  - _time: 7.2
     _actor: 0
     _sprite: {fileID: 21300000, guid: a4ed1fc916e29554181e6749201417f3, type: 3}
     _action: 1
@@ -224,7 +224,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 6.3
+  - _time: 7.3
     _actor: 1
     _sprite: {fileID: 0}
     _action: 6
@@ -232,7 +232,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 6.5
+  - _time: 7.5
     _actor: 0
     _sprite: {fileID: 0}
     _action: 2
@@ -240,7 +240,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 5.3
     _count: 1
-  - _time: 6.6
+  - _time: 7.6
     _actor: 1
     _sprite: {fileID: 0}
     _action: 4
@@ -248,7 +248,7 @@ MonoBehaviour:
     _move: {x: 3, y: -1.6}
     _duration: 0.05
     _count: 1
-  - _time: 6.9
+  - _time: 7.9
     _actor: 1
     _sprite: {fileID: 0}
     _action: 7
@@ -256,7 +256,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 6.9
+  - _time: 7.9
     _actor: 5
     _sprite: {fileID: 0}
     _action: 7
@@ -264,7 +264,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 7.3
+  - _time: 8.3
     _actor: 1
     _sprite: {fileID: 0}
     _action: 2
@@ -272,7 +272,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.4
     _count: 1
-  - _time: 7.9
+  - _time: 8.9
     _actor: 1
     _sprite: {fileID: 0}
     _action: 6
@@ -280,7 +280,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 8.2
+  - _time: 9.2
     _actor: 1
     _sprite: {fileID: 0}
     _action: 4
@@ -288,7 +288,7 @@ MonoBehaviour:
     _move: {x: -7.8, y: 2}
     _duration: 0.05
     _count: 1
-  - _time: 8.5
+  - _time: 9.5
     _actor: 1
     _sprite: {fileID: 0}
     _action: 7
@@ -296,7 +296,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 8.5
+  - _time: 9.5
     _actor: 6
     _sprite: {fileID: 0}
     _action: 7
@@ -304,7 +304,7 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 8.9
+  - _time: 1.35
     _actor: 1
     _sprite: {fileID: 0}
     _action: 5
@@ -312,27 +312,51 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 0.1
     _count: 1
-  - _time: 9
+  - _time: 2.75
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 6.35
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 7.95
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 5
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.1
+    _count: 1
+  - _time: 9.9
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.06
+    _move: {x: 0, y: 0}
+    _duration: 1.4
+    _count: 1
+  - _time: 4.3
     _actor: 1
     _sprite: {fileID: 0}
     _action: 1
-    _strength: 0.1
+    _strength: 0.12
     _move: {x: 0, y: 0}
     _duration: 0.3
     _count: 1
-  - _time: 9.6
+  - _time: 4.6
     _actor: 1
     _sprite: {fileID: 0}
-    _action: 5
-    _strength: 0
+    _action: 2
+    _strength: 0.04
     _move: {x: 0, y: 0}
-    _duration: 0.1
-    _count: 1
-  - _time: 10
-    _actor: 1
-    _sprite: {fileID: 0}
-    _action: 6
-    _strength: 0
-    _move: {x: 0, y: 0}
-    _duration: 0.3
+    _duration: 0.7
     _count: 1

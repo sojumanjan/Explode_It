@@ -169,7 +169,18 @@ namespace ExplodeIt.Stage
             }
 
             bool isHolding = Mouse.current != null && Mouse.current.leftButton.isPressed;
-            float speed = _data.ScrollSpeed * (isHolding ? _data.HoldSpeedMultiplier : 1f);
+            float tempo = isHolding ? _data.HoldSpeedMultiplier : 1f;
+            float speed = _data.ScrollSpeed * tempo;
+            // 빨리 감는 동안 왼쪽 장면도 같은 배율로 흘러야 크레딧과 장면 길이가 어긋나지 않는다.
+            if (_shotSequence != null && _shotSequence.IsActive())
+            {
+                _shotSequence.timeScale = tempo;
+            }
+
+            if (_shotTimeline != null && _shotTimeline.IsActive())
+            {
+                _shotTimeline.timeScale = tempo;
+            }
             Vector2 position = _content.anchoredPosition;
             position.y += speed * Time.unscaledDeltaTime;
             _content.anchoredPosition = position;
