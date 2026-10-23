@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AnalyticsData
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.AnalyticsData
   _isEnabled: 1
-  _sendFromEditor: 1
+  _sendFromEditor: 0
   _logEvents: 1
