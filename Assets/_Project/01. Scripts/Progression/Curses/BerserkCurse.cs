@@ -85,6 +85,13 @@ namespace ExplodeIt.Progression
                 Enemy enemy = runner.Enemy;
                 if (!enemy.isActiveAndEnabled || enemy.CurrentState == EnemyState.Dead)
                 {
+                    // 죽지 않고 풀로 돌아간 적(판 정리 등)은 처치가 아니다.
+                    if (enemy.CurrentState == EnemyState.Dead)
+                    {
+                        ProgressionEvents.RaiseBerserkEnemyKilled();
+                    }
+
+
                     runner.Trail.Clear();
                     _pool.Release(runner.Trail);
                     _runners.RemoveAt(i);

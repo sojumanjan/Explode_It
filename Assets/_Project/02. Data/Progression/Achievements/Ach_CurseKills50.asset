@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_CurseKills50
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: curse_kills_50
+  _displayName: "\uD558\uB298\uC758 \uB3C4\uC6C0"
+  _description: "\uC6B4\uC11D\uACFC \uB099\uB8B0\uB85C \uC801 50\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30
+    (\uB204\uC801)"
+  _sticker: {fileID: 21300000, guid: 302459c7900de4e4ba79cc5c15b7ae0c, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: fecf95be80af410498ca51a6baf892aa, type: 3}
+  _isHidden: 0
+  _condition: 22
+  _target: 50
+  _ability: {fileID: 0}
+  _enemyKind: 0
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
+  _rewardArtifact: {fileID: 0}

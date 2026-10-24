@@ -22,6 +22,14 @@ namespace ExplodeIt.Progression
             CurseUnlocked?.Invoke(curse);
         }
 
+        // 저주 "광폭"으로 붉어진 적이 죽었다. 광폭 여부는 광폭 저주만 알고 있어서 거기서 알린다.
+        public static event Action BerserkEnemyKilled;
+
+        public static void RaiseBerserkEnemyKilled()
+        {
+            BerserkEnemyKilled?.Invoke();
+        }
+
         // 스킬 발동 시작·끝(블랙홀이 터져 사라질 때, 다발폭탄이 모두 터졌을 때, 순간폭탄 시간이 끝났을 때).
         // 스킬 강화 업적이 "한 번 발동하는 동안"을 센다.
         public static event Action<AbilityData> AbilityStarted;
@@ -43,6 +51,7 @@ namespace ExplodeIt.Progression
         {
             AchievementCompleted = null;
             CurseUnlocked = null;
+            BerserkEnemyKilled = null;
             AbilityStarted = null;
             AbilityEnded = null;
         }

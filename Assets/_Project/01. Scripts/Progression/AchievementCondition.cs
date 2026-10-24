@@ -45,6 +45,12 @@ namespace ExplodeIt.Progression
         // 스토리 모드 클리어(최종 보스 처치).
         StoryCleared,
         // 저주를 모두 걸고 왕관까지 낀 무한 모드에서 각성한 왕을 쓰러뜨리고 크레딧까지 보기(찐엔딩).
-        TrueEndingCleared
+        TrueEndingCleared,
+        // 왕 칸(???)을 뺀 승천 저주를 모두 해금하기.
+        AllCursesUnlocked,
+        // 저주(운석·낙뢰)로 지금까지 처치한 수 (보스 제외, 모든 판 누적).
+        CurseKillsTotal,
+        // 저주 "광폭"으로 붉어진 적을 지금까지 처치한 수 (모든 판 누적).
+        BerserkKillsTotal
     }
 }

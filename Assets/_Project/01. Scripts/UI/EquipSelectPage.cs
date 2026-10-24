@@ -438,7 +438,8 @@ namespace ExplodeIt.UI
             _previewName.text = item != null ? item.DisplayName : "";
             _previewText.text = item != null ? item.Description : "";
             _clearStamp.SetActive(false);
-            if (item is ArtifactData && item.IsUnlocked)
+            // 무기·스킬·강화·아티팩트 모두 같다. 처음부터 열린 것은 주는 업적이 없어 그대로 둔다.
+            if (item != null && item.IsUnlocked)
             {
                 AchievementData achievement = _catalog.FindAchievementRewarding((Object)item);
                 if (achievement != null)

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5258e17c376bd19409e8e93f4d7712ff, type: 3}
+  m_Name: Ach_BerserkKills50
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
+  _id: berserk_kills_50
+  _displayName: "\uBD89\uC740 \uC0AC\uB0E5"
+  _description: "\uAD11\uD3ED\uD574\uC9C4 \uBD89\uC740 \uC801 50\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30
+    (\uB204\uC801)"
+  _sticker: {fileID: 21300000, guid: fd70adcb823f0534b9da218cf428156f, type: 3}
+  _stickerSilhouette: {fileID: 21300000, guid: f1b8c389b217fe943a5bf10ab373e9a4, type: 3}
+  _isHidden: 0
+  _condition: 23
+  _target: 50
+  _ability: {fileID: 0}
+  _enemyKind: 0
+  _rewardWeapon: {fileID: 0}
+  _rewardAbility: {fileID: 0}
+  _rewardUpgrade: {fileID: 0}
+  _rewardArtifact: {fileID: 0}

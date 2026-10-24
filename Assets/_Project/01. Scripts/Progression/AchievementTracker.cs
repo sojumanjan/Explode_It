@@ -15,6 +15,9 @@ namespace ExplodeIt.Progression
         // 종류와 상관없이 스킬로 잡은 누적 수, 회피 누적 수.
         private const string AnyAbilityKillsStat = "kills_ability";
         private const string EvadesStat = "evades";
+        // 저주(운석·낙뢰)로 잡은 누적 수, 광폭한 적을 잡은 누적 수.
+        private const string CurseKillsStat = "kills_curse";
+        private const string BerserkKillsStat = "kills_berserk";
 
         [SerializeField] private UnlockCatalog _catalog;
 
@@ -55,6 +58,8 @@ namespace ExplodeIt.Progression
             GameEvents.GolemLastStand += OnGolemLastStand;
             ProgressionEvents.AbilityStarted += OnAbilityStarted;
             ProgressionEvents.AbilityEnded += OnAbilityEnded;
+            ProgressionEvents.CurseUnlocked += OnCurseUnlocked;
+            ProgressionEvents.BerserkEnemyKilled += OnBerserkEnemyKilled;
         }
 
         private void OnDisable()
@@ -75,6 +80,8 @@ namespace ExplodeIt.Progression
             GameEvents.GolemLastStand -= OnGolemLastStand;
             ProgressionEvents.AbilityStarted -= OnAbilityStarted;
             ProgressionEvents.AbilityEnded -= OnAbilityEnded;
+            ProgressionEvents.CurseUnlocked -= OnCurseUnlocked;
+            ProgressionEvents.BerserkEnemyKilled -= OnBerserkEnemyKilled;
         }
 
         private void OnStageStarted(bool isStoryMode)
@@ -87,6 +94,42 @@ namespace ExplodeIt.Progression
             _hasMissed = false;
             // 예전 판에서 이미 다 해금했으면 여기서 챙긴다.
             CheckAllUnlocked();
+            CheckAllCursesUnlocked();
+        }
+
+        private void OnCurseUnlocked(CurseData curse)
+        {
+            CheckAllCursesUnlocked();
+        }
+
+        private void CheckAllCursesUnlocked()
+        {
+            if (!IsCounting)
+            {
+                return;
+            }
+
+            CurseData[] curses = _catalog.Curses;
+            for (int i = 0; i < curses.Length; i++)
+            {
+                if (curses[i] != null && curses[i].Kind != CurseKind.King && !curses[i].IsUnlocked)
+                {
+                    return;
+                }
+            }
+
+            Check(AchievementCondition.AllCursesUnlocked, 1);
+        }
+
+        private void OnBerserkEnemyKilled()
+        {
+            if (!IsCounting)
+            {
+                return;
+            }
+
+            SaveSystem.Data.AddStat(BerserkKillsStat, 1);
+            Check(AchievementCondition.BerserkKillsTotal, SaveSystem.Data.GetStat(BerserkKillsStat));
         }
 
         private void OnRunEnded()
@@ -250,6 +293,13 @@ namespace ExplodeIt.Progression
                 Check(AchievementCondition.BossKilledByDash, 1);
             }
 
+            // 적에게 닿는 저주 공격은 운석·낙뢰뿐이다(유폭·덫은 플레이어만 맞는다).
+            if (!isBoss && source == DamageSource.Curse)
+            {
+                SaveSystem.Data.AddStat(CurseKillsStat, 1);
+                Check(AchievementCondition.CurseKillsTotal, SaveSystem.Data.GetStat(CurseKillsStat));
+            }
+
             // 처치 수 조건은 보스를 빼고 세지만, "아무도 못 잡기"는 보스를 잡아도 깨져야 한다.
             if (_activeAbility != null && isBoss && IsUseKill(_activeAbility, source))
             {
@@ -395,6 +445,10 @@ namespace ExplodeIt.Progression
                     return data.TotalKills;
                 case AchievementCondition.EvadesTotal:
                     return data.GetStat(EvadesStat);
+                case AchievementCondition.CurseKillsTotal:
+                    return data.GetStat(CurseKillsStat);
+                case AchievementCondition.BerserkKillsTotal:
+                    return data.GetStat(BerserkKillsStat);
                 case AchievementCondition.AbilityKillsTotal:
                     return achievement.Ability == null
                         ? data.GetStat(AnyAbilityKillsStat)
