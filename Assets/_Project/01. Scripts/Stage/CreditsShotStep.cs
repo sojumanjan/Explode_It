@@ -28,7 +28,7 @@ namespace ExplodeIt.Stage
         [Tooltip("동작에 걸리는 시간 (초). 콩콩은 전체 시간")]
         [SerializeField, Min(0.01f)] private float _duration = 0.3f;
 
-        [Tooltip("콩콩 뛰는 횟수")]
+        [Tooltip("콩콩 뛰는 횟수. 떨기에서는 흔들림 수 배율(1초쯤에 1, 길게 떨면 초만큼)")]
         [SerializeField, Min(1)] private int _count = 1;
 
         public float Time => _time;

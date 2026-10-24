@@ -1,5 +1,5 @@
 // 찐엔딩 연출 감독. 쓰러진 왕 쪽으로 카메라를 천천히 당기며 까맣게 덮고 → 오른쪽에 크레딧을 아래에서 위로 올리고,
-// 왼쪽에는 맵 곳곳의 짧은 장면을 차례로 비춘다(장면 사이는 까맣게) → 빈 화면에 마지막 문구 → 까만 화면 그대로 진행 흐름에 넘긴다(결과 창).
+// 왼쪽에는 맵 곳곳의 짧은 장면을 차례로 비춘다(장면 사이는 까맣게) → 마지막 장면 뒤 화면을 보라로 덮고 그 위에 마지막 문구 → 그대로 진행 흐름에 넘긴다(결과 창).
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -33,6 +33,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private RectTransform _content;
         [SerializeField] private TMP_Text _finalText;
         [SerializeField] private TMP_Text _skipHint;
+        // 마지막 장면 뒤 화면 전체를 덮는 보라 판. 크레딧 글보다 위, 마지막 문구보다 아래에 둔다.
+        [SerializeField] private Image _finalTint;
 
         [Header("줄 본보기 (꺼 둔다)")]
         [SerializeField] private TMP_Text _titleTemplate;
@@ -116,6 +118,7 @@ namespace ExplodeIt.Stage
                     _rightPanel.SetActive(false);
                     _shotCover.alpha = 0f;
                     _finalText.alpha = 0f;
+                    _finalTint.gameObject.SetActive(false);
                     _skipHint.gameObject.SetActive(false);
                     _content.gameObject.SetActive(false);
                 })
@@ -201,19 +204,34 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 화면을 보라로 천천히 덮은 뒤 그 위에 마지막 문구를 띄운다. 덮이는 동안 장면은 계속 흐르고, 다 덮인 뒤에 걷는다.
+        // 마지막 장면이 끝날 때, 크레딧 글이 다 올라갈 때, 건너뛸 때 중 먼저 오는 쪽에서 한 번만 시작한다.
         private void ShowFinal(float gap, bool isSkipped)
         {
+            if (_step == Step.Final)
+            {
+                return;
+            }
+
             _step = Step.Final;
             GameEvents.RaiseCreditsFinished(isSkipped, _rollTime > 0f ? _fastTime / _rollTime : 0f);
-            StopShots();
-            _content.gameObject.SetActive(false);
             _skipHint.gameObject.SetActive(false);
             _finalText.text = _data.FinalText;
             _finalText.alpha = 0f;
+            Color tint = _data.FinalTintColor;
+            tint.a = 0f;
+            _finalTint.color = tint;
+            _finalTint.gameObject.SetActive(true);
 
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
                 .AppendInterval(gap)
+                .Append(_finalTint.DOFade(_data.FinalTintColor.a, _data.FinalTintTime).SetEase(Ease.Linear))
+                .AppendCallback(() =>
+                {
+                    StopShots();
+                    _content.gameObject.SetActive(false);
+                })
                 .Append(_finalText.DOFade(1f, _data.FinalFadeTime))
                 .AppendInterval(_data.FinalHoldTime)
                 .Append(_finalText.DOFade(0f, _data.EndFadeTime))
@@ -252,14 +270,23 @@ namespace ExplodeIt.Stage
                 .Append(_shotCover.DOFade(0f, data.FadeTime))
                 .AppendCallback(() => _shotTimeline.Play())
                 .AppendInterval(data.HoldTime)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+
+            // 마지막 장면(왕이 기를 모으는 순간)은 까맣게 끊지 않고 그대로 보라로 덮으며 마지막 문구로 넘어간다.
+            if (index == _shots.Length - 1)
+            {
+                _shotSequence.AppendCallback(() => ShowFinal(0f, false));
+                return;
+            }
+
+            _shotSequence
                 .Append(_shotCover.DOFade(1f, data.FadeTime))
                 .AppendCallback(() =>
                 {
                     EndShot();
                     PlayShot(index + 1, 0f);
-                })
-                .SetUpdate(true)
-                .SetLink(gameObject);
+                });
         }
 
         private void EndShot()

@@ -13,7 +13,7 @@ namespace ExplodeIt.Progression
     // 스킬은 한 번에 하나만 발동한다. 칸이 남아 있어도 앞의 발동이 끝난 뒤에 다음을 쓴다.
     //   블랙홀: 커서 쪽에 떨어져 범위 안의 적을 빨아들였다가 터진다.
     //   다발폭탄: 360도를 고르게 나눠 폭탄을 뿌린다(칸마다 살짝 비틂). 벽을 무시하고 방패를 뚫는다. 강화하면 터진 자리에서 작은 폭탄이 다시 튄다.
-    //   순간폭탄: 정한 시간 동안 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라진다.
+    //   순간폭탄: 정한 시간 동안 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라지며 사거리가 늘어난다.
     // 해금하고 장착한 강화만 판이 시작될 때 이 스킬에 붙는다.
     // 아티팩트: 필요 처치 수 감소(망토), 칸 증가(벨트), 가만히 서 있으면 충전(동전), 많이 잡으면 회복(반지).
     public class PlayerAbility : MonoBehaviour
@@ -197,7 +197,7 @@ namespace ExplodeIt.Progression
                     ThrowScatter();
                     break;
                 case AbilityKind.InstantBomb:
-                    _launcher.BeginInstantMode(_data.InstantSpeedMultiplier, _radiusMultiplier);
+                    _launcher.BeginInstantMode(_data.InstantSpeedMultiplier, _radiusMultiplier, _data.InstantRangeMultiplier);
                     _instantEndTime = Time.time + _data.InstantDuration + _durationBonus;
                     break;
                 default:
@@ -211,7 +211,7 @@ namespace ExplodeIt.Progression
             WeaponStats weapon = _launcher.Stats;
             _blackHole.transform.position = transform.position;
             _blackHole.gameObject.SetActive(true);
-            _blackHole.Launch(_launcher.GetThrowTarget(_data.MaxThrowRange), weapon.ExplosionRadius * _data.RadiusMultiplier * _radiusMultiplier,
+            _blackHole.Launch(_launcher.GetThrowTarget(_data.MaxThrowRange), _data.BlackHoleRadius * _radiusMultiplier,
                 _data.PullDuration + _durationBonus, _data.PullSpeed, weapon, _onBlackHoleFinished);
         }
 

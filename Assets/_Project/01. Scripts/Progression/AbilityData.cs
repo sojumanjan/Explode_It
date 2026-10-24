@@ -43,9 +43,9 @@ namespace ExplodeIt.Progression
         [Tooltip("최대 사거리 (유닛). 커서가 이보다 멀면 이 거리 지점에 떨어진다")]
         [SerializeField, Min(0f)] private float _maxThrowRange = 15f;
 
-        // 기본 폭탄 반경에 곱하므로, 기본 폭탄 범위가 강화되면 블랙홀도 함께 커진다.
-        [Tooltip("범위 배율 (배). 기본 폭탄 폭발 반경에 곱한다")]
-        [SerializeField, Min(0.1f)] private float _radiusMultiplier = 2f;
+        // 무기마다 블랙홀 크기가 달라지지 않게 고정한다. 커지는 건 범위 강화를 꼈을 때뿐이다.
+        [Tooltip("블랙홀 범위 (유닛, 반경). 무기와 상관없이 고정이고, 범위 강화를 끼면 그 배율이 곱해진다")]
+        [SerializeField, Min(0.1f)] private float _blackHoleRadius = 3.74f;
 
         [Tooltip("흡입 시간 (초). 착지 후 적을 빨아들이다가 이 시간이 지나면 터진다")]
         [SerializeField, Min(0.1f)] private float _pullDuration = 1.5f;
@@ -135,6 +135,9 @@ namespace ExplodeIt.Progression
         [Tooltip("지속 동안 연사·충전 속도 배율 (배)")]
         [SerializeField, Min(1f)] private float _instantSpeedMultiplier = 4f;
 
+        [Tooltip("지속 동안 최대 사거리 배율 (배). 무기 사거리에 곱한다")]
+        [SerializeField, Min(1f)] private float _instantRangeMultiplier = 1.5f;
+
         public string Id => _id;
         public string DisplayName => _displayName;
         public string Description => _description;
@@ -145,7 +148,7 @@ namespace ExplodeIt.Progression
         public int MaxCharges => _maxCharges;
         public int StartCharges => Mathf.Min(_startCharges, _maxCharges);
         public float MaxThrowRange => _maxThrowRange;
-        public float RadiusMultiplier => _radiusMultiplier;
+        public float BlackHoleRadius => _blackHoleRadius;
         public float PullDuration => _pullDuration;
         public float PullSpeed => _pullSpeed;
         public int ScatterCount => _scatterCount;
@@ -173,5 +176,6 @@ namespace ExplodeIt.Progression
         public float ChildSpriteSize => _childSpriteSize;
         public float InstantDuration => _instantDuration;
         public float InstantSpeedMultiplier => _instantSpeedMultiplier;
+        public float InstantRangeMultiplier => _instantRangeMultiplier;
     }
 }

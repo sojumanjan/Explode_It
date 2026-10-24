@@ -42461,7 +42461,7 @@ MonoBehaviour:
   _equipText: "\uC7A5\uCC29"
   _equippedText: "\uC7A5\uCC29 \uC911"
   _unequipText: "\uC7A5\uCC29 \uD574\uC81C"
-  _kingBlockedText: "\uBAA8\uB4E0 \uC800\uC8FC\uB97C \uC7A5\uCC29\uD574\uC57C \uD574\uC694"
+  _kingBlockedText: "\uBAA8\uB4E0 \uC800\uC8FC \uC7A5\uCC29 \uD544\uC694"
   _unlockFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC800\uC8FC {0}\uAC1C \uC774\uC0C1\uC744
     \uC7A5\uCC29\uD558\uACE0 \uD55C \uD310\uC5D0 {1}\uB9C8\uB9AC \uCC98\uCE58"
   _laterUnlockText: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC55E\uC758 \uC800\uC8FC\uB97C

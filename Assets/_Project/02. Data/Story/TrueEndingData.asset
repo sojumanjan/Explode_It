@@ -22,6 +22,7 @@ MonoBehaviour:
   _creditsBgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
   _bgmFadeTime: 2
   _revealTime: 1
+  _firstShotDelay: 4
   _entries:
   - _kind: 0
     _text: Explode It
@@ -140,7 +141,8 @@ MonoBehaviour:
     _subText: 
     _sprite: {fileID: 0}
   - _kind: 2
-    _text: "(\uCC44\uC6CC \uB123\uAE30)"
+    _text: "\uAE40\uC6B1\uC9C4 \uD29C\uD130\uB2D8\n\uC591\uC724\uC11D \uB9E4\uB2C8\uC800\uB2D8\n\uADF8
+      \uC678 \uBAA8\uB4E0 NC AI \uB274\uB51C \uC544\uCE74\uB370\uBBF8 \uD559\uC0DD\uBD84\uB4E4"
     _subText: 
     _sprite: {fileID: 0}
   _spaceHeight: 120

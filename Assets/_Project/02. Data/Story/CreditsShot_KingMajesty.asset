@@ -1,0 +1,306 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ad330b138fbb14f9d1bb5b0dd64b98, type: 3}
+  m_Name: CreditsShot_KingMajesty
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.CreditsShotData
+  _zoom: 0.45
+  _fadeTime: 0.8
+  _holdTime: 11
+  _steps:
+  - _time: 0.2
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 3
+    _strength: 0.22
+    _move: {x: 0, y: 6.699999}
+    _duration: 4.6
+    _count: 12
+  - _time: 1.61
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 1.71
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 2.85
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 2.9499998
+    _actor: 5
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 4.08
+    _actor: 6
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 4.18
+    _actor: 7
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 5
+    _actor: 0
+    _sprite: {fileID: 21300000, guid: cbcf0366a32108d43b82c5966fdbf3b0, type: 3}
+    _action: 2
+    _strength: 0.1
+    _move: {x: 0, y: 0}
+    _duration: 1.1
+    _count: 1
+  - _time: 6.1
+    _actor: 0
+    _sprite: {fileID: 0}
+    _action: 6
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.15
+    _count: 1
+  - _time: 6.15
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 6.2
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.4
+    _count: 1
+  - _time: 6.2
+    _actor: 8
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.5
+    _count: 1
+  - _time: 6.6
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 7
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 669142a6d4e9f7343b54684fa79c8d0d, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 7.3
+    _actor: 1
+    _sprite: {fileID: 21300000, guid: 19ddd669d370cda42afd1e2f03d6e676, type: 3}
+    _action: 1
+    _strength: 0.12
+    _move: {x: 0, y: 0}
+    _duration: 0.4
+    _count: 1
+  - _time: 7.4
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.4
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 7.4
+    _actor: 7
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.4
+    _actor: 6
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.4
+    _actor: 5
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.4
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.4
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.15
+    _move: {x: 0, y: 0}
+    _duration: 0.35
+    _count: 1
+  - _time: 7.8
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.2
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 669142a6d4e9f7343b54684fa79c8d0d, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.6
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 8.6
+    _actor: 1
+    _sprite: {fileID: 0}
+    _action: 2
+    _strength: 0.14
+    _move: {x: 0, y: 0}
+    _duration: 4
+    _count: 4
+  - _time: 9
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 9.4
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 669142a6d4e9f7343b54684fa79c8d0d, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 9.8
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 10.2
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 10.6
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 669142a6d4e9f7343b54684fa79c8d0d, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 11
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 11.4
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 11.8
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 669142a6d4e9f7343b54684fa79c8d0d, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 12.2
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 1a2ca7bce32f8534e84ea223eafc489e, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 12.6
+    _actor: 9
+    _sprite: {fileID: 21300000, guid: 7c621cccc8676574592a8c445327255b, type: 3}
+    _action: 0
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1

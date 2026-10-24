@@ -27,7 +27,7 @@ namespace ExplodeIt.UI
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
         [SerializeField] private string _unequipText = "장착 해제";
-        [SerializeField] private string _kingBlockedText = "모든 저주를 장착해야 해요";
+        [SerializeField] private string _kingBlockedText = "모든 저주 장착 필요";
         // 잠긴 칸은 이름을 가리고 해금 조건만 보여 준다. 바로 다음 차례가 아닌 칸은 조건도 가린다.
         [Tooltip("다음 차례 저주의 해금 조건. {0} = 걸어야 하는 저주 수, {1} = 처치 수")]
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";

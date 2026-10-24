@@ -120,3 +120,99 @@ MonoBehaviour:
     _move: {x: 0, y: 0}
     _duration: 3.1
     _count: 1
+  - _time: 2.75
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.2
+    _count: 1
+  - _time: 3
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.2
+    _count: 1
+  - _time: 3.25
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 7
+    _strength: 0
+    _move: {x: 0, y: 0}
+    _duration: 0.2
+    _count: 1
+  - _time: 3.5
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.55
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 3.6
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.6
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.65
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 4.7
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 5.6
+    _actor: 2
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 5.65
+    _actor: 3
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1
+  - _time: 5.7
+    _actor: 4
+    _sprite: {fileID: 0}
+    _action: 1
+    _strength: 0.35
+    _move: {x: 0, y: 0}
+    _duration: 0.3
+    _count: 1

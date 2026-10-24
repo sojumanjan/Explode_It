@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AmbushCurseData
   _id: ambush
   _displayName: "\uAE30\uC2B5"
-  _description: "\uC801 \uC808\uBC18\uC774 \uAD6C\uC5ED\uC774 \uC544\uB2CC \uB0B4
-    \uADFC\uCC98 \uC544\uBB34 \uB370\uC11C\uB098\n\uD55C \uB9C8\uB9AC\uC529 \uB098\uD0C0\uB09C\uB2E4.
-    2\uCD08 \uC804\uC5D0 \uC790\uB9AC\uAC00 \uD45C\uC2DC\uB41C\uB2E4."
+  _description: "50%\uD655\uB960\uB85C \uC801\uC774 \uD50C\uB808\uC774\uC5B4 \uADFC\uCC98\uC5D0\uC11C
+    \uC2A4\uD3F0\uD55C\uB2E4."
   _icon: {fileID: 21300000, guid: 38115045e6824c14ca7b83d878d37ce8, type: 3}
   _unlockedByDefault: 0
   _requiredCurses: 3

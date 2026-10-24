@@ -63,6 +63,12 @@ namespace ExplodeIt.Core
         private void OnDisable()
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
+            // 히트스톱 도중 씬이 바뀌어도 소리 높이가 낮은 채로 남지 않게 한다.
+            if (_isHitStopping)
+            {
+                _isHitStopping = false;
+                AudioManager.SetSfxPitchScale(1f);
+            }
         }
 
         private void OnDestroy()
@@ -202,6 +208,9 @@ namespace ExplodeIt.Core
             }
 
             _isHitStopping = false;
+            // 히트스톱을 여기서 끊으면 Update가 더는 소리 높이를 되돌리지 않는다. 안 되돌리면 낮아진 높이가
+            // 씬을 넘어 살아 있는 AudioManager에 남아, 이후 모든 효과음(버튼 클릭 포함)이 늘어져 들린다.
+            AudioManager.SetSfxPitchScale(1f);
             if (current != GameState.Paused)
             {
                 Time.timeScale = _savedTimeScale;

@@ -65,6 +65,12 @@ namespace ExplodeIt.Stage
         [SerializeField] private string _skipHint = "스페이스: 건너뛰기";
 
         [Header("마지막 문구")]
+        [Tooltip("마지막 장면이 끝나면 화면 전체를 덮는 색. 보스 3국면 필살기(충격파)와 같은 보라")]
+        [SerializeField] private Color _finalTintColor = new Color(0.82f, 0.6f, 1f, 1f);
+
+        [Tooltip("화면이 보라로 다 덮이는 시간 (초). 다 덮인 뒤 그 위에 마지막 문구가 떠오른다")]
+        [SerializeField, Min(0.05f)] private float _finalTintTime = 1.5f;
+
         [Tooltip("크레딧이 다 올라간 뒤 빈 화면으로 기다리는 시간 (초)")]
         [SerializeField, Min(0f)] private float _finalGap = 2.5f;
 
@@ -100,6 +106,8 @@ namespace ExplodeIt.Stage
         public float ScrollSpeed => _scrollSpeed;
         public float HoldSpeedMultiplier => _holdSpeedMultiplier;
         public string SkipHint => _skipHint;
+        public Color FinalTintColor => _finalTintColor;
+        public float FinalTintTime => _finalTintTime;
         public float FinalGap => _finalGap;
         public string FinalText => _finalText;
         public float FinalFadeTime => _finalFadeTime;

@@ -60,6 +60,7 @@ namespace ExplodeIt.Bombs
         private float _savedThrowInterval;
         private float _savedRechargeTime;
         private float _savedExplosionRadius;
+        private float _savedMaxThrowRange;
 
         public WeaponStats Stats => _stats;
         public WeaponData Weapon => _weaponData;
@@ -371,8 +372,8 @@ namespace ExplodeIt.Bombs
             });
         }
 
-        // 순간폭탄 스킬: 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라진다. 범위 배율은 강화로 커질 수 있다.
-        public void BeginInstantMode(float speedMultiplier, float radiusMultiplier)
+        // 순간폭탄 스킬: 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라지며 사거리가 늘어난다. 범위 배율은 강화로 커질 수 있다.
+        public void BeginInstantMode(float speedMultiplier, float radiusMultiplier, float rangeMultiplier)
         {
             if (_isInstantMode)
             {
@@ -384,11 +385,13 @@ namespace ExplodeIt.Bombs
             _savedThrowInterval = _stats.ThrowInterval;
             _savedRechargeTime = _stats.RechargeTime;
             _savedExplosionRadius = _stats.ExplosionRadius;
+            _savedMaxThrowRange = _stats.MaxThrowRange;
             float speed = Mathf.Max(0.01f, speedMultiplier);
             _stats.FuseDelay = 0f;
             _stats.ThrowInterval /= speed;
             _stats.RechargeTime /= speed;
             _stats.ExplosionRadius *= radiusMultiplier;
+            _stats.MaxThrowRange *= rangeMultiplier;
             _rechargeTimer = Mathf.Min(_rechargeTimer, _stats.RechargeTime);
             _throwSource = DamageSource.InstantBomb;
             ApplyStats();
@@ -406,6 +409,7 @@ namespace ExplodeIt.Bombs
             _stats.ThrowInterval = _savedThrowInterval;
             _stats.RechargeTime = _savedRechargeTime;
             _stats.ExplosionRadius = _savedExplosionRadius;
+            _stats.MaxThrowRange = _savedMaxThrowRange;
             _throwSource = DamageSource.Bomb;
             ApplyStats();
         }

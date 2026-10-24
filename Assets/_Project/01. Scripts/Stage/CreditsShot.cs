@@ -110,7 +110,8 @@ namespace ExplodeIt.Stage
                 case CreditsShotAction.Punch:
                     return actor.DOPunchScale(homeScale * step.Strength, step.Duration, 6);
                 case CreditsShotAction.Shake:
-                    return actor.DOShakePosition(step.Duration, new Vector3(step.Strength, 0f, 0f), 25, 0f, false, true);
+                    // 흔들림 수가 길이와 상관없이 정해져 있어, 길게 떨 때는 횟수를 늘려야 바들바들 빠르기가 유지된다.
+                    return actor.DOShakePosition(step.Duration, new Vector3(step.Strength, 0f, 0f), 25 * step.Count, 0f, false, true);
                 case CreditsShotAction.Hop:
                     // 이동 거리를 주면 콩콩 뛰며 그만큼 옮겨 간다(걷기).
                     return actor.DOLocalJump(position + (Vector3)step.Move, step.Strength, step.Count, step.Duration).SetEase(Ease.Linear);
