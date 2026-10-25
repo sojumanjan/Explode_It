@@ -1950,11 +1950,23 @@ namespace ExplodeIt.Enemies
             shadow.localScale = _dropShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, fall);
         }
 
+        // 씬이 닫힐 때는 오브젝트가 지워지는 순서가 정해져 있지 않아, 보스보다 표시가 먼저 지워져 있을 수 있다.
         private void HideDropMarker()
         {
-            _dropShadow.enabled = false;
-            _dropRange.Visible = false;
-            _dropFill.Visible = false;
+            if (_dropShadow != null)
+            {
+                _dropShadow.enabled = false;
+            }
+
+            if (_dropRange != null)
+            {
+                _dropRange.Visible = false;
+            }
+
+            if (_dropFill != null)
+            {
+                _dropFill.Visible = false;
+            }
         }
 
         // ── 유성우: 보라 소용돌이 속에서 두 손을 들면 맵이 보랏빛으로 물들고, 맵 전체에 유성이 하나씩 떨어진다.

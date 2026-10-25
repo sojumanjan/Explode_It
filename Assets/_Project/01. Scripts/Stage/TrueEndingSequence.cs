@@ -33,6 +33,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private RectTransform _content;
         [SerializeField] private TMP_Text _finalText;
         [SerializeField] private TMP_Text _skipHint;
+        // 건너뛰기 안내 아래 게이지의 채움 판. 가로 앵커 끝(anchorMax.x)을 0~1로 늘려 채운다.
+        [SerializeField] private RectTransform _skipFill;
         // 마지막 장면 뒤 화면 전체를 덮는 보라 판. 크레딧 글보다 위, 마지막 문구보다 아래에 둔다.
         [SerializeField] private Image _finalTint;
 
@@ -61,6 +63,9 @@ namespace ExplodeIt.Stage
         // 크레딧 동안 숨길 게임 화면 UI(체력·게이지 등). 왼쪽 칸으로 비쳐 보이면 안 된다.
         [SerializeField] private GameObject[] _hideDuringCredits;
 
+        // 곡 위치가 크레딧과 이 정도(초) 넘게 어긋났을 때만 옮긴다. 프레임 차이만큼의 오차로 소리가 튀지 않게 한다.
+        private const float BgmSyncTolerance = 0.25f;
+
         private readonly List<GameObject> _built = new List<GameObject>();
         private TrueEndingData _data;
         private Action _onFinished;
@@ -76,6 +81,13 @@ namespace ExplodeIt.Stage
         // 크레딧이 흐른 시간과 그중 꾹 눌러 빨리 감은 시간(실제 시간). 플레이 기록에 비율로 남긴다.
         private float _rollTime;
         private float _fastTime;
+        // 이번 크레딧의 글 속도(UI 단위/초). 곡이 있으면 실제 글 높이와 곡 길이로 계산한다.
+        private float _scrollSpeed;
+        // 마지막 문구를 띄운 채 곡이 끝나기를 기다리는 중인지. 곡이 없으면 이 시각(실제 시간)까지 기다린다.
+        private bool _isWaitingBgmEnd;
+        // 스페이스를 누르고 있는 시간(실제 시간). 떼면 처음부터.
+        private float _skipHeld;
+        private float _waitBgmEndAt = -1f;
 
         private void Awake()
         {
@@ -125,7 +137,13 @@ namespace ExplodeIt.Stage
                 .Append(_cover.DOFade(1f, data.CoverTime).SetEase(Ease.InQuad))
                 .AppendCallback(StartCredits)
                 .Append(_cover.DOFade(0f, data.RevealTime))
-                .AppendCallback(() => _step = Step.Rolling)
+                .AppendCallback(() =>
+                {
+                    // 글 속도를 곡 길이에 맞춰 정하므로, 글이 움직이기 시작하는 순간에 곡을 튼다. 글 배치가 다 끝난 지금 높이를 잰다.
+                    _scrollSpeed = ComputeScrollSpeed();
+                    AudioManager.PlayBgm(data.CreditsBgm, data.BgmFadeTime);
+                    _step = Step.Rolling;
+                })
                 .SetUpdate(true)
                 .SetLink(gameObject);
         }
@@ -138,7 +156,7 @@ namespace ExplodeIt.Stage
             LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
             _viewHeight = ((RectTransform)_content.parent).rect.height;
             _content.anchoredPosition = new Vector2(_content.anchoredPosition.x, -_viewHeight);
-            AudioManager.PlayBgm(_data.CreditsBgm, _data.BgmFadeTime);
+            _scrollSpeed = _data.ScrollSpeed;
             for (int i = 0; _hideDuringCredits != null && i < _hideDuringCredits.Length; i++)
             {
                 _hideDuringCredits[i].SetActive(false);
@@ -150,6 +168,8 @@ namespace ExplodeIt.Stage
             // 크레딧 글이 먼저 몇 줄 올라온 뒤에 장면이 밝아져야 크레딧이 주인공으로 읽힌다.
             PlayShot(0, _data.FirstShotDelay);
 
+            _skipHeld = 0f;
+            _skipFill.anchorMax = new Vector2(0f, _skipFill.anchorMax.y);
             bool showHint = _canSkip && !string.IsNullOrEmpty(_data.SkipHint);
             _skipHint.gameObject.SetActive(showHint);
             _skipHint.text = _data.SkipHint;
@@ -163,12 +183,26 @@ namespace ExplodeIt.Stage
                 _camera.PreviousStateIsValid = false;
             }
 
+            if (_isWaitingBgmEnd)
+            {
+                // 곡이 끝나기 조금 전에 까매져야 마지막 소리가 까만 화면 위에서 울린다.
+                bool isDone = _waitBgmEndAt >= 0f
+                    ? Time.unscaledTime >= _waitBgmEndAt
+                    : !AudioManager.IsBgmPlaying || AudioManager.BgmTime >= AudioManager.BgmLength - _data.BlackLeadTime;
+                if (isDone)
+                {
+                    CutToBlack();
+                }
+
+                return;
+            }
+
             if (_step != Step.Rolling)
             {
                 return;
             }
 
-            if (_canSkip && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (_canSkip && UpdateSkipHold())
             {
                 ShowFinal(0f, true);
                 return;
@@ -176,7 +210,7 @@ namespace ExplodeIt.Stage
 
             bool isHolding = Mouse.current != null && Mouse.current.leftButton.isPressed;
             float tempo = isHolding ? _data.HoldSpeedMultiplier : 1f;
-            float speed = _data.ScrollSpeed * tempo;
+            float speed = _scrollSpeed * tempo;
             _rollTime += Time.unscaledDeltaTime;
             if (isHolding)
             {
@@ -204,8 +238,53 @@ namespace ExplodeIt.Stage
             }
         }
 
+        // 스페이스를 정해 둔 시간 동안 누르고 있으면 건너뛴다. 실수로 한 번 눌러 크레딧을 놓치지 않게 한다.
+        // 게이지는 처음엔 빨리 차다가 끝에 갈수록 천천히 차서, 누르는 즉시 반응하면서도 끝까지 눌러야 하는 느낌을 준다.
+        private bool UpdateSkipHold()
+        {
+            bool isPressed = Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
+            _skipHeld = isPressed ? _skipHeld + Time.unscaledDeltaTime : 0f;
+            float t = Mathf.Clamp01(_skipHeld / Mathf.Max(_data.SkipHoldTime, 0.01f));
+            float shown = 1f - (1f - t) * (1f - t) * (1f - t);
+            _skipFill.anchorMax = new Vector2(shown, _skipFill.anchorMax.y);
+            return t >= 1f;
+        }
+
+        // 마지막 줄이 화면 위로 빠지는 순간 곡이 "보라 덮기 + 문구 떠오르기 + 문구 머무는 시간"만 남도록 글 속도를 정한다.
+        // 글 높이는 실제 배치 결과로 재야 한다. 미리 잰 값을 쓰면 글자 배치가 조금만 달라도 곡과 어긋난다.
+        private float ComputeScrollSpeed()
+        {
+            AudioClip clip = _data.CreditsBgm != null ? _data.CreditsBgm.Clip : null;
+            float rollTime = clip != null ? clip.length - FinalTailTime : 0f;
+            if (rollTime <= 1f)
+            {
+                return _data.ScrollSpeed;
+            }
+
+            return (_viewHeight + _content.rect.height) / rollTime;
+        }
+
+        private float FinalTailTime => _data.FinalTintTime + _data.FinalFadeTime + _data.FinalHoldTime;
+
+        // 빨리 감거나 건너뛰어 곡이 뒤처졌으면, 곡을 끝부분만 남기고 앞으로 옮겨 누구나 곡 끝과 함께 까매지는 순간을 보게 한다.
+        // 그대로 본 사람은 글 속도를 곡에 맞춰 두었으므로 건드리지 않는다(옮기면 소리가 튄다).
+        private void SyncBgmForFinal(bool isSkipped)
+        {
+            float length = AudioManager.BgmLength;
+            if (length <= 0f || !AudioManager.IsBgmPlaying || (!isSkipped && _fastTime <= 0f))
+            {
+                return;
+            }
+
+            float target = length - FinalTailTime;
+            if (target > 0f && AudioManager.BgmTime < target - BgmSyncTolerance)
+            {
+                AudioManager.BgmTime = target;
+            }
+        }
+
         // 화면을 보라로 천천히 덮은 뒤 그 위에 마지막 문구를 띄운다. 덮이는 동안 장면은 계속 흐르고, 다 덮인 뒤에 걷는다.
-        // 마지막 장면이 끝날 때, 크레딧 글이 다 올라갈 때, 건너뛸 때 중 먼저 오는 쪽에서 한 번만 시작한다.
+        // 크레딧 글이 다 올라갈 때(곡이 끝나는 순간)나 건너뛸 때 한 번만 시작한다.
         private void ShowFinal(float gap, bool isSkipped)
         {
             if (_step == Step.Final)
@@ -226,6 +305,7 @@ namespace ExplodeIt.Stage
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
                 .AppendInterval(gap)
+                .AppendCallback(() => SyncBgmForFinal(isSkipped))
                 .Append(_finalTint.DOFade(_data.FinalTintColor.a, _data.FinalTintTime).SetEase(Ease.Linear))
                 .AppendCallback(() =>
                 {
@@ -233,9 +313,31 @@ namespace ExplodeIt.Stage
                     _content.gameObject.SetActive(false);
                 })
                 .Append(_finalText.DOFade(1f, _data.FinalFadeTime))
-                .AppendInterval(_data.FinalHoldTime)
-                .Append(_finalText.DOFade(0f, _data.EndFadeTime))
-                .AppendCallback(Finish)
+                .AppendCallback(WaitForBgmEnd)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+        }
+
+        // 문구는 곡이 끝나는 바로 그 순간까지 띄워 둔다. 곡이 없으면(꺼졌거나 이미 끝났으면) 정해 둔 시간만큼 둔다.
+        private void WaitForBgmEnd()
+        {
+            _waitBgmEndAt = AudioManager.IsBgmPlaying ? -1f : Time.unscaledTime + _data.FinalHoldTime;
+            _isWaitingBgmEnd = true;
+        }
+
+        // 곡이 뚝 끝나는 순간 문구·보라를 한 번에 걷고 까만 화면으로 바꾼 뒤 결과 창으로 넘긴다.
+        private void CutToBlack()
+        {
+            _isWaitingBgmEnd = false;
+            _finalText.alpha = 0f;
+            _finalTint.gameObject.SetActive(false);
+            _cover.alpha = 1f;
+            Finish();
+            // 곡 끝의 딸깍 소리만 막을 만큼 아주 짧게 줄인다. 길게 줄이면 마지막 한 방이 묻힌다.
+            float untilFade = Mathf.Max(0f, AudioManager.BgmLength - AudioManager.BgmTime - _data.BgmEndFadeTime);
+            _sequence?.Kill();
+            _sequence = DOTween.Sequence()
+                .InsertCallback(untilFade, () => AudioManager.FadeOutBgm(_data.BgmEndFadeTime))
                 .AppendInterval(_data.ClearDelay)
                 .AppendCallback(() => _onFinished?.Invoke())
                 .SetUpdate(true)
@@ -245,8 +347,8 @@ namespace ExplodeIt.Stage
         // 까만 화면은 그대로 두고 결과 창이 그 위에 뜬다. 그 전에 저장하고 업적 알림을 먼저 띄운다.
         private void Finish()
         {
+            // 곡은 줄이지 않는다. 마지막 한 방이 묻히지 않게 끝까지 그대로 울리게 둔다.
             _step = Step.None;
-            AudioManager.FadeOutBgm(_data.EndFadeTime);
             SaveSystem.Data.TrueEndingSeen = true;
             SaveSystem.Save();
             GameEvents.RaiseTrueEndingFinished();
@@ -273,10 +375,9 @@ namespace ExplodeIt.Stage
                 .SetUpdate(true)
                 .SetLink(gameObject);
 
-            // 마지막 장면(왕이 기를 모으는 순간)은 까맣게 끊지 않고 그대로 보라로 덮으며 마지막 문구로 넘어간다.
+            // 마지막 장면(왕이 기를 모으는 순간)은 까맣게 끊지 않고, 크레딧 글이 다 올라갈 때까지 띄워 둔 채 보라로 덮인다.
             if (index == _shots.Length - 1)
             {
-                _shotSequence.AppendCallback(() => ShowFinal(0f, false));
                 return;
             }
 
@@ -285,7 +386,7 @@ namespace ExplodeIt.Stage
                 .AppendCallback(() =>
                 {
                     EndShot();
-                    PlayShot(index + 1, 0f);
+                    PlayShot(index + 1, _data.ShotGap);
                 });
         }
 

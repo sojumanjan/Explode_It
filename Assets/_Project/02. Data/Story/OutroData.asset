@@ -48,7 +48,7 @@ MonoBehaviour:
     \uC624\uB4E0\uC9C0.\n<size=80%>(\uCC38\uACE0\uB85C \uC774\uC790\uB294 \uB9E4\uC77C
     \uBD99\uB294\uB2E4)</size>\n\n<align=right>- \uC704\uB300\uD558\uACE0 \uB108\uADF8\uB7EC\uC6B4
     \uC655, \uC9D0\uC774</align>"
-  _letterSound: {fileID: 0}
+  _letterSound: {fileID: 11400000, guid: 33327e8dad76f5244b4957dbc5d72736, type: 2}
   _endText: THE END...?
   _endFadeTime: 0.8
   _endHoldTime: 0.3

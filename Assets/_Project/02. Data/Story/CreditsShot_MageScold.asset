@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CreditsShot_MageScold
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.CreditsShotData
   _zoom: 0.45
-  _fadeTime: 0.8
-  _holdTime: 10
+  _fadeTime: 1.2
+  _holdTime: 11.5
   _steps:
   - _time: 0.3
     _actor: 1

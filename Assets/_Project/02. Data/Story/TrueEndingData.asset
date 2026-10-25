@@ -19,10 +19,11 @@ MonoBehaviour:
   _zoom: 0.12
   _zoomTime: 4
   _coverTime: 2
-  _creditsBgm: {fileID: 11400000, guid: bcc5c5bbbda23344fa994d25fcbc6821, type: 2}
+  _creditsBgm: {fileID: 11400000, guid: 0d5fed3797e031a4e9b4c4c857443ffe, type: 2}
   _bgmFadeTime: 2
   _revealTime: 1
   _firstShotDelay: 4
+  _shotGap: 2
   _entries:
   - _kind: 0
     _text: Explode It
@@ -149,11 +150,15 @@ MonoBehaviour:
   _castSpriteHeight: 150
   _scrollSpeed: 96
   _holdSpeedMultiplier: 3
-  _skipHint: "\uC2A4\uD398\uC774\uC2A4: \uAC74\uB108\uB6F0\uAE30"
-  _finalGap: 2.5
+  _skipHint: "\uC2A4\uD398\uC774\uC2A4\uB97C \uAE38\uAC8C \uB20C\uB7EC \uAC74\uB108\uB6F0\uAE30"
+  _skipHoldTime: 1
+  _finalTintColor: {r: 0.82, g: 0.6, b: 1, a: 1}
+  _finalTintTime: 1.5
+  _finalGap: 0
   _finalText: "\uADF8\uB9AC\uACE0, \uBAA8\uB4E0 \uC800\uC8FC\uB97C \uC9CA\uC5B4\uC9C4
     \uCC44 \uC655\uC744 \uC4F0\uB7EC\uD2B8\uB9B0 \uB2F9\uC2E0\uAED8 \uAC10\uC0AC\uB97C."
   _finalFadeTime: 1.5
-  _finalHoldTime: 4
-  _endFadeTime: 1.5
+  _finalHoldTime: 3.5
+  _blackLeadTime: 0.3
+  _bgmEndFadeTime: 0.05
   _clearDelay: 1

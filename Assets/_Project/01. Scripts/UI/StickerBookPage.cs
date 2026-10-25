@@ -103,8 +103,9 @@ namespace ExplodeIt.UI
 
             _hovered = null;
             _tooltip.Hide();
-            _prevButton.interactable = index > 0;
-            _nextButton.interactable = index < _spreads.Length - 1;
+            // 못 넘기는 쪽 버튼은 회색으로 두지 않고 아예 숨긴다.
+            _prevButton.gameObject.SetActive(index > 0);
+            _nextButton.gameObject.SetActive(index < _spreads.Length - 1);
             _spreadText.text = string.Format(_spreadFormat, index + 1, _spreads.Length);
         }
     }

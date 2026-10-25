@@ -263,6 +263,26 @@ namespace ExplodeIt.Core
             }
         }
 
+        // 지금 배경음의 곡 길이와 재생 위치(초). 크레딧처럼 화면 길이에 맞춘 곡을 빨리 감은 화면에 다시 맞출 때 쓴다.
+        public static bool IsBgmPlaying => _current != null && _current._bgmFront.isPlaying;
+
+        public static float BgmLength => _current != null && _current._bgmFront.clip != null ? _current._bgmFront.clip.length : 0f;
+
+        public static float BgmTime
+        {
+            get => _current != null && _current._bgmFront.clip != null ? _current._bgmFront.time : 0f;
+            set
+            {
+                if (_current == null || _current._bgmFront.clip == null)
+                {
+                    return;
+                }
+
+                AudioSource front = _current._bgmFront;
+                front.time = Mathf.Clamp(value, 0f, front.clip.length - 0.01f);
+            }
+        }
+
         // 지금 배경음을 서서히 줄여 끈다. 다음 곡은 따로 정할 때까지 나오지 않는다(보스가 각성하는 순간 새 곡으로 바꾸려고 미리 비울 때).
         public static void FadeOutBgm(float duration)
         {
@@ -410,6 +430,7 @@ namespace ExplodeIt.Core
             (_bgmFront, _bgmBack) = (_bgmBack, _bgmFront);
 
             _bgmFront.clip = bgm.Clip;
+            _bgmFront.loop = bgm.Loop;
             _bgmFront.volume = 0f;
             _bgmFront.pitch = 1f;
             _bgmFront.Play();
