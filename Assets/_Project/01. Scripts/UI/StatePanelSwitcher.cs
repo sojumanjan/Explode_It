@@ -15,7 +15,7 @@ namespace ExplodeIt.UI
             // 에디터에서 켜 둔 채 저장했더라도 시작할 때는 모두 숨긴다.
             for (int i = 0; i < _panels.Length; i++)
             {
-                _panels[i].Hide();
+                _panels[i].Hide(true);
             }
         }
 

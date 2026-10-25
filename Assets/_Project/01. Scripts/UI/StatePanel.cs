@@ -94,10 +94,29 @@ namespace ExplodeIt.UI
             Group.blocksRaycasts = true;
         }
 
-        public void Hide()
+        // instant가 아니고 밀려 들어오는 판이 있으면, 들어온 방향으로 쏙 빠지며 사라진 뒤 끈다(일시정지를 풀 때).
+        // 시작할 때 모두 숨기는 경우는 바로 끈다.
+        public void Hide(bool instant = false)
         {
             _tween?.Kill();
-            gameObject.SetActive(false);
+            _slideTween?.Kill();
+            if (instant || _slideIn == null || !gameObject.activeInHierarchy || Group.alpha <= 0f)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
+            Group.interactable = false;
+            Group.blocksRaycasts = false;
+            _slideTween = _slideIn.DOAnchorPosX(_slideBaseX + _slideOffset, _slideTime)
+                .SetEase(Ease.InCubic)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+            _tween = Group.DOFade(0f, _slideTime)
+                .SetEase(Ease.InQuad)
+                .OnComplete(() => gameObject.SetActive(false))
+                .SetUpdate(true)
+                .SetLink(gameObject);
         }
     }
 }
