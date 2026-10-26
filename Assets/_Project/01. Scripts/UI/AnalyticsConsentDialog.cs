@@ -19,7 +19,8 @@ namespace ExplodeIt.UI
         [Header("글")]
         [SerializeField] private string _title = "플레이 기록 수집 안내";
         [SerializeField, TextArea(8, 16)] private string _body =
-            "더 재미있는 게임을 만들기 위해 플레이 기록(판 결과, 고른 장비, 진행 상황)과 기본 기기 정보를 익명으로 수집하려고 합니다.\n\n" +
+            "더 재미있는 게임을 만들기 위해 플레이 기록(판 결과, 고른 장비, 진행 상황)과 기본 기기 정보를 익명으로 수집하려고 합니다.\n" +
+            "설문에 참여하면 설문 답과 플레이 기록이 같은 익명 번호로 묶입니다.\n" +
             "이름, 연락처 같은 개인정보는 수집하지 않고, 설정에서 언제든 끌 수 있습니다.";
 
         public bool IsOpen { get; private set; }

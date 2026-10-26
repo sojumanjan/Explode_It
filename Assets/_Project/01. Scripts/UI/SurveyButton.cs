@@ -25,7 +25,7 @@ namespace ExplodeIt.UI
 
         private void OpenSurvey()
         {
-            Application.OpenURL(_data.Url);
+            Application.OpenURL(_data.BuildUrl(Core.PlayAnalytics.UserId));
         }
     }
 }

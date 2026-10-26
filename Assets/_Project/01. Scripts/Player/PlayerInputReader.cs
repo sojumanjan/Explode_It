@@ -21,6 +21,8 @@ namespace ExplodeIt.Player
         public Vector2 Aim => _aimAction.action.ReadValue<Vector2>();
         // 한 번 누를 때 한 번만 던진다. 꾹 누르고 있어도 연사되지 않게 누른 프레임만 읽는다.
         public bool ThrowPressed => !IsLocked && !PointerBlocked && _throwAction.action.WasPressedThisFrame();
+        // 누르고 있는 동안 계속 참. 순간폭탄 스킬 동안만 꾹 눌러 연사하는 데 쓴다.
+        public bool ThrowHeld => !IsLocked && !PointerBlocked && _throwAction.action.IsPressed();
         // 게이지가 차는 순간 누르고 있던 버튼으로 바로 나가지 않도록, 누른 프레임만 읽는다.
         public bool AbilityPressed => !IsLocked && !PointerBlocked && !IsAbilityBlocked && _abilityAction.action.WasPressedThisFrame();
         // 키보드 입력이라 패널 위 커서와 무관하게 받는다.

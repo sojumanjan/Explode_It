@@ -29,6 +29,10 @@ namespace ExplodeIt.Core
         private static bool CanSend => _data != null && _data.IsEnabled && SaveSystem.Data.AnalyticsEnabled
             && (!Application.isEditor || _data.SendFromEditor);
 
+        // 기록에 붙는 익명 사용자 번호. 설문 답과 기록을 같은 사람끼리 이어 보려고 설문 링크에 붙인다.
+        // 수집을 거절했거나 서비스가 아직 안 켜졌으면 빈 문자열(기록이 없으니 이을 것도 없다).
+        public static string UserId => _isReady && CanSend ? AnalyticsService.Instance.GetAnalyticsUserID() : "";
+
         public static void Configure(AnalyticsData data)
         {
             if (_data != null || data == null)

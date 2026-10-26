@@ -155,7 +155,9 @@ namespace ExplodeIt.Bombs
             }
 
             // 폭탄이 없을 때 누른 것은 기억하지 않는다. 다시 차는 순간 저절로 나가면 의도와 다르기 때문이다.
-            if (_input.ThrowPressed && _chargesLeft > 0)
+            // 순간폭탄 동안은 꾹 누르고 있으면 연사 간격·충전마다 저절로 나간다. 짧은 지속 시간에 연타하느라 조준이 흔들리지 않게 한다.
+            bool wantsThrow = _input.ThrowPressed || (_isInstantMode && _input.ThrowHeld);
+            if (wantsThrow && _chargesLeft > 0)
             {
                 _throwQueuedUntil = Time.time + ThrowBufferTime;
             }
@@ -411,6 +413,8 @@ namespace ExplodeIt.Bombs
             _stats.ExplosionRadius = _savedExplosionRadius;
             _stats.MaxThrowRange = _savedMaxThrowRange;
             _throwSource = DamageSource.Bomb;
+            // 꾹 누른 채로 끝나면 기억해 둔 입력 때문에 일반 폭탄이 한 발 더 나가지 않게 지운다.
+            _throwQueuedUntil = -1f;
             ApplyStats();
         }
 
