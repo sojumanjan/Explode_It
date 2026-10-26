@@ -16660,6 +16660,7 @@ GameObject:
   - component: {fileID: 671047733}
   - component: {fileID: 671047732}
   - component: {fileID: 671047731}
+  - component: {fileID: 671047735}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -16794,6 +16795,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671047729}
   m_CullTransparentMesh: 1
+--- !u!114 &671047735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671047729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d032179eb4580ed4da2acc12955951ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.ButtonClickSound
+  _sound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
 --- !u!1 &678275528
 GameObject:
   m_ObjectHideFlags: 0
@@ -22106,6 +22120,7 @@ MonoBehaviour:
   _box: {fileID: 396050774}
   _content: {fileID: 23598561}
   _titleText: {fileID: 1988186217}
+  _openSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
   _clearRow: {fileID: 1683340744}
   _killsRow: {fileID: 1902467612}
   _survivalRow: {fileID: 1058936348}
@@ -38189,6 +38204,7 @@ GameObject:
   - component: {fileID: 1538289755}
   - component: {fileID: 1538289754}
   - component: {fileID: 1538289753}
+  - component: {fileID: 1538289757}
   m_Layer: 5
   m_Name: DeclineButton
   m_TagString: Untagged
@@ -38323,6 +38339,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538289751}
   m_CullTransparentMesh: 1
+--- !u!114 &1538289757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538289751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d032179eb4580ed4da2acc12955951ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.ButtonClickSound
+  _sound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
 --- !u!1 &1538505834
 GameObject:
   m_ObjectHideFlags: 0
@@ -45012,6 +45041,7 @@ GameObject:
   - component: {fileID: 1770689594}
   - component: {fileID: 1770689593}
   - component: {fileID: 1770689592}
+  - component: {fileID: 1770689596}
   m_Layer: 5
   m_Name: AgreeButton
   m_TagString: Untagged
@@ -45146,6 +45176,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770689590}
   m_CullTransparentMesh: 1
+--- !u!114 &1770689596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770689590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d032179eb4580ed4da2acc12955951ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.ButtonClickSound
+  _sound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
 --- !u!1 &1780546324
 GameObject:
   m_ObjectHideFlags: 0

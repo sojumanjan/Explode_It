@@ -32,7 +32,7 @@ namespace ExplodeIt.Stage
         // 건너뛰기 칸이 손을 뗐을 때 줄어드는 빠르기(누를 때의 배수).
         private const float SkipDrainRate = 3f;
         // 건너뛰기 칸은 평소 흐리게 두어 컷씬을 가리지 않고, 누르기 시작하면 또렷해진다.
-        private const float SkipIdleAlpha = 0.45f;
+        private const float SkipIdleAlpha = 0.9f;
 
         private enum Step
         {

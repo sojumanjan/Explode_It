@@ -20,6 +20,8 @@ namespace ExplodeIt.UI
         [SerializeField] private RectTransform _box;
         [SerializeField] private RectTransform _content;
         [SerializeField] private TMP_Text _titleText;
+        // 모드 버튼의 클릭 소리. 잠긴 무한 모드는 막힘 소리만 나야 해서 버튼이 아니라 창이 뜰 때 낸다.
+        [SerializeField] private SoundData _openSound;
 
         [Header("기록 줄")]
         [SerializeField] private RecordRow _clearRow;
@@ -49,6 +51,7 @@ namespace ExplodeIt.UI
         public void Show(RunMode mode, Action onStart)
         {
             _onStart = onStart;
+            AudioManager.Play(_openSound);
             SaveData data = SaveSystem.Data;
             if (mode == RunMode.Story)
             {

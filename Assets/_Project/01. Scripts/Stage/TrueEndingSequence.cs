@@ -188,7 +188,7 @@ namespace ExplodeIt.Stage
                 // 곡이 끝나기 조금 전에 까매져야 마지막 소리가 까만 화면 위에서 울린다.
                 bool isDone = _waitBgmEndAt >= 0f
                     ? Time.unscaledTime >= _waitBgmEndAt
-                    : !AudioManager.IsBgmPlaying || AudioManager.BgmTime >= AudioManager.BgmLength - _data.BlackLeadTime;
+                    : !AudioManager.IsBgmPlaying || AudioManager.BgmTime >= AudioManager.BgmLength - _data.BgmTailTime - _data.BlackLeadTime;
                 if (isDone)
                 {
                     CutToBlack();
@@ -255,7 +255,7 @@ namespace ExplodeIt.Stage
         private float ComputeScrollSpeed()
         {
             AudioClip clip = _data.CreditsBgm != null ? _data.CreditsBgm.Clip : null;
-            float rollTime = clip != null ? clip.length - FinalTailTime : 0f;
+            float rollTime = clip != null ? clip.length - _data.BgmTailTime - FinalTailTime : 0f;
             if (rollTime <= 1f)
             {
                 return _data.ScrollSpeed;
@@ -276,7 +276,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            float target = length - FinalTailTime;
+            float target = length - _data.BgmTailTime - FinalTailTime;
             if (target > 0f && AudioManager.BgmTime < target - BgmSyncTolerance)
             {
                 AudioManager.BgmTime = target;
@@ -333,13 +333,12 @@ namespace ExplodeIt.Stage
             _finalTint.gameObject.SetActive(false);
             _cover.alpha = 1f;
             Finish();
-            // 곡 끝의 딸깍 소리만 막을 만큼 아주 짧게 줄인다. 길게 줄이면 마지막 한 방이 묻힌다.
+            // 잔향까지 다 울린 뒤 파일 끝의 딸깍 소리만 막을 만큼 아주 짧게 줄인다.
             float untilFade = Mathf.Max(0f, AudioManager.BgmLength - AudioManager.BgmTime - _data.BgmEndFadeTime);
             _sequence?.Kill();
             _sequence = DOTween.Sequence()
                 .InsertCallback(untilFade, () => AudioManager.FadeOutBgm(_data.BgmEndFadeTime))
-                .AppendInterval(_data.ClearDelay)
-                .AppendCallback(() => _onFinished?.Invoke())
+                .InsertCallback(_data.ClearDelay, () => _onFinished?.Invoke())
                 .SetUpdate(true)
                 .SetLink(gameObject);
         }

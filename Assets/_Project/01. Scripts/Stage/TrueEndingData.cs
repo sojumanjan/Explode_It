@@ -40,6 +40,9 @@ namespace ExplodeIt.Stage
         [Tooltip("크레딧 배경음이 올라오는 시간 (초, 실제 시간)")]
         [SerializeField, Min(0f)] private float _bgmFadeTime = 2f;
 
+        [Tooltip("크레딧 곡 파일 끝에 덧붙인 잔향 길이 (초). 연주가 끝나는 시각을 이만큼 앞으로 보고 크레딧·마지막 문구·까만 화면을 맞춘다. 잔향은 까만 화면 위에서 울린다")]
+        [SerializeField, Min(0f)] private float _bgmTailTime = 4.5f;
+
         [Tooltip("까만 화면이 걷히며 크레딧이 드러나는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _revealTime = 1f;
 
@@ -94,8 +97,8 @@ namespace ExplodeIt.Stage
         [Tooltip("크레딧 곡이 끝나기 이만큼 전(초)부터 줄여 끝의 딸깍 소리를 막는다. 길면 마지막 소리가 묻힌다")]
         [SerializeField, Min(0.01f)] private float _bgmEndFadeTime = 0.1f;
 
-        [Tooltip("문구가 사라진 뒤 결과 창이 뜨기까지 (초). 그 사이 까만 화면 위에 찐엔딩 업적 알림이 먼저 올라온다")]
-        [SerializeField, Min(0f)] private float _clearDelay = 1f;
+        [Tooltip("문구가 사라지고 까매진 뒤 결과 창이 뜨기까지 (초). 그 사이 까만 화면 위에 찐엔딩 업적 알림이 먼저 올라온다. 곡 잔향이 덜 끝났으면 결과 창 위에서 마저 울린다")]
+        [SerializeField, Min(0f)] private float _clearDelay = 3.25f;
 
         public Enemy King => _king != null && _king.TryGetComponent(out Enemy enemy) ? enemy : null;
         public BossDialogueData Dialogue => _dialogue;
@@ -106,6 +109,7 @@ namespace ExplodeIt.Stage
         public float CoverTime => _coverTime;
         public BgmData CreditsBgm => _creditsBgm;
         public float BgmFadeTime => _bgmFadeTime;
+        public float BgmTailTime => _bgmTailTime;
         public float RevealTime => _revealTime;
         public float FirstShotDelay => _firstShotDelay;
         public float ShotGap => _shotGap;

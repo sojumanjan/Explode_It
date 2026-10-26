@@ -21,9 +21,10 @@ MonoBehaviour:
   _coverTime: 2
   _creditsBgm: {fileID: 11400000, guid: 0d5fed3797e031a4e9b4c4c857443ffe, type: 2}
   _bgmFadeTime: 2
+  _bgmTailTime: 4.5
   _revealTime: 1
-  _firstShotDelay: 4
-  _shotGap: 2
+  _firstShotDelay: 8
+  _shotGap: 1.6
   _entries:
   - _kind: 0
     _text: Explode It
@@ -161,4 +162,4 @@ MonoBehaviour:
   _finalHoldTime: 3.5
   _blackLeadTime: 0.3
   _bgmEndFadeTime: 0.05
-  _clearDelay: 1
+  _clearDelay: 3.25

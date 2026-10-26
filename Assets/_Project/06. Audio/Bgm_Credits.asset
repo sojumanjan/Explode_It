@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1699dff49160af648affbecfb2c02c86, type: 3}
   m_Name: Bgm_Credits
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.BgmData
-  _clip: {fileID: 8300000, guid: 6665d344d64aa2d478a68985773c2b36, type: 3}
+  _clip: {fileID: 8300000, guid: efa1c8d59b007d04bba9eccd0fdaae97, type: 3}
   _loop: 0
   _volume: 0.6
   _fadeDuration: 1.5
