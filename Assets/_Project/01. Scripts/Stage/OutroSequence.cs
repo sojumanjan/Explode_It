@@ -6,7 +6,6 @@ using ExplodeIt.UI;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ExplodeIt.Stage
@@ -168,7 +167,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            if (_step == Step.None || Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame)
+            if (_step == Step.None || !IntroComic.WasAdvancePressed())
             {
                 return;
             }

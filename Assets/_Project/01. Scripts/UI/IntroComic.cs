@@ -4,12 +4,13 @@ using ExplodeIt.Core;
 using ExplodeIt.Stage;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ExplodeIt.UI
 {
     // 만화 페이지(오프닝·엔딩 공용). 2×2 칸이 차례로 튀어나오고, 칸 아래 상자에 대사가 타자 치듯 나온다.
-    // 클릭해야만 다음 칸으로 넘어간다. 대사가 다 나오면 페이지 구석에 "클릭" 표시가 통통 튀어 넘길 수 있음을 알리고,
+    // 클릭해야만 다음 칸으로 넘어간다. 대사가 다 나오면 대사 상자 오른쪽 끝에 ▼가 통통 튀어 넘길 수 있음을 알리고,
     // 넘기는 순간 지금 칸이 꾹 눌렸다 돌아오며 딸깍 소리가 난다. 클릭 판정은 연출 감독(IntroSequence·OutroSequence)이 한다.
     // 대사는 그림에 그리지 않고 여기서 얹는다. 대사를 고칠 때 그림을 다시 만들지 않아도 된다.
     public class IntroComic : MonoBehaviour
@@ -17,17 +18,19 @@ namespace ExplodeIt.UI
         // 칸이 튀어나올 때 처음 크기 배율과 기울기(도). 만화 칸을 탁 붙이는 느낌만 내는 연출 값이다.
         private const float PopStartScale = 1.25f;
         private const float PopStartTilt = 6f;
-        // "클릭" 표시가 위아래로 튀는 폭(UI 단위)과 빠르기, 넘길 때 지금 칸이 눌리는 세기(비율).
+        // ▼ 표시가 위아래로 튀는 폭(UI 단위)과 빠르기, 넘길 때 지금 칸이 눌리는 세기(비율).
         private const float HintBob = 10f;
         private const float HintBobRate = 3f;
         private const float PressPunch = 0.06f;
+        // ▼ 표시가 대사 상자 오른쪽 끝에서 안쪽으로 들어온 거리(UI 단위).
+        private const float HintInset = 20f;
 
         [SerializeField] private CanvasGroup _group;
         // 칸 틀(테두리 포함). 튀어나오는 연출을 이 틀에 준다.
         [SerializeField] private RectTransform[] _panels;
         [SerializeField] private Image[] _pictures;
         [SerializeField] private TMP_Text[] _captions;
-        // 대사가 다 나오면 뜨는 "클릭" 표시.
+        // 대사가 다 나오면 지금 칸의 대사 상자 오른쪽 끝에 뜨는 ▼ 표시. 칸이 바뀔 때마다 그 칸의 상자로 옮겨 붙인다.
         [SerializeField] private RectTransform _nextHint;
 
         private IComicData _data;
@@ -38,7 +41,6 @@ namespace ExplodeIt.UI
         private Tween _pop;
         private Tween _press;
         private Vector2 _hintHome;
-        private bool _hasHintHome;
         // 데이터의 몇 번째 컷부터, 몇 장을 이 페이지에 보여 줄지.
         private int _first;
         private int _count;
@@ -83,12 +85,6 @@ namespace ExplodeIt.UI
                 _panels[i].anchoredPosition = isRow ? new Vector2(_panelHomes[i].x, middleY) : _panelHomes[i];
             }
 
-            if (!_hasHintHome)
-            {
-                _hintHome = _nextHint.anchoredPosition;
-                _hasHintHome = true;
-            }
-
             _nextHint.gameObject.SetActive(false);
             _isPlaying = true;
             _index = -1;
@@ -101,6 +97,21 @@ namespace ExplodeIt.UI
             _press?.Kill();
             _isPlaying = false;
             gameObject.SetActive(false);
+        }
+
+        // 넘기기 입력. 마우스만 쓰면 키보드에 손을 둔 사람이 헤매므로 스페이스·엔터도 받는다.
+        // 스페이스는 길게 누르면 건너뛰기이기도 해서, 누르는 순간 한 칸 넘어간 뒤 계속 누르면 건너뛴다.
+        public static bool WasAdvancePressed()
+        {
+            Mouse mouse = Mouse.current;
+            if (mouse != null && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
+            {
+                return true;
+            }
+
+            Keyboard keyboard = Keyboard.current;
+            return keyboard != null && (keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame
+                || keyboard.numpadEnterKey.wasPressedThisFrame);
         }
 
         // 대사가 나오는 중이면 한 번에 다 보여 주고, 다 나왔으면 지금 칸을 꾹 누르는 연출과 함께 다음 칸으로 넘긴다.
@@ -177,6 +188,7 @@ namespace ExplodeIt.UI
             caption.text = _data.GetPanelLine(_first + _index);
             caption.ForceMeshUpdate();
             caption.maxVisibleCharacters = 0;
+            AttachHint((RectTransform)caption.rectTransform.parent);
 
             RectTransform panel = _panels[_index];
             panel.gameObject.SetActive(true);
@@ -188,6 +200,17 @@ namespace ExplodeIt.UI
                 .Join(panel.DOLocalRotate(Vector3.zero, _data.PanelPopTime).SetEase(Ease.OutQuad))
                 .SetLink(gameObject);
             AudioManager.Play(_data.PanelSound);
+        }
+
+        // 대사 상자의 자식으로 붙여, 칸이 눌리고 튀는 연출도 같이 따라가게 한다.
+        private void AttachHint(RectTransform box)
+        {
+            _nextHint.SetParent(box, false);
+            _nextHint.anchorMin = new Vector2(1f, 0.5f);
+            _nextHint.anchorMax = new Vector2(1f, 0.5f);
+            _nextHint.pivot = new Vector2(1f, 0.5f);
+            _hintHome = new Vector2(-HintInset, -HintBob * 0.5f);
+            _nextHint.anchoredPosition = _hintHome;
         }
     }
 }

@@ -31,6 +31,8 @@ namespace ExplodeIt.Stage
         private const float KingJolt = 0.2f;
         // 건너뛰기 칸이 손을 뗐을 때 줄어드는 빠르기(누를 때의 배수).
         private const float SkipDrainRate = 3f;
+        // 건너뛰기 칸은 평소 흐리게 두어 컷씬을 가리지 않고, 누르기 시작하면 또렷해진다.
+        private const float SkipIdleAlpha = 0.45f;
 
         private enum Step
         {
@@ -78,6 +80,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private Image _fade;
         [SerializeField] private RectTransform _skipButton;
         [SerializeField] private Image _skipFill;
+        // 건너뛰기 칸 전체의 투명도. 비워 두면 늘 또렷하다.
+        [SerializeField] private CanvasGroup _skipGroup;
         // 건너뛰려면 누르고 있어야 하는 시간(초). 대사를 넘기려고 연타하다 실수로 건너뛰지 않게 한다.
         [SerializeField, Min(0.1f)] private float _skipHoldTime = 0.8f;
 
@@ -196,6 +200,8 @@ namespace ExplodeIt.Stage
             _playerScale = _player.localScale;
             _player.localScale = Vector3.zero;
             Teleport(_book.transform.position);
+            // 튀어나와 착지하는 순간부터 왕을 본다. 대사가 뜰 때 바라보게 하면 그 전까지 커서 쪽을 보고 있다가 홱 돌아선다.
+            GameEvents.RaisePlayerLookRequested(_king.transform.position);
             _king.sprite = _kingSprites.Get(KingMood.Lazy);
             _king.transform.localScale = _kingScale;
             _areSoldiersCalled = false;
@@ -250,7 +256,7 @@ namespace ExplodeIt.Stage
                 return;
             }
 
-            bool isClicked = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && !isOverSkip;
+            bool isClicked = IntroComic.WasAdvancePressed() && !isOverSkip;
             switch (_step)
             {
                 case Step.Comic:
@@ -616,7 +622,7 @@ namespace ExplodeIt.Stage
             _fade.gameObject.SetActive(true);
         }
 
-        // ── 건너뛰기: 오른쪽 위 버튼을 길게 누르거나 스페이스를 길게 누르면 바로 아레나 입장으로 간다.
+        // ── 건너뛰기: 오른쪽 아래 작은 칸을 길게 누르거나 스페이스를 길게 누르면 바로 아레나 입장으로 간다.
 
         private void ShowSkip()
         {
@@ -641,6 +647,11 @@ namespace ExplodeIt.Stage
             if (_skipFill != null)
             {
                 _skipFill.fillAmount = amount;
+            }
+
+            if (_skipGroup != null)
+            {
+                _skipGroup.alpha = amount > 0f ? 1f : SkipIdleAlpha;
             }
         }
 

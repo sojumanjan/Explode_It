@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2de80303436f14ea0615aca92fec43, type: 3}
+  m_Name: SurveyData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.SurveyData
+  _url: https://docs.google.com/forms/d/e/1FAIpQLScodEDsHZXaIfk2V-3OwfwfJ1B1M6NdEMDFrshEV-sf1D5T6w/viewform?usp=dialog
+  _confirmMessage: "\uD50C\uB808\uC774 \uC18C\uAC10 \uC124\uBB38 \uD398\uC774\uC9C0\uB97C
+    \uC5F4\uAE4C\uC694?\n(\uBE0C\uB77C\uC6B0\uC800 \uC0C8 \uCC3D\uC5D0\uC11C \uC5F4\uB824\uC694)"
