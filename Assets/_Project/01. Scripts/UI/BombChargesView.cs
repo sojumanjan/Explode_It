@@ -17,12 +17,13 @@ namespace ExplodeIt.UI
 
         private readonly List<Image> _pips = new List<Image>();
 
-        private void OnEnable()
+        // 오프닝 동안 HUD를 꺼 두므로, 꺼져 있는 사이 오는 판 시작 알림(처음 값)을 놓치지 않게 켜고 끄는 것과 상관없이 듣는다.
+        private void Awake()
         {
             GameEvents.BombChargesChanged += OnChargesChanged;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             GameEvents.BombChargesChanged -= OnChargesChanged;
         }

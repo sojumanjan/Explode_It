@@ -2417,7 +2417,7 @@ namespace ExplodeIt.Enemies
             {
                 _screenFlashTime += deltaTime;
                 float fade = 1f - Mathf.Clamp01(_screenFlashTime / _data.LeapFlashTime);
-                Color flash = _data.LeapFlashColor;
+                Color flash = FlashSafety.Apply(_data.LeapFlashColor);
                 flash.a *= fade;
                 _mapTint.color = flash;
                 _mapTint.enabled = fade > 0f;

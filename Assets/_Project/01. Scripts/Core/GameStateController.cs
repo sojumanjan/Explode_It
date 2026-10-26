@@ -36,6 +36,15 @@ namespace ExplodeIt.Core
             ChangeState(GameState.Playing);
         }
 
+        // 창 밖을 누르거나 다른 창으로 넘어가면 멈춘다. 웹은 게임 칸 밖을 누르는 순간 키 입력이 끊긴다.
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus && SaveSystem.Data.AutoPauseEnabled && !IsPauseBlocked)
+            {
+                Pause();
+            }
+        }
+
         private void OnPauseInput(InputAction.CallbackContext context)
         {
             if (Current == GameState.Playing && !IsPauseBlocked)

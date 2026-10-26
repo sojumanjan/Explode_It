@@ -12,6 +12,8 @@ namespace ExplodeIt.Progression
     {
         // 낙뢰 직전 번쩍임이 한 번 켜졌다 꺼지는 주기 (초). 그림 전용 연출이라 데이터로 빼지 않는다.
         private const float FlashPeriod = 0.1f;
+        // 번쩍임 줄이기를 켜면 초당 3번 아래로 느리게 깜빡인다.
+        private const float ReducedFlashPeriod = 0.4f;
 
         [SerializeField] private ExplosionShape _range;
         [SerializeField] private ExplosionShape _fill;
@@ -220,7 +222,8 @@ namespace ExplodeIt.Progression
             else if (_flashTime > 0f && _duration - _time <= _flashTime)
             {
                 _fill.SetRadius(_radius);
-                _fill.Visible = Mathf.Repeat(_time, FlashPeriod) < FlashPeriod * 0.5f;
+                float period = FlashSafety.IsReduced ? ReducedFlashPeriod : FlashPeriod;
+                _fill.Visible = Mathf.Repeat(_time, period) < period * 0.5f;
             }
 
             if (_time >= _duration)

@@ -197,7 +197,7 @@ namespace ExplodeIt.Bombs
             }
 
             _body.enabled = false;
-            _fuseFill.SetColor(_explodeFlashColor);
+            _fuseFill.SetColor(FlashSafety.Apply(_explodeFlashColor));
 
             if (_options.Source == DamageSource.Bomb || _options.Source == DamageSource.InstantBomb)
             {

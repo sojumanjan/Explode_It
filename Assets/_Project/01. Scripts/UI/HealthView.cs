@@ -19,17 +19,14 @@ namespace ExplodeIt.UI
         private Image[] _hearts = new Image[0];
         private int _current = -1;
 
+        // 오프닝 동안 HUD를 꺼 두므로, 꺼져 있는 사이 오는 판 시작 알림(처음 값)을 놓치지 않게 켜고 끄는 것과 상관없이 듣는다.
         private void Awake()
         {
+            GameEvents.PlayerHealthChanged += OnHealthChanged;
             _heartTemplate.gameObject.SetActive(false);
         }
 
-        private void OnEnable()
-        {
-            GameEvents.PlayerHealthChanged += OnHealthChanged;
-        }
-
-        private void OnDisable()
+        private void OnDestroy()
         {
             GameEvents.PlayerHealthChanged -= OnHealthChanged;
         }

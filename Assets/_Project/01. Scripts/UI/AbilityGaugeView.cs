@@ -21,8 +21,10 @@ namespace ExplodeIt.UI
         private float _gap;
         private int _laidOutCount;
 
+        // 오프닝 동안 HUD를 꺼 두므로, 꺼져 있는 사이 오는 판 시작 알림(처음 값)을 놓치지 않게 켜고 끄는 것과 상관없이 듣는다.
         private void Awake()
         {
+            GameEvents.AbilityChargeChanged += OnChargeChanged;
             RectTransform first = SlotRect(0);
             RectTransform last = SlotRect(Mathf.Min(1, _fills.Length - 1));
             _left = first.anchoredPosition.x - HalfWidth(first);
@@ -56,12 +58,7 @@ namespace ExplodeIt.UI
             }
         }
 
-        private void OnEnable()
-        {
-            GameEvents.AbilityChargeChanged += OnChargeChanged;
-        }
-
-        private void OnDisable()
+        private void OnDestroy()
         {
             GameEvents.AbilityChargeChanged -= OnChargeChanged;
         }

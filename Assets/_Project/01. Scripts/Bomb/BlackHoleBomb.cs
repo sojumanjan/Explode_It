@@ -218,7 +218,7 @@ namespace ExplodeIt.Bombs
             }
 
             _body.enabled = false;
-            _fuseFill.SetColor(_explodeFlashColor);
+            _fuseFill.SetColor(FlashSafety.Apply(_explodeFlashColor));
             AudioManager.Play(_explodeSound);
             FeedbackPlayer.Play(_explodeFeedback, position);
             GameEvents.RaisePlayerBlastExploded(position, _radius);
