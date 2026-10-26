@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using ExplodeIt.Core;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace ExplodeIt.UI
@@ -131,8 +132,7 @@ namespace ExplodeIt.UI
             AudioManager.Play(_pageSound);
             _history.Push(_current);
             _overlayBase = _current;
-            _overlayBase.interactable = false;
-            _overlayBase.blocksRaycasts = false;
+            BlockInput(_overlayBase);
             Show(page, false);
         }
 
@@ -183,8 +183,7 @@ namespace ExplodeIt.UI
             if (isBackgroundChange && _fader != null && _current != null)
             {
                 CanvasGroup from = _current;
-                from.interactable = false;
-                from.blocksRaycasts = false;
+                BlockInput(from);
                 _current = page;
                 bool isToTitle = page == _firstPage;
                 // 배경음도 화면과 같은 박자로: 어두워지는 동안 지금 곡이 잦아들고, 밝아지는 동안 다음 곡이 들어온다.
@@ -264,8 +263,7 @@ namespace ExplodeIt.UI
         // 사라지는 동안 눌리지 않게 바로 입력을 막는다.
         private void Hide(CanvasGroup page)
         {
-            page.interactable = false;
-            page.blocksRaycasts = false;
+            BlockInput(page);
             if (page.TryGetComponent(out IMenuPage listener))
             {
                 listener.OnPageClosed();
@@ -276,6 +274,17 @@ namespace ExplodeIt.UI
             page.DOFade(0f, FadeTime).SetUpdate(true).SetLink(page.gameObject)
                 .OnComplete(() => page.gameObject.SetActive(false));
             page.transform.DOScale(ExitScale, FadeTime).SetUpdate(true).SetLink(page.gameObject);
+        }
+
+        // interactable을 끄면 버튼이 비활성 색으로 바뀌어, 어두워지는 동안 화면이 얼룩져 보인다.
+        // 그래서 색은 그대로 두고 클릭만 막고, 눌렀던 버튼 선택을 풀어 엔터·스페이스로 다시 눌리지 않게 한다.
+        private static void BlockInput(CanvasGroup page)
+        {
+            page.blocksRaycasts = false;
+            if (EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
     }
 }

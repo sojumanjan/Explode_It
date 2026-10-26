@@ -84,6 +84,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private CanvasGroup _skipGroup;
         // 건너뛰려면 누르고 있어야 하는 시간(초). 대사를 넘기려고 연타하다 실수로 건너뛰지 않게 한다.
         [SerializeField, Min(0.1f)] private float _skipHoldTime = 0.8f;
+        // 만화·정원 연출 동안 숨길 판 화면 UI(HUD 등). 까만 화면 뒤에서 아레나로 옮길 때 다시 켠다.
+        [SerializeField] private GameObject[] _hideDuringIntro;
 
         private Step _step;
         private Action _onFinished;
@@ -208,6 +210,7 @@ namespace ExplodeIt.Stage
             CutCamera(_gardenView.position, _data.GardenZoom, false);
             SetFade(Color.white, 0f);
             ShowSkip();
+            SetIntroUiHidden(true);
 
             EnterStep(Step.Comic);
             _comic.Play(_data, OnComicDone);
@@ -552,6 +555,15 @@ namespace ExplodeIt.Stage
 
             _king.sprite = _kingSprites.Get(KingMood.Lazy);
             CutCamera(_arenaEntry.position, 1f, true);
+            SetIntroUiHidden(false);
+        }
+
+        private void SetIntroUiHidden(bool isHidden)
+        {
+            for (int i = 0; i < _hideDuringIntro.Length; i++)
+            {
+                _hideDuringIntro[i].SetActive(!isHidden);
+            }
         }
 
         private void WalkIntoArena()

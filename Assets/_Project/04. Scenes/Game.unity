@@ -37719,6 +37719,9 @@ MonoBehaviour:
   _skipFill: {fileID: 1328191610}
   _skipGroup: {fileID: 789525316}
   _skipHoldTime: 0.8
+  _hideDuringIntro:
+  - {fileID: 774221039}
+  - {fileID: 2026531879}
 --- !u!4 &621317455
 Transform:
   m_ObjectHideFlags: 0
