@@ -130,6 +130,8 @@ namespace ExplodeIt.Stage
         // 스토리를 중간 지점부터 시작했는지(시작 지점 번호, 0이면 처음부터)와, 첫 쉬는 시간 뒤 웨이브 없이 최종 보스전부터 하는지.
         private int _startCheckpoint;
         private bool _startsAtBoss;
+        // 등장 대화 동안 보스 자리로 확대해 두었는지. 조작을 돌려줄 때 배율도 되돌린다.
+        private bool _isZoomedOnBoss;
         private System.Action _onIntroFinished;
         private System.Action _onTutorialFinished;
         private System.Action _onDialogueSpawnBoss;
@@ -501,7 +503,16 @@ namespace ExplodeIt.Stage
                 // 등장 연출 동안 플레이어를 세우고, 카메라를 플레이어와 보스 사이로 옮겨 둘 다 보이게 한다.
                 Vector2 player = _spawner.Target != null ? (Vector2)_spawner.Target.position : _bossSpawnPoint;
                 GameEvents.RaisePlayerControlLockChanged(true);
-                GameEvents.RaiseCameraFocusRequested((player + _bossSpawnPoint) * 0.5f, _stage.BossCameraBlend);
+                _isZoomedOnBoss = dialogue != null && dialogue.FocusOnBoss;
+                if (_isZoomedOnBoss)
+                {
+                    GameEvents.RaiseCameraFocusRequested(_bossSpawnPoint, _stage.BossCameraBlend);
+                    GameEvents.RaiseCameraZoomRequested(dialogue.FocusZoom, _stage.BossCameraBlend);
+                }
+                else
+                {
+                    GameEvents.RaiseCameraFocusRequested((player + _bossSpawnPoint) * 0.5f, _stage.BossCameraBlend);
+                }
                 _isControlReleased = false;
             }
 
@@ -580,6 +591,11 @@ namespace ExplodeIt.Stage
             _isControlReleased = true;
             GameEvents.RaisePlayerControlLockChanged(false);
             GameEvents.RaiseCameraFocusReleased(_stage.BossCameraBlend);
+            if (_isZoomedOnBoss)
+            {
+                _isZoomedOnBoss = false;
+                GameEvents.RaiseCameraZoomRequested(1f, _stage.BossCameraBlend);
+            }
         }
 
         // 최종 보스를 쓰러뜨렸다. 슬로모션이 끝나도록 실제 시간으로 기다린 뒤 처치 대화를 연다. 대화가 없으면 바로 왕을 보내고 끝낸다.

@@ -69,7 +69,15 @@ namespace ExplodeIt.Stage
         [Tooltip("처치 대화에서 2등신으로 돌아가는 줄이 시작된 뒤 그 줄을 띄우기까지 (초). 펑 하고 바뀌는 연출에 눈이 가도록 잠깐 말없이 둔다")]
         [SerializeField, Min(0f)] private float _revertPause = 0.6f;
 
+        [Tooltip("켜면 등장 대화 동안 카메라가 플레이어와 보스 사이 대신 보스 자리를 비추고 아래 배율로 확대한다. 플레이어가 구석에 있어 보스·왕 말풍선이 화면 밖으로 잘리는 보스에 쓴다")]
+        [SerializeField] private bool _focusOnBoss;
+
+        [Tooltip("보스 자리를 비출 때 카메라 화면 크기 배율 (1 = 그대로, 작을수록 확대). 보스 자리 비추기를 켰을 때만 쓴다")]
+        [SerializeField, Range(0.3f, 1f)] private float _focusZoom = 0.8f;
+
         public float SpawnPause => _spawnPause;
+        public bool FocusOnBoss => _focusOnBoss;
+        public float FocusZoom => _focusZoom;
         public bool KingBecomesBoss => _kingBecomesBoss;
         public float KingStandHeight => _kingStandHeight;
         public float RevertPause => _revertPause;
