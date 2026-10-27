@@ -29649,7 +29649,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -60, y: 126}
+  m_AnchoredPosition: {x: -60, y: 267}
   m_SizeDelta: {x: 220, y: 52}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &498190933
@@ -43358,7 +43358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &706166379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49646,7 +49646,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281542953
   m_fontColor: {r: 0.16, g: 0.16, b: 0.2, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -127224,7 +127224,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -60, y: 126}
+  m_AnchoredPosition: {x: -60, y: 267}
   m_SizeDelta: {x: 220, y: 52}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &2053597058
