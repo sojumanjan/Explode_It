@@ -36,6 +36,7 @@ namespace ExplodeIt.UI
         private bool _isShown;
         private bool _isTalking;
         private int _kills;
+        private int _resumedKills;
         private float _lastMultiKillTime = float.NegativeInfinity;
         private float _holdTimer;
         private KingRemarkData _last;
@@ -69,6 +70,7 @@ namespace ExplodeIt.UI
         private void OnEnable()
         {
             GameEvents.StageStarted += OnStageStarted;
+            GameEvents.StoryResumed += OnStoryResumed;
             GameEvents.WaveStarted += OnWaveStarted;
             GameEvents.BombExploded += OnBombExploded;
             GameEvents.EnemyKilled += OnEnemyKilled;
@@ -81,6 +83,7 @@ namespace ExplodeIt.UI
         private void OnDisable()
         {
             GameEvents.StageStarted -= OnStageStarted;
+            GameEvents.StoryResumed -= OnStoryResumed;
             GameEvents.WaveStarted -= OnWaveStarted;
             GameEvents.BombExploded -= OnBombExploded;
             GameEvents.EnemyKilled -= OnEnemyKilled;
@@ -96,7 +99,14 @@ namespace ExplodeIt.UI
         private void OnStageStarted(bool isStoryMode)
         {
             _isStoryMode = isStoryMode;
-            _kills = 0;
+            // 중간부터 시작하면 건너뛴 웨이브의 처치 수 대사가 다시 나오지 않게 이어 센다.
+            _kills = _resumedKills;
+        }
+
+        // 판 시작 알림보다 먼저 오므로, 처치 수를 판 시작에서 0으로 되돌린 뒤 이어 세도록 따로 들고 있는다.
+        private void OnStoryResumed(int checkpoint, int startKills)
+        {
+            _resumedKills = startKills;
         }
 
         private void OnWaveStarted(int waveNumber)

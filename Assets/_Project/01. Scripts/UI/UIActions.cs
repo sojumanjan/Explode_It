@@ -27,8 +27,28 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text[] _resultLeaveLabels;
         [SerializeField] private string _resultTitleText = "타이틀로";
 
+        [Header("결과 창 스토리 중간부터 다시 하기 (게임 씬)")]
+        // 스토리 판에서만 보인다. 결과 창 다시하기는 스토리에서 처음부터 다시 하므로 글자를 바꿔 구분한다.
+        [SerializeField] private CheckpointRetryButton[] _resultCheckpoints;
+        [SerializeField] private TMP_Text[] _resultRetryLabels;
+        [SerializeField] private string _storyRetryText = "처음부터 다시하기";
+
         private bool _isLeaving;
         private bool _leavesToTitle;
+
+        private void Awake()
+        {
+            bool isStory = RunSetup.Mode == RunMode.Story;
+            for (int i = 0; _resultCheckpoints != null && i < _resultCheckpoints.Length; i++)
+            {
+                _resultCheckpoints[i].Bind(RestartFrom);
+            }
+
+            for (int i = 0; isStory && _resultRetryLabels != null && i < _resultRetryLabels.Length; i++)
+            {
+                _resultRetryLabels[i].text = _storyRetryText;
+            }
+        }
 
         private void OnEnable()
         {
@@ -54,8 +74,20 @@ namespace ExplodeIt.UI
             SceneFlow.LoadGame();
         }
 
+        // 스토리는 중간부터 시작한 판이어도 처음부터 다시 한다. 중간부터는 결과 창의 지점 버튼으로 고른다.
         public void Restart()
         {
+            RestartFrom(0);
+        }
+
+        private void RestartFrom(int checkpoint)
+        {
+            if (_isLeaving)
+            {
+                return;
+            }
+
+            RunSetup.SetStartCheckpoint(checkpoint);
             Leave(SceneFlow.LoadGame);
         }
 

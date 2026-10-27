@@ -204,6 +204,10 @@ namespace ExplodeIt.Core
 
         // 판이 시작될 때 한 번. 스토리 모드인지 알려 준다(왕 컷인 등 스토리 전용 연출이 구독한다).
         public static event Action<bool> StageStarted;
+        // 스토리를 중간 지점부터 시작할 때, 판 시작 알림 바로 앞에 한 번. 시작 지점 번호와 이미 잡은 것으로 칠 처치 수.
+        public static event Action<int, int> StoryResumed;
+        // 스토리에서 새 시작 지점에 닿았을 때(보스 처치, 마지막 웨이브 완료). 시작 지점 번호.
+        public static event Action<int> StoryCheckpointReached;
 
         // 폭탄(블랙홀 포함)이 착지해 범위가 정해진 순간. 위치, 반경. 폭탄을 보고 피하는 적이 구독한다.
         public static event Action<Vector2, float> BombLanded;
@@ -219,6 +223,16 @@ namespace ExplodeIt.Core
         public static void RaiseStageStarted(bool isStoryMode)
         {
             StageStarted?.Invoke(isStoryMode);
+        }
+
+        public static void RaiseStoryResumed(int checkpoint, int startKills)
+        {
+            StoryResumed?.Invoke(checkpoint, startKills);
+        }
+
+        public static void RaiseStoryCheckpointReached(int checkpoint)
+        {
+            StoryCheckpointReached?.Invoke(checkpoint);
         }
 
         public static void RaiseWaveStarted(int waveNumber)
@@ -398,6 +412,8 @@ namespace ExplodeIt.Core
             CameraFocusReleased = null;
             CameraZoomRequested = null;
             StageStarted = null;
+            StoryResumed = null;
+            StoryCheckpointReached = null;
             BombLanded = null;
             WaveStarted = null;
             SpawnWarned = null;

@@ -94,7 +94,7 @@ namespace ExplodeIt.UI
 
         public void PlayStory()
         {
-            _recordPopup.Show(RunMode.Story, () => BeginRun(RunMode.Story));
+            _recordPopup.Show(RunMode.Story, checkpoint => BeginRun(RunMode.Story, checkpoint));
         }
 
         // 첫 판은 보여 줄 기록이 없으니 창 없이 곧장 들어간다.
@@ -119,7 +119,7 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            _recordPopup.Show(RunMode.Endless, () => BeginRun(RunMode.Endless));
+            _recordPopup.Show(RunMode.Endless, _ => BeginRun(RunMode.Endless));
         }
 
         // 승천 칸 버튼. 스토리를 클리어했으면 저주 고르기 페이지로 간다.
@@ -136,12 +136,13 @@ namespace ExplodeIt.UI
             _pager.Open(_cursePage);
         }
 
-        private void BeginRun(RunMode mode)
+        // startCheckpoint: 스토리를 시작할 지점. 0이면 처음부터.
+        private void BeginRun(RunMode mode, int startCheckpoint = 0)
         {
             WeaponData weapon = _catalog.FindUsableWeapon(SaveSystem.Data.SelectedWeapon);
             AbilityData ability = _catalog.FindUsableAbility(SaveSystem.Data.SelectedAbility);
             _launcher.Launch(mode, weapon != null ? weapon.Id : "", ability != null ? ability.Id : "", SaveSystem.Data.SelectedArtifacts,
-                SaveSystem.Data.EquippedCurses);
+                SaveSystem.Data.EquippedCurses, startCheckpoint);
         }
 
         private void RefreshSlots()

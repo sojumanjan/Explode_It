@@ -127,6 +127,9 @@ namespace ExplodeIt.Stage
         private bool _isTrueEnding;
         // 오프닝·튜토리얼이 끝나기를 기다리는 중. 그동안은 웨이브 시계를 돌리지 않는다.
         private bool _isWaitingIntro;
+        // 스토리를 중간 지점부터 시작했는지(시작 지점 번호, 0이면 처음부터)와, 첫 쉬는 시간 뒤 웨이브 없이 최종 보스전부터 하는지.
+        private int _startCheckpoint;
+        private bool _startsAtBoss;
         private System.Action _onIntroFinished;
         private System.Action _onTutorialFinished;
         private System.Action _onDialogueSpawnBoss;
@@ -204,6 +207,13 @@ namespace ExplodeIt.Stage
             _spawner.Prepare(CollectEnemyPrefabs());
             PrepareBosses();
             SetMarker(false, 0f);
+            // 중간부터 시작하는 판은 이미 본 오프닝·기초 과제를 건너뛴다.
+            if (ApplyStartCheckpoint())
+            {
+                BeginStage();
+                return;
+            }
+
             if (_intro != null && _stage.IsStoryMode && _intro.ShouldPlay)
             {
                 _isWaitingIntro = true;
@@ -240,9 +250,41 @@ namespace ExplodeIt.Stage
             BeginStage();
         }
 
+        // 스토리 시작 지점 n은 웨이브 n개(와 그 뒤 보스 n마리)를 끝낸 자리다. 웨이브 수와 같으면 마지막 웨이브까지 끝내고 최종 보스만 남은 자리다.
+        // 처치 수는 건너뛴 웨이브의 스폰 수만큼 잡은 것으로 치고 이어 센다.
+        private bool ApplyStartCheckpoint()
+        {
+            if (!_stage.IsStoryMode || _stage.IsEndless || RunSetup.StartCheckpoint <= 0)
+            {
+                return false;
+            }
+
+            _startCheckpoint = Mathf.Min(RunSetup.StartCheckpoint, WaveCount);
+            _waveNumber = _startCheckpoint;
+            _waveIndex = Mathf.Min(_startCheckpoint, WaveCount - 1);
+            _startsAtBoss = _startCheckpoint >= WaveCount;
+            return true;
+        }
+
+        private int SkippedKills()
+        {
+            int kills = 0;
+            for (int i = 0; i < _startCheckpoint; i++)
+            {
+                kills += _stage.Waves[i].TotalSpawnCount;
+            }
+
+            return kills;
+        }
+
         // 판 시간과 웨이브 시계는 여기서부터 센다. 오프닝은 판 시간에 들어가지 않는다.
         private void BeginStage()
         {
+            if (_startCheckpoint > 0)
+            {
+                GameEvents.RaiseStoryResumed(_startCheckpoint, SkippedKills());
+            }
+
             GameEvents.RaiseStageStarted(_stage.IsStoryMode);
             BeginRest(_isTrueEnding ? _trueEnding.StartDelay : _stage.FirstWaveDelay);
         }
@@ -266,6 +308,11 @@ namespace ExplodeIt.Stage
                         if (_isTrueEnding)
                         {
                             BeginTrueEndingBoss();
+                        }
+                        else if (_startsAtBoss)
+                        {
+                            _startsAtBoss = false;
+                            BeginBossIntro(_waveNumber);
                         }
                         else
                         {
@@ -300,6 +347,12 @@ namespace ExplodeIt.Stage
                     if (_nextEvent >= _events.Count && (_generator == null || _generator.IsDone) && _spawner.ActiveCount == 0)
                     {
                         GameEvents.RaiseWaveCleared(_waveNumber);
+                        // 마지막 웨이브를 끝내면 최종 보스전부터 다시 할 수 있다.
+                        if (_stage.IsStoryMode && !_stage.IsEndless && _waveNumber >= WaveCount)
+                        {
+                            GameEvents.RaiseStoryCheckpointReached(_waveNumber);
+                        }
+
                         BeginBossIntro(_waveNumber);
                     }
                     break;
@@ -707,6 +760,12 @@ namespace ExplodeIt.Stage
                 _isRunning = false;
                 GameEvents.RaiseStageCleared();
                 return;
+            }
+
+            // 보스를 쓰러뜨리면 다음 웨이브부터 다시 할 수 있다.
+            if (_stage.IsStoryMode && !_stage.IsEndless)
+            {
+                GameEvents.RaiseStoryCheckpointReached(_bossNumber);
             }
 
             // 웨이브가 보스 수보다 적으면 마지막 웨이브를 반복한다. 무한 모드는 웨이브 목록을 쓰지 않는다.

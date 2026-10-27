@@ -54,8 +54,8 @@ namespace ExplodeIt.UI
         private void OnKillsChanged(int kills)
         {
             _text.SetText("{0}", kills);
-            // 처음 표시할 때는 튀지 않는다.
-            if (_shownKills >= 0 && kills > _shownKills)
+            // 처음 표시할 때와, 중간부터 시작해 처치 수가 한 번에 건너뛸 때는 튀지 않는다.
+            if (_shownKills >= 0 && kills == _shownKills + 1)
             {
                 Bounce(kills);
             }

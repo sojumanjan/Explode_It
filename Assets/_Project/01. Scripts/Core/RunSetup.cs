@@ -14,6 +14,7 @@ namespace ExplodeIt.Core
         private static RunMode _mode;
         private static string _weaponId;
         private static string _abilityId;
+        private static int _startCheckpoint;
 
         public static RunMode Mode => _isSet ? _mode : RunMode.Story;
         public static string WeaponId => _isSet ? _weaponId : SaveSystem.Data.SelectedWeapon;
@@ -22,6 +23,9 @@ namespace ExplodeIt.Core
         public static IReadOnlyList<string> ArtifactIds => _isSet ? _artifactIds : SaveSystem.Data.SelectedArtifacts;
         // 건 저주 ID. 무한 모드에서만 채워진다. 게임 씬을 바로 켜면 스토리라 비어 있다.
         public static IReadOnlyList<string> CurseIds => _curseIds;
+        // 스토리를 어디서부터 시작하는지 (저장의 스토리 시작 지점과 같은 번호). 0이면 처음부터. 무한 모드는 늘 0이다.
+        // 다시 하기는 같은 설정으로 씬을 다시 불러오므로, 결과 창 버튼이 고른 지점으로 바꿔 놓고 다시 부른다.
+        public static int StartCheckpoint => _mode == RunMode.Story ? _startCheckpoint : 0;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatic()
@@ -30,19 +34,26 @@ namespace ExplodeIt.Core
             _mode = RunMode.Story;
             _weaponId = "";
             _abilityId = "";
+            _startCheckpoint = 0;
             _artifactIds.Clear();
             _curseIds.Clear();
         }
 
         public static void Set(RunMode mode, string weaponId, string abilityId, IReadOnlyList<string> artifactIds,
-            IReadOnlyList<string> curseIds)
+            IReadOnlyList<string> curseIds, int startCheckpoint = 0)
         {
             _isSet = true;
             _mode = mode;
             _weaponId = weaponId ?? "";
             _abilityId = abilityId ?? "";
+            _startCheckpoint = Mathf.Max(0, startCheckpoint);
             CopyIds(artifactIds, _artifactIds);
             CopyIds(mode == RunMode.Endless ? curseIds : null, _curseIds);
+        }
+
+        public static void SetStartCheckpoint(int checkpoint)
+        {
+            _startCheckpoint = Mathf.Max(0, checkpoint);
         }
 
         // 개발자 패널은 지금 설정(같은 목록)을 그대로 다시 넘기므로, 비우기 전에 같은 목록인지 본다.

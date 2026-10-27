@@ -57,6 +57,8 @@ namespace ExplodeIt.Core
             }
 
             _isRestarting = true;
+            // 결과 창 다시하기 버튼과 같이, 스토리는 처음부터 다시 한다.
+            RunSetup.SetStartCheckpoint(0);
             SceneFlow.LoadGame();
         }
 

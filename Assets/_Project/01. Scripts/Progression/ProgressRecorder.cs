@@ -28,6 +28,7 @@ namespace ExplodeIt.Progression
             GameEvents.StageStarted += OnStageStarted;
             GameEvents.StageCleared += OnStageCleared;
             GameEvents.PlayerDied += OnPlayerDied;
+            GameEvents.StoryCheckpointReached += OnStoryCheckpointReached;
         }
 
         private void OnDisable()
@@ -35,6 +36,7 @@ namespace ExplodeIt.Progression
             GameEvents.StageStarted -= OnStageStarted;
             GameEvents.StageCleared -= OnStageCleared;
             GameEvents.PlayerDied -= OnPlayerDied;
+            GameEvents.StoryCheckpointReached -= OnStoryCheckpointReached;
             // 재시작·타이틀로 나가기도 처치 수는 누적에 남긴다.
             EndRun(false);
         }
@@ -55,6 +57,15 @@ namespace ExplodeIt.Progression
             EndRun(false);
         }
 
+        // 시작 지점은 판 끝을 기다리지 않고 바로 저장한다. 판 도중 창을 닫아도 다음에 거기서부터 할 수 있게 한다. 한 판에 몇 번뿐이다.
+        private void OnStoryCheckpointReached(int checkpoint)
+        {
+            if (SaveSystem.Data.UnlockStoryCheckpoint(checkpoint))
+            {
+                SaveSystem.Save();
+            }
+        }
+
         private void EndRun(bool isCleared)
         {
             if (!_isRunning)
@@ -64,8 +75,10 @@ namespace ExplodeIt.Progression
 
             _isRunning = false;
             SaveData data = SaveSystem.Data;
-            data.TotalKills += _stats.Kills;
+            // 중간부터 시작한 판은 건너뛴 웨이브 몫을 빼고 실제로 잡은 수만 누적한다.
+            data.TotalKills += _stats.Kills - _stats.StartKills;
             LastIsStoryMode = _isStoryMode;
+            LastIsNewTime = false;
             // 찐엔딩 판(왕관)은 웨이브 없이 왕과만 싸워 처치·생존 기록이 무한 모드와 견줄 수 없으므로 남기지 않는다.
             if (!_isStoryMode && RunCurses.Has(CurseKind.King))
             {
@@ -79,7 +92,12 @@ namespace ExplodeIt.Progression
                 if (isCleared)
                 {
                     data.StoryCleared = true;
-                    LastIsNewTime = data.TryRecordStoryTime(_stats.Elapsed);
+                    // 중간부터 깬 시간은 처음부터 깬 시간과 견줄 수 없어 최단 클리어에 넣지 않는다.
+                    if (!_stats.IsResumed)
+                    {
+                        LastIsNewTime = data.TryRecordStoryTime(_stats.Elapsed);
+                    }
+
                     LastBestTime = data.BestStoryTime;
                 }
             }
@@ -90,9 +108,14 @@ namespace ExplodeIt.Progression
             }
 
             // 클리어한 판은 "버틴 시간"이 아니므로 생존 기록에 넣지 않는다.
+            // 중간부터 시작한 판의 시간도 마찬가지로 생존 기록에 넣지 않는다.
             if (!isCleared)
             {
-                LastIsNewTime = data.TryRecordSurvival(_isStoryMode, _stats.Elapsed);
+                if (!_stats.IsResumed)
+                {
+                    LastIsNewTime = data.TryRecordSurvival(_isStoryMode, _stats.Elapsed);
+                }
+
                 LastBestTime = data.BestSurvival(_isStoryMode);
             }
 

@@ -20,6 +20,8 @@ namespace ExplodeIt.Core
         [SerializeField] private bool _firstRunDone;
         // 스토리 클리어. 무한 모드 해금 조건이다.
         [SerializeField] private bool _storyCleared;
+        // 스토리에서 가장 멀리 연 시작 지점. 1~3: 그 번째 보스를 쓰러뜨려 다음 웨이브부터, 웨이브 수(4): 최종 보스전부터. 0이면 없음.
+        [SerializeField] private int _storyCheckpoint;
         // 지금까지 모든 판에서 처치한 수 (업적용).
         [SerializeField] private int _totalKills;
         [SerializeField] private int _bestEndlessKills;
@@ -102,6 +104,20 @@ namespace ExplodeIt.Core
         {
             get => _storyCleared;
             set => _storyCleared = value;
+        }
+
+        public int StoryCheckpoint => _storyCheckpoint;
+
+        // 더 먼 시작 지점을 열었으면 true. 이미 연 지점이나 그보다 앞이면 그대로 둔다.
+        public bool UnlockStoryCheckpoint(int checkpoint)
+        {
+            if (checkpoint <= _storyCheckpoint)
+            {
+                return false;
+            }
+
+            _storyCheckpoint = checkpoint;
+            return true;
         }
 
         public int TotalKills

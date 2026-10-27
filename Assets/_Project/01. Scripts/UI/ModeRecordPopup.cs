@@ -10,6 +10,7 @@ namespace ExplodeIt.UI
 {
     // 메인에서 모드를 누르면 뜨는 작은 창. 그 모드의 최고 기록을 보여 주고, 창의 시작 버튼을 눌러야 판이 시작된다.
     // 무한 모드는 아래에 지금 장착한 저주 아이콘을 늘어놓아, 들어가기 전에 무엇을 짊어지는지 한 번 더 보여 준다.
+    // 스토리 모드는 오른쪽에 중간부터 시작하는 버튼 줄을 함께 띄운다.
     // 줄은 세로 레이아웃 안에 있어 숨긴 줄만큼 자리가 줄어든다.
     // 씬에서는 꺼 둔다. Awake에서 끄면 Show로 켠 직후 다시 꺼지기 때문이다.
     public class ModeRecordPopup : MonoBehaviour
@@ -33,6 +34,9 @@ namespace ExplodeIt.UI
         // 저주 칸 수만큼 미리 놓아 둔다. 남는 칸은 숨긴다.
         [SerializeField] private Image[] _curseIcons;
 
+        [Header("스토리 중간부터 시작")]
+        [SerializeField] private StoryCheckpointButtons _checkpoints;
+
         [Header("글")]
         [SerializeField] private string _storyTitle = "스토리 모드";
         [SerializeField] private string _endlessTitle = "무한 모드";
@@ -44,13 +48,15 @@ namespace ExplodeIt.UI
         [Tooltip("아직 기록이 없을 때 값 자리에 쓰는 글")]
         [SerializeField] private string _emptyValue = "-";
 
-        private Action _onStart;
+        // 판을 시작할 일. 인자는 스토리 시작 지점(0이면 처음부터).
+        private Action<int> _onStart;
 
         public bool IsOpen { get; private set; }
 
-        public void Show(RunMode mode, Action onStart)
+        public void Show(RunMode mode, Action<int> onStart)
         {
             _onStart = onStart;
+            _checkpoints.gameObject.SetActive(mode == RunMode.Story);
             AudioManager.Play(_openSound);
             SaveData data = SaveSystem.Data;
             if (mode == RunMode.Story)
@@ -60,6 +66,8 @@ namespace ExplodeIt.UI
                 _killsRow.Set(_killsLabel, FormatKills(data.BestStoryKills), false);
                 _survivalRow.Set(_survivalLabel, FormatTime(data.BestSurvival(true)), false);
                 _curseRow.SetActive(false);
+                _checkpoints.Bind(StartRunFrom);
+                _checkpoints.Refresh();
             }
             else
             {
@@ -81,9 +89,14 @@ namespace ExplodeIt.UI
         // 시작 버튼. 판 시작은 화면을 덮으며 넘어가므로 창은 닫지 않고 그대로 덮이게 둔다.
         public void StartRun()
         {
-            Action onStart = _onStart;
+            StartRunFrom(0);
+        }
+
+        private void StartRunFrom(int checkpoint)
+        {
+            Action<int> onStart = _onStart;
             _onStart = null;
-            onStart?.Invoke();
+            onStart?.Invoke(checkpoint);
         }
 
         public void Close()

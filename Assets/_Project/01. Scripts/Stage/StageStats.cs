@@ -12,6 +12,9 @@ namespace ExplodeIt.Stage
         private bool _hasStarted;
 
         public int Kills { get; private set; }
+        // 스토리를 중간부터 시작했을 때 건너뛴 웨이브만큼 잡은 것으로 친 수. 이번 판에 실제로 잡은 수는 Kills에서 이 값을 뺀 것이다.
+        public int StartKills { get; private set; }
+        public bool IsResumed { get; private set; }
         public float Elapsed { get; private set; }
         // 폭탄 하나로 동시에 맞힌 최대 수. 예측이 잘 맞았는지 보는 지표다.
         public int BestMultiKill { get; private set; }
@@ -36,6 +39,7 @@ namespace ExplodeIt.Stage
             GameEvents.PlayerKillerKnown += OnPlayerKillerKnown;
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.StageStarted += OnStageStarted;
+            GameEvents.StoryResumed += OnStoryResumed;
             GameEvents.StageTimerStopped += OnStageTimerStopped;
         }
 
@@ -47,6 +51,7 @@ namespace ExplodeIt.Stage
             GameEvents.PlayerKillerKnown -= OnPlayerKillerKnown;
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.StageStarted -= OnStageStarted;
+            GameEvents.StoryResumed -= OnStoryResumed;
             GameEvents.StageTimerStopped -= OnStageTimerStopped;
         }
 
@@ -59,6 +64,14 @@ namespace ExplodeIt.Stage
         private void OnStageStarted(bool isStoryMode)
         {
             _hasStarted = true;
+        }
+
+        private void OnStoryResumed(int checkpoint, int startKills)
+        {
+            IsResumed = true;
+            StartKills = startKills;
+            Kills = startKills;
+            KillsChanged?.Invoke(Kills);
         }
 
         // 일시정지·사망·클리어 동안에는 시간을 세지 않는다.
