@@ -108,3 +108,53 @@ WHERE EVENT_NAME = 'tutorial_step'
   AND EVENT_DATE >= '2026-10-27'
 GROUP BY 1
 ORDER BY players DESC;
+
+
+-- [7] 스킬별_처치: 판 시작 때 낀 스킬마다 판당 평균 스킬 처치 수와 발동 1회당 처치 수
+-- 총합으로 보면 많이 고른 스킬(기본 블랙홀)이 무조건 커지므로 판당 평균과 발동당 효율로 본다.
+-- 장착은 판 시작(run_started), 성적은 같은 판의 끝(run_ended)에서 가져와 run_id로 잇는다.
+SELECT
+    s.EVENT_JSON:ability::STRING AS ability,
+    COUNT(*) AS runs,
+    ROUND(AVG(e.EVENT_JSON:ability_kills::INT)) AS avg_ability_kills,
+    ROUND(SUM(e.EVENT_JSON:ability_kills::INT) / NULLIF(SUM(e.EVENT_JSON:ability_uses::INT), 0), 1) AS kills_per_use
+FROM EVENTS s
+JOIN EVENTS e
+  ON e.EVENT_NAME = 'run_ended'
+ AND e.EVENT_JSON:run_id::STRING = s.EVENT_JSON:run_id::STRING
+WHERE s.EVENT_NAME = 'run_started'
+  AND s.EVENT_DATE >= '2026-10-27'
+  AND e.EVENT_DATE >= '2026-10-27'
+GROUP BY 1
+ORDER BY runs DESC;
+
+
+-- [8] 아티팩트_인기(클리어 유저): 스토리를 깬 사람의 판에서 아티팩트마다 낀 비율
+-- 이벤트에 해금 목록이 없어, 안 낀 것이 싫어서인지 못 열어서인지 구분할 수 없다. 그래서 해금을 꽤 했을 클리어 유저만 보고, 성능이 아니라 인기로만 읽는다.
+-- equip_pct는 두 칸을 합쳐 세므로 모두 더하면 100%를 넘는다. 참/거짓 값은 0/1 숫자로 저장되므로 ::INT로 비교한다.
+WITH s AS (
+    SELECT
+        r.EVENT_JSON:artifact_1::STRING AS a1,
+        r.EVENT_JSON:artifact_2::STRING AS a2,
+        r.USER_ID
+    FROM EVENTS r
+    JOIN EVENTS e
+      ON e.EVENT_NAME = 'run_ended'
+     AND e.EVENT_JSON:run_id::STRING = r.EVENT_JSON:run_id::STRING
+     AND e.EVENT_JSON:story_cleared::INT = 1
+    WHERE r.EVENT_NAME = 'run_started'
+      AND r.EVENT_DATE >= '2026-10-27'
+),
+slots AS (
+    SELECT USER_ID, a1 AS artifact FROM s
+    UNION ALL
+    SELECT USER_ID, a2 AS artifact FROM s
+)
+SELECT
+    COALESCE(NULLIF(artifact, ''), '(빈 칸)') AS artifact,
+    COUNT(*) AS runs,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM s), 1) AS equip_pct,
+    COUNT(DISTINCT USER_ID) AS players
+FROM slots
+GROUP BY 1
+ORDER BY runs DESC;
