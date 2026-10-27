@@ -268,7 +268,8 @@ namespace ExplodeIt.Core
                 { "mode", ModeName() },
                 { "result", result },
                 { "survival_sec", Mathf.RoundToInt(_stats.Elapsed) },
-                { "kills", _stats.Kills },
+                // 스토리를 중간부터 시작한 판은 건너뛴 웨이브 몫을 빼고 이번 판에 실제로 잡은 수만 보낸다. 진행 위치는 wave_reached로 본다.
+                { "kills", _stats.Kills - _stats.StartKills },
                 { "wave_reached", _waveReached },
                 { "boss_reached", _bossReached },
                 { "killer", result == "death" ? _killer : "" },
