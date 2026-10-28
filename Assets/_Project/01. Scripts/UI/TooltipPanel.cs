@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ namespace ExplodeIt.UI
         public void Show(string text, RectTransform anchor)
         {
             var panel = (RectTransform)transform;
-            _text.text = text;
+            _text.text = L10n.Tr(text);
             gameObject.SetActive(true);
             LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
 

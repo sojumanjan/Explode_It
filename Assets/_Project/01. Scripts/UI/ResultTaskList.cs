@@ -1,4 +1,5 @@
 using System;
+using ExplodeIt.Core;
 using ExplodeIt.Progression;
 using TMPro;
 using UnityEngine;
@@ -60,13 +61,13 @@ namespace ExplodeIt.UI
 
             if (next == null)
             {
-                row.Title.text = category.DoneText;
+                row.Title.text = L10n.Tr(category.DoneText);
                 row.Detail.text = "";
                 row.Progress.SetText("");
                 return;
             }
 
-            row.Title.text = category.Label;
+            row.Title.text = L10n.Tr(category.Label);
             row.Detail.text = next.Description;
             int progress = AchievementTracker.GetProgress(next);
             if (progress >= 0)

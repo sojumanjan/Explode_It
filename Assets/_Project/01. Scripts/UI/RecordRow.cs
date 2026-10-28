@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace ExplodeIt.UI
         public void Set(string label, string value, bool isStamped)
         {
             gameObject.SetActive(true);
-            _label.text = label;
+            _label.text = L10n.Tr(label);
             _value.text = value;
             if (_stamp != null)
             {

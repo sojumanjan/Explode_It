@@ -117,7 +117,7 @@ namespace ExplodeIt.UI
             }
 
             bool hasName = killer != null && !string.IsNullOrEmpty(killer.KillerName);
-            _caption.text = hasName ? string.Format(_killerCaptionFormat, killer.KillerName) : _unknownKillerCaption;
+            _caption.text = hasName ? L10n.Format(_killerCaptionFormat, killer.KillerName) : L10n.Tr(_unknownKillerCaption);
         }
     }
 }

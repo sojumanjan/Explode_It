@@ -34,7 +34,7 @@ namespace ExplodeIt.UI
             _button.gameObject.SetActive(_checkpoint > 0);
             if (_checkpoint > 0)
             {
-                _label.text = _texts[_checkpoint - 1];
+                _label.text = L10n.Tr(_texts[_checkpoint - 1]);
             }
         }
 

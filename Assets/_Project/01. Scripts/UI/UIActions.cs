@@ -24,13 +24,16 @@ namespace ExplodeIt.UI
         [SerializeField, TextArea] private string _mainMenuMessage = "메인 메뉴로 나갈까요?\n이번 판은 여기서 끝나요.";
         [SerializeField, TextArea] private string _titleMessage = "타이틀로 나갈까요?\n이번 판은 여기서 끝나요.";
         // 결과 창 나가기 버튼 글자. 타이틀로 나가기를 골랐으면 이 글자로 바꾼다.
+        // 코드가 바꾸는 글자라 씬 글자 번역을 붙이지 않고, 판이 시작될 때 지금 언어로 직접 채운다.
         [SerializeField] private TMP_Text[] _resultLeaveLabels;
+        [SerializeField] private string _resultMainMenuText = "메인으로";
         [SerializeField] private string _resultTitleText = "타이틀로";
 
         [Header("결과 창 스토리 중간부터 다시 하기 (게임 씬)")]
         // 스토리 판에서만 보인다. 결과 창 다시하기는 스토리에서 처음부터 다시 하므로 글자를 바꿔 구분한다.
         [SerializeField] private CheckpointRetryButton[] _resultCheckpoints;
         [SerializeField] private TMP_Text[] _resultRetryLabels;
+        [SerializeField] private string _retryText = "다시하기";
         [SerializeField] private string _storyRetryText = "처음부터 다시하기";
 
         private bool _isLeaving;
@@ -44,9 +47,16 @@ namespace ExplodeIt.UI
                 _resultCheckpoints[i].Bind(RestartFrom);
             }
 
-            for (int i = 0; isStory && _resultRetryLabels != null && i < _resultRetryLabels.Length; i++)
+            string retryText = L10n.Tr(isStory ? _storyRetryText : _retryText);
+            for (int i = 0; _resultRetryLabels != null && i < _resultRetryLabels.Length; i++)
             {
-                _resultRetryLabels[i].text = _storyRetryText;
+                _resultRetryLabels[i].text = retryText;
+            }
+
+            string leaveText = L10n.Tr(_resultMainMenuText);
+            for (int i = 0; _resultLeaveLabels != null && i < _resultLeaveLabels.Length; i++)
+            {
+                _resultLeaveLabels[i].text = leaveText;
             }
         }
 
@@ -138,7 +148,7 @@ namespace ExplodeIt.UI
             {
                 for (int i = 0; i < _resultLeaveLabels.Length; i++)
                 {
-                    _resultLeaveLabels[i].text = _resultTitleText;
+                    _resultLeaveLabels[i].text = L10n.Tr(_resultTitleText);
                 }
             }
 

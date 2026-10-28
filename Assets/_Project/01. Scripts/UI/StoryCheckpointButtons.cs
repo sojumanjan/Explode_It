@@ -58,7 +58,7 @@ namespace ExplodeIt.UI
             {
                 bool isOpen = i + 1 <= farthest;
                 _buttons[i].interactable = isOpen;
-                _labels[i].text = isOpen ? _openTexts[i] : _lockedText;
+                _labels[i].text = isOpen ? L10n.Tr(_openTexts[i]) : L10n.Tr(_lockedText);
                 if (_lockedTooltips != null && i < _lockedTooltips.Length && _lockedTooltips[i] != null)
                 {
                     _lockedTooltips[i].enabled = !isOpen;

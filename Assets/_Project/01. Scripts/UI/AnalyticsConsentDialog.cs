@@ -33,8 +33,8 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            _titleText.text = _title;
-            _bodyText.text = _body;
+            _titleText.text = L10n.Tr(_title);
+            _bodyText.text = L10n.Tr(_body);
             gameObject.SetActive(true);
             IsOpen = true;
             _box.DOKill();

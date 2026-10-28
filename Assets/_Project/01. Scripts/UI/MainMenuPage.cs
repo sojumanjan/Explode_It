@@ -206,7 +206,7 @@ namespace ExplodeIt.UI
         private void ShowNotice(string text)
         {
             AudioManager.Play(_errorSound);
-            _noticeText.text = text;
+            _noticeText.text = L10n.Tr(text);
             _notice.DOKill();
             _notice.alpha = 1f;
             _notice.transform.localScale = Vector3.one;

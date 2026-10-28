@@ -101,9 +101,9 @@ namespace ExplodeIt.UI
         public void OnPageOpened()
         {
             BuildCards();
-            _title.text = _kind == Kind.Weapon ? _weaponTitle
-                : _kind == Kind.Ability ? _abilityTitle
-                : string.Format(_artifactTitle, SlotName(_slot));
+            _title.text = _kind == Kind.Weapon ? L10n.Tr(_weaponTitle)
+                : _kind == Kind.Ability ? L10n.Tr(_abilityTitle)
+                : L10n.Format(_artifactTitle, SlotName(_slot));
             bool isAbility = _kind == Kind.Ability;
             _list.gameObject.SetActive(!isAbility);
             _abilityList.gameObject.SetActive(isAbility);
@@ -344,7 +344,7 @@ namespace ExplodeIt.UI
                 AbilityUpgradeData upgrade = _upgradeItems[i];
                 number = upgrade.Ability == current ? number + 1 : 0;
                 current = upgrade.Ability;
-                string label = string.Format(_upgradeCellFormat, SlotName(number));
+                string label = L10n.Format(_upgradeCellFormat, SlotName(number));
                 _upgradeCells[i].Setup(upgrade, upgrade.Icon, label, !upgrade.IsUnlocked, OnUpgradeCellClicked, OnUpgradeCellDoubleClicked);
                 // 강화 칸의 표시는 "보고 있는 것"이 아니라 "장착한 것"이다.
                 _upgradeCells[i].SetSelected(upgrade.IsEquipped);
@@ -445,7 +445,7 @@ namespace ExplodeIt.UI
                 if (achievement != null)
                 {
                     // 달성한 조건은 가운데에 줄을 그어 끝냈다는 걸 한눈에 보이게 한다.
-                    _previewText.text = string.Format(_clearedFormat, "<s>" + achievement.Description + "</s>", item.Description);
+                    _previewText.text = L10n.Format(_clearedFormat, "<s>" + achievement.Description + "</s>", item.Description);
                     _clearStamp.SetActive(true);
                     PlaceStampAfterCondition(achievement.Description);
                 }
@@ -456,7 +456,8 @@ namespace ExplodeIt.UI
         // 조건 길이·줄바꿈·자동 글자 크기가 바뀌어도 글을 따라간다.
         private void PlaceStampAfterCondition(string condition)
         {
-            int start = _clearedFormat.IndexOf("{0}");
+            string clearedFormat = L10n.Tr(_clearedFormat);
+            int start = clearedFormat.IndexOf("{0}");
             if (start < 0 || condition.Length == 0)
             {
                 return;
@@ -464,7 +465,7 @@ namespace ExplodeIt.UI
 
             _previewText.ForceMeshUpdate();
             TMP_TextInfo info = _previewText.textInfo;
-            int first = VisibleLength(_clearedFormat.Substring(0, start));
+            int first = VisibleLength(clearedFormat.Substring(0, start));
             int last = first + condition.Length - 1;
             if (first < 0 || last >= info.characterCount)
             {
@@ -526,7 +527,7 @@ namespace ExplodeIt.UI
             _previewIcon.color = _silhouetteColor;
             _previewName.text = "???";
             _clearStamp.SetActive(false);
-            _previewText.text = achievement == null ? _noUnlockText : string.Format(_unlockFormat, achievement.IsHidden ? "???" : achievement.Description);
+            _previewText.text = achievement == null ? L10n.Tr(_noUnlockText) : L10n.Format(_unlockFormat, achievement.IsHidden ? "???" : achievement.Description);
             _equipButton.gameObject.SetActive(false);
         }
     }

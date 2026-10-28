@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using ExplodeIt.Progression;
 using TMPro;
 using UnityEngine;
@@ -32,9 +33,9 @@ namespace ExplodeIt.UI
             AchievementData achievement = slot.Achievement;
             bool isCompleted = slot.IsCompleted;
             _nameText.text = achievement.DisplayName;
-            _statusText.text = isCompleted ? _completedStatus : _lockedStatus;
+            _statusText.text = L10n.Tr(isCompleted ? _completedStatus : _lockedStatus);
             _statusText.color = isCompleted ? _completedColor : _lockedColor;
-            _conditionText.text = string.Format(_conditionFormat, achievement.Description);
+            _conditionText.text = L10n.Format(_conditionFormat, achievement.Description);
 
             _panel.gameObject.SetActive(true);
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_panel);

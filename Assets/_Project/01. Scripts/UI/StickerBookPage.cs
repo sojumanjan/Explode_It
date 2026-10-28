@@ -49,7 +49,7 @@ namespace ExplodeIt.UI
                 }
             }
 
-            _progressText.text = string.Format(_progressFormat, completed, _slots.Length);
+            _progressText.text = L10n.Format(_progressFormat, completed, _slots.Length);
             ShowSpread(0);
         }
 

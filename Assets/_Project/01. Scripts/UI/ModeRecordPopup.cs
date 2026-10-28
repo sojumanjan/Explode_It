@@ -61,7 +61,7 @@ namespace ExplodeIt.UI
             SaveData data = SaveSystem.Data;
             if (mode == RunMode.Story)
             {
-                _titleText.text = _storyTitle;
+                _titleText.text = L10n.Tr(_storyTitle);
                 _clearRow.Set(_clearTimeLabel, FormatTime(data.BestStoryTime), data.StoryCleared);
                 _killsRow.Set(_killsLabel, FormatKills(data.BestStoryKills), false);
                 _survivalRow.Set(_survivalLabel, FormatTime(data.BestSurvival(true)), false);
@@ -71,7 +71,7 @@ namespace ExplodeIt.UI
             }
             else
             {
-                _titleText.text = _endlessTitle;
+                _titleText.text = L10n.Tr(_endlessTitle);
                 _clearRow.Hide();
                 _killsRow.Set(_killsLabel, FormatKills(data.BestKills(false)), false);
                 _survivalRow.Set(_survivalLabel, FormatTime(data.BestSurvival(false)), false);
@@ -134,7 +134,7 @@ namespace ExplodeIt.UI
 
         private string FormatKills(int kills)
         {
-            return kills > 0 ? string.Format(_killsFormat, kills) : _emptyValue;
+            return kills > 0 ? L10n.Format(_killsFormat, kills) : _emptyValue;
         }
 
         private string FormatTime(float seconds)

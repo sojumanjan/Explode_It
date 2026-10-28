@@ -293,7 +293,7 @@ namespace ExplodeIt.UI
             AchievementData story = FindStoryAchievement();
             _modeSticker.sprite = story != null && story.Sticker != null ? story.Sticker : _fallbackSticker;
             _modeSticker.enabled = _modeSticker.sprite != null;
-            _modeAchievementText.text = story != null ? string.Format(_modeAchievementFormat, story.DisplayName) : _modeFallbackText;
+            _modeAchievementText.text = story != null ? L10n.Format(_modeAchievementFormat, story.DisplayName) : L10n.Tr(_modeFallbackText);
 
             _modeWindow.SetActive(true);
             AudioManager.Play(_modeSound != null ? _modeSound : _sound);
@@ -311,8 +311,8 @@ namespace ExplodeIt.UI
             IUnlockable reward = _rewards[_index];
             _icon.sprite = reward.Icon;
             _icon.enabled = reward.Icon != null;
-            _kindText.text = reward is WeaponData ? _weaponKind : reward is AbilityData ? _abilityKind
-                : reward is AbilityUpgradeData ? _upgradeKind : reward is CurseData ? _curseKind : _artifactKind;
+            _kindText.text = L10n.Tr(reward is WeaponData ? _weaponKind : reward is AbilityData ? _abilityKind
+                : reward is AbilityUpgradeData ? _upgradeKind : reward is CurseData ? _curseKind : _artifactKind);
             // 강화는 이름("블랙홀 범위 +30%")이 설명과 겹치므로 이름 줄을 빼고 설명만 보여 준다.
             bool showsName = !(reward is AbilityUpgradeData);
             _nameText.gameObject.SetActive(showsName);
@@ -323,7 +323,7 @@ namespace ExplodeIt.UI
             {
                 // 저주는 업적 스티커가 없으므로 경로 그림을 숨기고 해금 조건만 적는다.
                 _sourceSticker.enabled = false;
-                _sourceText.text = string.Format(_curseSourceFormat, curse.RequiredCurses, curse.UnlockKills);
+                _sourceText.text = L10n.Format(_curseSourceFormat, curse.RequiredCurses, curse.UnlockKills);
             }
             else
             {
@@ -331,7 +331,7 @@ namespace ExplodeIt.UI
                 _sourceSticker.enabled = _sourceSticker.sprite != null;
                 _sourceText.text = source.Description;
             }
-            _buttonLabel.text = _index + 1 < _rewards.Count ? _nextText : _closeText;
+            _buttonLabel.text = L10n.Tr(_index + 1 < _rewards.Count ? _nextText : _closeText);
         }
     }
 }

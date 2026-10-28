@@ -152,9 +152,9 @@ namespace ExplodeIt.UI
             _previewIcon.enabled = curse.Icon != null;
             _previewIcon.color = _silhouetteColor;
             _previewName.text = "???";
-            _previewText.text = curse.Kind == CurseKind.King ? _kingUnlockText
-                : curse == _catalog.NextLockedCurse ? string.Format(_unlockFormat, curse.RequiredCurses, curse.UnlockKills)
-                : _laterUnlockText;
+            _previewText.text = curse.Kind == CurseKind.King ? L10n.Tr(_kingUnlockText)
+                : curse == _catalog.NextLockedCurse ? L10n.Format(_unlockFormat, curse.RequiredCurses, curse.UnlockKills)
+                : L10n.Tr(_laterUnlockText);
             _equipButton.gameObject.SetActive(false);
         }
 

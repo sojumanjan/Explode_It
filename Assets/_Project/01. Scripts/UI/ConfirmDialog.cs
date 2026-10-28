@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace ExplodeIt.UI
         public void Show(string message, Action onConfirm)
         {
             _onConfirm = onConfirm;
-            _message.text = message;
+            _message.text = L10n.Tr(message);
             gameObject.SetActive(true);
             IsOpen = true;
             _box.DOKill();

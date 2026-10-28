@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace ExplodeIt.UI
 {
@@ -26,8 +28,10 @@ namespace ExplodeIt.UI
             _goblinHome = _goblin.anchoredPosition;
         }
 
-        private void Start()
+        // 웹은 번역 표를 비동기로 불러오므로, 준비가 끝난 뒤에 동의 창을 띄워야 고른 언어로 나온다.
+        private IEnumerator Start()
         {
+            yield return LocalizationSettings.InitializationOperation;
             _consent.ShowIfNeeded();
         }
 

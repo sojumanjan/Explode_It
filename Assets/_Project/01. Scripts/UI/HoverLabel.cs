@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,8 +18,8 @@ namespace ExplodeIt.UI
         // 평소 글자와 올렸을 때 글자를 정한다. hoverText가 비어 있으면 올려도 바뀌지 않는다.
         public void SetTexts(string normalText, string hoverText)
         {
-            _normalText = normalText ?? "";
-            _hoverText = hoverText ?? "";
+            _normalText = L10n.Tr(normalText ?? "");
+            _hoverText = L10n.Tr(hoverText ?? "");
             Apply();
         }
 

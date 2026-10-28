@@ -77,7 +77,7 @@ namespace ExplodeIt.UI
         private void OnAchievementCompleted(AchievementData achievement)
         {
             Sprite icon = achievement.Sticker != null ? achievement.Sticker : _fallbackSticker;
-            Enqueue(new Toast(icon, string.Format(_titleFormat, achievement.DisplayName), achievement.Description));
+            Enqueue(new Toast(icon, L10n.Format(_titleFormat, achievement.DisplayName), achievement.Description));
         }
 
         private void Enqueue(Toast toast)
