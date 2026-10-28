@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -46,6 +47,13 @@ namespace ExplodeIt.Core
         public static string Format(string source, object arg0, object arg1)
         {
             return string.Format(Tr(source), arg0, arg1);
+        }
+
+        // 언어를 바꾼 직후 코드 글자를 새 언어로 쓰려면 새 언어의 표가 준비될 때까지 기다린다. 웹은 표를 비동기로만 불러온다.
+        public static IEnumerator WaitForTables()
+        {
+            yield return LocalizationSettings.StringDatabase.GetTableAsync(UiTableName);
+            yield return LocalizationSettings.StringDatabase.GetTableAsync(DataTableName);
         }
 
         private static string Lookup(string source, string tableName, ref StringTable table)

@@ -18,7 +18,8 @@ namespace ExplodeIt.UI
         // 첫 판으로 바로 들어갈 때 장착 확인과 판 시작을 메인 메뉴와 똑같이 하려고 메인 메뉴 페이지를 빌려 쓴다.
         [SerializeField] private MainMenuPage _mainMenu;
         [SerializeField] private RectTransform _goblin;
-        // 처음 켰을 때 타이틀 위에 띄우는 플레이 기록 수집 동의 창.
+        // 처음 켰을 때 타이틀 위에 띄우는 언어 고르기와 플레이 기록 수집 동의 창. 언어를 먼저 골라야 동의 창을 읽을 수 있다.
+        [SerializeField] private LanguagePickDialog _language;
         [SerializeField] private AnalyticsConsentDialog _consent;
 
         private Vector2 _goblinHome;
@@ -32,6 +33,12 @@ namespace ExplodeIt.UI
         private IEnumerator Start()
         {
             yield return LocalizationSettings.InitializationOperation;
+            if (_language.ShowIfNeeded())
+            {
+                yield return new WaitUntil(() => !_language.IsOpen);
+                yield return Core.L10n.WaitForTables();
+            }
+
             _consent.ShowIfNeeded();
         }
 
