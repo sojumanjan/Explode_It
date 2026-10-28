@@ -139,8 +139,8 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(1f)] private float _instantRangeMultiplier = 1.5f;
 
         public string Id => _id;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Icon => _icon;
         public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsAbilityUnlocked(_id);
         public AbilityKind Kind => _kind;

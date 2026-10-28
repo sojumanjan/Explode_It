@@ -29,8 +29,8 @@ namespace ExplodeIt.Progression
 
         public string Id => _id;
         public AbilityData Ability => _ability;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Icon => _ability != null ? _ability.Icon : null;
         public bool IsUnlocked => SaveSystem.Data.IsUpgradeUnlocked(_id);
         public bool IsEquipped => IsUnlocked && SaveSystem.Data.IsUpgradeEquipped(_id);

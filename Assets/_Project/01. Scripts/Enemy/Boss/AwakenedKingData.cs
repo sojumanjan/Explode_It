@@ -551,7 +551,7 @@ namespace ExplodeIt.Enemies
         public float SwordWait => _swordWait;
         public float SwordSlashGap => _swordSlashGap;
         public float SwordRecover => _swordRecover;
-        public string CrownHintText => _crownHintText;
+        public string CrownHintText => L10n.Data(_crownHintText);
         public float CrownHintHold => _crownHintHold;
         public float SwordFollowupWait => _swordFollowupWait;
         public float SwordStageGap => _swordStageGap;

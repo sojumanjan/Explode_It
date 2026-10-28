@@ -1,4 +1,5 @@
 using System;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Stage
@@ -20,8 +21,8 @@ namespace ExplodeIt.Stage
         [SerializeField] private Sprite _sprite;
 
         public CreditsEntryKind Kind => _kind;
-        public string Text => _text;
-        public string SubText => _subText;
+        public string Text => L10n.Data(_text);
+        public string SubText => L10n.Data(_subText);
         public Sprite Sprite => _sprite;
     }
 }

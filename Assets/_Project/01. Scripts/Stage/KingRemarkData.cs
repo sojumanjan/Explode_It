@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Stage
@@ -24,7 +25,7 @@ namespace ExplodeIt.Stage
         public KingRemarkTrigger Trigger => _trigger;
         public int Value => _value;
         public KingMood Mood => _mood;
-        public string Text => _text;
+        public string Text => L10n.Data(_text);
         public float Hold => _hold;
     }
 }

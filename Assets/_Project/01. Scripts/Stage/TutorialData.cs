@@ -1,3 +1,4 @@
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.Stage
@@ -48,13 +49,13 @@ namespace ExplodeIt.Stage
         [Tooltip("게이지 강조 설명이 떠 있는 시간 (초). 걷히고 나서 첫 웨이브가 시작된다")]
         [SerializeField, Min(0.5f)] private float _gaugeFocusTime = 4f;
 
-        public string MoveTask => _moveTask;
-        public string ThrowTask => _throwTask;
-        public string DashTask => _dashTask;
-        public string DashDoneText => _dashDoneText;
-        public string AbilityTask => _abilityTask;
+        public string MoveTask => L10n.Data(_moveTask);
+        public string ThrowTask => L10n.Data(_throwTask);
+        public string DashTask => L10n.Data(_dashTask);
+        public string DashDoneText => L10n.Data(_dashDoneText);
+        public string AbilityTask => L10n.Data(_abilityTask);
         public string AbilityDoneText => _abilityDoneText;
-        public string GaugeText => _gaugeText;
+        public string GaugeText => L10n.Data(_gaugeText);
         public float StartDelay => _startDelay;
         public float MoveDistance => _moveDistance;
         public float TaskCompleteHold => _taskCompleteHold;

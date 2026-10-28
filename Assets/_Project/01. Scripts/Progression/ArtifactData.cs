@@ -34,8 +34,8 @@ namespace ExplodeIt.Progression
         [SerializeField] private float _value2;
 
         public string Id => _id;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Icon => _icon;
         public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsArtifactUnlocked(_id);
         public ArtifactEffect Effect => _effect;

@@ -118,11 +118,11 @@ namespace ExplodeIt.Stage
         public float CastSpriteHeight => _castSpriteHeight;
         public float ScrollSpeed => _scrollSpeed;
         public float HoldSpeedMultiplier => _holdSpeedMultiplier;
-        public string SkipHint => _skipHint;
+        public string SkipHint => L10n.Data(_skipHint);
         public float SkipHoldTime => _skipHoldTime;
         public Color FinalTintColor => _finalTintColor;
         public float FinalTintTime => _finalTintTime;        public float FinalGap => _finalGap;
-        public string FinalText => _finalText;
+        public string FinalText => L10n.Data(_finalText);
         public float FinalFadeTime => _finalFadeTime;
         public float FinalHoldTime => _finalHoldTime;
         public float BlackLeadTime => _blackLeadTime;

@@ -1,4 +1,5 @@
 using System;
+using ExplodeIt.Core;
 using UnityEngine;
 
 namespace ExplodeIt.UI
@@ -15,7 +16,7 @@ namespace ExplodeIt.UI
         [Tooltip("설문 버튼을 눌렀을 때 확인 창에 띄울 글")]
         [SerializeField, TextArea(2, 4)] private string _confirmMessage = "플레이 소감 설문 페이지를 열까요?\n(브라우저 새 창에서 열려요)";
 
-        public string ConfirmMessage => _confirmMessage;
+        public string ConfirmMessage => L10n.Data(_confirmMessage);
         public bool HasUrl => !string.IsNullOrWhiteSpace(_url);
 
         // 번호가 없으면(기록 수집을 거절한 사람 등) 빈 칸으로 연다.

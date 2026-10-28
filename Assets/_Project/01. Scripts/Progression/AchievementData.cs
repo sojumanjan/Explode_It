@@ -55,8 +55,8 @@ namespace ExplodeIt.Progression
         [SerializeField] private ArtifactData _rewardArtifact;
 
         public string Id => _id;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Sticker => _sticker;
         public Sprite StickerSilhouette => _stickerSilhouette;
         public bool IsHidden => _isHidden;

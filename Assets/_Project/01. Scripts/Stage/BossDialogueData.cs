@@ -44,7 +44,7 @@ namespace ExplodeIt.Stage
 
             public DialogueSpeaker Speaker => _speaker;
             public KingMood Mood => _mood;
-            public string Text => _text;
+            public string Text => L10n.Data(_text);
             public bool SpawnBoss => _spawnBoss;
             public bool StartEntrance => _startEntrance;
             public Sprite BossSprite => _bossSprite;

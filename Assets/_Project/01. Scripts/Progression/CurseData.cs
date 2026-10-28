@@ -32,8 +32,8 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(1)] private int _unlockKills = 100;
 
         public string Id => _id;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Icon => _icon;
         public abstract CurseKind Kind { get; }
         public bool UnlockedByDefault => _unlockedByDefault;
@@ -41,7 +41,7 @@ namespace ExplodeIt.Progression
         public int UnlockKills => _unlockKills;
         public bool IsUnlocked => _unlockedByDefault || SaveSystem.Data.IsCurseUnlocked(_id);
         public bool IsEquipped => IsUnlocked && SaveSystem.Data.IsCurseEquipped(_id);
-        public string KillerName => _displayName;
+        public string KillerName => L10n.Data(_displayName);
         public Sprite KillerPortrait => _icon;
 
         // 판이 시작될 때 장비 적용기가 부른다. 스폰·체력처럼 다른 시스템이 읽는 값만 바꾸는 저주가 여기서 값을 넣는다.

@@ -55,7 +55,7 @@ namespace ExplodeIt.Enemies
         [Tooltip("사망 연출 시간 (초). 밀려남 → 부풀기 → 줄어들기가 이 시간 안에 끝난다")]
         [SerializeField, Min(0.05f)] private float _deathDuration = 0.5f;
 
-        public string KillerName => _displayName;
+        public string KillerName => L10n.Data(_displayName);
         public Sprite KillerPortrait => _portrait;
         public float MoveSpeed => _moveSpeed;
         public int HitsToDie => _hitsToDie;

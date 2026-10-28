@@ -71,8 +71,8 @@ namespace ExplodeIt.Bombs
         [SerializeField, Range(0.5f, 2f)] private float _explosionPitchMax = 1.05f;
 
         public string Id => _id;
-        public string DisplayName => _displayName;
-        public string Description => _description;
+        public string DisplayName => L10n.Data(_displayName);
+        public string Description => L10n.Data(_description);
         public Sprite Icon => _icon != null ? _icon : _bombSprite;
         public Sprite BombSprite => _bombSprite;
         public float BombSize => _bombSize;

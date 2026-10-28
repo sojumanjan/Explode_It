@@ -101,12 +101,12 @@ namespace ExplodeIt.Stage
         public SoundData PanelSound => _panelSound;
         public SoundData ClickSound => _clickSound;
         public int FirstPageCount => _firstPageCount;
-        public string NightText => _nightText;
+        public string NightText => L10n.Data(_nightText);
         public float NightFadeTime => _nightFadeTime;
         public float NightHoldTime => _nightHoldTime;
         public BgmData NightBgm => _nightBgm;
         public float LetterOpenTime => _letterOpenTime;
-        public string LetterText => _letterText;
+        public string LetterText => L10n.Data(_letterText);
         public SoundData LetterSound => _letterSound;
         public string EndText => _endText;
         public float EndFadeTime => _endFadeTime;
