@@ -1165,8 +1165,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 26375806259210
-    m_Localized: <color=#FFD54A>Black Hole</color> pulls enemies together and blows
-      them up all at once!
+    m_Localized: <color=#FFD54A>Black Hole</color> pulls enemies in and blows them
+      all up!
     m_Metadata:
       m_Items: []
   references:
