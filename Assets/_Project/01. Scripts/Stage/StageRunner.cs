@@ -149,6 +149,7 @@ namespace ExplodeIt.Stage
         {
             GameEvents.GameStateChanged += OnGameStateChanged;
             GameEvents.BossDefeated += OnBossDefeated;
+            GameEvents.PlayerDied += OnPlayerDied;
             if (_dialoguePlayer != null)
             {
                 _onDialogueSpawnBoss ??= OnDialogueSpawnBoss;
@@ -162,6 +163,7 @@ namespace ExplodeIt.Stage
         {
             GameEvents.GameStateChanged -= OnGameStateChanged;
             GameEvents.BossDefeated -= OnBossDefeated;
+            GameEvents.PlayerDied -= OnPlayerDied;
             if (_dialoguePlayer != null)
             {
                 _dialoguePlayer.BossSpawnRequested -= _onDialogueSpawnBoss;
@@ -796,6 +798,11 @@ namespace ExplodeIt.Stage
         private void OnBossDefeated(int bossNumber)
         {
             _isBossDefeated = true;
+        }
+
+        private void OnPlayerDied()
+        {
+            _boss?.StopFight();
         }
 
         // 플레이어 가까이, 맵에서 더 넓은 쪽(맵 중심 쪽)으로 내려온다. 구석에 몰린 플레이어 바로 옆 벽에 붙어 나오지 않게 한다.

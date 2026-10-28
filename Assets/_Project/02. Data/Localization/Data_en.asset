@@ -1124,6 +1124,53 @@ MonoBehaviour:
       but reload a little slower.'
     m_Metadata:
       m_Items: []
+  - m_Id: 26375806259200
+    m_Localized: How DARE you scratch Our royal body..!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259201
+    m_Localized: You insolent little goblin!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259202
+    m_Localized: (What a peaceful goblin village!)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259203
+    m_Localized: Haah~~ Maybe I'll read a book for once??
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259204
+    m_Localized: Wh-whoa?! Wh..what is this!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259205
+    m_Localized: I'm getting sucked iiiinnnn~!!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259206
+    m_Localized: "I-I'm back\u2026! I'm really back!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259207
+    m_Localized: This crazy book is sealed..... FOREVER..!!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259208
+    m_Localized: 'Wh..what... is that letter...?
+
+      I''m sure I sealed the book....??'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259209
+    m_Localized: Wha??? A-an INVOICEEE?!?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259210
+    m_Localized: <color=#FFD54A>Black Hole</color> pulls enemies together and blows
+      them up all at once!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -132,7 +132,7 @@ namespace ExplodeIt.Stage
         public BgmData ArenaBgm => _arenaBgm;
         public int PanelCount => Mathf.Min(_panelSprites.Length, _panelLines.Length);
         public Sprite GetPanelSprite(int index) => _panelSprites[index];
-        public string GetPanelLine(int index) => _panelLines[index];
+        public string GetPanelLine(int index) => L10n.Data(_panelLines[index]);
         public float PanelPopTime => _panelPopTime;
         public float CaptionCharsPerSecond => _captionCharsPerSecond;
         public SoundData PanelSound => _panelSound;

@@ -126,6 +126,11 @@ namespace ExplodeIt.Enemies
 
         public bool IsEntranceDone => _entranceStartTime >= 0f && Time.time - _entranceStartTime >= _data.EntranceSettleTime;
 
+        public void StopFight()
+        {
+            _isFighting = false;
+        }
+
         public void StartFight()
         {
             _isFighting = true;

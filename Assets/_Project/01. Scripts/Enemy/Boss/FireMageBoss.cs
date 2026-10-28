@@ -177,6 +177,11 @@ namespace ExplodeIt.Enemies
 
         public bool IsEntranceDone => _aliveFairies > 0;
 
+        public void StopFight()
+        {
+            _isFighting = false;
+        }
+
         public void StartFight()
         {
             _isFighting = true;

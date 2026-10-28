@@ -54,7 +54,7 @@ namespace ExplodeIt.Stage
         public string DashTask => L10n.Data(_dashTask);
         public string DashDoneText => L10n.Data(_dashDoneText);
         public string AbilityTask => L10n.Data(_abilityTask);
-        public string AbilityDoneText => _abilityDoneText;
+        public string AbilityDoneText => L10n.Data(_abilityDoneText);
         public string GaugeText => L10n.Data(_gaugeText);
         public float StartDelay => _startDelay;
         public float MoveDistance => _moveDistance;

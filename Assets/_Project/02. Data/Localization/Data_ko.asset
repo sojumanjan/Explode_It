@@ -1085,6 +1085,54 @@ MonoBehaviour:
       \uC788\uC9C0\uB9CC,\n\uC7AC\uC7A5\uC804 \uC2DC\uAC04\uC774 \uC57D\uAC04 \uC99D\uAC00\uD55C\uB2E4."
     m_Metadata:
       m_Items: []
+  - m_Id: 26375806259200
+    m_Localized: "\uAC10\uD788 \uC9D0\uC758 \uBAB8\uC5D0 \uC0DD\uCC44\uAE30\uB97C
+      \uB0B4\uB2E4\uB2C8..!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259201
+    m_Localized: "\uC774 \uBB34\uC5C4\uD55C \uACE0\uBE14\uB9B0 \uB140\uC11D\uC774!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259202
+    m_Localized: "(\uCC38 \uD3C9\uD654\uB85C\uC6B4 \uACE0\uBE14\uB9B0 \uB9C8\uC744\uC774\uB124\uC694!)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259203
+    m_Localized: "\uD558\uC544~~ \uC624\uB79C\uB9CC\uC5D0 \uCC45\uC774\uB098 \uC77D\uC5B4\uBCFC\uAE4C??"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259204
+    m_Localized: "\uC5B4, \uC5B4\uC5B4?! \u3147..\uC774\uAC70 \uBB50\uC57C!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259205
+    m_Localized: "\uBE68\uB824\uB4E4\uC5B4\uAC04\uB4DC\uC544\uC544\uC544\u314F\u314F\u314F\u314F~!!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259206
+    m_Localized: "\uB3C4, \uB3CC\uC544\uC654\uB2E4\u2026! \uC9C4\uC9DC \uB3CC\uC544\uC654\uC5B4!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259207
+    m_Localized: "\uC774 \uBBF8\uCE5C \uCC45\uC740 \uBD09\uC778\uC774\uC57C.....
+      \uC601\uC6D0\uD788..!!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259208
+    m_Localized: "\u3141..\uBB50\uC57C... \uC800 \uD3B8\uC9C0\uB294...?\n\uCC45\uC740
+      \uBD84\uBA85\uD788 \uBD09\uC778 \uC2DC\uCF30\uC744\uD150\uB370....??"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259209
+    m_Localized: "\uC5D0\uC5D0\uC5E5??? \uCC98, \uCCAD\uAD6C\uC11C\uC5B4\uC5B4\uC5B4?!?!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26375806259210
+    m_Localized: "<color=#FFD54A>\uBE14\uB799\uD640</color>\uC740 \uC801\uB4E4\uC744
+      \uAC00\uC6B4\uB370\uB85C \uB04C\uC5B4\uBAA8\uC544 \uD55C \uBC29\uC5D0 \uD130\uB728\uB9BD\uB2C8\uB2E4!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

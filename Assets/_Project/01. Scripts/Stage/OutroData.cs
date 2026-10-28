@@ -89,7 +89,7 @@ namespace ExplodeIt.Stage
 
         public int PanelCount => Mathf.Min(_panelSprites.Length, _panelLines.Length);
         public Sprite GetPanelSprite(int index) => _panelSprites[index];
-        public string GetPanelLine(int index) => _panelLines[index];
+        public string GetPanelLine(int index) => L10n.Data(_panelLines[index]);
         public float BookMoveTime => _bookMoveTime;
         public float BookZoom => _bookZoom;
         public float BookZoomTime => _bookZoomTime;
@@ -108,7 +108,7 @@ namespace ExplodeIt.Stage
         public float LetterOpenTime => _letterOpenTime;
         public string LetterText => L10n.Data(_letterText);
         public SoundData LetterSound => _letterSound;
-        public string EndText => _endText;
+        public string EndText => L10n.Data(_endText);
         public float EndFadeTime => _endFadeTime;
         public float EndHoldTime => _endHoldTime;
         public float EndAutoTime => _endAutoTime;

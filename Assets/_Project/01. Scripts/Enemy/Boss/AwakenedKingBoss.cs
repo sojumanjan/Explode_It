@@ -732,6 +732,11 @@ namespace ExplodeIt.Enemies
             Stun(0.3f);
         }
 
+        public void StopFight()
+        {
+            _isFighting = false;
+        }
+
         public void StartFight()
         {
             _isFighting = true;

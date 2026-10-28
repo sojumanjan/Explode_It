@@ -459,7 +459,7 @@ namespace ExplodeIt.Enemies
         public string GetPhaseLine(int hitsTaken)
         {
             int index = hitsTaken - 1;
-            return _phaseLines != null && index >= 0 && index < _phaseLines.Length && !string.IsNullOrEmpty(_phaseLines[index]) ? _phaseLines[index] : null;
+            return _phaseLines != null && index >= 0 && index < _phaseLines.Length && !string.IsNullOrEmpty(_phaseLines[index]) ? L10n.Data(_phaseLines[index]) : null;
         }
         public float GroggyDuration => _groggyDuration;
         public float TransformDuration => _transformDuration;

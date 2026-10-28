@@ -178,6 +178,11 @@ namespace ExplodeIt.Enemies
         public bool IsEntranceDone => _isEntering && _phase == MovePhase.Underground;
 
         // 카메라가 돌아오면 땅속 이동부터 시작한다. 등장 동작을 건너뛴 경우에만 직접 파고든다.
+        public void StopFight()
+        {
+            _isFighting = false;
+        }
+
         public void StartFight()
         {
             _isFighting = true;
