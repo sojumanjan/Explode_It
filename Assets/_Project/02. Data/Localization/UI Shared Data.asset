@@ -14,7 +14,279 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: UI
   m_TableCollectionNameGuidString: f14fd8fa24117d44c8a52a700d2980f1
-  m_Entries: []
+  m_Entries:
+  - m_Id: 1975581151232
+    m_Key: Title/TitlePage/StartButton/Face
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008832
+    m_Key: Common/TitlePage/SettingsButton/Face
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008833
+    m_Key: Title/TitlePage/QuitButton/Face
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008834
+    m_Key: Common/TitlePage/SurveyButton/Face
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203136
+    m_Key: Title/MainPage/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203137
+    m_Key: Title/MainPage/ModeTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203138
+    m_Key: Title/MainPage/WeaponHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203139
+    m_Key: Common/MainPage/WeaponSlot/Lock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397440
+    m_Key: Title/MainPage/AbilityHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397441
+    m_Key: Title/MainPage/ArtifactHeader1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397442
+    m_Key: Title/MainPage/ArtifactHeader2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397443
+    m_Key: Title/MainPage/Buttons/StoryButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397444
+    m_Key: Title/MainPage/Buttons/EndlessButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397445
+    m_Key: Title/MainPage/Buttons/CollectionButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397446
+    m_Key: Common/MainPage/Buttons/TitleButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591744
+    m_Key: Title/SelectPage/Empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591745
+    m_Key: Common/SelectPage/BackButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591746
+    m_Key: Title/CursePage/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591747
+    m_Key: Title/CursePage/Note
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591748
+    m_Key: Title/CollectionPage/Spread2/Empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591749
+    m_Key: Title/CollectionPage/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786048
+    m_Key: Title/CollectionPage/PrevButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786049
+    m_Key: Title/CollectionPage/NextButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786050
+    m_Key: Title/SettingsPage/Info
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786051
+    m_Key: Common/SettingsPage/ControlsTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786052
+    m_Key: Common/SettingsPage/ControlsText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786053
+    m_Key: "Title/SettingsPage/\uD6A8\uACFC\uC74CLabel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786054
+    m_Key: "Title/SettingsPage/\uBC30\uACBD\uC74CLabel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786055
+    m_Key: "Title/SettingsPage/\uD754\uB4E4\uB9BCLabel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786056
+    m_Key: Title/SettingsPage/FlashLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786057
+    m_Key: Title/SettingsPage/AutoPauseLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786058
+    m_Key: "Title/SettingsPage/\uAE30\uB85DLabel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786059
+    m_Key: Title/SettingsPage/FullScreenLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980352
+    m_Key: Title/SettingsPage/ResolutionLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980353
+    m_Key: Title/SettingsPage/ResetButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980354
+    m_Key: Title/SettingsPage/LanguageLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980355
+    m_Key: Title/RecordPopup/CurseRow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980356
+    m_Key: Common/RecordPopup/Buttons/CloseButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980357
+    m_Key: Title/RecordPopup/Buttons/StartButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980358
+    m_Key: Common/Dialog/NoButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980359
+    m_Key: Common/Dialog/YesButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980360
+    m_Key: Title/ConsentDialog/DeclineButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980361
+    m_Key: Title/ConsentDialog/AgreeButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980362
+    m_Key: Game/IntroComic/NextHint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980363
+    m_Key: Game/OutroLetter/Paper/Seal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980364
+    m_Key: Game/DialogueSkip/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980365
+    m_Key: Common/DialogueSkip/Hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980366
+    m_Key: Game/IntroSkip/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980367
+    m_Key: Game/PausePanel/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980368
+    m_Key: "Game/PausePanel/\uACC4\uC18D\uD558\uAE30Button"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980369
+    m_Key: "Game/PausePanel/\uBA54\uC778\uBA54\uB274\uB85CButton"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980370
+    m_Key: Game/DeathPanel/TitleBand/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980371
+    m_Key: Common/DeathPanel/RecordCard/HeaderNow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980372
+    m_Key: Game/DeathPanel/RecordCard/HeaderBest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980373
+    m_Key: Game/DeathPanel/RecordCard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980374
+    m_Key: Common/DeathPanel/RecordCard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980375
+    m_Key: Common/DeathPanel/RecordCard_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980376
+    m_Key: Game/DeathPanel/RecordCard/CurseRow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980377
+    m_Key: Common/DeathPanel/Tasks/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174656
+    m_Key: Game/DeathPanel/Hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174657
+    m_Key: Game/ClearPanel/TitleBand/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174658
+    m_Key: Game/ClearPanel/RecordCard/HeaderBest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174659
+    m_Key: Game/ClearPanel/RecordCard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174660
+    m_Key: Game/UnlockSummary/Window/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174661
+    m_Key: Game/UnlockSummary/Window/Sub
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174662
+    m_Key: Game/UnlockSummary/ModeWindow/Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174663
+    m_Key: Game/UnlockSummary/ModeWindow/Sub
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174664
+    m_Key: Game/UnlockSummary/ModeWindow/OkButton
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
