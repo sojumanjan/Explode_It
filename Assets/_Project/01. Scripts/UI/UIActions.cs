@@ -28,6 +28,8 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text[] _resultLeaveLabels;
         [SerializeField] private string _resultMainMenuText = "메인으로";
         [SerializeField] private string _resultTitleText = "타이틀로";
+        // 타이틀 설정 페이지를 옮겨 온 것. 판 도중이라 저장 초기화와 언어 바꾸기는 꺼 둔다.
+        [SerializeField] private SettingsPage _settings;
 
         [Header("결과 창 스토리 중간부터 다시 하기 (게임 씬)")]
         // 스토리 판에서만 보인다. 결과 창 다시하기는 스토리에서 처음부터 다시 하므로 글자를 바꿔 구분한다.
@@ -70,13 +72,39 @@ namespace ExplodeIt.UI
             GameEvents.GameStateChanged -= OnGameStateChanged;
         }
 
-        // ESC로 일시정지를 풀면 떠 있던 확인 창도 함께 닫는다.
+        // ESC로 일시정지를 풀면 떠 있던 확인 창과 설정도 함께 닫는다.
         private void OnGameStateChanged(GameState previous, GameState current)
         {
-            if (previous == GameState.Paused && _confirm != null && _confirm.IsOpen)
+            if (previous != GameState.Paused)
+            {
+                return;
+            }
+
+            if (_confirm != null && _confirm.IsOpen)
             {
                 _confirm.Cancel();
             }
+
+            CloseSettings();
+        }
+
+        // 일시정지 메뉴 "설정". 켜야 Awake에서 슬라이더·토글 연결이 끝나므로 켠 뒤에 값을 채운다.
+        public void OpenSettings()
+        {
+            _settings.gameObject.SetActive(true);
+            _settings.OnPageOpened();
+        }
+
+        // 설정의 뒤로 버튼. 닫을 때 한 번 저장한다.
+        public void CloseSettings()
+        {
+            if (_settings == null || !_settings.gameObject.activeSelf)
+            {
+                return;
+            }
+
+            _settings.OnPageClosed();
+            _settings.gameObject.SetActive(false);
         }
 
         public void StartGame()

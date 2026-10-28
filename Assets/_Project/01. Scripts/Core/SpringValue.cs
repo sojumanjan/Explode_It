@@ -6,6 +6,8 @@ namespace ExplodeIt.Core
     // 트윈 객체를 만들지 않으므로 적 수십 마리가 매 프레임 써도 할당이 없다.
     public struct SpringValue
     {
+        private const float MaxStep = 1f / 120f;
+
         public float Value;
         public float Velocity;
 
@@ -19,10 +21,16 @@ namespace ExplodeIt.Core
         public void Step(float target, float frequency, float damping, float deltaTime)
         {
             float omega = 2f * Mathf.PI * frequency;
-            // 반 고정 오일러. 히트스톱 직후처럼 프레임이 길어도 튀지 않게 한 스텝 길이를 제한한다.
+            // 반 고정 오일러. 히트스톱 직후처럼 프레임이 길어도 튀지 않게 한 프레임 길이를 제한한다.
             deltaTime = Mathf.Min(deltaTime, 1f / 30f);
-            Velocity += (-omega * omega * (Value - target) - 2f * damping * omega * Velocity) * deltaTime;
-            Value += Velocity * deltaTime;
+            // 한 번에 크게 밟으면 프레임이 낮을 때(하드웨어 가속을 끈 웹 등) 출렁임이 커지다 발산한다. 잘게 나눠 밟는다.
+            int steps = Mathf.CeilToInt(deltaTime / MaxStep);
+            float step = deltaTime / Mathf.Max(steps, 1);
+            for (int i = 0; i < steps; i++)
+            {
+                Velocity += (-omega * omega * (Value - target) - 2f * damping * omega * Velocity) * step;
+                Value += Velocity * step;
+            }
         }
 
         public void Snap(float value)
