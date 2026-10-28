@@ -61,6 +61,8 @@ namespace ExplodeIt.Core
         [SerializeField] private bool _reduceFlashes;
         // 창 밖(웹 페이지의 다른 곳)을 누르면 키 입력이 끊겨 그대로 맞으므로, 기본으로 일시정지한다.
         [SerializeField] private bool _autoPauseEnabled = true;
+        // 설정에서 고른 언어 코드(ko, en). 비어 있으면 아직 고르지 않은 것이라 시스템 언어를 따른다.
+        [SerializeField] private string _language = "";
         // 플레이 기록 수집. 처음 켤 때 한 번 묻고(물었는지), 답(동의했는지)은 설정에서 바꿀 수 있다.
         [SerializeField] private bool _analyticsAsked;
         [SerializeField] private bool _analyticsEnabled;
@@ -173,6 +175,12 @@ namespace ExplodeIt.Core
         {
             get => _autoPauseEnabled;
             set => _autoPauseEnabled = value;
+        }
+
+        public string Language
+        {
+            get => _language;
+            set => _language = value ?? "";
         }
 
         public IReadOnlyList<string> SelectedArtifacts => _selectedArtifacts;
