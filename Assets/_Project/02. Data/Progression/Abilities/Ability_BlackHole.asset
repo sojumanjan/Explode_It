@@ -23,7 +23,7 @@ MonoBehaviour:
   _maxCharges: 2
   _startCharges: 1
   _maxThrowRange: 15
-  _blackHoleRadius: 3.74
+  _blackHoleRadius: 4
   _pullDuration: 2
   _pullSpeed: 4
   _scatterCount: 10
@@ -51,3 +51,4 @@ MonoBehaviour:
   _childSpriteSize: 0.45
   _instantDuration: 10
   _instantSpeedMultiplier: 4
+  _instantRangeMultiplier: 1.5

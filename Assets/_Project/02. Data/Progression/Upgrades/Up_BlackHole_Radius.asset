@@ -15,7 +15,6 @@ MonoBehaviour:
   _id: bh_radius
   _ability: {fileID: 11400000, guid: 5b38ccfd3a44697489f4d6f286ec6301, type: 2}
   _displayName: "\uBE14\uB799\uD640 \uBC94\uC704 +30%"
-  _description: "\uBE14\uB799\uD640\uC774 \uBE68\uC544\uB4E4\uC774\uACE0\n\uD130\uC9C0\uB294
-    \uBC94\uC704\uAC00 30% \uB113\uC5B4\uC9C4\uB2E4."
+  _description: "\uBC94\uC704\uAC00 30% \uB113\uC5B4\uC9C4\uB2E4."
   _effect: 0
   _value: 1.3

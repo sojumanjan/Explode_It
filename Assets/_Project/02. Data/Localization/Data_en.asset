@@ -534,9 +534,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636535
-    m_Localized: 'Black Hole pulls and explodes
-
-      in a 30% wider area.'
+    m_Localized: Range is 30% wider.
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636536
