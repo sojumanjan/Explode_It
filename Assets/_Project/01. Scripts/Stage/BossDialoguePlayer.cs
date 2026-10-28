@@ -22,6 +22,8 @@ namespace ExplodeIt.Stage
         // 말하는 쪽 머리 위와 말풍선 사이 간격(유닛). 보스가 아직 없을 때 보스 줄은 자리 위 이 높이(유닛)에 뜬다.
         [SerializeField, Min(0f)] private float _bubbleGap = 0.15f;
         [SerializeField, Min(0f)] private float _emptyBossHeight = 2f;
+        // 싸우는 도중 외치는 대사가 글자가 다 나온 뒤에도 남아 있는 최소 시간(초). 영어처럼 긴 대사는 정해 둔 시간 안에 타자가 겨우 끝나 읽을 틈이 없다.
+        [SerializeField, Min(0f)] private float _shoutReadHold = 1f;
         // 보스전 시작 후 카메라가 옮겨 가는 동안 기다렸다가 왕이 붙는 시간(초).
         [SerializeField, Min(0f)] private float _startDelay = 0.5f;
         // 왕이 붙고 떨어지는 시간(초), 표정이 바뀔 때 뽀잉 세기(비율).
@@ -160,7 +162,7 @@ namespace ExplodeIt.Stage
             _bossBubble.transform.position = new Vector3(_boss.position.x, TopOf(_boss) + _bubbleGap, 0f);
             _bossBubble.Show(text, false);
             _shoutHide?.Kill();
-            _shoutHide = DOVirtual.DelayedCall(duration, _onShoutEnd).SetLink(gameObject);
+            _shoutHide = DOVirtual.DelayedCall(Mathf.Max(duration, _bossBubble.TypingDuration + _shoutReadHold), _onShoutEnd).SetLink(gameObject);
         }
 
         private void HideShout()

@@ -160,6 +160,6 @@ MonoBehaviour:
     \uCC44 \uC655\uC744 \uC4F0\uB7EC\uD2B8\uB9B0 \uB2F9\uC2E0\uAED8 \uAC10\uC0AC\uB97C."
   _finalFadeTime: 1.5
   _finalHoldTime: 3.5
-  _blackLeadTime: 0.3
+  _blackLeadTime: 0.25
   _bgmEndFadeTime: 0.05
   _clearDelay: 3.25

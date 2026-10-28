@@ -173,6 +173,9 @@ namespace ExplodeIt.Stage
             bool showHint = _canSkip && !string.IsNullOrEmpty(_data.SkipHint);
             _skipHint.gameObject.SetActive(showHint);
             _skipHint.text = _data.SkipHint;
+            // 게이지는 안내 글 바로 아래에 글 길이만큼 깐다. 언어마다 글 길이가 달라 고정 너비면 글과 어긋난다.
+            var gauge = (RectTransform)_skipFill.parent;
+            gauge.sizeDelta = new Vector2(_skipHint.GetPreferredValues(_skipHint.text).x, gauge.sizeDelta.y);
         }
 
         private void Update()

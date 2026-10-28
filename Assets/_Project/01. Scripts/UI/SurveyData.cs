@@ -1,6 +1,8 @@
 using System;
 using ExplodeIt.Core;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 namespace ExplodeIt.UI
 {
@@ -13,6 +15,10 @@ namespace ExplodeIt.UI
         [SerializeField] private string _url = "";
         [Tooltip("플레이어 번호를 미리 채울 칸 이름. 구글 폼 '양식 미리 작성' 링크의 entry.숫자 부분. 비워 두면 번호 없이 연다")]
         [SerializeField] private string _playerIdEntry = "";
+        [Tooltip("영어로 플레이할 때 열 설문 주소(영어판 구글 폼). 비워 두면 위 한국어 설문을 연다")]
+        [SerializeField] private string _englishUrl = "";
+        [Tooltip("영어판 설문의 플레이어 번호 칸 이름(entry.숫자). 폼마다 번호가 달라 따로 적는다")]
+        [SerializeField] private string _englishPlayerIdEntry = "";
         [Tooltip("설문 버튼을 눌렀을 때 확인 창에 띄울 글")]
         [SerializeField, TextArea(2, 4)] private string _confirmMessage = "플레이 소감 설문 페이지를 열까요?\n(브라우저 새 창에서 열려요)";
 
@@ -20,15 +26,20 @@ namespace ExplodeIt.UI
         public bool HasUrl => !string.IsNullOrWhiteSpace(_url);
 
         // 번호가 없으면(기록 수집을 거절한 사람 등) 빈 칸으로 연다.
+        // 한국어가 아닌 언어는 영어판 설문이 있으면 그쪽으로 보낸다.
         public string BuildUrl(string playerId)
         {
-            if (string.IsNullOrEmpty(_playerIdEntry) || string.IsNullOrEmpty(playerId))
+            Locale locale = LocalizationSettings.SelectedLocale;
+            bool isEnglish = locale != null && locale.Identifier.Code != "ko" && !string.IsNullOrWhiteSpace(_englishUrl);
+            string url = isEnglish ? _englishUrl : _url;
+            string entry = isEnglish ? _englishPlayerIdEntry : _playerIdEntry;
+            if (string.IsNullOrEmpty(entry) || string.IsNullOrEmpty(playerId))
             {
-                return _url;
+                return url;
             }
 
-            string separator = _url.Contains("?") ? "&" : "?";
-            return _url + separator + "usp=pp_url&" + _playerIdEntry + "=" + Uri.EscapeDataString(playerId);
+            string separator = url.Contains("?") ? "&" : "?";
+            return url + separator + "usp=pp_url&" + entry + "=" + Uri.EscapeDataString(playerId);
         }
     }
 }

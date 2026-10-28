@@ -44791,11 +44791,11 @@ RectTransform:
   - {fileID: 570043983}
   m_Father: {fileID: 1743268735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -40, y: 30}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -40, y: -30}
   m_SizeDelta: {x: 500, y: 40}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &721572264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63467,6 +63467,7 @@ MonoBehaviour:
   _kingSideDistance: 2.6
   _bubbleGap: 0.15
   _emptyBossHeight: 2
+  _shoutReadHold: 1
   _startDelay: 0.5
   _appearDuration: 0.25
   _leaveDuration: 0.3
@@ -86906,6 +86907,7 @@ MonoBehaviour:
   _resultLeaveLabels:
   - {fileID: 125909990}
   - {fileID: 1284317459}
+  _resultMainMenuText: "\uBA54\uC778\uC73C\uB85C"
   _resultTitleText: "\uD0C0\uC774\uD2C0\uB85C"
   _resultCheckpoints:
   - {fileID: 2139819445}
@@ -86914,6 +86916,7 @@ MonoBehaviour:
   - {fileID: 1257734069}
   - {fileID: 317440271}
   - {fileID: 798058252}
+  _retryText: "\uB2E4\uC2DC\uD558\uAE30"
   _storyRetryText: "\uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC\uD558\uAE30"
 --- !u!114 &1367413040
 MonoBehaviour:

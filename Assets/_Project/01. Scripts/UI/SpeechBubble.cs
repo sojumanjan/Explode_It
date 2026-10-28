@@ -62,6 +62,8 @@ namespace ExplodeIt.UI
         }
 
         public bool IsTyping => _text.maxVisibleCharacters < _total;
+        // 지금 대사를 끝까지 치는 데 걸리는 시간(초).
+        public float TypingDuration => _total / _charsPerSecond;
         // 지금까지 나온 글자 비율 (0~1).
         public float TypingProgress => _total > 0 ? Mathf.Clamp01((float)_text.maxVisibleCharacters / _total) : 1f;
 
