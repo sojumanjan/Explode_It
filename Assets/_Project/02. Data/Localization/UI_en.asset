@@ -17,7 +17,644 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: f14fd8fa24117d44c8a52a700d2980f1, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 1975581151232
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008832
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008833
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975686008834
+    m_Localized: Survey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203136
+    m_Localized: Loadout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203137
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203138
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975690203139
+    m_Localized: Locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397440
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397441
+    m_Localized: Artifact I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397442
+    m_Localized: Artifact II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397443
+    m_Localized: Story Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397444
+    m_Localized: Endless Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397445
+    m_Localized: Achievements
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975694397446
+    m_Localized: To Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591744
+    m_Localized: No artifacts yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591745
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591746
+    m_Localized: Curses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591747
+    m_Localized: Curses only apply in Endless Mode.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591748
+    m_Localized: Coming soon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975698591749
+    m_Localized: Sticker Book
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786048
+    m_Localized: Prev
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786049
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786050
+    m_Localized: Settings are saved when you close this page.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786051
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786052
+    m_Localized: 'WASD / Arrows<pos=52%><alpha=#B0>Move
+
+      <alpha=#FF>Mouse<pos=52%><alpha=#B0>Aim
+
+      <alpha=#FF>Left
+      Click<pos=52%><alpha=#B0>Throw bomb
+
+      <alpha=#FF>Right Click<pos=52%><alpha=#B0>Skill
+
+      <alpha=#FF>Space
+      / Shift<pos=52%><alpha=#B0>Dash
+
+      <alpha=#FF>Esc / P<pos=52%><alpha=#B0>Pause'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786053
+    m_Localized: SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786054
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786055
+    m_Localized: Screen Shake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786056
+    m_Localized: Reduce Flashes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786057
+    m_Localized: Auto Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786058
+    m_Localized: Send Play Data
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975702786059
+    m_Localized: Fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980352
+    m_Localized: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980353
+    m_Localized: Reset Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980354
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980355
+    m_Localized: Equipped Curses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980356
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980357
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980358
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980359
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980360
+    m_Localized: Decline
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980361
+    m_Localized: Agree
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980362
+    m_Localized: Next (Click, Space)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980363
+    m_Localized: We
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980364
+    m_Localized: Skip >>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980365
+    m_Localized: Hold (Space)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980366
+    m_Localized: 'Hold to
+
+      skip >>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980367
+    m_Localized: Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980368
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980369
+    m_Localized: Main Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980370
+    m_Localized: DEFEATED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980371
+    m_Localized: This Run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980372
+    m_Localized: Best
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980373
+    m_Localized: Survived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980374
+    m_Localized: Kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980375
+    m_Localized: Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980376
+    m_Localized: Curses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975706980377
+    m_Localized: To Do
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174656
+    m_Localized: Press R to retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174657
+    m_Localized: CLEAR!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174658
+    m_Localized: Best
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174659
+    m_Localized: Clear Time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174660
+    m_Localized: New Unlock!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174661
+    m_Localized: Equip it from the main menu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174662
+    m_Localized: Endless Mode Unlocked!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174663
+    m_Localized: 'Curses are unlocked too!
+
+      Try them from the main menu!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1975711174664
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652237398016
+    m_Localized: 'Return to the main menu?
+
+      This run will end here.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980928
+    m_Localized: 'Return to the title?
+
+      This run will end here.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980929
+    m_Localized: Main Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980930
+    m_Localized: To Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980931
+    m_Localized: Retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980932
+    m_Localized: Restart from Beginning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980933
+    m_Localized: Empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980934
+    m_Localized: Artifacts are coming soon!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980935
+    m_Localized: Clear Story Mode to unlock!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980936
+    m_Localized: Endless Mode is coming soon!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980937
+    m_Localized: Choose Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980938
+    m_Localized: Choose Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980939
+    m_Localized: Choose Artifact {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980940
+    m_Localized: Unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980941
+    m_Localized: Equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980942
+    m_Localized: Equipped
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980943
+    m_Localized: Equip Upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980944
+    m_Localized: No way to unlock this yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980945
+    m_Localized: '<b>Unlock</b>
+
+      {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980946
+    m_Localized: '<b>Unlock</b>
+
+      {0}
+
+
+      <b>Effect</b>
+
+      {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980947
+    m_Localized: Upgrade {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980948
+    m_Localized: Equip all curses first
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980949
+    m_Localized: '<b>Unlock</b>
+
+      Equip {0}+ curses and get {1} kills in one
+      run'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980950
+    m_Localized: '<b>Unlock</b>
+
+      Unlock the previous curse first.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980951
+    m_Localized: '<b>Unlock</b>
+
+      Only one who bears every curse is worthy.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980952
+    m_Localized: Stickers {0} / {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980953
+    m_Localized: Not unlocked yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980954
+    m_Localized: Unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980955
+    m_Localized: 'Reset your save?
+
+      All achievements, unlocks and records will
+      be lost.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980956
+    m_Localized: 'Are you really sure?
+
+      This cannot be undone!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980957
+    m_Localized: 'Shakes the screen on explosions and hits.
+
+      Turn it off if
+      it makes you dizzy.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980958
+    m_Localized: 'Softens explosion flashes, screen flashes and blinking.
+
+      Turn
+      it on if you are sensitive to light.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980959
+    m_Localized: 'Pauses automatically when you click outside
+
+      the game or
+      switch to another window.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980960
+    m_Localized: 'Sends anonymous play data such as run results and gear.
+
+      No
+      personal information is sent.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980961
+    m_Localized: Switches between fullscreen and windowed mode.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980962
+    m_Localized: 'Changes the game window size.
+
+      Only 16:9 is offered so the
+      layout stays intact.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980963
+    m_Localized: Story Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980964
+    m_Localized: Endless Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980965
+    m_Localized: Fastest Clear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980966
+    m_Localized: Most Kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980967
+    m_Localized: Longest Run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980968
+    m_Localized: '{0} kills'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980969
+    m_Localized: Unlocks after defeating the first boss.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980970
+    m_Localized: Unlocks after defeating the second boss.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980971
+    m_Localized: Unlocks after defeating the third boss.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980972
+    m_Localized: Unlocks as you progress through the story.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980973
+    m_Localized: About Play Data
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980974
+    m_Localized: 'To make the game better, we would like to collect anonymous play
+      data (run results, chosen gear, progress) and basic device info.
+
+      We
+      never collect personal information such as your name or contact details, and
+      you can turn this off anytime in Settings.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980975
+    m_Localized: Start from 100 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980976
+    m_Localized: Start from 200 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980977
+    m_Localized: Start from 300 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980978
+    m_Localized: Start Final Boss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980979
+    m_Localized: Defeated by <color=#FF6B6B>{0}</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980980
+    m_Localized: Fell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980981
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980982
+    m_Localized: All weapons unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980983
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980984
+    m_Localized: All skills unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980985
+    m_Localized: Skill Upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980986
+    m_Localized: All skill upgrades unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980987
+    m_Localized: Artifact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980988
+    m_Localized: All artifacts unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980989
+    m_Localized: Retry from 100 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980990
+    m_Localized: Retry from 200 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980991
+    m_Localized: Retry from 300 kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980992
+    m_Localized: Retry Final Boss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980993
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980994
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980995
+    m_Localized: New Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980996
+    m_Localized: New Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980997
+    m_Localized: New Artifact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980998
+    m_Localized: New Curse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249980999
+    m_Localized: Equip {0}+ curses and get {1} kills in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249981000
+    m_Localized: 'Achievement: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249981001
+    m_Localized: Story Mode cleared
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3652249981002
+    m_Localized: 'Achievement: {0}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

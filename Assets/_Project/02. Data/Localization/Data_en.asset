@@ -17,7 +17,1113 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 77e1b7bb9ae82644cad62d2ec3d73cbb, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 6819830304768
+    m_Localized: Onslaught
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636416
+    m_Localized: 'Enemies swarm in 25% faster,
+
+      and every enemy type appears
+      from the start.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636417
+    m_Localized: Chain Blast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636418
+    m_Localized: Enemies explode where they die.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636419
+    m_Localized: Meteor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636420
+    m_Localized: Every 5 seconds, a meteor falls near you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636421
+    m_Localized: Berserk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636422
+    m_Localized: 'Now and then a red-hot enemy
+
+      charges at you very fast.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636423
+    m_Localized: Lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636424
+    m_Localized: Every 18 seconds, lightning strikes a huge area.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636425
+    m_Localized: Ambush
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636426
+    m_Localized: Enemies have a 50% chance to spawn near you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636427
+    m_Localized: Trap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636428
+    m_Localized: 'Every 10 seconds, 3 traps appear near you.
+
+      Stepping on one
+      hurts, but bombs can destroy them.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636429
+    m_Localized: One Hit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636430
+    m_Localized: 'You have only 1 heart.
+
+      Even the Pendant won''t help.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636431
+    m_Localized: Dust Storm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636432
+    m_Localized: 'Dust storms blow across the map.
+
+      You move 30% slower inside
+      them, and they keep moving.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636433
+    m_Localized: 'To one who bears every curse,
+
+      He comes in person.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636434
+    m_Localized: Archer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636435
+    m_Localized: Fire Mage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636436
+    m_Localized: Drill Miner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636437
+    m_Localized: Beast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636438
+    m_Localized: Awakened King
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636439
+    m_Localized: Maybe I should strike when that crown falls...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636440
+    m_Localized: Charger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636441
+    m_Localized: Golem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636442
+    m_Localized: Mantis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636443
+    m_Localized: Shield Bearer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636444
+    m_Localized: Sniper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636445
+    m_Localized: Warrior
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636446
+    m_Localized: Black Hole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636447
+    m_Localized: 'Pulls enemies in a wide area into one spot,
+
+      then blows them
+      all up at once.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636448
+    m_Localized: Instant Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636449
+    m_Localized: 'For 5 seconds, your bombs explode the moment they land,
+
+      and
+      your throw speed and range greatly increase.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636450
+    m_Localized: Scatter Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636451
+    m_Localized: Scatters 10 bombs in every direction.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636452
+    m_Localized: Skill Lover
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636453
+    m_Localized: Defeat 100 enemies with skills (total)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636454
+    m_Localized: Whiff
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636455
+    m_Localized: Use a skill and defeat no one
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636456
+    m_Localized: The Cursed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636457
+    m_Localized: Unlock all 9 curses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636458
+    m_Localized: Collector
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636459
+    m_Localized: Unlock every weapon, skill, skill upgrade and artifact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636460
+    m_Localized: Red Hunt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636461
+    m_Localized: Defeat 50 berserk red enemies (total)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636462
+    m_Localized: Black Hole Vortex
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636463
+    m_Localized: Defeat 10 enemies with a single Black Hole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636464
+    m_Localized: Event Horizon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636465
+    m_Localized: Land the final blow on a boss with Black Hole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636466
+    m_Localized: Headbutt King
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636467
+    m_Localized: Land the final blow on a boss with a dash headbutt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636468
+    m_Localized: So Popular
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636469
+    m_Localized: Have 40 enemies on the map at once
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636470
+    m_Localized: Help from Above
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636471
+    m_Localized: Defeat 50 enemies with meteors and lightning (total)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636472
+    m_Localized: Close Call
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636473
+    m_Localized: Dodge enemy attacks with a dash 3 times (total)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636474
+    m_Localized: Small and Precious
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636475
+    m_Localized: Keep the last little golem alive for 15 seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636476
+    m_Localized: Machine Gun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636477
+    m_Localized: Defeat 10 enemies during one Instant Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636478
+    m_Localized: Spray and Pray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636479
+    m_Localized: Throw 15 bombs during one Instant Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636480
+    m_Localized: Warm-up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636481
+    m_Localized: Defeat 100 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636482
+    m_Localized: Bomb Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636483
+    m_Localized: Defeat 300 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636484
+    m_Localized: Slayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636485
+    m_Localized: Defeat 400 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636486
+    m_Localized: Endless Hunt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636487
+    m_Localized: Defeat 500 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636488
+    m_Localized: Legendary Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636489
+    m_Localized: Defeat 1000 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636490
+    m_Localized: Bare-Handed Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636491
+    m_Localized: Defeat 200 enemies in one run without using a skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636492
+    m_Localized: Never Miss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636493
+    m_Localized: 'Defeat 100 enemies in one run
+
+      without a single missed bomb'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636494
+    m_Localized: One Shot, One Kill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636495
+    m_Localized: Defeat exactly one enemy per bomb, 10 times in a row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636496
+    m_Localized: All Directions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636497
+    m_Localized: Defeat 10 enemies with a single Scatter Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636498
+    m_Localized: Bomb Rain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636499
+    m_Localized: Defeat 30 enemies with Scatter Bomb (total)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636500
+    m_Localized: Shield Breaker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636501
+    m_Localized: Defeat 3 Shield Bearers with a single skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636502
+    m_Localized: Taste of the Mace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636503
+    m_Localized: Get knocked out by a Shield Bearer's slam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636504
+    m_Localized: End of the Kingdom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636505
+    m_Localized: Defeat the final boss and clear Story Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636506
+    m_Localized: Clean Sweep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636507
+    m_Localized: Defeat 5 enemies at once with a single bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636508
+    m_Localized: The True End
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636509
+    m_Localized: Bear every curse and defeat the Awakened King
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636510
+    m_Localized: Veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636511
+    m_Localized: Defeat 200 enemies in one run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636512
+    m_Localized: Leather Belt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636513
+    m_Localized: Adds one more skill gauge slot.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636514
+    m_Localized: Leather Cloak
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636515
+    m_Localized: Skills need 2 fewer kills to charge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636516
+    m_Localized: Leather Gloves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636517
+    m_Localized: 'Move 10% faster
+
+      while your bombs are fully loaded.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636518
+    m_Localized: Leather Helm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636519
+    m_Localized: 'Enemies you bump into while dashing are defeated.
+
+      But dash
+      cooldown is doubled.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636520
+    m_Localized: Leather Shoes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636521
+    m_Localized: You can dash twice in a row.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636522
+    m_Localized: Old Coin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636523
+    m_Localized: 'Stand still for 5 seconds to gain 1 skill gauge,
+
+      then 1
+      more every 2 seconds you keep standing.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636524
+    m_Localized: Old Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636525
+    m_Localized: 'Defeat 5+ enemies with one skill
+
+      to gain 2 skill gauge.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636526
+    m_Localized: Old Socks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636527
+    m_Localized: 'Right after using a skill,
+
+      move 20% faster for 5 seconds.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636528
+    m_Localized: Pendant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636529
+    m_Localized: Gain one extra heart, but enemies come 25% faster.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636530
+    m_Localized: Red Ribbon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636531
+    m_Localized: You can throw bombs while dashing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636532
+    m_Localized: Black Hole Duration +1s
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636533
+    m_Localized: Black Hole pulls for 1 second longer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636534
+    m_Localized: Black Hole Range +30%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636535
+    m_Localized: 'Black Hole pulls and explodes
+
+      in a 30% wider area.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636536
+    m_Localized: Instant Bomb Duration +2s
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636537
+    m_Localized: Instant Bomb lasts 2 seconds longer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636538
+    m_Localized: Instant Bomb Range +50%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636539
+    m_Localized: During Instant Bomb, bomb range is 50% wider.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636540
+    m_Localized: Chain Scatter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636541
+    m_Localized: 'Where a Scatter Bomb explodes, 2-3 small bombs
+
+      pop out and
+      explode in a chain.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636542
+    m_Localized: Scatter Bomb +4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636543
+    m_Localized: Scatters 4 more bombs at once.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636544
+    m_Localized: What? A hundred soldiers couldn't catch ONE goblin?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636545
+    m_Localized: '...Fine.
+
+      We''ll have to call in the pricey one.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636546
+    m_Localized: 'To think We''d have to
+
+      hire a wizard..'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636547
+    m_Localized: Payment up front, Your Majesty.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636548
+    m_Localized: Burn him to a crisp!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636549
+    m_Localized: 'That wizard... took the money
+
+      and just lay down...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636550
+    m_Localized: 'This time We hired a veteran miner
+
+      to finish you from underground!!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636551
+    m_Localized: And this old miner cost Us a fortune too, you know?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636552
+    m_Localized: Dynamite costs extra, sire.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636553
+    m_Localized: ....What is WRONG with mercenaries these days?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636554
+    m_Localized: Blow him up!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636555
+    m_Localized: 'Heh heh... This time We brought
+
+      Our own precious beast...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636556
+    m_Localized: It's famous for being VERY vicious!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636557
+    m_Localized: Grrrrr...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636558
+    m_Localized: H-hey! Not me! Over there! The goblin!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636559
+    m_Localized: Sic 'em!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636560
+    m_Localized: 'I-impossible...
+
+      We... lost to a mere goblin...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636561
+    m_Localized: Um... are you okay?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636562
+    m_Localized: ...? You can TALK?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636563
+    m_Localized: I've been talking the whole time.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636564
+    m_Localized: 'Everyone just swung their swords
+
+      instead of listening to
+      me.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636565
+    m_Localized: 'I was just reading a book
+
+      and got sucked in.
+
+      I only
+      want to go home.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636566
+    m_Localized: 'Then all the soldiers and mercenaries
+
+      We''ve thrown at you...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636567
+    m_Localized: W-well... that was... unavoidable..
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636568
+    m_Localized: 'Kahahaha!! Fine, fine! No worries~
+
+      It was Our fault anyway,
+      so what~?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636569
+    m_Localized: 'It''s fine, but...
+
+      all that money really stings....'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636570
+    m_Localized: 'Especially the wizard, he was SO expensive..!!
+
+      Pay Us back!!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636571
+    m_Localized: 'W-what....???
+
+      You just said it was fine...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636572
+    m_Localized: ...is what I'd say if I weren't joking..!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636573
+    m_Localized: We brought the book you popped out of.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636574
+    m_Localized: 'Try jumping in.
+
+      Who knows~ maybe you''ll go back?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636575
+    m_Localized: Farewell!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636576
+    m_Localized: 'Going back could really
+
+      be that easy..?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636577
+    m_Localized: Well.. guess I'll jump in?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636578
+    m_Localized: Huh..? Nothing's happening?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636579
+    m_Localized: Yeah, no way something that dumb would wor....WHOAaa ahh.hh.mmf
+      aaAAAGH uwaaAAHH?!?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636580
+    m_Localized: 'Our soldiers, Our mercenaries,
+
+      even Our pet...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636581
+    m_Localized: We cannot take it anymore...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636582
+    m_Localized: We'll finish you for good....
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636583
+    m_Localized: Let's end this today..
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636584
+    m_Localized: 'Oh~ You got the bill
+
+      and actually came?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636585
+    m_Localized: 'I don''t have money to pay..
+
+      I just came to fight..'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636586
+    m_Localized: Carrying every single curse?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636587
+    m_Localized: Kahaha! We like your guts!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636588
+    m_Localized: 'If I win,
+
+      please forget the debt.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636589
+    m_Localized: 'Deal! But if you lose,
+
+      you''re Our hunter forever~'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636590
+    m_Localized: This time We won't go easy on you!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636591
+    m_Localized: Hmm hmm hmm~~
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636592
+    m_Localized: Things have been so boring lately~~
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636593
+    m_Localized: Whoa...!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636594
+    m_Localized: W-where am I?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636595
+    m_Localized: W...wha...what!!! A goblin!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636596
+    m_Localized: Why is a monster here all of a sudden...!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636597
+    m_Localized: Soldiers!! Seize him!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636598
+    m_Localized: What?? N..no wait a sec...!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636599
+    m_Localized: 'What are you waiting for!!
+
+      Don''t you want your pay??'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636600
+    m_Localized: 'N..no, um... wait a second.
+
+      Wuaagh!! AAAAAHHHH!!!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636601
+    m_Localized: "That night\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636602
+    m_Localized: '<align=center><size=140%><b>I N V O I C E</b></size></align>
+
+
+      To:
+      The Goblin
+
+
+      We hereby bill you for the ruckus in Our garden.
+
+
+      Wizard''s
+      fee<pos=60%>500,000 gold
+
+      Soldier & mercenary pay<pos=60%>300,000 gold
+
+      Garden
+      repairs<pos=60%>199,999 gold
+
+      <b>Total<pos=60%>999,999 gold</b>
+
+
+      Come
+      to pay, or come to fight.
+
+      <size=80%>(Interest is charged daily, by the
+      way)</size>
+
+
+      <align=right>- The Great and Generous King, Us</align>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636603
+    m_Localized: We paid up front!! Refund!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636604
+    m_Localized: Even the veteran miner failed?!?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636605
+    m_Localized: My sweet baby...!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636606
+    m_Localized: Pfahaha! Gone at last!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636607
+    m_Localized: Not bad for a goblin. We'll give you that.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636608
+    m_Localized: What? Can't even catch ONE goblin?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636609
+    m_Localized: Even shields are useless..!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636610
+    m_Localized: 'Do you know what We pay you...
+
+      Try harder!!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636611
+    m_Localized: The kingdom's population is shrinking...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636612
+    m_Localized: How many in ONE blast...!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636613
+    m_Localized: 'How many times did We say
+
+      don''t bunch up!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636614
+    m_Localized: Who's paying the soldiers' pensions...!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636615
+    m_Localized: Soldiers! Catch that green goblin, now!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636616
+    m_Localized: 'Whoever brings Us that goblin
+
+      shall receive... a compliment!!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636617
+    m_Localized: D...deploy!! Soldiers!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636618
+    m_Localized: Grrngh..!! Send even the bugs!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636619
+    m_Localized: S..send anything!! Chargers!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636620
+    m_Localized: Design / Programming / Direction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636621
+    m_Localized: Han Jihoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636622
+    m_Localized: Cast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636623
+    m_Localized: Goblin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636624
+    m_Localized: A kind goblin sucked into a book
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636625
+    m_Localized: King
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636626
+    m_Localized: King of the human kingdom (chibi)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636627
+    m_Localized: The King, getting serious
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636628
+    m_Localized: The priciest mercenary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636629
+    m_Localized: A mercenary who digs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636630
+    m_Localized: The King's pet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636631
+    m_Localized: Kingdom soldier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636632
+    m_Localized: Origin unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636633
+    m_Localized: A big rock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636634
+    m_Localized: Tools Used
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636635
+    m_Localized: Special Thanks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636636
+    m_Localized: 'Tutor Kim Ukjin
+
+      Manager Yang Yunseok
+
+      Students of
+      NC AI New Deal Academy'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636637
+    m_Localized: Hold Space to skip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636638
+    m_Localized: And thank you, for defeating the King while bearing every curse.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636639
+    m_Localized: Move with <color=#FFD54A>WASD</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636640
+    m_Localized: <color=#FFD54A>Left Click</color> to throw a bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636641
+    m_Localized: <color=#FFD54A>Space</color> to dash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636642
+    m_Localized: You are <color=#FFD54A>invincible</color> while dashing!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636643
+    m_Localized: <color=#FFD54A>Right Click</color> to use a powerful skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636644
+    m_Localized: 'When a gauge slot is full, you can use your skill.
+
+      Defeat
+      enemies to fill the gauge!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636645
+    m_Localized: 'Open the feedback survey page?
+
+      (It opens in a new browser
+      tab.)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636646
+    m_Localized: Basic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636647
+    m_Localized: Balanced. Steadily throws standard-range bombs.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636648
+    m_Localized: Double Barrel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636649
+    m_Localized: Two shots per click. The second flies to wherever your cursor is
+      at that moment.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636650
+    m_Localized: Rapid Fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636651
+    m_Localized: 'Smaller blasts, but faster reloads
+
+      and quicker explosions.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636652
+    m_Localized: Big Blast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636653
+    m_Localized: 'Wider blasts, but slower reloads
+
+      and slower explosions.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636654
+    m_Localized: Triple Bomb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6819880636655
+    m_Localized: 'Hold up to 3 bombs,
+
+      but reload a little slower.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
