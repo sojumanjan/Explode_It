@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.SurveyData
   _url: https://docs.google.com/forms/d/e/1FAIpQLScodEDsHZXaIfk2V-3OwfwfJ1B1M6NdEMDFrshEV-sf1D5T6w/viewform
   _playerIdEntry: entry.330612679
+  _englishUrl: https://docs.google.com/forms/d/e/1FAIpQLSfwA8YjakH70zNy17_6FK0H73AGaPlgGtDpFq-5bnKXYlpRHQ/viewform
+  _englishPlayerIdEntry: entry.673733918
   _confirmMessage: "\uD50C\uB808\uC774 \uC18C\uAC10 \uC124\uBB38 \uD398\uC774\uC9C0\uB97C
     \uC5F4\uAE4C\uC694?\n(\uBE0C\uB77C\uC6B0\uC800 \uC0C8 \uCC3D\uC5D0\uC11C \uC5F4\uB9BD\uB2C8\uB2E4.)"
