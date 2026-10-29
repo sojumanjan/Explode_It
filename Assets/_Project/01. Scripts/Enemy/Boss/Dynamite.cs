@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 드릴 광부의 가짜 구멍에서 튀어나와 사방으로 날아간 뒤 터지는 다이너마이트.
+    // 노장 광부의 가짜 구멍에서 튀어나와 사방으로 날아간 뒤 터지는 다이너마이트.
     // 날아가는 순간부터 떨어질 자리에 범위 원을 깔고 채워 가므로, 터지기 전까지가 곧 예고다.
     public class Dynamite : MonoBehaviour
     {
