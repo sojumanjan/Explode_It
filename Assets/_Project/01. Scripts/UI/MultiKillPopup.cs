@@ -7,6 +7,8 @@ namespace ExplodeIt.UI
 {
     // 폭탄 하나로 여러 마리를 잡으면 그 자리에서 "x3!"을 위로 툭 던졌다 떨어뜨린다. 예측이 맞았다는 걸 숫자로 보여 주는 보상이다.
     // 처치 알림은 폭발 알림보다 먼저(같은 프레임, 판정 도중) 오므로, 그 사이 처치 수를 모아 두었다가 폭발 알림에서 꺼낸다.
+    // 블랙홀로 모아 터뜨린 것도 보상이라 플레이어 폭발 전체(폭탄, 다발, 순간, 블랙홀) 알림을 듣는다.
+    // BombExploded는 처치 수, 정확도 집계용이라 블랙홀이 내지 않는다.
     // 글씨는 월드 공간 TMP라 카메라가 움직여도 터진 자리에 붙어 있다.
     public class MultiKillPopup : MonoBehaviour
     {
@@ -57,13 +59,13 @@ namespace ExplodeIt.UI
         private void OnEnable()
         {
             GameEvents.EnemyKilled += OnEnemyKilled;
-            GameEvents.BombExploded += OnBombExploded;
+            GameEvents.PlayerBlastExploded += OnBlastExploded;
         }
 
         private void OnDisable()
         {
             GameEvents.EnemyKilled -= OnEnemyKilled;
-            GameEvents.BombExploded -= OnBombExploded;
+            GameEvents.PlayerBlastExploded -= OnBlastExploded;
         }
 
         // 프레임이 바뀌면 지난 처치는 이 폭발과 상관없다(저주 낙뢰 등).
@@ -78,7 +80,7 @@ namespace ExplodeIt.UI
             _pendingKills++;
         }
 
-        private void OnBombExploded(Vector2 position, float radius, int hitCount)
+        private void OnBlastExploded(Vector2 position, float radius)
         {
             int kills = _pendingFrame == Time.frameCount ? _pendingKills : 0;
             _pendingKills = 0;
