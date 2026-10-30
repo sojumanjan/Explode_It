@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using ExplodeIt.Core;
 using ExplodeIt.Stage;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,13 +27,17 @@ namespace ExplodeIt.UI
         [SerializeField] private float _shownY;
         [SerializeField, Min(0f)] private float _slideDuration = 0.3f;
         [SerializeField, Min(0f)] private float _moodPunch = 0.15f;
-        // 쓰러지는 연출(슬로모션·확대)을 먼저 보여 준 뒤 왕이 놀리러 올라오게 한다.
-        [Tooltip("플레이어가 쓰러진 뒤 왕 컷인이 나오기까지 기다리는 시간 (초, 실제 시간)")]
-        [SerializeField, Min(0f)] private float _deathRemarkDelay = 1f;
+        // 쓰러진 뒤에는 결과 창이 뜨므로, 우측 하단 컷인이 결과 창 버튼을 가렸다(테스터 피드백).
+        // 그래서 쓰러진 순간 컷인을 거두고, 놀리는 대사는 결과 창 안의 이 칸에 넣는다. 결과 창과 함께 보인다.
+        [SerializeField] private GameObject _resultRemark;
+        [SerializeField] private Image _resultKing;
+        [SerializeField] private TMP_Text _resultLine;
 
         private readonly List<KingRemarkData> _candidates = new List<KingRemarkData>();
         private bool _isStoryMode;
         private bool _isLocked;
+        // 판이 끝나 결과 창이 뜨는 중. 이때는 컷인을 띄우지 않는다.
+        private bool _isRunOver;
         private bool _isShown;
         private bool _isTalking;
         private int _kills;
@@ -44,11 +49,11 @@ namespace ExplodeIt.UI
         private float _currentHold;
         private Sequence _sequence;
         private Tween _punch;
-        private Tween _deathDelay;
         private TweenCallback _onSlidIn;
         private TweenCallback _onSlidOut;
         // 인스펙터에 잡아 둔 왕 그림 높이(캔버스 단위). 표정 그림마다 가로세로 비율만 맞춘다.
         private float _kingSize;
+        private float _resultKingSize;
 
         private void Awake()
         {
@@ -65,6 +70,11 @@ namespace ExplodeIt.UI
             SetPanelY(_hiddenY);
             _bubble.Hide();
             _king.enabled = false;
+            if (_resultRemark != null)
+            {
+                _resultKingSize = _resultKing.rectTransform.rect.height;
+                _resultRemark.SetActive(false);
+            }
         }
 
         private void OnEnable()
@@ -76,6 +86,7 @@ namespace ExplodeIt.UI
             GameEvents.EnemyKilled += OnEnemyKilled;
             GameEvents.BossDefeated += OnBossDefeated;
             GameEvents.PlayerDied += OnPlayerDied;
+            GameEvents.StageCleared += OnStageCleared;
             GameEvents.PlayerControlLockChanged += OnControlLockChanged;
             GameEvents.PlayerHintRequested += OnPlayerHintRequested;
         }
@@ -89,16 +100,17 @@ namespace ExplodeIt.UI
             GameEvents.EnemyKilled -= OnEnemyKilled;
             GameEvents.BossDefeated -= OnBossDefeated;
             GameEvents.PlayerDied -= OnPlayerDied;
+            GameEvents.StageCleared -= OnStageCleared;
             GameEvents.PlayerControlLockChanged -= OnControlLockChanged;
             GameEvents.PlayerHintRequested -= OnPlayerHintRequested;
             _sequence?.Kill();
             _punch?.Kill();
-            _deathDelay?.Kill();
         }
 
         private void OnStageStarted(bool isStoryMode)
         {
             _isStoryMode = isStoryMode;
+            _isRunOver = false;
             // 중간부터 시작하면 건너뛴 웨이브의 처치 수 대사가 다시 나오지 않게 이어 센다.
             _kills = _resumedKills;
         }
@@ -140,13 +152,44 @@ namespace ExplodeIt.UI
 
         private void OnPlayerDied()
         {
-            _deathDelay?.Kill();
-            _deathDelay = DOVirtual.DelayedCall(_deathRemarkDelay, ShowDeathRemark).SetUpdate(true).SetLink(gameObject);
+            EndRun();
+            if (!_isStoryMode || _resultRemark == null || _remarks == null)
+            {
+                return;
+            }
+
+            KingRemarkData remark = Pick(KingRemarkTrigger.PlayerDied, 0);
+            if (remark == null)
+            {
+                return;
+            }
+
+            _last = remark;
+            Sprite sprite = _kingSprites.Get(remark.Mood);
+            _resultKing.sprite = sprite;
+            // 칸 안에서 그림과 대사를 함께 가운데 정렬하므로, 그림 칸을 표정 그림 비율에 맞춰 빈 여백이 생기지 않게 한다.
+            if (sprite != null)
+            {
+                _resultKing.rectTransform.sizeDelta = new Vector2(_resultKingSize * sprite.rect.width / sprite.rect.height, _resultKingSize);
+            }
+
+            _resultLine.text = remark.Text;
+            _resultRemark.SetActive(true);
         }
 
-        private void ShowDeathRemark()
+        private void OnStageCleared()
         {
-            TryShow(KingRemarkTrigger.PlayerDied, 0);
+            EndRun();
+        }
+
+        // 결과 창이 뜨기 전에 컷인을 내리고, 그 뒤로는 새 컷인을 띄우지 않는다.
+        private void EndRun()
+        {
+            _isRunOver = true;
+            if (_isShown)
+            {
+                SlideOut();
+            }
         }
 
         // 보스 등장 대화 동안은 맵 위 왕이 주인공이라 컷인을 바로 거둔다.
@@ -161,7 +204,7 @@ namespace ExplodeIt.UI
 
         private bool TryShow(KingRemarkTrigger trigger, int value)
         {
-            if (!_isStoryMode || _isLocked || _remarks == null)
+            if (!_isStoryMode || _isLocked || _isRunOver || _remarks == null)
             {
                 return false;
             }
@@ -235,7 +278,7 @@ namespace ExplodeIt.UI
         // 연출로 조작이 막힌 동안에는 띄우지 않는다(보스 대화가 주인공이다).
         private void OnPlayerHintRequested(string text, float hold)
         {
-            if (_isLocked || string.IsNullOrEmpty(text) || _playerPortrait == null)
+            if (_isLocked || _isRunOver || string.IsNullOrEmpty(text) || _playerPortrait == null)
             {
                 return;
             }
