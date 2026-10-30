@@ -1,3 +1,4 @@
+using System.Collections;
 using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
@@ -43,19 +44,32 @@ namespace ExplodeIt.UI
 
         private void Awake()
         {
-            bool isStory = RunSetup.Mode == RunMode.Story;
             for (int i = 0; _resultCheckpoints != null && i < _resultCheckpoints.Length; i++)
             {
                 _resultCheckpoints[i].Bind(RestartFrom);
             }
 
+            ApplyResultLabels();
+        }
+
+        // 웹은 번역 표를 비동기로 불러와, 씬이 켜지는 순간에는 아직 원문(한국어)만 나온다(테스터 피드백: 영어에서 "처음부터 다시하기").
+        // 표가 준비되면 한 번 더 넣는다.
+        private IEnumerator Start()
+        {
+            yield return L10n.WaitForTables();
+            ApplyResultLabels();
+        }
+
+        private void ApplyResultLabels()
+        {
+            bool isStory = RunSetup.Mode == RunMode.Story;
             string retryText = L10n.Tr(isStory ? _storyRetryText : _retryText);
             for (int i = 0; _resultRetryLabels != null && i < _resultRetryLabels.Length; i++)
             {
                 _resultRetryLabels[i].text = retryText;
             }
 
-            string leaveText = L10n.Tr(_resultMainMenuText);
+            string leaveText = L10n.Tr(_leavesToTitle ? _resultTitleText : _resultMainMenuText);
             for (int i = 0; _resultLeaveLabels != null && i < _resultLeaveLabels.Length; i++)
             {
                 _resultLeaveLabels[i].text = leaveText;
