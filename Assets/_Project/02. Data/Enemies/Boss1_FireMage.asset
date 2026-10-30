@@ -53,7 +53,7 @@ MonoBehaviour:
   _fireballSpeed: 25
   _fireballHitRadius: 0.4
   _fireballRange: 40
-  _fireballCount: 8
+  _fireballCount: 4
   _fireballBurstInterval: 0.14
   _fireballSpread: 2
   _fireballIgnoresWalls: 1

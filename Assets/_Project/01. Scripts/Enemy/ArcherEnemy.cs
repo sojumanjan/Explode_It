@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace ExplodeIt.Enemies
 {
-    // 고블린 궁수·저격수: 다가옴 → 멈춰서 조준 예고(조준 방향만 플레이어를 따라가다 발사 직전에 고정) → 고정된 방향으로 한 발 → 회복.
-    // 두 적은 코드가 같고 데이터(사거리, 탄속, 조준선 표시, 소리)만 다르다.
+    // 고블린 궁수·저격수: 다가옴 → 멈춰서 조준 예고(조준 방향이 플레이어 쪽으로 돌며 따라가다 발사 직전에 고정) → 고정된 방향으로 한 발 → 회복.
+    // 두 적은 코드가 같고 데이터(사거리, 탄속, 조준선 표시, 조준 회전, 소리)만 다르다.
     // 예측 과제: 쏘는 순간의 방향으로 날아가므로, 예고가 끝나기 직전에 옆으로 빠지면서 멈춰 선 적에게 폭탄을 둔다.
     public class ArcherEnemy : Enemy
     {
@@ -34,7 +34,8 @@ namespace ExplodeIt.Enemies
         {
             if (StateTime < _data.TelegraphDuration - _data.AimLockTime)
             {
-                AimAtTarget();
+                TurnAimToward(DirectionToTarget(), deltaTime);
+                UpdateAimLine();
             }
         }
 
@@ -51,7 +52,9 @@ namespace ExplodeIt.Enemies
         {
             if (state == EnemyState.Telegraph)
             {
-                AimAtTarget();
+                // 예고를 시작하는 순간에는 플레이어를 바로 겨눈다. 따라가는 속도는 그 뒤부터 적용한다.
+                _aimDirection = DirectionToTarget();
+                UpdateAimLine();
                 _aimSoundHandle = AudioManager.Play(_data.AimSound);
                 return;
             }
@@ -74,9 +77,24 @@ namespace ExplodeIt.Enemies
             _aimSoundHandle = SoundHandle.None;
         }
 
-        private void AimAtTarget()
+        // 남은 각도에 비례하는 속도로 돈다. 크게 벗어나면 빨리 넘어오고, 가까워질수록 느려져 마지막에 살짝 비킬 틈이 남는다.
+        private void TurnAimToward(Vector2 desired, float deltaTime)
         {
-            _aimDirection = DirectionToTarget();
+            if (_data.AimTurnRate <= 0f)
+            {
+                _aimDirection = desired;
+                return;
+            }
+
+            float angle = Vector2.SignedAngle(_aimDirection, desired);
+            float remaining = Mathf.Abs(angle);
+            float speed = Mathf.Clamp(remaining * _data.AimTurnRate, _data.AimMinTurnSpeed, _data.AimMaxTurnSpeed);
+            float step = Mathf.Min(remaining, speed * deltaTime);
+            _aimDirection = Quaternion.Euler(0f, 0f, Mathf.Sign(angle) * step) * _aimDirection;
+        }
+
+        private void UpdateAimLine()
+        {
             // 탄은 구조물에 막힌다. 비행 거리를 막힌 지점까지로 줄여, 조준선 끝이 곧 탄이 사라지는 곳이 되게 한다.
             _shotLength = ClearDistance(_aimDirection, _data.ProjectileRange, _data.ProjectileHitRadius);
             if (_data.ShowAimLine)

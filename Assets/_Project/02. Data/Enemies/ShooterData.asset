@@ -30,5 +30,8 @@ MonoBehaviour:
   _projectileHitRadius: 0.15
   _showAimLine: 1
   _aimLockTime: 0.3
+  _aimTurnRate: 0
+  _aimMinTurnSpeed: 25
+  _aimMaxTurnSpeed: 720
   _aimSound: {fileID: 11400000, guid: ca9757e24a492494b9aec791bc90aec8, type: 2}
   _shotSound: {fileID: 11400000, guid: 7b86fd5c603643d4085877448b1f33c4, type: 2}
