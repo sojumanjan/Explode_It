@@ -24,6 +24,11 @@ namespace ExplodeIt.Progression
         private bool _isRunning;
         private bool _isStoryMode;
         private int _runKills;
+        // 스토리 중간부터 시작한 판이 건너뛴 처치 수. 판 시작 알림보다 먼저 오므로 따로 들고 있다가 판 시작에서 옮긴다.
+        // "한 판 N마리"는 화면 처치 수처럼 여기서부터 이어 센다(200마리부터 시작해 300마리에 닿으면 300마리 업적).
+        // 스킬 없이, 빗나감 없이, 누적 처치는 이번 판에 실제로 잡은 수만 센다.
+        private int _resumedKills;
+        private int _startKills;
         private int _singleKillStreak;
         private int _frameKills;
         private int _frameKillsFrame = -1;
@@ -43,6 +48,7 @@ namespace ExplodeIt.Progression
         private void OnEnable()
         {
             GameEvents.StageStarted += OnStageStarted;
+            GameEvents.StoryResumed += OnStoryResumed;
             GameEvents.EnemyKilled += OnEnemyKilled;
             GameEvents.EnemyKilledBy += OnEnemyKilledBy;
             GameEvents.BombExploded += OnBombExploded;
@@ -65,6 +71,7 @@ namespace ExplodeIt.Progression
         private void OnDisable()
         {
             GameEvents.StageStarted -= OnStageStarted;
+            GameEvents.StoryResumed -= OnStoryResumed;
             GameEvents.EnemyKilled -= OnEnemyKilled;
             GameEvents.EnemyKilledBy -= OnEnemyKilledBy;
             GameEvents.BombExploded -= OnBombExploded;
@@ -89,12 +96,18 @@ namespace ExplodeIt.Progression
             _isRunning = true;
             _isStoryMode = isStoryMode;
             _runKills = 0;
+            _startKills = isStoryMode ? _resumedKills : 0;
             _singleKillStreak = 0;
             _hasUsedAbility = false;
             _hasMissed = false;
             // 예전 판에서 이미 다 해금했으면 여기서 챙긴다.
             CheckAllUnlocked();
             CheckAllCursesUnlocked();
+        }
+
+        private void OnStoryResumed(int checkpoint, int startKills)
+        {
+            _resumedKills = startKills;
         }
 
         private void OnCurseUnlocked(CurseData curse)
@@ -229,7 +242,7 @@ namespace ExplodeIt.Progression
             }
 
             _runKills++;
-            Check(AchievementCondition.KillsInOneRun, _runKills);
+            Check(AchievementCondition.KillsInOneRun, _startKills + _runKills);
             // 누적은 판이 끝날 때 저장에 더해지므로, 그 전까지는 이번 판 수를 더해 본다.
             Check(AchievementCondition.TotalKills, SaveSystem.Data.TotalKills + _runKills);
             if (!_hasUsedAbility)
