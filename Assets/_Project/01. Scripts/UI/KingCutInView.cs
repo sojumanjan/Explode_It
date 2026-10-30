@@ -54,6 +54,8 @@ namespace ExplodeIt.UI
         // 인스펙터에 잡아 둔 왕 그림 높이(캔버스 단위). 표정 그림마다 가로세로 비율만 맞춘다.
         private float _kingSize;
         private float _resultKingSize;
+        // 결과 창 칸은 가로 정렬 그룹이 그림과 대사의 크기를 읽어 가운데에 늘어놓는다. 그림 크기는 여기로 알려 준다.
+        private LayoutElement _resultKingLayout;
 
         private void Awake()
         {
@@ -73,6 +75,7 @@ namespace ExplodeIt.UI
             if (_resultRemark != null)
             {
                 _resultKingSize = _resultKing.rectTransform.rect.height;
+                _resultKingLayout = _resultKing.GetComponent<LayoutElement>();
                 _resultRemark.SetActive(false);
             }
         }
@@ -170,7 +173,13 @@ namespace ExplodeIt.UI
             // 칸 안에서 그림과 대사를 함께 가운데 정렬하므로, 그림 칸을 표정 그림 비율에 맞춰 빈 여백이 생기지 않게 한다.
             if (sprite != null)
             {
-                _resultKing.rectTransform.sizeDelta = new Vector2(_resultKingSize * sprite.rect.width / sprite.rect.height, _resultKingSize);
+                float width = _resultKingSize * sprite.rect.width / sprite.rect.height;
+                _resultKing.rectTransform.sizeDelta = new Vector2(width, _resultKingSize);
+                if (_resultKingLayout != null)
+                {
+                    _resultKingLayout.preferredWidth = width;
+                    _resultKingLayout.preferredHeight = _resultKingSize;
+                }
             }
 
             _resultLine.text = remark.Text;
