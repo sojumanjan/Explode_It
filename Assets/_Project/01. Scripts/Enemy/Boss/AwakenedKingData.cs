@@ -41,8 +41,14 @@ namespace ExplodeIt.Enemies
         [Tooltip("1국면에서 패턴 한 바퀴가 다 돌도록 한 대도 못 때리면, 우측 하단 컷인에 고블린이 나와 하는 힌트. 비워 두면 힌트를 주지 않는다")]
         [SerializeField, TextArea(1, 2)] private string _crownHintText = "저 왕관이 떨어질 때를 노려야 할 것 같은데...";
 
-        [Tooltip("힌트가 떠 있는 시간 (초, 실제 시간). 글자가 다 나온 뒤부터 센다")]
+        [Tooltip("힌트가 떠 있는 시간 (초, 실제 시간). 글자가 다 나온 뒤부터 센다. 무적 힌트도 같은 시간을 쓴다")]
         [SerializeField, Min(0.5f)] private float _crownHintHold = 3f;
+
+        [Tooltip("왕관이 있는 왕에게 폭탄이 이 횟수만큼 막히면, 우측 하단 컷인에 고블린이 나와 무적 힌트를 준다 (번). 한 전투에 한 번만. 0이면 주지 않는다")]
+        [SerializeField, Min(0)] private int _immuneHintBlocks = 5;
+
+        [Tooltip("무적 힌트 문구. 비워 두면 힌트를 주지 않는다")]
+        [SerializeField, TextArea(1, 2)] private string _immuneHintText = "왕에게 왕관이 붙어 있으면 무적 상태인 것 같아.";
 
         [Tooltip("국면 전환 끝에 바닥에 떨어진 왕관이 머리 위로 날아 돌아오는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _crownReturnTime = 0.45f;
@@ -553,6 +559,8 @@ namespace ExplodeIt.Enemies
         public float SwordRecover => _swordRecover;
         public string CrownHintText => L10n.Data(_crownHintText);
         public float CrownHintHold => _crownHintHold;
+        public int ImmuneHintBlocks => _immuneHintBlocks;
+        public string ImmuneHintText => L10n.Data(_immuneHintText);
         public float SwordFollowupWait => _swordFollowupWait;
         public float SwordStageGap => _swordStageGap;
         public int StripeCount => _stripeCount;

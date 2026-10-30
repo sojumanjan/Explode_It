@@ -118,7 +118,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636436
-    m_Localized: Drill Miner
+    m_Localized: Veteran Miner
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636437
@@ -903,7 +903,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636607
-    m_Localized: Not bad for a goblin. We'll give you that.
+    m_Localized: "Not bad for a goblin! We'll praise you\u2026 a teeny bit!"
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636608
@@ -1167,6 +1167,22 @@ MonoBehaviour:
   - m_Id: 26375806259210
     m_Localized: <color=#FFD54A>Black Hole</color> pulls enemies in and blows them
       all up!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 836004828155904
+    m_Localized: Looks like the King can't be hurt while he's wearing that crown.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 841141286080512
+    m_Localized: Pfahaha! See that?! That's royal power!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 841142959607808
+    m_Localized: Mad? Are you mad?! Nyah nyah~!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 841144524083200
+    m_Localized: Just a goblin after all! Nothing special!!
     m_Metadata:
       m_Items: []
   references:

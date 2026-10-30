@@ -222,6 +222,9 @@ namespace ExplodeIt.Enemies
         // 1국면에서 시작한 패턴 수와, 왕관을 노리라는 힌트를 이미 줬는지.
         private int _firstPhasePatterns;
         private bool _isCrownHintShown;
+        // 왕관에 막힌 폭탄 수와, 왕관이 있으면 무적이라는 힌트를 이미 줬는지.
+        private int _blockedHits;
+        private bool _isImmuneHintShown;
         private Pattern _pattern;
         private float _moveTimer;
 
@@ -614,6 +617,8 @@ namespace ExplodeIt.Enemies
             _isFighting = false;
             _hitsTaken = 0;
             _rotationIndex = 0;
+            _blockedHits = 0;
+            _isImmuneHintShown = false;
             _dodge = DodgePhase.None;
             _popTime = -1f;
             _summonTime = -1f;
@@ -3238,6 +3243,26 @@ namespace ExplodeIt.Enemies
             FeedbackPlayer.Play(_data.ImmuneFeedback, Body.position);
             AudioManager.Play(_data.ImmuneSound);
             _visual.Flash(_data.ImmuneFlashColor, _data.ImmuneFlashDuration);
+            TryShowImmuneHint();
+        }
+
+        // 막혀도 계속 때리던 사람이 우연히 왕관 없을 때 맞히면 "피해가 쌓여서 맞았다"고 오해한다(테스터 피드백).
+        // 그래서 이미 맞힌 적이 있어도, 막힌 횟수가 차면 한 번은 규칙을 알려 준다.
+        private void TryShowImmuneHint()
+        {
+            if (_isImmuneHintShown || _data.ImmuneHintBlocks <= 0 || string.IsNullOrEmpty(_data.ImmuneHintText))
+            {
+                return;
+            }
+
+            _blockedHits++;
+            if (_blockedHits < _data.ImmuneHintBlocks)
+            {
+                return;
+            }
+
+            _isImmuneHintShown = true;
+            GameEvents.RaisePlayerHintRequested(_data.ImmuneHintText, _data.CrownHintHold);
         }
 
         // ── 구르기: 왕관이 있고 패턴 사이에 서 있을 때, 근처에 떨어진 폭탄을 보고 반대쪽으로 구른다. 쿨타임은 없다.
