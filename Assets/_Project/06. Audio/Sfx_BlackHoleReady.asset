@@ -17,5 +17,7 @@ MonoBehaviour:
   _volume: 0.71
   _pitchMin: 1
   _pitchMax: 1
-  _maxInstances: 1
-  _minInterval: 0.5
+  _maxInstances: 3
+  _minInterval: 0.05
+  _maxInterval: 0
+  _isInterface: 0

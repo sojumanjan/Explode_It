@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 namespace ExplodeIt.Progression
 {
     // 처치로 게이지를 채우고, 한 칸이 차면 메뉴에서 고른 스킬을 쓸 수 있다. 칸은 여러 개라 모아 둘 수 있다.
-    // 스킬은 한 번에 하나만 발동한다. 칸이 남아 있어도 앞의 발동이 끝난 뒤에 다음을 쓴다.
+    // 칸이 남아 있으면 앞의 발동이 끝나기 전에도 겹쳐 쓸 수 있다(블랙홀 두 개를 연달아 던지기 등). 순간폭탄만은 모드라서 겹치지 않는다.
     //   블랙홀: 커서 쪽에 떨어져 범위 안의 적을 빨아들였다가 터진다.
     //   다발폭탄: 360도를 고르게 나눠 폭탄을 뿌린다(칸마다 살짝 비틂). 벽을 무시하고 방패를 뚫는다. 강화하면 터진 자리에서 작은 폭탄이 다시 튄다.
     //   순간폭탄: 정한 시간 동안 던진 폭탄이 땅에 닿자마자 터지고 연사·충전이 빨라지며 사거리가 늘어난다.
@@ -25,15 +25,18 @@ namespace ExplodeIt.Progression
         [SerializeField] private BombLauncher _launcher;
         [SerializeField] private BlackHoleBomb _blackHolePrefab;
 
-        private BlackHoleBomb _blackHole;
-        private Action _onBlackHoleFinished;
+        // 겹쳐 던질 수 있게 칸 수만큼 미리 만들어 둔다.
+        private BlackHoleBomb[] _blackHoles;
         private Action<Vector2> _onScatterExploded;
         private Action _onSkillBombFinished;
         private WeaponStats _scatterStats;
         private WeaponStats _childStats;
         private BombOptions _scatterOptions;
         private int _charge;
-        private bool _isActive;
+        // 아직 끝나지 않은 발동 수. 겹친 발동은 하나의 발동 구간으로 묶어, 시작·끝 이벤트는 구간마다 한 번만 낸다.
+        private int _activeUses;
+        // 아직 터지지 않은 다발폭탄으로 끝을 기다리는 다발폭탄 발동 수.
+        private int _scatterUses;
         private bool _canUse = true;
         // 아직 터지지 않은 다발폭탄 수(작은 폭탄 포함). 0이 되면 발동이 끝난다.
         private int _pendingBombs;
@@ -65,11 +68,15 @@ namespace ExplodeIt.Progression
             _maxCharges = Mathf.Max(1, _data.MaxCharges + RunModifiers.ExtraAbilityCharges);
             _nextStillCharge = RunModifiers.StillChargeDelay;
 
-            // 한 번에 하나만 존재하므로 풀 대신 하나를 미리 만들어 재사용한다. 전투 중 생성이 일어나지 않는다.
+            // 동시에 있을 수 있는 수는 칸 수가 최대이므로 풀 대신 그만큼 미리 만들어 재사용한다. 전투 중 생성이 일어나지 않는다.
             // 던진 뒤 플레이어를 따라가면 안 되므로 부모 없이 월드에 둔다.
-            _blackHole = Instantiate(_blackHolePrefab);
-            _blackHole.gameObject.SetActive(false);
-            _onBlackHoleFinished = Finish;
+            _blackHoles = new BlackHoleBomb[_maxCharges];
+            for (int i = 0; i < _blackHoles.Length; i++)
+            {
+                _blackHoles[i] = Instantiate(_blackHolePrefab);
+                _blackHoles[i].gameObject.SetActive(false);
+            }
+
             _onScatterExploded = SpawnChildBombs;
             _onSkillBombFinished = OnSkillBombFinished;
             _scatterOptions = new BombOptions(true, true, DamageSource.ScatterBomb);
@@ -168,12 +175,17 @@ namespace ExplodeIt.Progression
             {
                 _instantEndTime = -1f;
                 _launcher.EndInstantMode();
-                Finish();
+                EndUses(1);
             }
 
             TickStillCharge();
 
-            if (!_canUse || _isActive || _charge < _killsToCharge || !_input.AbilityPressed)
+            if (!_canUse || _charge < _killsToCharge || !_input.AbilityPressed)
+            {
+                return;
+            }
+
+            if (_activeUses > 0 && _data.Kind == AbilityKind.InstantBomb)
             {
                 return;
             }
@@ -183,17 +195,28 @@ namespace ExplodeIt.Progression
 
         private void Use()
         {
+            BlackHoleBomb blackHole = null;
+            if (_data.Kind == AbilityKind.BlackHole && !TryGetIdleBlackHole(out blackHole))
+            {
+                return;
+            }
+
             // 한 칸만 쓴다. 차던 중인 다음 칸의 진행분은 그대로 남는다.
             _charge -= _killsToCharge;
-            _isActive = true;
-            _useKills = 0;
             RaiseChargeChanged();
             GameEvents.RaiseAbilityUsed();
-            ProgressionEvents.RaiseAbilityStarted(_data);
+            if (_activeUses == 0)
+            {
+                _useKills = 0;
+                ProgressionEvents.RaiseAbilityStarted(_data);
+            }
+
+            _activeUses++;
 
             switch (_data.Kind)
             {
                 case AbilityKind.ScatterBomb:
+                    _scatterUses++;
                     ThrowScatter();
                     break;
                 case AbilityKind.InstantBomb:
@@ -201,18 +224,38 @@ namespace ExplodeIt.Progression
                     _instantEndTime = Time.time + _data.InstantDuration + _durationBonus;
                     break;
                 default:
-                    ThrowBlackHole();
+                    ThrowBlackHole(blackHole);
                     break;
             }
         }
 
-        private void ThrowBlackHole()
+        private bool TryGetIdleBlackHole(out BlackHoleBomb blackHole)
+        {
+            for (int i = 0; i < _blackHoles.Length; i++)
+            {
+                if (!_blackHoles[i].gameObject.activeSelf)
+                {
+                    blackHole = _blackHoles[i];
+                    return true;
+                }
+            }
+
+            blackHole = null;
+            return false;
+        }
+
+        // 스킬은 드물게 쓰므로 끝 콜백 람다 할당은 감수한다.
+        private void ThrowBlackHole(BlackHoleBomb blackHole)
         {
             WeaponStats weapon = _launcher.Stats;
-            _blackHole.transform.position = transform.position;
-            _blackHole.gameObject.SetActive(true);
-            _blackHole.Launch(_launcher.GetThrowTarget(_data.MaxThrowRange), _data.BlackHoleRadius * _radiusMultiplier,
-                _data.PullDuration + _durationBonus, _data.PullSpeed, weapon, _onBlackHoleFinished);
+            blackHole.transform.position = transform.position;
+            blackHole.gameObject.SetActive(true);
+            blackHole.Launch(_launcher.GetThrowTarget(_data.MaxThrowRange), _data.BlackHoleRadius * _radiusMultiplier,
+                _data.PullDuration + _durationBonus, _data.PullSpeed, weapon, () =>
+                {
+                    blackHole.gameObject.SetActive(false);
+                    EndUses(1);
+                });
         }
 
         // 360도를 폭탄 수로 나눈 칸마다 하나씩, 칸 가운데에서 정한 각도 안으로 살짝 비틀어 던진다.
@@ -288,10 +331,12 @@ namespace ExplodeIt.Progression
         private void OnSkillBombFinished()
         {
             _pendingBombs--;
-            if (_pendingBombs <= 0 && _isActive)
+            if (_pendingBombs <= 0 && _scatterUses > 0)
             {
                 _pendingBombs = 0;
-                Finish();
+                int uses = _scatterUses;
+                _scatterUses = 0;
+                EndUses(uses);
             }
         }
 
@@ -362,7 +407,7 @@ namespace ExplodeIt.Progression
         // 아티팩트 충전은 발동 중에는 쌓지 않는다. 쌓이면 발동이 끝나자마자 다음 스킬로 이어진다.
         private void AddCharge(int amount)
         {
-            if (_isActive || _charge >= MaxCharge)
+            if (_activeUses > 0 || _charge >= MaxCharge)
             {
                 return;
             }
@@ -374,21 +419,23 @@ namespace ExplodeIt.Progression
         // 이번 발동의 스킬로 잡은 적(보스 제외). 반지 회복 조건에 쓴다.
         private void OnEnemyKilledBy(DamageSource source, EnemyKind kind)
         {
-            if (_isActive && kind != EnemyKind.Boss && (source == DamageSource.BlackHole || source == DamageSource.ScatterBomb
+            if (_activeUses > 0 && kind != EnemyKind.Boss && (source == DamageSource.BlackHole || source == DamageSource.ScatterBomb
                 || source == DamageSource.InstantBomb))
             {
                 _useKills++;
             }
         }
 
-        private void Finish()
+        // 겹친 발동이 모두 끝나야 발동 구간이 끝난다.
+        private void EndUses(int count)
         {
-            if (_data.Kind == AbilityKind.BlackHole)
+            _activeUses -= count;
+            if (_activeUses > 0)
             {
-                _blackHole.gameObject.SetActive(false);
+                return;
             }
 
-            _isActive = false;
+            _activeUses = 0;
             if (RunModifiers.AbilityRefundMinKills > 0 && _useKills >= RunModifiers.AbilityRefundMinKills)
             {
                 AddCharge(RunModifiers.AbilityRefundAmount);
