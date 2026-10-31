@@ -42,6 +42,10 @@ namespace ExplodeIt.Enemies
         [Tooltip("밀어내는 최대 속도 (유닛/초). 낮을수록 살짝살짝 밀린다. 0이면 밀어내지 않는다")]
         [SerializeField, Min(0f)] private float _separationSpeed = 1.5f;
 
+        // 흡입이 밀어내기보다 세면 모두 한 점에 포개져 몇 마리가 빨려 왔는지 안 보인다.
+        [Tooltip("블랙홀에 끌려갈 때 밀어내는 최대 속도 (흡입 속도 대비 배율). 1보다 크면 가운데에 덩어리로 뭉치고, 클수록 덩어리가 넓게 퍼진다. 0이면 한 점에 포개진다")]
+        [SerializeField, Min(0f)] private float _pulledSeparationRatio = 2.5f;
+
         [Header("예고 / 회복")]
         // 예고 없는 공격은 버그로 취급하므로 0이 되지 않게 막는다. 하드모드에서도 이 아래로는 줄이지 않는다.
         [Tooltip("예고 시간 (초). 멈춰서 예고하는 시간. 궁수류는 이 동안 조준이 플레이어를 따라가고, 돌격병·전사는 예고 시작 방향으로 고정된다. 최소 0.1")]
@@ -67,6 +71,7 @@ namespace ExplodeIt.Enemies
         public float DeathDuration => _deathDuration;
         public float SeparationDistanceRatio => _separationDistanceRatio;
         public float SeparationSpeed => _separationSpeed;
+        public float PulledSeparationRatio => _pulledSeparationRatio;
         public float SightConfirmTime => _sightConfirmTime;
     }
 }

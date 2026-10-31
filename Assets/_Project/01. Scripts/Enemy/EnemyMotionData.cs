@@ -18,6 +18,10 @@ namespace ExplodeIt.Enemies
         [Tooltip("초당 뛰는 횟수 (회/초)")]
         [SerializeField, Min(0f)] private float _hopRate = 3f;
 
+        // 끌려가는 동안 걷는 박자 그대로 뛰면 제 발로 걸어오는 것처럼 보여, 뛰기만 느리게 해 빨려 가는 느낌을 준다.
+        [Tooltip("블랙홀에 끌려가는 동안 뛰는 빠르기 (평소 대비 배율). 낮을수록 슬로모션처럼 느리게 허우적댄다. 1이면 평소와 같다")]
+        [SerializeField, Range(0f, 1f)] private float _pulledHopRateRatio = 0.3f;
+
         [Tooltip("뛰는 높이 (유닛)")]
         [SerializeField, Min(0f)] private float _hopHeight = 0.12f;
 
@@ -120,6 +124,7 @@ namespace ExplodeIt.Enemies
         public float SpringFrequency => _springFrequency;
         public float SpringDamping => _springDamping;
         public float HopRate => _hopRate;
+        public float PulledHopRateRatio => _pulledHopRateRatio;
         public float HopHeight => _hopHeight;
         public float HopStretch => _hopStretch;
         public float HopSquash => _hopSquash;

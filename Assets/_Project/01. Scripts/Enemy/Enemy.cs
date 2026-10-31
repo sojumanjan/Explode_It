@@ -299,18 +299,22 @@ namespace ExplodeIt.Enemies
                 EnterState(EnemyState.Pulled);
             }
 
+            // 끌려온 적끼리 흡입보다 세게 밀어내, 한 점이 아니라 여러 마리가 엉긴 덩어리로 모이게 한다.
+            Vector2 move = SeparationStep(step * Data.PulledSeparationRatio);
             Vector2 toCenter = center - Body.position;
             float distance = toCenter.magnitude;
-            if (distance < 0.0001f)
+            if (distance >= 0.0001f)
             {
-                return;
+                // 중심을 지나쳐 앞뒤로 떨리지 않게 남은 거리까지만 움직인다.
+                Vector2 direction = toCenter / distance;
+                float pull = Mathf.Min(step, distance);
+                move += direction * Mathf.Min(pull, ClearDistance(direction, pull, BodyRadius));
             }
 
-            // 중심을 지나쳐 앞뒤로 떨리지 않게 남은 거리까지만 움직인다.
-            Vector2 direction = toCenter / distance;
-            float move = Mathf.Min(step, distance);
-            move = Mathf.Min(move, ClearDistance(direction, move, BodyRadius));
-            Body.MovePosition(Body.position + direction * move);
+            if (move.sqrMagnitude > 0f)
+            {
+                Body.MovePosition(Body.position + move);
+            }
         }
 
         // 예고·공격 중이어도 끊고 기절시킨다. 풀려나면 이동부터 다시 하므로 예고 없이 공격하는 일은 없다.
@@ -440,7 +444,7 @@ namespace ExplodeIt.Enemies
         {
             Vector2 toTarget = MoveGoal - Body.position;
             float step = speed * deltaTime;
-            Vector2 move = SeparationStep(deltaTime);
+            Vector2 move = SeparationStep(Data.SeparationSpeed * deltaTime);
             if (toTarget.sqrMagnitude > step * step)
             {
                 Vector2 direction = MoveDirection();
@@ -456,11 +460,12 @@ namespace ExplodeIt.Enemies
         }
 
         // 흐름장을 따라 같은 길로 오면 한 점에 포개지므로, 너무 가까운 다른 적에게서 조금씩 떨어진다.
-        // 이동 중에만 적용한다. 예고·공격 중인 적은 제자리를 지켜야 하고, 블랙홀은 일부러 뭉치게 하는 기술이다.
+        // 이동 중과 블랙홀에 끌려갈 때만 적용한다. 예고·공격 중인 적은 제자리를 지켜야 한다.
         // 서 있는 적은 밀리지 않으므로, 걸어오는 쪽이 비켜 간다.
-        private Vector2 SeparationStep(float deltaTime)
+        // maxPush: 이번 스텝에 밀려날 수 있는 최대 거리.
+        private Vector2 SeparationStep(float maxPush)
         {
-            if (Data.SeparationSpeed <= 0f)
+            if (maxPush <= 0f)
             {
                 return Vector2.zero;
             }
@@ -502,7 +507,7 @@ namespace ExplodeIt.Enemies
 
             // 여럿에게 둘러싸여도 정해진 속도보다 빨리 밀리지 않게 한다.
             Vector2 pushDirection = push / strength;
-            float pushDistance = Mathf.Min(strength, 1f) * Data.SeparationSpeed * deltaTime;
+            float pushDistance = Mathf.Min(strength, 1f) * maxPush;
             // 키네마틱이라 물리가 막아 주지 않으므로, 밀려서 구조물에 파묻히지 않게 직접 멈춘다.
             pushDistance = ClearDistance(pushDirection, pushDistance, BodyRadius);
             return pushDirection * pushDistance;
@@ -724,11 +729,13 @@ namespace ExplodeIt.Enemies
         private void OnDied(HitInfo hit)
         {
             LeaveArenaCount();
+            bool wasPulled = _state == EnemyState.Pulled;
             EnterState(EnemyState.Dead);
             _collider.enabled = false;
             if (Data.CountsAsKill)
             {
                 GameEvents.RaiseEnemyKilled(Body.position);
+                GameEvents.RaiseCountedEnemyKilled(hit.Source, wasPulled);
             }
 
             GameEvents.RaiseEnemyKilledBy(hit.Source, Kind);

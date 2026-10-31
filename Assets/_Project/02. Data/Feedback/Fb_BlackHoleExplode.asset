@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Fb_BlackHoleExplode
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.FeedbackData
   _shakeForce: 0.8
-  _hitStopDuration: 0.08
-  _hitStopTimeScale: 0.05
+  _hitStopDuration: 0.4
+  _hitStopTimeScale: 0.15
+  _hitStopSoundPitch: 0.7
   _effect: {fileID: 1875158574369223164, guid: 699b46d62bd92274a9e4fc77c2b3bc62, type: 3}
   _effectScale: 1.6

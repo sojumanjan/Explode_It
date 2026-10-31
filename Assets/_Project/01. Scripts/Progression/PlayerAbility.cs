@@ -128,7 +128,7 @@ namespace ExplodeIt.Progression
 
         private void OnEnable()
         {
-            GameEvents.EnemyKilled += OnEnemyKilled;
+            GameEvents.CountedEnemyKilled += OnCountedEnemyKilled;
             GameEvents.EnemyKilledBy += OnEnemyKilledBy;
             GameEvents.PlayerDodged += OnPlayerDodged;
             GameEvents.GameStateChanged += OnGameStateChanged;
@@ -136,7 +136,7 @@ namespace ExplodeIt.Progression
 
         private void OnDisable()
         {
-            GameEvents.EnemyKilled -= OnEnemyKilled;
+            GameEvents.CountedEnemyKilled -= OnCountedEnemyKilled;
             GameEvents.EnemyKilledBy -= OnEnemyKilledBy;
             GameEvents.PlayerDodged -= OnPlayerDodged;
             GameEvents.GameStateChanged -= OnGameStateChanged;
@@ -310,10 +310,12 @@ namespace ExplodeIt.Progression
             return point;
         }
 
-        // 스킬로 뭉친 적을 지우면 게이지가 곧바로 다시 차서 연달아 쓰게 되므로, 발동이 끝날 때까지는 처치를 세지 않는다.
-        private void OnEnemyKilled(Vector2 position)
+        // 스킬로 뭉친 적을 지우면 게이지가 곧바로 다시 차서 연달아 쓰게 되므로, 스킬로 잡은 적과 블랙홀에 끌려가던 적은 세지 않는다.
+        // 발동 중이어도 스킬과 상관없는 곳에서 폭탄으로 잡은 적은 센다.
+        private void OnCountedEnemyKilled(DamageSource source, bool wasPulled)
         {
-            if (_isActive || _charge >= MaxCharge)
+            if (wasPulled || source == DamageSource.BlackHole || source == DamageSource.ScatterBomb
+                || source == DamageSource.InstantBomb || _charge >= MaxCharge)
             {
                 return;
             }
@@ -357,7 +359,7 @@ namespace ExplodeIt.Progression
             ResetStill();
         }
 
-        // 발동 중에는 처치로 게이지가 차지 않으므로, 아티팩트 충전도 같은 규칙을 따른다.
+        // 아티팩트 충전은 발동 중에는 쌓지 않는다. 쌓이면 발동이 끝나자마자 다음 스킬로 이어진다.
         private void AddCharge(int amount)
         {
             if (_isActive || _charge >= MaxCharge)

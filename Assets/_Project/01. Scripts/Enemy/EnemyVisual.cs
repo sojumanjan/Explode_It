@@ -410,7 +410,8 @@ namespace ExplodeIt.Enemies
             {
                 if (isWalking)
                 {
-                    _hopPhase += _motion.HopRate * deltaTime;
+                    float hopRate = state == EnemyState.Pulled ? _motion.HopRate * _motion.PulledHopRateRatio : _motion.HopRate;
+                    _hopPhase += hopRate * deltaTime;
                 }
 
                 float wave = Mathf.Sin(Mathf.PI * _hopPhase);
@@ -502,7 +503,7 @@ namespace ExplodeIt.Enemies
 
         private float FacingSign => _facesRight ? 1f : -1f;
 
-        // 블랙홀에 끌려가는 동안에도 따로 연출하지 않고 걷는 모습 그대로 둔다.
+        // 블랙홀에 끌려가는 동안에도 걷는 모습을 쓴다. 뛰는 빠르기만 느리게 바꾼다.
         private static bool IsWalkingState(EnemyState state)
         {
             return state == EnemyState.Move || state == EnemyState.Pulled;

@@ -25,6 +25,8 @@ namespace ExplodeIt.Core
         public static event Action<Vector2> EnemyKilled;
         // 처치 출처와 적 부류. 처치 수에 들지 않는 보스도 발행한다. 스킬 업적(보스 막타, 방패병 처치 등)이 듣는다.
         public static event Action<DamageSource, EnemyKind> EnemyKilledBy;
+        // 처치 수에 드는 적의 처치 출처와, 죽는 순간 블랙홀에 끌려가던 중이었는지. 스킬 게이지가 스킬로 잡거나 모은 적을 거른다.
+        public static event Action<DamageSource, bool> CountedEnemyKilled;
         // 현재 충전량(처치 수, 모든 칸 합계), 한 칸에 필요한 양, 칸 수. 게이지 UI가 능력 코드를 몰라도 되게 한다.
         public static event Action<int, int, int> AbilityChargeChanged;
         // 남은 폭탄 수, 최대 보유 수. HUD가 무기 코드를 몰라도 되게 한다.
@@ -328,6 +330,11 @@ namespace ExplodeIt.Core
             EnemyKilledBy?.Invoke(source, kind);
         }
 
+        public static void RaiseCountedEnemyKilled(DamageSource source, bool wasPulled)
+        {
+            CountedEnemyKilled?.Invoke(source, wasPulled);
+        }
+
         // 플레이어를 쓰러뜨린 마지막 공격이 적이 직접 때린 것이면 그 적의 부류. 사망 이벤트보다 먼저 온다.
         public static event Action<EnemyKind> PlayerKilledBy;
 
@@ -389,6 +396,7 @@ namespace ExplodeIt.Core
             PlayerHealthChanged = null;
             EnemyKilled = null;
             EnemyKilledBy = null;
+            CountedEnemyKilled = null;
             PlayerKilledBy = null;
             PlayerKillerKnown = null;
             EnemiesInArenaChanged = null;
