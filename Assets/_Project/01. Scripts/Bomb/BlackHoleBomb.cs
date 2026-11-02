@@ -30,6 +30,13 @@ namespace ExplodeIt.Bombs
         [SerializeField, Min(1f)] private float _burnPopScale = 1.35f;
         [SerializeField, Min(0f)] private float _burnPopDuration = 0.08f;
         [SerializeField, Min(0f)] private float _burnShrinkDuration = 0.3f;
+        [Header("픽셀 연출")]
+        [Tooltip("착지부터 폭발까지 트는 pixelfx 재생기 (자식, Play On Enable 끔). 비워 두면 틀지 않는다")]
+        [SerializeField] private PixelFxPlayer _pixelFx;
+        [Tooltip("배율 1일 때 연출이 덮는 반경 (유닛). blackhole-implode는 76px ÷ PPU 20 = 3.8")]
+        [SerializeField, Min(0.01f)] private float _pixelFxRadius = 3.8f;
+        [Tooltip("시트를 렌더한 흡입 시간 (초). 실제 흡입 시간에 맞춰 재생 속도를 바꿔 터지는 순간을 폭발에 맞춘다")]
+        [SerializeField, Min(0.01f)] private float _pixelFxPull = 2f;
 
         private SoundHandle _pullHandle = SoundHandle.None;
 
@@ -135,6 +142,10 @@ namespace ExplodeIt.Bombs
             _isFlying = false;
             _sequence?.Kill();
             barrier.OnBombBurned(transform.position);
+            if (_pixelFx != null)
+            {
+                _pixelFx.Stop();
+            }
 
             Transform body = _body.transform;
             _sequence = DOTween.Sequence()
@@ -197,6 +208,7 @@ namespace ExplodeIt.Bombs
             _fuseFill.Visible = true;
             _isPulling = true;
             _pullHandle = AudioManager.Play(_pullSound);
+            PlayPixelFx();
             GameEvents.RaiseBombLanded(transform.position, _radius);
         }
 
@@ -222,6 +234,18 @@ namespace ExplodeIt.Bombs
             AudioManager.Play(_explodeSound);
             FeedbackPlayer.Play(_explodeFeedback, position);
             GameEvents.RaisePlayerBlastExploded(position, _radius);
+        }
+
+        // 흡입 강화로 시간이 늘어나도 시트 하나로 맞춘다. 늘어나는 만큼 흡입과 터짐이 함께 느려진다.
+        private void PlayPixelFx()
+        {
+            if (_pixelFx == null)
+            {
+                return;
+            }
+
+            _pixelFx.gameObject.SetActive(true);
+            _pixelFx.Play(_radius / _pixelFxRadius, _pixelFxPull / _pullDuration, null);
         }
 
         private void GrowFill(float radius)
@@ -253,6 +277,11 @@ namespace ExplodeIt.Bombs
 
             _fuseFill.Visible = false;
             _fuseFill.ResetColor();
+
+            if (_pixelFx != null)
+            {
+                _pixelFx.Stop();
+            }
         }
     }
 }

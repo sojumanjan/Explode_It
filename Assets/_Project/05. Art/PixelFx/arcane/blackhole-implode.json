@@ -1,0 +1,1645 @@
+{
+ "frames": [
+  {
+   "filename": "blackhole-implode 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 1",
+   "frame": {
+    "x": 176,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 2",
+   "frame": {
+    "x": 352,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 3",
+   "frame": {
+    "x": 528,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 4",
+   "frame": {
+    "x": 704,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 5",
+   "frame": {
+    "x": 880,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 6",
+   "frame": {
+    "x": 1056,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 7",
+   "frame": {
+    "x": 1232,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 8",
+   "frame": {
+    "x": 1408,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 9",
+   "frame": {
+    "x": 0,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 10",
+   "frame": {
+    "x": 176,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 11",
+   "frame": {
+    "x": 352,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 12",
+   "frame": {
+    "x": 528,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 13",
+   "frame": {
+    "x": 704,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 14",
+   "frame": {
+    "x": 880,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 15",
+   "frame": {
+    "x": 1056,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 16",
+   "frame": {
+    "x": 1232,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 17",
+   "frame": {
+    "x": 1408,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 18",
+   "frame": {
+    "x": 0,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 19",
+   "frame": {
+    "x": 176,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 20",
+   "frame": {
+    "x": 352,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 21",
+   "frame": {
+    "x": 528,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 22",
+   "frame": {
+    "x": 704,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 23",
+   "frame": {
+    "x": 880,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 24",
+   "frame": {
+    "x": 1056,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 25",
+   "frame": {
+    "x": 1232,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 26",
+   "frame": {
+    "x": 1408,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 27",
+   "frame": {
+    "x": 0,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 28",
+   "frame": {
+    "x": 176,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 29",
+   "frame": {
+    "x": 352,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 30",
+   "frame": {
+    "x": 528,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 31",
+   "frame": {
+    "x": 704,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 32",
+   "frame": {
+    "x": 880,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 33",
+   "frame": {
+    "x": 1056,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 34",
+   "frame": {
+    "x": 1232,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 35",
+   "frame": {
+    "x": 1408,
+    "y": 528,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 36",
+   "frame": {
+    "x": 0,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 37",
+   "frame": {
+    "x": 176,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 38",
+   "frame": {
+    "x": 352,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 39",
+   "frame": {
+    "x": 528,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 40",
+   "frame": {
+    "x": 704,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 41",
+   "frame": {
+    "x": 880,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 42",
+   "frame": {
+    "x": 1056,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 43",
+   "frame": {
+    "x": 1232,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 44",
+   "frame": {
+    "x": 1408,
+    "y": 704,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 45",
+   "frame": {
+    "x": 0,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 46",
+   "frame": {
+    "x": 176,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 47",
+   "frame": {
+    "x": 352,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 48",
+   "frame": {
+    "x": 528,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 49",
+   "frame": {
+    "x": 704,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 50",
+   "frame": {
+    "x": 880,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 51",
+   "frame": {
+    "x": 1056,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 52",
+   "frame": {
+    "x": 1232,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 53",
+   "frame": {
+    "x": 1408,
+    "y": 880,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 54",
+   "frame": {
+    "x": 0,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 55",
+   "frame": {
+    "x": 176,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 56",
+   "frame": {
+    "x": 352,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 57",
+   "frame": {
+    "x": 528,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 58",
+   "frame": {
+    "x": 704,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 59",
+   "frame": {
+    "x": 880,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 60",
+   "frame": {
+    "x": 1056,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 61",
+   "frame": {
+    "x": 1232,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 62",
+   "frame": {
+    "x": 1408,
+    "y": 1056,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 63",
+   "frame": {
+    "x": 0,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 64",
+   "frame": {
+    "x": 176,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 65",
+   "frame": {
+    "x": 352,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 66",
+   "frame": {
+    "x": 528,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 67",
+   "frame": {
+    "x": 704,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 68",
+   "frame": {
+    "x": 880,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 69",
+   "frame": {
+    "x": 1056,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 70",
+   "frame": {
+    "x": 1232,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 71",
+   "frame": {
+    "x": 1408,
+    "y": 1232,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "blackhole-implode 72",
+   "frame": {
+    "x": 0,
+    "y": 1408,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "blackhole-implode.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1584,
+   "h": 1584
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "blackhole-implode",
+    "from": 0,
+    "to": 72,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "arcane/blackhole-implode",
+   "name": "Black hole implode",
+   "fps": 30,
+   "loop": false,
+   "frames": 73,
+   "frameSize": [
+    176,
+    176
+   ],
+   "pivot": [
+    88,
+    88
+   ],
+   "columns": 9
+  }
+ }
+}

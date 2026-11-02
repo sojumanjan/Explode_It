@@ -102546,6 +102546,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.GameRestarter
   _retryAction: {fileID: 7228549200559496680, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _quickRestartAction: {fileID: -5874306449678467279, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+--- !u!1 &1521631035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1521631037}
+  - component: {fileID: 1521631036}
+  m_Layer: 0
+  m_Name: EnemyPixelFx
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1521631036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521631035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cfe99db21a3194c95e18c2d61809bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyPixelFx
+  _slashPrefab: {fileID: 0}
+  _slashRadius: 1.7
+  _slashScale: 1
+  _blockPrefab: {fileID: 0}
+  _blockScale: 1
+  _prewarm: 6
+  _maxSize: 24
+--- !u!4 &1521631037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521631035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1522695384
 GameObject:
   m_ObjectHideFlags: 0
@@ -144028,3 +144079,4 @@ SceneRoots:
   - {fileID: 1905018846}
   - {fileID: 1429635140}
   - {fileID: 46445499}
+  - {fileID: 1521631037}

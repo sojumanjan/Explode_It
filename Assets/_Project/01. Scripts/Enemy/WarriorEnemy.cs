@@ -42,6 +42,7 @@ namespace ExplodeIt.Enemies
         {
             HitInSector(_aimDirection, _data.AttackRadius, _data.AttackAngle);
             ShowSwing();
+            GameEvents.RaiseEnemySwung(Body.position, _aimDirection, _data.AttackRadius);
             AudioManager.Play(_data.SwingSound);
             return true;
         }

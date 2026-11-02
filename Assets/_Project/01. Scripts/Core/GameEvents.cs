@@ -384,6 +384,22 @@ namespace ExplodeIt.Core
             SpawnWarned?.Invoke(position, radius, duration);
         }
 
+        // 적이 근접 공격을 휘둘렀다(판정 순간). 휘두른 중심, 정면 방향, 반경(유닛). 베기 연출이 듣는다.
+        public static event Action<Vector2, Vector2, float> EnemySwung;
+
+        public static void RaiseEnemySwung(Vector2 center, Vector2 direction, float radius)
+        {
+            EnemySwung?.Invoke(center, direction, radius);
+        }
+
+        // 적의 방패가 폭발을 막았다. 방패 자리와 방패가 향한 방향(폭발이 온 쪽). 막힘 연출이 듣는다.
+        public static event Action<Vector2, Vector2> EnemyHitBlocked;
+
+        public static void RaiseEnemyHitBlocked(Vector2 position, Vector2 facing)
+        {
+            EnemyHitBlocked?.Invoke(position, facing);
+        }
+
         // 도메인 리로드를 끈 플레이모드 설정에서도 이전 세션의 구독자가 남지 않게 한다.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetSubscribers()
@@ -425,6 +441,8 @@ namespace ExplodeIt.Core
             BombLanded = null;
             WaveStarted = null;
             SpawnWarned = null;
+            EnemySwung = null;
+            EnemyHitBlocked = null;
             PlayerBlastExploded = null;
         }
     }

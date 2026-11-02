@@ -60,7 +60,9 @@ namespace ExplodeIt.Enemies
                     continue;
                 }
 
-                if (enemy.AttackCount != _attackCounts[i] && enemy.CurrentState == EnemyState.Move)
+                // 시연 씬에서 폭탄이나 블랙홀에 죽으면(풀 없이 꺼짐) 처음 자리에서 다시 시작한다.
+                if (!enemy.gameObject.activeSelf
+                    || (enemy.AttackCount != _attackCounts[i] && enemy.CurrentState == EnemyState.Move))
                 {
                     Restart(i);
                 }

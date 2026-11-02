@@ -23,6 +23,8 @@ namespace ExplodeIt.Core
         private Action<PixelFxPlayer> _release;
         private Vector3 _baseScale;
         private float _time;
+        // Play로 틀 때 정하는 속도 배율. 블랙홀처럼 길이가 바뀌는 연출에 시트 하나를 맞춰 늘이거나 줄인다.
+        private float _playSpeed = 1f;
         private int _shownFrame = -1;
         private bool _isPlaying;
 
@@ -49,15 +51,33 @@ namespace ExplodeIt.Core
 
         public void Play(float scale, Action<PixelFxPlayer> release)
         {
+            Play(scale, 1f, release);
+        }
+
+        public void Play(float scale, float speed, Action<PixelFxPlayer> release)
+        {
             _release = release;
             transform.localScale = _baseScale * scale;
             Restart();
+            _playSpeed = speed;
+        }
+
+        // 끝 콜백 없이 바로 감춘다. 붙어 있는 연출을 주인이 먼저 끝낼 때 쓴다.
+        public void Stop()
+        {
+            _isPlaying = false;
+            _release = null;
+            if (_renderer != null)
+            {
+                _renderer.enabled = false;
+            }
         }
 
         private void Restart()
         {
             _time = 0f;
             _shownFrame = -1;
+            _playSpeed = 1f;
             _isPlaying = _clip != null && _clip.Frames != null && _clip.Frames.Length > 0;
             _renderer.enabled = _isPlaying;
             if (_isPlaying)
@@ -73,7 +93,7 @@ namespace ExplodeIt.Core
                 return;
             }
 
-            _time += (_useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime) * _speed;
+            _time += (_useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime) * _speed * _playSpeed;
             int count = _clip.Frames.Length;
             int frame = Mathf.FloorToInt(_time * _clip.Fps);
             if (frame >= count)

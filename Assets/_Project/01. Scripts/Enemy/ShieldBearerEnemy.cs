@@ -156,6 +156,7 @@ namespace ExplodeIt.Enemies
         private void OnHitBlocked(HitInfo hit)
         {
             FeedbackPlayer.Play(_data.BlockFeedback, _shield.position);
+            GameEvents.RaiseEnemyHitBlocked(_shield.position, ShieldDirection);
             AudioManager.Play(_data.BlockSound);
             if (_visual != null)
             {

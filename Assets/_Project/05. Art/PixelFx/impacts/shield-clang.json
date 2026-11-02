@@ -1,0 +1,303 @@
+{
+ "frames": [
+  {
+   "filename": "shield-clang 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 1",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 2",
+   "frame": {
+    "x": 160,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 3",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 4",
+   "frame": {
+    "x": 0,
+    "y": 64,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 5",
+   "frame": {
+    "x": 80,
+    "y": 64,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 6",
+   "frame": {
+    "x": 160,
+    "y": 64,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 7",
+   "frame": {
+    "x": 240,
+    "y": 64,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 8",
+   "frame": {
+    "x": 0,
+    "y": 128,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 9",
+   "frame": {
+    "x": 80,
+    "y": 128,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 10",
+   "frame": {
+    "x": 160,
+    "y": 128,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  },
+  {
+   "filename": "shield-clang 11",
+   "frame": {
+    "x": 240,
+    "y": 128,
+    "w": 80,
+    "h": 64
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 80,
+    "h": 64
+   },
+   "sourceSize": {
+    "w": 80,
+    "h": 64
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "shield-clang.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 320,
+   "h": 192
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "shield-clang",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "impacts/shield-clang",
+   "name": "Shield clang",
+   "fps": 30,
+   "loop": false,
+   "frames": 12,
+   "frameSize": [
+    80,
+    64
+   ],
+   "pivot": [
+    28,
+    32
+   ],
+   "columns": 4
+  }
+ }
+}
