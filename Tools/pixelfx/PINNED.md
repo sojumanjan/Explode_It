@@ -9,4 +9,6 @@
 
 ## 이 프로젝트에서 더한 것
 
-- `src/fx/explosions/bomb-pop-a.js`, `-b.js`, `-c.js`: Explode It용 탑다운 폭탄 폭발(0.36~0.5초). 원본 라이브러리에는 없다. 버전을 올릴 때 이 세 파일은 옮겨 둔다.
+- `src/fx/explosions/bomb-pop-a.js`, `-b.js`, `-c.js`: Explode It용 탑다운 폭탄 폭발(0.36~0.5초)
+- `src/fx/melee/topdown-slash.js`(적 베기, 100도), `src/fx/impacts/shield-clang.js`(방패 막힘), `src/fx/arcane/blackhole-implode.js`(블랙홀)
+- 원본 라이브러리에는 없다. 버전을 올릴 때 이 파일들은 옮겨 둔다.
