@@ -28,7 +28,11 @@ if (-not $Name) { $Name = $effect }
 
 $work = Join-Path $pixelfx 'records\_export'
 $renderArgs = @('tools/render.mjs', $Id, '--sheet', '--no-actor', '--out', $work)
-if ($Opts) { $renderArgs += @('--opts', $Opts) }
+if ($Opts) {
+    # Windows PowerShell 5.1은 외부 프로그램에 넘길 때 인자 속 큰따옴표를 빼먹어 JSON이 깨진다. 7.3 이상은 그대로 넘긴다.
+    if ($PSVersionTable.PSVersion.Major -lt 7) { $Opts = $Opts -replace '"', '\"' }
+    $renderArgs += @('--opts', $Opts)
+}
 if ($Fps) { $renderArgs += @('--fps', "$Fps") }
 if ($Seed) { $renderArgs += @('--seed', "$Seed") }
 
