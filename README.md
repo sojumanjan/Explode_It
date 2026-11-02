@@ -63,3 +63,4 @@ Explode It은 던지고 약 1초 뒤에 터지는 폭탄으로 싸우는 탑다�
 | **플레이 타임** | 스토리 모드 약 15분, 이후 무한 모드 |
 | **플레이 링크** | https://jihoonhan.itch.io/explode-it |
 | **만든 사람** | 한지훈 (1인 개발) |
+| **서드파티 고지** | [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (pixelfx, MIT) |

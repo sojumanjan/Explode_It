@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_bomb-pop-b
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: explosions/bomb-pop-b
+  _frames:
+  - {fileID: -1609951503, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1009348544, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 1598864624, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 364791381, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 570460430, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1732168506, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -314389596, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 1349207725, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -135193185, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1358983953, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1458816643, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 110480054, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1609069499, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -1193452376, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: 1983622681, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  - {fileID: -236106711, guid: 14fbe84fcfcb3fb42ac04bab339a0d7e, type: 3}
+  _fps: 30
+  _loop: 0

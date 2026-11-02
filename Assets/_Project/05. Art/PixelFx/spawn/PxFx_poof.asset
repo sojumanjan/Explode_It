@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_poof
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: spawn/poof
+  _frames:
+  - {fileID: -1261861683, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1079348051, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -172799990, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1536696538, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 924309088, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1781157034, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 692994574, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -284181359, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1027820930, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 2003945694, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1380234254, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1423450497, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1577524521, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -688560147, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1892327416, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -821457893, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -2136989404, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -466159476, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -116201433, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 343299902, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1728355096, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 742236630, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -982791078, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 85250989, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -573401361, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -261435007, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1811115540, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1259616187, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1979724156, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 770029932, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 294902200, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1313923869, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 939745331, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1533852132, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -694783276, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1914640969, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -949148222, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1185849155, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -794633536, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1056163872, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -1284719436, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -770264301, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 505237169, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -834697859, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1046669100, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 18369682, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: 1013844826, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -2116841264, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  - {fileID: -927527292, guid: 031b4d9c5c3400d46acef02064252d50, type: 3}
+  _fps: 30
+  _loop: 0
