@@ -117,6 +117,19 @@ namespace ExplodeIt.Enemies
         [Tooltip("보스를 잡은 순간의 연출. 히트스톱 시간을 1초, 게임 속도 배율을 낮게 두면 1초 슬로모션이 된다")]
         [SerializeField] private FeedbackData _defeatFeedback;
 
+        [Header("픽셀 연출")]
+        [Tooltip("혼불이 터질 때 그 자리에 틀 pixelfx (PxFx_fire-soul-pop). 비워 두면 틀지 않는다")]
+        [SerializeField] private PixelFxPlayer _orbPopFx;
+        [Tooltip("할퀴기 돌진을 시작할 때 발밑에 틀 pixelfx (PxFx_dash-kick). 돌진 방향으로 돌린다")]
+        [SerializeField] private PixelFxPlayer _clawStartFx;
+        [Tooltip("할퀴기 돌진이 끝난 자리에 틀 pixelfx (PxFx_claw-rake). 돌진 방향으로 돌리고 할퀴기 폭에 맞춰 키운다")]
+        [SerializeField] private PixelFxPlayer _clawEndFx;
+        [Tooltip("배율 1일 때 발톱 자국이 덮는 폭 (유닛). claw-rake는 120px ÷ PPU 20 = 6 (야수 할퀴기 폭)")]
+        [SerializeField, Min(0.01f)] private float _clawEndFxWidth = 6f;
+
+        [Header("혼불이 터질 때 보스 움찔")]
+        [SerializeField] private FlinchSettings _orbPopFlinch = new FlinchSettings();
+
         public float OrbBounceJitter => _orbBounceJitter;
         public float OrbSpawnRadius => _orbSpawnRadius;
         public float EntranceSettleTime => _entranceSettleTime;
@@ -143,6 +156,11 @@ namespace ExplodeIt.Enemies
         public float OrbFlicker => _orbFlicker;
         public float OrbFlickerRate => _orbFlickerRate;
         public float OrbSway => _orbSway;
+        public PixelFxPlayer OrbPopFx => _orbPopFx;
+        public PixelFxPlayer ClawStartFx => _clawStartFx;
+        public PixelFxPlayer ClawEndFx => _clawEndFx;
+        public float ClawEndFxWidth => _clawEndFxWidth;
+        public FlinchSettings OrbPopFlinch => _orbPopFlinch;
 
         public Tier GetTier(int tier)
         {

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_claw-rake
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: melee/claw-rake
+  _frames:
+  - {fileID: -1878349871, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: -508315564, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: -1673054266, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: -921893247, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 1182888535, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 1032535366, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: -78486225, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 1834929068, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: -203354337, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 1891246971, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 124843468, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  - {fileID: 241694053, guid: 5685d9af2f207524f8eac65ccca6e9fe, type: 3}
+  _fps: 30
+  _loop: 0

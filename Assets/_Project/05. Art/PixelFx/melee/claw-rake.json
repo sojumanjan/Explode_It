@@ -1,0 +1,303 @@
+{
+ "frames": [
+  {
+   "filename": "claw-rake 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 1",
+   "frame": {
+    "x": 168,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 2",
+   "frame": {
+    "x": 336,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 3",
+   "frame": {
+    "x": 504,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 4",
+   "frame": {
+    "x": 0,
+    "y": 168,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 5",
+   "frame": {
+    "x": 168,
+    "y": 168,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 6",
+   "frame": {
+    "x": 336,
+    "y": 168,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 7",
+   "frame": {
+    "x": 504,
+    "y": 168,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 8",
+   "frame": {
+    "x": 0,
+    "y": 336,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 9",
+   "frame": {
+    "x": 168,
+    "y": 336,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 10",
+   "frame": {
+    "x": 336,
+    "y": 336,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  },
+  {
+   "filename": "claw-rake 11",
+   "frame": {
+    "x": 504,
+    "y": 336,
+    "w": 168,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 168,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 168,
+    "h": 168
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "claw-rake.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 672,
+   "h": 504
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "claw-rake",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "melee/claw-rake",
+   "name": "Claw rake",
+   "fps": 30,
+   "loop": false,
+   "frames": 12,
+   "frameSize": [
+    168,
+    168
+   ],
+   "pivot": [
+    84,
+    84
+   ],
+   "columns": 4
+  }
+ }
+}

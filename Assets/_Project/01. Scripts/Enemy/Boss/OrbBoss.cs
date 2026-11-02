@@ -40,6 +40,12 @@ namespace ExplodeIt.Enemies
         // 이번 할퀴기의 길이. 맵 테두리에 닿으면 데이터 길이보다 짧아진다.
         private float _clawLength;
         private SoundHandle _readySoundHandle = SoundHandle.None;
+        // 픽셀 연출 풀. 보스를 따라 움직이면 안 되므로 월드에 둔 묶음 아래에 만든다.
+        private Transform _fxRoot;
+        private PixelFxPool _orbPopFx;
+        private PixelFxPool _clawStartFx;
+        private PixelFxPool _clawEndFx;
+        private VisualFlinch _flinch;
         // 등장 연출 동안은 구체만 퍼지고 보스는 제자리에 서 있는다.
         private bool _isFighting;
         // 등장 동작(혼불 퍼뜨리기)을 시작한 시각. 음수면 아직 시작하지 않았다.
@@ -70,6 +76,12 @@ namespace ExplodeIt.Enemies
                 _orbs[i].gameObject.SetActive(false);
                 _orbs[i].Popped += OnOrbPopped;
             }
+
+            _fxRoot = new GameObject($"{name} Fx").transform;
+            _orbPopFx = PixelFxPool.Create(_data.OrbPopFx, _fxRoot, count);
+            _clawStartFx = PixelFxPool.Create(_data.ClawStartFx, _fxRoot, 1);
+            _clawEndFx = PixelFxPool.Create(_data.ClawEndFx, _fxRoot, 1);
+            _flinch = new VisualFlinch(_visual);
         }
 
         // 기반 클래스가 이동 상태로 들어가며 OnEnterState를 부르므로, 지난 판의 그로기 표시를 먼저 지운다.
@@ -88,10 +100,16 @@ namespace ExplodeIt.Enemies
             HitReceiver.Blocked -= OnHitBlocked;
             RetractOrbs();
             StopReadySound();
+            _flinch?.Stop();
         }
 
         private void OnDestroy()
         {
+            if (_fxRoot != null)
+            {
+                Destroy(_fxRoot.gameObject);
+            }
+
             if (_orbs == null)
             {
                 return;
@@ -202,6 +220,8 @@ namespace ExplodeIt.Enemies
                 {
                     _clawSlash.Begin(Body.position, _clawDirection, _data.ClawWidth);
                 }
+
+                _clawStartFx?.Play(Body.position, _clawDirection, 1f);
             }
 
             float step = Mathf.Min(_data.ClawDashSpeed * deltaTime, _dashRemaining);
@@ -214,7 +234,14 @@ namespace ExplodeIt.Enemies
                 _clawSlash.Reach(next);
             }
 
-            return _dashRemaining <= 0f;
+            if (_dashRemaining > 0f)
+            {
+                return false;
+            }
+
+            // 발톱 자국이 할퀴기 폭을 정확히 덮게 키운다(보이는 범위 = 판정 범위).
+            _clawEndFx?.Play(next, _clawDirection, _data.ClawWidth / _data.ClawEndFxWidth);
+            return true;
         }
 
         // 돌진 끝이 맵 밖으로 나가지 않는 길이. 맵 테두리에서 몸 반경만큼 안쪽까지만 간다.
@@ -333,6 +360,10 @@ namespace ExplodeIt.Enemies
 
         private void OnOrbPopped(BossOrb orb)
         {
+            Vector2 orbPosition = orb.transform.position;
+            _orbPopFx?.Play(orbPosition, Vector2.right, 1f);
+            // 혼불은 보스의 분노가 빠져나온 덩어리라, 하나 터질 때마다 보스가 아픈 듯 움찔한다.
+            _flinch.Play(_data.OrbPopFlinch, Body.position - orbPosition);
             _aliveOrbs--;
             if (_aliveOrbs > 0 || CurrentState == EnemyState.Dead)
             {
@@ -366,6 +397,11 @@ namespace ExplodeIt.Enemies
             {
                 _visual.Flash(_data.ImmuneFlashColor, _data.ImmuneFlashDuration);
             }
+        }
+
+        private void Update()
+        {
+            _flinch.Tick(Time.deltaTime);
         }
 
         private void StopReadySound()

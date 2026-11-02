@@ -22,6 +22,7 @@ MonoBehaviour:
   _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
+  _pulledSeparationRatio: 2.5
   _telegraphDuration: 0.6
   _recoverDuration: 0.6
   _deathDuration: 1
@@ -58,3 +59,13 @@ MonoBehaviour:
   _orbFlickerRate: 5
   _orbSway: 6
   _defeatFeedback: {fileID: 11400000, guid: 873be053273a520448e8a002a950b12a, type: 2}
+  _orbPopFx: {fileID: 8622775233287430600, guid: 221acd82f537bfe4cb22e4796bc4bd94, type: 3}
+  _clawStartFx: {fileID: 7427736597100000725, guid: fe97ca37d5ca721498996036a1e8d9eb, type: 3}
+  _clawEndFx: {fileID: 8206169699264692478, guid: 889eab247427e35449d3473eee692550, type: 3}
+  _clawEndFxWidth: 6
+  _orbPopFlinch:
+    _distance: 0.3
+    _duration: 0.25
+    _squash: 0.15
+    _flashColor: {r: 1, g: 0.55, b: 0.45, a: 1}
+    _flashDuration: 0.1

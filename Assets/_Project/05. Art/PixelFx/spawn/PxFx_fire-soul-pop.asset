@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_fire-soul-pop
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: spawn/fire-soul-pop
+  _frames:
+  - {fileID: -1011002013, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: -773226025, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 1869174441, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: -790579277, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 888818601, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 632858184, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 1641080138, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 1406653549, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 893680475, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 1889863871, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 973038534, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: -2009863639, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 231785117, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 739512704, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: 842510931, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  - {fileID: -1318458336, guid: 61b71456590087341b5b11d9340f7fa0, type: 3}
+  _fps: 30
+  _loop: 0
