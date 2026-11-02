@@ -427,6 +427,16 @@ namespace ExplodeIt.UI
             {
                 Time.timeScale = 2f;
             }
+
+            if (GUILayout.Button("3x"))
+            {
+                Time.timeScale = 3f;
+            }
+
+            if (GUILayout.Button("5x"))
+            {
+                Time.timeScale = 5f;
+            }
             GUILayout.EndHorizontal();
         }
 
