@@ -1,0 +1,2 @@
+# GitHub 언어 통계에서 외부 도구는 뺀다. pixelfx(이펙트 렌더용 Node 도구)가 JS라 C# 게임이 JS 저장소로 보이지 않게 한다.
+Tools/pixelfx/** linguist-vendored
