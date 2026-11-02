@@ -344,7 +344,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636491
-    m_Localized: Defeat 200 enemies in one run without using a skill
+    m_Localized: Defeat 100 enemies in one run without using a skill
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636492
@@ -479,7 +479,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636523
-    m_Localized: 'Stand still for 5 seconds to gain 1 skill gauge,
+    m_Localized: 'Stand still for 3 seconds to gain 1 skill gauge,
 
       then 1
       more every 2 seconds you keep standing.'
