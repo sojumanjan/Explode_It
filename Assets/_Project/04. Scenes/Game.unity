@@ -3819,6 +3819,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2a597fcd2f1714984545d03399912f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Stage.ArenaBounds
+--- !u!1 &46445497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 46445499}
+  - component: {fileID: 46445498}
+  m_Layer: 0
+  m_Name: BombPixelFx
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &46445498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46445497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c8aa96b93269741a5e9c52a24c5981, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.BombPixelFx
+  _prefab: {fileID: 5226856394494544794, guid: 07940de3671e8d04eb31f06293922978, type: 3}
+  _effectRadius: 1.9
+  _scaleMultiplier: 1
+  _prewarm: 8
+  _maxSize: 32
+--- !u!4 &46445499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46445497}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &48878094
 GameObject:
   m_ObjectHideFlags: 0
@@ -11216,6 +11265,8 @@ MonoBehaviour:
   _bombExplode: {fileID: 11400000, guid: aab7c45fe2c426048a772526be5abb6c, type: 2}
   _bombMultiKill: {fileID: 11400000, guid: df95960ba79cbd246a4473046980abd7, type: 2}
   _multiKillThreshold: 3
+  _bombBigKill: {fileID: 11400000, guid: 14ae2033de4181b43bec8b517160a24d, type: 2}
+  _bigKillThreshold: 5
   _enemyKilled: {fileID: 11400000, guid: 54a486c39a923b34f9b671c75ac6d997, type: 2}
   _playerDied: {fileID: 11400000, guid: c795f96a9d4b001428db5c689fe9556b, type: 2}
   _alsoPrepare:
@@ -143976,3 +144027,4 @@ SceneRoots:
   - {fileID: 930764847}
   - {fileID: 1905018846}
   - {fileID: 1429635140}
+  - {fileID: 46445499}
