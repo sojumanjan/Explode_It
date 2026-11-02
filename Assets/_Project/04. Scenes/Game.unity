@@ -102575,10 +102575,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cfe99db21a3194c95e18c2d61809bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyPixelFx
-  _slashPrefab: {fileID: 0}
+  _slashPrefab: {fileID: 7178975640674469497, guid: 2d4028742ca0893468394095a2ac6d7c, type: 3}
   _slashRadius: 1.7
   _slashScale: 1
-  _blockPrefab: {fileID: 0}
+  _blockPrefab: {fileID: 8017872955544915540, guid: 069364b7c3e4c6e499817649079629cb, type: 3}
   _blockScale: 1
   _prewarm: 6
   _maxSize: 24
