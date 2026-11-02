@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ExplodeIt.Enemies
 {
     // EnemyVisual 그림을 한 번 움찔하게 한다. 확 밀렸다가 빠르게 돌아오고, 그동안 납작해졌다 펴지며 번쩍인다.
-    // 그림 위치(Shift)와 크기(ExtraScale)만 건드리므로, 이 둘을 따로 쓰지 않는 보스에서만 쓴다.
+    // 그림 위치(Shift)와 크기(ExtraScale)만 건드린다. 크기를 다른 연출에 쓰는 보스(광부)는 납작함을 0으로 두면 크기를 건드리지 않는다.
     public class VisualFlinch
     {
         private readonly EnemyVisual _visual;
@@ -27,7 +27,11 @@ namespace ExplodeIt.Enemies
             _settings = settings;
             _direction = away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.up;
             _time = 0f;
-            _visual.Flash(settings.FlashColor, settings.FlashDuration);
+            // 이미 자기 번쩍임이 있는 보스(광부 과열)는 번쩍임 시간을 0으로 두어 덮어쓰지 않게 한다.
+            if (settings.FlashDuration > 0f)
+            {
+                _visual.Flash(settings.FlashColor, settings.FlashDuration);
+            }
         }
 
         // 남은 비율의 제곱으로 줄여 처음 한두 프레임에 대부분이 보인다.
@@ -49,7 +53,10 @@ namespace ExplodeIt.Enemies
             float strength = (1f - k) * (1f - k);
             float squash = _settings.Squash * strength;
             _visual.Shift = _direction * (_settings.Distance * strength);
-            _visual.ExtraScale = new Vector2(1f + squash, 1f - squash);
+            if (_settings.Squash > 0f)
+            {
+                _visual.ExtraScale = new Vector2(1f + squash, 1f - squash);
+            }
         }
 
         public void Stop()
@@ -61,7 +68,10 @@ namespace ExplodeIt.Enemies
 
             _time = -1f;
             _visual.Shift = Vector2.zero;
-            _visual.ExtraScale = Vector2.one;
+            if (_settings.Squash > 0f)
+            {
+                _visual.ExtraScale = Vector2.one;
+            }
         }
     }
 }

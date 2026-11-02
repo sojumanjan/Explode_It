@@ -1,0 +1,741 @@
+fileFormatVersion: 2
+guid: d4812cd4442b65849b214039efbfbba4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2363648959241394565
+    second: dirt-burst_0
+  - first:
+      213: 464357782108411481
+    second: dirt-burst_1
+  - first:
+      213: 7773365716858948432
+    second: dirt-burst_2
+  - first:
+      213: -2321594472029317215
+    second: dirt-burst_3
+  - first:
+      213: 6503557069387449416
+    second: dirt-burst_4
+  - first:
+      213: 4005761863407214747
+    second: dirt-burst_5
+  - first:
+      213: 365660003116310494
+    second: dirt-burst_6
+  - first:
+      213: 7355557573813645988
+    second: dirt-burst_7
+  - first:
+      213: 5554500685707824733
+    second: dirt-burst_8
+  - first:
+      213: -8102294018285768177
+    second: dirt-burst_9
+  - first:
+      213: -2165763155055679971
+    second: dirt-burst_10
+  - first:
+      213: 6899885034737538440
+    second: dirt-burst_11
+  - first:
+      213: -4149582978451400887
+    second: dirt-burst_12
+  - first:
+      213: 4368099848472205740
+    second: dirt-burst_13
+  - first:
+      213: 6117805008591941395
+    second: dirt-burst_14
+  - first:
+      213: 7295940223053236077
+    second: dirt-burst_15
+  - first:
+      213: 4397493757772056093
+    second: dirt-burst_16
+  - first:
+      213: -4370307620189310851
+    second: dirt-burst_17
+  - first:
+      213: -8490723934483952996
+    second: dirt-burst_18
+  - first:
+      213: 323602029946551421
+    second: dirt-burst_19
+  - first:
+      213: -6297157515194928180
+    second: dirt-burst_20
+  - first:
+      213: -8418686438406252792
+    second: dirt-burst_21
+  - first:
+      213: -2933545892806701539
+    second: dirt-burst_22
+  - first:
+      213: 1520843472784301875
+    second: dirt-burst_23
+  - first:
+      213: 6035147508013013658
+    second: dirt-burst_24
+  - first:
+      213: -5517340490619527543
+    second: dirt-burst_25
+  - first:
+      213: 772075010947912214
+    second: dirt-burst_26
+  - first:
+      213: -7909517635916913204
+    second: dirt-burst_27
+  - first:
+      213: 501182554629960810
+    second: dirt-burst_28
+  - first:
+      213: -7391869763713194547
+    second: dirt-burst_29
+  - first:
+      213: -1899674632475959297
+    second: dirt-burst_30
+  - first:
+      213: 2913704605364933902
+    second: dirt-burst_31
+  - first:
+      213: -6548648652766386077
+    second: dirt-burst_32
+  - first:
+      213: -5462075165220655265
+    second: dirt-burst_33
+  - first:
+      213: 151206929205910518
+    second: dirt-burst_34
+  - first:
+      213: 72113236940015785
+    second: dirt-burst_35
+  - first:
+      213: 1280930881066970433
+    second: dirt-burst_36
+  - first:
+      213: 8275992683918472714
+    second: dirt-burst_37
+  - first:
+      213: -1756980897589542240
+    second: dirt-burst_38
+  - first:
+      213: 691492509400941671
+    second: dirt-burst_39
+  - first:
+      213: 3143161300107026909
+    second: dirt-burst_40
+  - first:
+      213: -1850315917503969465
+    second: dirt-burst_41
+  - first:
+      213: -125927105264509104
+    second: dirt-burst_42
+  - first:
+      213: 6038764248389137293
+    second: dirt-burst_43
+  - first:
+      213: -5700799296043014712
+    second: dirt-burst_44
+  - first:
+      213: -248550638205793858
+    second: dirt-burst_45
+  - first:
+      213: 7835466699967534859
+    second: dirt-burst_46
+  - first:
+      213: -8585882582394373702
+    second: dirt-burst_47
+  - first:
+      213: -5199047390964721034
+    second: dirt-burst_48
+  - first:
+      213: 3120513854821722959
+    second: dirt-burst_49
+  - first:
+      213: 4344666377830235882
+    second: dirt-burst_50
+  - first:
+      213: 1834924980152452344
+    second: dirt-burst_51
+  - first:
+      213: -2369521224570767241
+    second: dirt-burst_52
+  - first:
+      213: -7666376745848134058
+    second: dirt-burst_53
+  - first:
+      213: -6761730735430297687
+    second: dirt-burst_54
+  - first:
+      213: 8274014992189690054
+    second: dirt-burst_55
+  - first:
+      213: 8078204289479309094
+    second: dirt-burst_56
+  - first:
+      213: -4172807133871853196
+    second: dirt-burst_57
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: dirt-burst_000
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 336
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3651678a66d7a247971728de2229430
+      internalID: -448886844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_001
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 336
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7674ad9c0c74bcb4c91fab211a115766
+      internalID: -433326618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_002
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 336
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 550cb44c3ef5b7541bde06eb9a634813
+      internalID: 2003282390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_003
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 336
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b2d7a136af64cd4f91993927d7cba2f
+      internalID: -1146536631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_004
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 336
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d75b03dbd2d9bc45b47220671eb8aff
+      internalID: -1611357632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_005
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 224
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25706741c528d8d40a1d2cc2e9857124
+      internalID: 1309006936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_006
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 224
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04d43ce8d9d89eb46b1c91a7a18d1938
+      internalID: -596162215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_007
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 224
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ce52199ee9772e45a40d5536f843278
+      internalID: -1768046836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_008
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 224
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdcb7bd57a6a3fc4ba0bc8e3a292554b
+      internalID: 1257026985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_009
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 224
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6151353d06ed494fa8420d4c313ae86
+      internalID: -1156333994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_010
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbda1cd66d6a5cf43abad4a0ab9eec1e
+      internalID: -1281916128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_011
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 112
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 972137c160db8304d9dcbbd5859f73c5
+      internalID: -1479587382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_012
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 112
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a08ea84a3b21f6d408f3edb1cd6f661b
+      internalID: -213881339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_013
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 112
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc34f1eb00cdf84bae9aa789f0d790d
+      internalID: 1045519592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_014
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 112
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dac57deae44d7840a8280ff03ff6696
+      internalID: -221106443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_015
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1961cc912361f134ead7e08ae7b85b3f
+      internalID: -1479302057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_016
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2199bcab14799214392784a577e7bcb9
+      internalID: 1827614715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_017
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 870358251a9b669469e370119eb28d19
+      internalID: -556053826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt-burst_018
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82b2d91eedd07604f8a7137929d4af66
+      internalID: 1809045263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 0bc88a53c07aca940b13d19879922cbe
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      dirt-burst_000: -448886844
+      dirt-burst_001: -433326618
+      dirt-burst_002: 2003282390
+      dirt-burst_003: -1146536631
+      dirt-burst_004: -1611357632
+      dirt-burst_005: 1309006936
+      dirt-burst_006: -596162215
+      dirt-burst_007: -1768046836
+      dirt-burst_008: 1257026985
+      dirt-burst_009: -1156333994
+      dirt-burst_010: -1281916128
+      dirt-burst_011: -1479587382
+      dirt-burst_012: -213881339
+      dirt-burst_013: 1045519592
+      dirt-burst_014: -221106443
+      dirt-burst_015: -1479302057
+      dirt-burst_016: 1827614715
+      dirt-burst_017: -556053826
+      dirt-burst_018: 1809045263
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: pixelfx
+  assetBundleName: 
+  assetBundleVariant: 

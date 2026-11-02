@@ -65,6 +65,12 @@ namespace ExplodeIt.Enemies
         private ContactFilter2D _landingFilter;
         private Dynamite[] _dynamites;
         private System.Action<Dynamite> _onDynamiteExplode;
+        // 픽셀 연출 풀. 광부를 따라 움직이면 안 되므로 월드에 둔 묶음 아래에 만든다.
+        private Transform _fxRoot;
+        private PixelFxPool _heatFx;
+        private PixelFxPool _burstFx;
+        private PixelFxPool _dynamiteFx;
+        private VisualFlinch _flinch;
         private SoundHandle _diggingMoveHandle = SoundHandle.None;
         // 예고 땅울림. 분출 전에 끊기면(사망 등) 같이 멈춘다.
         private SoundHandle _rumbleHandle = SoundHandle.None;
@@ -106,6 +112,11 @@ namespace ExplodeIt.Enemies
             }
 
             _onDynamiteExplode = OnDynamiteExplode;
+            _fxRoot = new GameObject($"{name} Fx").transform;
+            _heatFx = PixelFxPool.Create(_data.HeatFx, _fxRoot, 1);
+            _burstFx = PixelFxPool.Create(_data.BurstFx, _fxRoot, count);
+            _dynamiteFx = PixelFxPool.Create(_data.DynamiteFx, _fxRoot, dynamiteCount);
+            _flinch = new VisualFlinch(_visual);
             _moundBaseColor = _mound.color;
             _moundBaseScale = _mound.transform.localScale;
             _landingFilter = new ContactFilter2D();
@@ -133,10 +144,16 @@ namespace ExplodeIt.Enemies
             HideHoles();
             HideDynamites();
             StopDiggingMoveSound();
+            _flinch?.Stop();
         }
 
         private void OnDestroy()
         {
+            if (_fxRoot != null)
+            {
+                Destroy(_fxRoot.gameObject);
+            }
+
             if (_holes == null)
             {
                 return;
@@ -346,6 +363,7 @@ namespace ExplodeIt.Enemies
             {
                 HitOverlapping(_holePositions[i], _data.HoleRadius);
                 FeedbackPlayer.Play(_data.BurstFeedback, _holePositions[i]);
+                _burstFx?.Play(_holePositions[i], Vector2.right, _data.HoleRadius / _data.BurstFxRadius);
                 if (i > 0)
                 {
                     nextDynamite = ScatterDynamites(_holePositions[i], nextDynamite);
@@ -418,6 +436,7 @@ namespace ExplodeIt.Enemies
         // 구멍에서 위로 늘어나며 솟구쳤다가, 착지하며 납작하게 눌린 뒤 원래 모양으로 돌아온다.
         private void Update()
         {
+            _flinch.Tick(Time.deltaTime);
             if (_emergeTime < 0f)
             {
                 return;
@@ -558,7 +577,7 @@ namespace ExplodeIt.Enemies
                 if (!_hasHeatedThisExposure)
                 {
                     _hasHeatedThisExposure = true;
-                    AddHeat();
+                    AddHeat(hit.SourcePosition);
                 }
 
                 return;
@@ -574,12 +593,16 @@ namespace ExplodeIt.Enemies
             }
         }
 
-        private void AddHeat()
+        private void AddHeat(Vector2 source)
         {
             _heat++;
             ApplyHeatTint();
             FeedbackPlayer.Play(_data.HeatFeedback, Body.position);
             _visual.Flash(_data.HeatFlashColor, _data.FlashDuration);
+            // 맞은 폭발 반대쪽으로 움찔하며 엔진이 증기를 뿜는다. 다 과열되면 증기가 크게 터진다.
+            _flinch.Play(_data.HeatFlinch, Body.position - source);
+            bool isOverheat = _heat >= _data.HeatToOverheat;
+            _heatFx?.Play(Body.position, Vector2.right, isOverheat ? _data.OverheatFxScale : 1f);
 
             if (_heat < _data.HeatToOverheat)
             {
@@ -636,6 +659,7 @@ namespace ExplodeIt.Enemies
         {
             HitOverlapping(dynamite.Position, dynamite.Radius);
             FeedbackPlayer.Play(_data.DynamiteFeedback, dynamite.Position);
+            _dynamiteFx?.Play(dynamite.Position, Vector2.right, dynamite.Radius / _data.DynamiteFxRadius);
             AudioManager.Play(_data.DynamiteSound);
         }
 

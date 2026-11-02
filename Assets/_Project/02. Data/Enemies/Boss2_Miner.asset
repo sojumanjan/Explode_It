@@ -22,6 +22,7 @@ MonoBehaviour:
   _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 0
+  _pulledSeparationRatio: 2.5
   _telegraphDuration: 1.8
   _recoverDuration: 1
   _deathDuration: 1
@@ -82,3 +83,15 @@ MonoBehaviour:
   _heatFlashColor: {r: 1, g: 0.6, b: 0.3, a: 1}
   _immuneFlashColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   _flashDuration: 0.2
+  _heatFx: {fileID: 480282721541420992, guid: 11b2f15e54d0a2942ab1a3e493887077, type: 3}
+  _overheatFxScale: 1.8
+  _burstFx: {fileID: 5071872899935765841, guid: 26266c63dcfac6b4e850833470b99998, type: 3}
+  _burstFxRadius: 2.2
+  _dynamiteFx: {fileID: 6325890378022611151, guid: c9c01b6614b901a47979700704c687a1, type: 3}
+  _dynamiteFxRadius: 2.2
+  _heatFlinch:
+    _distance: 0.3
+    _duration: 0.25
+    _squash: 0
+    _flashColor: {r: 1, g: 0.55, b: 0.45, a: 1}
+    _flashDuration: 0

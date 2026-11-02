@@ -1,0 +1,609 @@
+fileFormatVersion: 2
+guid: 0d730a7a20cc8944c997830c444dd551
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8723143167899212040
+    second: dynamite-blast_0
+  - first:
+      213: 7053993789206679978
+    second: dynamite-blast_1
+  - first:
+      213: 7382762264469947055
+    second: dynamite-blast_2
+  - first:
+      213: -8760964805574023185
+    second: dynamite-blast_3
+  - first:
+      213: -1877608996270664252
+    second: dynamite-blast_4
+  - first:
+      213: -7338601007819289099
+    second: dynamite-blast_5
+  - first:
+      213: 8658705510178007067
+    second: dynamite-blast_6
+  - first:
+      213: 4532375339405682707
+    second: dynamite-blast_7
+  - first:
+      213: 2160910986378871187
+    second: dynamite-blast_8
+  - first:
+      213: 2518985633751541930
+    second: dynamite-blast_9
+  - first:
+      213: 1727877232482322286
+    second: dynamite-blast_10
+  - first:
+      213: -1829428104878832748
+    second: dynamite-blast_11
+  - first:
+      213: -4706934495781729227
+    second: dynamite-blast_12
+  - first:
+      213: 4880617981177971420
+    second: dynamite-blast_13
+  - first:
+      213: -2925541018560820760
+    second: dynamite-blast_14
+  - first:
+      213: -4441987408507248284
+    second: dynamite-blast_15
+  - first:
+      213: -2129204623101449787
+    second: dynamite-blast_16
+  - first:
+      213: -5533943710262080139
+    second: dynamite-blast_17
+  - first:
+      213: 476942945785808175
+    second: dynamite-blast_18
+  - first:
+      213: -6789207323617317180
+    second: dynamite-blast_19
+  - first:
+      213: -3109661563898696000
+    second: dynamite-blast_20
+  - first:
+      213: -487645764541575478
+    second: dynamite-blast_21
+  - first:
+      213: -668740299131779390
+    second: dynamite-blast_22
+  - first:
+      213: 6118916081793458903
+    second: dynamite-blast_23
+  - first:
+      213: 8403994287424202615
+    second: dynamite-blast_24
+  - first:
+      213: 8830885065406275614
+    second: dynamite-blast_25
+  - first:
+      213: 6045562780645585123
+    second: dynamite-blast_26
+  - first:
+      213: 6791876543495651641
+    second: dynamite-blast_27
+  - first:
+      213: 1763351131003031541
+    second: dynamite-blast_28
+  - first:
+      213: 6328256298163914556
+    second: dynamite-blast_29
+  - first:
+      213: 8514100655387638853
+    second: dynamite-blast_30
+  - first:
+      213: -2992158218885943176
+    second: dynamite-blast_31
+  - first:
+      213: 1648472311076615524
+    second: dynamite-blast_32
+  - first:
+      213: -7310372700911735521
+    second: dynamite-blast_33
+  - first:
+      213: 6737442226269961883
+    second: dynamite-blast_34
+  - first:
+      213: -2652622859327213013
+    second: dynamite-blast_35
+  - first:
+      213: 535974422832397881
+    second: dynamite-blast_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: dynamite-blast_000
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 288
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f86416a391ae674409869d920f7efea9
+      internalID: 535688042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_001
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 288
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a11bb2bf89270a4f97fd15e77546b95
+      internalID: -489796478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_002
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 288
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0dc4b1c8a3d85bc45b7c0470131962d9
+      internalID: -1214178918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_003
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 288
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cec3a37986d96a34f8bb71fe390a4bba
+      internalID: -1400681572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_004
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97544dab8986d834babfaf470bc6ca09
+      internalID: -1940275654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_005
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c063a2d45e9601c419cdc7d91bb72635
+      internalID: 1362028309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_006
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c1d7b63433af374ea979b46fe96f1c3
+      internalID: -1263291386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_007
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d35bf05b10417e49b7dc4e474989b22
+      internalID: 498855430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_008
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8807544d8e3c6f04da3dc0d579b2861f
+      internalID: 1035516382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_009
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de5b82a86021ddb43b33d0cbe524a1ba
+      internalID: 314881006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_010
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8e0d45058f8d34458f039499eca2741
+      internalID: 20724236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_011
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3bba552cb837834dae164962643a14f
+      internalID: -1388837826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_012
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57caff22bf8aee1448584a137396034c
+      internalID: -819299079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_013
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a3b9587e20c93f4dbc657cf380dd47a
+      internalID: -1796578177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_014
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0fbe996e78c8724593ea261b6c0564f
+      internalID: 1113391331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dynamite-blast_015
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3e4983471095a34cab52d2464e6a678
+      internalID: -1163162129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 11e7a336c6d1fa14f97aa0cc7b55b7a7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      dynamite-blast_000: 535688042
+      dynamite-blast_001: -489796478
+      dynamite-blast_002: -1214178918
+      dynamite-blast_003: -1400681572
+      dynamite-blast_004: -1940275654
+      dynamite-blast_005: 1362028309
+      dynamite-blast_006: -1263291386
+      dynamite-blast_007: 498855430
+      dynamite-blast_008: 1035516382
+      dynamite-blast_009: 314881006
+      dynamite-blast_010: 20724236
+      dynamite-blast_011: -1388837826
+      dynamite-blast_012: -819299079
+      dynamite-blast_013: -1796578177
+      dynamite-blast_014: 1113391331
+      dynamite-blast_015: -1163162129
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: pixelfx
+  assetBundleName: 
+  assetBundleVariant: 

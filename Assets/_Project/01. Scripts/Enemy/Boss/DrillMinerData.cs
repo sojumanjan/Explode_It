@@ -152,6 +152,17 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(0.8f, 0.8f, 0.8f, 1f);
         [SerializeField, Min(0f), Tooltip("번쩍임 시간 (초)")] private float _flashDuration = 0.2f;
 
+        [Header("픽셀 연출")]
+        [SerializeField, Tooltip("과열이 오를 때 광부 몸에서 새는 증기 pixelfx (PxFx_steam-vent). 비워 두면 틀지 않는다")] private PixelFxPlayer _heatFx;
+        [SerializeField, Min(0.1f), Tooltip("다 과열돼 주저앉을 때 같은 증기를 몇 배로 키울지")] private float _overheatFxScale = 1.8f;
+        [SerializeField, Tooltip("구멍이 분출할 때 구멍마다 트는 흙 폭발 pixelfx (PxFx_dirt-burst). 진짜, 가짜 구멍이 같은 그림이라 분출로는 구분되지 않는다")] private PixelFxPlayer _burstFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 흙 폭발이 덮는 반경 (유닛). dirt-burst는 44px ÷ PPU 20 = 2.2")] private float _burstFxRadius = 2.2f;
+        [SerializeField, Tooltip("다이너마이트가 터질 때 트는 pixelfx (PxFx_dynamite-blast)")] private PixelFxPlayer _dynamiteFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 다이너마이트 폭발이 덮는 반경 (유닛). dynamite-blast는 44px ÷ PPU 20 = 2.2")] private float _dynamiteFxRadius = 2.2f;
+
+        [Header("과열이 오를 때 광부 움찔")]
+        [SerializeField] private FlinchSettings _heatFlinch = new FlinchSettings();
+
         public int HeatToOverheat => _heatToOverheat;
         public float GroggyDuration => _groggyDuration;
         public Color OverheatTint => _overheatTint;
@@ -211,6 +222,13 @@ namespace ExplodeIt.Enemies
         public Color HeatFlashColor => _heatFlashColor;
         public Color ImmuneFlashColor => _immuneFlashColor;
         public float FlashDuration => _flashDuration;
+        public PixelFxPlayer HeatFx => _heatFx;
+        public float OverheatFxScale => _overheatFxScale;
+        public PixelFxPlayer BurstFx => _burstFx;
+        public float BurstFxRadius => _burstFxRadius;
+        public PixelFxPlayer DynamiteFx => _dynamiteFx;
+        public float DynamiteFxRadius => _dynamiteFxRadius;
+        public FlinchSettings HeatFlinch => _heatFlinch;
 
         public Tier GetTier(int tier)
         {
