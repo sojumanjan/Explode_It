@@ -1,0 +1,1359 @@
+{
+ "frames": [
+  {
+   "filename": "field-swirl 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 1",
+   "frame": {
+    "x": 232,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 2",
+   "frame": {
+    "x": 464,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 3",
+   "frame": {
+    "x": 696,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 4",
+   "frame": {
+    "x": 928,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 5",
+   "frame": {
+    "x": 1160,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 6",
+   "frame": {
+    "x": 1392,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 7",
+   "frame": {
+    "x": 1624,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 8",
+   "frame": {
+    "x": 0,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 9",
+   "frame": {
+    "x": 232,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 10",
+   "frame": {
+    "x": 464,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 11",
+   "frame": {
+    "x": 696,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 12",
+   "frame": {
+    "x": 928,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 13",
+   "frame": {
+    "x": 1160,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 14",
+   "frame": {
+    "x": 1392,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 15",
+   "frame": {
+    "x": 1624,
+    "y": 232,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 16",
+   "frame": {
+    "x": 0,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 17",
+   "frame": {
+    "x": 232,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 18",
+   "frame": {
+    "x": 464,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 19",
+   "frame": {
+    "x": 696,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 20",
+   "frame": {
+    "x": 928,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 21",
+   "frame": {
+    "x": 1160,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 22",
+   "frame": {
+    "x": 1392,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 23",
+   "frame": {
+    "x": 1624,
+    "y": 464,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 24",
+   "frame": {
+    "x": 0,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 25",
+   "frame": {
+    "x": 232,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 26",
+   "frame": {
+    "x": 464,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 27",
+   "frame": {
+    "x": 696,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 28",
+   "frame": {
+    "x": 928,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 29",
+   "frame": {
+    "x": 1160,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 30",
+   "frame": {
+    "x": 1392,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 31",
+   "frame": {
+    "x": 1624,
+    "y": 696,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 32",
+   "frame": {
+    "x": 0,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 33",
+   "frame": {
+    "x": 232,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 34",
+   "frame": {
+    "x": 464,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 35",
+   "frame": {
+    "x": 696,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 36",
+   "frame": {
+    "x": 928,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 37",
+   "frame": {
+    "x": 1160,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 38",
+   "frame": {
+    "x": 1392,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 39",
+   "frame": {
+    "x": 1624,
+    "y": 928,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 40",
+   "frame": {
+    "x": 0,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 41",
+   "frame": {
+    "x": 232,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 42",
+   "frame": {
+    "x": 464,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 43",
+   "frame": {
+    "x": 696,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 44",
+   "frame": {
+    "x": 928,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 45",
+   "frame": {
+    "x": 1160,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 46",
+   "frame": {
+    "x": 1392,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 47",
+   "frame": {
+    "x": 1624,
+    "y": 1160,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 48",
+   "frame": {
+    "x": 0,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 49",
+   "frame": {
+    "x": 232,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 50",
+   "frame": {
+    "x": 464,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 51",
+   "frame": {
+    "x": 696,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 52",
+   "frame": {
+    "x": 928,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 53",
+   "frame": {
+    "x": 1160,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 54",
+   "frame": {
+    "x": 1392,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 55",
+   "frame": {
+    "x": 1624,
+    "y": 1392,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 56",
+   "frame": {
+    "x": 0,
+    "y": 1624,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 57",
+   "frame": {
+    "x": 232,
+    "y": 1624,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 58",
+   "frame": {
+    "x": 464,
+    "y": 1624,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  },
+  {
+   "filename": "field-swirl 59",
+   "frame": {
+    "x": 696,
+    "y": 1624,
+    "w": 232,
+    "h": 232
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 232
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 232
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "field-swirl.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1856,
+   "h": 1856
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "field-swirl",
+    "from": 0,
+    "to": 59,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "fire/field-swirl",
+   "name": "Fire field embers",
+   "fps": 30,
+   "loop": true,
+   "frames": 60,
+   "frameSize": [
+    232,
+    232
+   ],
+   "pivot": [
+    116,
+    116
+   ],
+   "columns": 8
+  }
+ }
+}

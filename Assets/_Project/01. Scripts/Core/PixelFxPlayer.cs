@@ -62,6 +62,12 @@ namespace ExplodeIt.Core
             _playSpeed = speed;
         }
 
+        // 재생을 처음부터 다시 하지 않고 크기만 바꾼다. 커지며 펼쳐지는 영역처럼 재생 중에 크기가 변하는 연출에 쓴다.
+        public void SetScale(float scale)
+        {
+            transform.localScale = _baseScale * scale;
+        }
+
         // 끝 콜백 없이 바로 감춘다. 붙어 있는 연출을 주인이 먼저 끝낼 때 쓴다.
         public void Stop()
         {

@@ -34,6 +34,14 @@ namespace ExplodeIt.Enemies
         private EnemyProjectile[] _fireballs;
         private System.Action<Meteor> _onMeteorImpact;
         private System.Action<EnemyProjectile> _releaseFireball;
+        // 픽셀 연출 풀. 보스를 따라 움직이면 안 되므로 월드에 둔 묶음 아래에 만든다.
+        private Transform _fxRoot;
+        private PixelFxPlayer _fieldFx;
+        private PixelFxPool _fireballWakeFx;
+        private float _wakeTimer;
+        private PixelFxPool _meteorImpactFx;
+        private PixelFxPool _fireballCastFx;
+        private VisualFlinch _flinch;
 
         private int _aliveFairies;
         // 이번 바퀴에 띄운 요정 수. 미리 만든 수보다 적을 수 있다.
@@ -102,6 +110,21 @@ namespace ExplodeIt.Enemies
             }
             _onMeteorImpact = OnMeteorImpact;
             _releaseFireball = ReleaseFireball;
+
+            _fxRoot = new GameObject($"{name} Fx").transform;
+            // 영역 불꽃은 하나뿐이고 마법사 자리에 붙어 있으므로 풀 없이 자식으로 둔다.
+            if (_data.FieldFx != null)
+            {
+                _fieldFx = Instantiate(_data.FieldFx, transform);
+                _fieldFx.transform.localPosition = Vector3.zero;
+                _fieldFx.gameObject.SetActive(false);
+            }
+
+            // 화염구 하나가 사거리를 날아가는 동안 남기는 잔상 수를 넉넉히 잡는다.
+            _fireballWakeFx = PixelFxPool.Create(_data.FireballWakeFx, _fxRoot, _fireballs.Length * 8);
+            _meteorImpactFx = PixelFxPool.Create(_data.MeteorImpactFx, _fxRoot, _meteors.Length);
+            _fireballCastFx = PixelFxPool.Create(_data.FireballCastFx, _fxRoot, _fireballs.Length);
+            _flinch = new VisualFlinch(_visual);
         }
 
         // 기반 클래스가 이동 상태로 들어가며 OnEnterState를 부르므로, 지난 판의 그로기 표시를 먼저 지운다.
@@ -124,10 +147,16 @@ namespace ExplodeIt.Enemies
             RetractFairies();
             HideAttacks();
             StopChargeSound();
+            _flinch?.Stop();
         }
 
         private void OnDestroy()
         {
+            if (_fxRoot != null)
+            {
+                Destroy(_fxRoot.gameObject);
+            }
+
             if (_fairies == null)
             {
                 return;
@@ -205,6 +234,8 @@ namespace ExplodeIt.Enemies
 
         private void Update()
         {
+            _flinch.Tick(Time.deltaTime);
+            TickFireballWake(Time.deltaTime);
             TickField(Time.deltaTime);
             if (_field.enabled)
             {
@@ -347,6 +378,7 @@ namespace ExplodeIt.Enemies
             fireball.gameObject.SetActive(true);
             fireball.Launch(direction, _data.FireballSpeed, length, _data.FireballHitRadius, _releaseFireball, _data);
             AudioManager.Play(_data.FireballShotSound);
+            _fireballCastFx?.Play(Body.position + direction * _data.FireballCastOffset, direction, 1f);
         }
 
         private float ShotLength(Vector2 direction)
@@ -364,6 +396,7 @@ namespace ExplodeIt.Enemies
         {
             HitOverlapping(meteor.Position, meteor.Radius);
             FeedbackPlayer.Play(_data.MeteorImpactFeedback, meteor.Position);
+            _meteorImpactFx?.Play(meteor.Position, Vector2.right, meteor.Radius / _data.MeteorImpactFxRadius);
             AudioManager.Play(_data.MeteorImpactSound);
         }
 
@@ -403,6 +436,9 @@ namespace ExplodeIt.Enemies
 
         private void OnFairyPopped(FireFairy fairy)
         {
+            Vector2 fairyPosition = fairy.transform.position;
+            // 요정은 영역을 붙잡고 있어서, 하나 터질 때마다 마법사가 아픈 듯 움찔한다.
+            _flinch.Play(_data.FairyPopFlinch, Center - fairyPosition);
             _aliveFairies--;
             if (CurrentState == EnemyState.Dead)
             {
@@ -450,6 +486,11 @@ namespace ExplodeIt.Enemies
             _fieldGrowTime = 0f;
             SetFieldRadius(0f);
             _field.enabled = true;
+            if (_fieldFx != null)
+            {
+                _fieldFx.gameObject.SetActive(true);
+                _fieldFx.Play(0f, null);
+            }
         }
 
         private void TickField(float deltaTime)
@@ -477,6 +518,11 @@ namespace ExplodeIt.Enemies
             _fieldGrowTime = -1f;
             _fieldRadius = 0f;
             _field.enabled = false;
+            if (_fieldFx != null)
+            {
+                _fieldFx.Stop();
+                _fieldFx.gameObject.SetActive(false);
+            }
         }
 
         private void SetFieldRadius(float radius)
@@ -485,6 +531,34 @@ namespace ExplodeIt.Enemies
             float spriteWidth = _field.sprite != null ? _field.sprite.bounds.size.x : 1f;
             float scale = radius * 2f / Mathf.Max(spriteWidth, 0.01f);
             _field.transform.localScale = new Vector3(scale, scale, 1f);
+            if (_fieldFx != null)
+            {
+                _fieldFx.SetScale(radius / _data.FieldFxRadius);
+            }
+        }
+
+        // 날아가는 화염구마다 일정 간격으로 잔상을 하나씩 떨군다. 잔상은 제자리에서 식으며 사라져 지나온 길이 남는다.
+        private void TickFireballWake(float deltaTime)
+        {
+            if (_fireballWakeFx == null)
+            {
+                return;
+            }
+
+            _wakeTimer -= deltaTime;
+            if (_wakeTimer > 0f)
+            {
+                return;
+            }
+
+            _wakeTimer = _data.FireballWakeInterval;
+            for (int i = 0; i < _fireballs.Length; i++)
+            {
+                if (_fireballs[i].gameObject.activeSelf)
+                {
+                    _fireballWakeFx.Play(_fireballs[i].transform.position, Vector2.right, 1f);
+                }
+            }
         }
 
         private void HideAttacks()

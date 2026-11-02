@@ -1,0 +1,215 @@
+{
+ "frames": [
+  {
+   "filename": "cast-flare 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 1",
+   "frame": {
+    "x": 56,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 2",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 3",
+   "frame": {
+    "x": 0,
+    "y": 40,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 4",
+   "frame": {
+    "x": 56,
+    "y": 40,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 5",
+   "frame": {
+    "x": 112,
+    "y": 40,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 6",
+   "frame": {
+    "x": 0,
+    "y": 80,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  },
+  {
+   "filename": "cast-flare 7",
+   "frame": {
+    "x": 56,
+    "y": 80,
+    "w": 56,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 56,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 56,
+    "h": 40
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "cast-flare.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 168,
+   "h": 120
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "cast-flare",
+    "from": 0,
+    "to": 7,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "fire/cast-flare",
+   "name": "Cast flare",
+   "fps": 30,
+   "loop": false,
+   "frames": 8,
+   "frameSize": [
+    56,
+    40
+   ],
+   "pivot": [
+    14,
+    20
+   ],
+   "columns": 3
+  }
+ }
+}

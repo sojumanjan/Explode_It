@@ -122,6 +122,19 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("실드에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.7f, 0.3f, 1f);
         [SerializeField, Min(0f), Tooltip("번쩍임 시간 (초)")] private float _immuneFlashDuration = 0.2f;
 
+        [Header("픽셀 연출")]
+        [SerializeField, Tooltip("영역이 펼쳐져 있는 동안 영역 위에 반복해서 트는 pixelfx (PxFx_field-swirl). 영역 반경에 맞춰 키운다")] private PixelFxPlayer _fieldFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 영역 불꽃이 덮는 반경 (유닛). field-swirl은 100px ÷ PPU 20 = 5")] private float _fieldFxRadius = 5f;
+        [SerializeField, Tooltip("메테오가 떨어진 자리에 틀 pixelfx (PxFx_meteor-impact). 메테오 반경에 맞춰 키운다")] private PixelFxPlayer _meteorImpactFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 메테오 폭발이 덮는 반경 (유닛). meteor-impact는 26px ÷ PPU 20 = 1.3")] private float _meteorImpactFxRadius = 1.3f;
+        [SerializeField, Tooltip("화염구를 쏠 때 마법사 앞에 틀 pixelfx (PxFx_cast-flare). 쏘는 방향으로 돌린다")] private PixelFxPlayer _fireballCastFx;
+        [SerializeField, Min(0f), Tooltip("화염구 손끝 섬광을 몸 가운데에서 쏘는 방향으로 얼마나 앞에 둘지 (유닛)")] private float _fireballCastOffset = 0.6f;
+        [SerializeField, Tooltip("날아가는 화염구 뒤에 남기는 잔상 pixelfx (PxFx_fireball-wake). 비워 두면 남기지 않는다")] private PixelFxPlayer _fireballWakeFx;
+        [SerializeField, Min(0.01f), Tooltip("화염구 잔상을 남기는 간격 (초). 짧을수록 잔상이 촘촘하다")] private float _fireballWakeInterval = 0.04f;
+
+        [Header("요정이 터질 때 보스 움찔")]
+        [SerializeField] private FlinchSettings _fairyPopFlinch = new FlinchSettings();
+
         public float FieldRadius => _fieldRadius;
         public float FieldGrowTime => _fieldGrowTime;
         public float FieldSpinSpeed => _fieldSpinSpeed;
@@ -157,6 +170,15 @@ namespace ExplodeIt.Enemies
         public FeedbackData FieldBreakFeedback => _fieldBreakFeedback;
         public FeedbackData ImmuneFeedback => _immuneFeedback;
         public FeedbackData DefeatFeedback => _defeatFeedback;
+        public PixelFxPlayer FieldFx => _fieldFx;
+        public float FieldFxRadius => _fieldFxRadius;
+        public PixelFxPlayer FireballWakeFx => _fireballWakeFx;
+        public float FireballWakeInterval => _fireballWakeInterval;
+        public PixelFxPlayer MeteorImpactFx => _meteorImpactFx;
+        public float MeteorImpactFxRadius => _meteorImpactFxRadius;
+        public PixelFxPlayer FireballCastFx => _fireballCastFx;
+        public float FireballCastOffset => _fireballCastOffset;
+        public FlinchSettings FairyPopFlinch => _fairyPopFlinch;
         public Color ImmuneFlashColor => _immuneFlashColor;
         public float ImmuneFlashDuration => _immuneFlashDuration;
 
