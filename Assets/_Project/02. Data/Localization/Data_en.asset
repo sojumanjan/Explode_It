@@ -304,7 +304,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636481
-    m_Localized: Defeat 100 enemies in one run
+    m_Localized: Reach 100 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636482
@@ -312,7 +312,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636483
-    m_Localized: Defeat 300 enemies in one run
+    m_Localized: Reach 300 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636484
@@ -320,7 +320,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636485
-    m_Localized: Defeat 400 enemies in one run
+    m_Localized: Reach 400 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636486
@@ -328,7 +328,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636487
-    m_Localized: Defeat 500 enemies in one run
+    m_Localized: Reach 500 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636488
@@ -336,7 +336,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636489
-    m_Localized: Defeat 1000 enemies in one run
+    m_Localized: Reach 1000 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636490
@@ -344,7 +344,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636491
-    m_Localized: Defeat 100 enemies in one run without using a skill
+    m_Localized: Defeat 100 enemies this run without using a skill
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636492
@@ -352,7 +352,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636493
-    m_Localized: 'Defeat 100 enemies in one run
+    m_Localized: 'Defeat 100 enemies this run
 
       without a single missed bomb'
     m_Metadata:
@@ -426,7 +426,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636511
-    m_Localized: Defeat 200 enemies in one run
+    m_Localized: Reach 200 kills
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636512
