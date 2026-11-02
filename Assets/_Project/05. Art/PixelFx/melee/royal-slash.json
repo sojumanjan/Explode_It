@@ -1,0 +1,259 @@
+{
+ "frames": [
+  {
+   "filename": "royal-slash 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 1",
+   "frame": {
+    "x": 176,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 2",
+   "frame": {
+    "x": 352,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 3",
+   "frame": {
+    "x": 528,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 4",
+   "frame": {
+    "x": 0,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 5",
+   "frame": {
+    "x": 176,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 6",
+   "frame": {
+    "x": 352,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 7",
+   "frame": {
+    "x": 528,
+    "y": 176,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 8",
+   "frame": {
+    "x": 0,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  },
+  {
+   "filename": "royal-slash 9",
+   "frame": {
+    "x": 176,
+    "y": 352,
+    "w": 176,
+    "h": 176
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 176,
+    "h": 176
+   },
+   "sourceSize": {
+    "w": 176,
+    "h": 176
+   },
+   "duration": 33
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "royal-slash.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 704,
+   "h": 528
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "royal-slash",
+    "from": 0,
+    "to": 9,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "melee/royal-slash",
+   "name": "Royal slash",
+   "fps": 30,
+   "loop": false,
+   "frames": 10,
+   "frameSize": [
+    176,
+    176
+   ],
+   "pivot": [
+    88,
+    88
+   ],
+   "columns": 4
+  }
+ }
+}

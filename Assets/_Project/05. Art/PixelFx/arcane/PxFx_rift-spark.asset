@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_rift-spark
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: arcane/rift-spark
+  _frames:
+  - {fileID: 1853481245, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -1388026973, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -1214906117, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: 573454895, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: 168871649, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: 1548550362, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -62149528, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -649390893, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -1058832299, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -1606536930, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: -1681689602, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  - {fileID: 1131545522, guid: 0613954f737c06149a530625963bfa3f, type: 3}
+  _fps: 30
+  _loop: 0

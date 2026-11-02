@@ -6,7 +6,8 @@ using UnityEngine;
 namespace ExplodeIt.Enemies
 {
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
-    // 머리 위에 왕관이 떠서 빛나는 동안은 무적이고, 근처에 폭탄이 떨어지면 굴러서 피한다(쿨타임 없음).
+    // 머리 위에 왕관이 떠서 빛나는 동안은 무적이다. (폭탄을 굴러 피하던 동작은 무적일 때만 일어나 공략에 의미가 없고,
+    // 피하니까 맞힐 수 있다는 오해만 키워서 뺐다.)
     // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하,
     // 3국면은 유성우 → 천지 가르기 → 별의 의식(왕관을 맵 가운데 띄우고 별 끝을 순간이동, 못 잡으면 맵 전체 충격파)을 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
@@ -125,13 +126,6 @@ namespace ExplodeIt.Enemies
             StarShock
         }
 
-        private enum DodgePhase
-        {
-            None,
-            Crouch,
-            Roll
-        }
-
         // 국면별 패턴 순서. 맞을 때마다 다음 국면으로 넘어가고, 마지막 국면 순서를 그 뒤로도 쓴다.
         // 각 국면의 마지막 패턴이 왕관이 머리를 떠나는(맞을 수 있는) 유일한 기회다.
         private static readonly Pattern[][] Rotations =
@@ -239,11 +233,6 @@ namespace ExplodeIt.Enemies
         private Vector2 _crownPosition;
         private float _crownTravel;
 
-        private DodgePhase _dodge;
-        private float _dodgeTime;
-        private Vector2 _dodgeDirection;
-        private float _dodgeLength;
-
         // 각 연출이 시작된 뒤 지난 시간. 음수면 그 연출 중이 아니다.
         private float _transformTime = -1f;
         private float _popTime = -1f;
@@ -285,6 +274,17 @@ namespace ExplodeIt.Enemies
         private Vector2 _dropPoint;
         private bool _isCrownAirborne;
         private Vector3 _flyingCrownScale;
+        // 픽셀 연출 풀. 왕을 따라 움직이면 안 되므로 월드에 둔 묶음 아래에 만든다.
+        private Transform _fxRoot;
+        private PixelFxPool _slashFx;
+        private PixelFxPool _starArriveFx;
+        private PixelFxPool _crownWakeFx;
+        private PixelFxPool _lungeWakeFx;
+        private PixelFxPool _meteorFx;
+        private PixelFxPool _riftFx;
+        private float _lungeWakeTimer;
+        private float _crownWakeTimer;
+        private Vector2 _lastCrownWake;
         private Vector3 _dropShadowScale;
         private Vector3 _crownReturnFromScale;
 
@@ -371,8 +371,6 @@ namespace ExplodeIt.Enemies
         protected override float BaseTelegraphDuration =>
             _pattern == Pattern.Crown ? _data.CrownWindup : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
 
-        private bool IsDodging => _dodge != DodgePhase.None;
-
         protected override void Awake()
         {
             base.Awake();
@@ -392,6 +390,16 @@ namespace ExplodeIt.Enemies
             _flyingCrown.SetParent(null);
             _flyingCrown.gameObject.SetActive(false);
             _flyingCrownScale = _flyingCrown.localScale;
+            _fxRoot = new GameObject($"{name} Fx").transform;
+            _slashFx = PixelFxPool.Create(_data.SlashFx, _fxRoot, 2);
+            _starArriveFx = PixelFxPool.Create(_data.StarArriveFx, _fxRoot, 2);
+            // 왕관이 한 번 날아가는 동안 남는 잔상 수를 넉넉히 잡는다.
+            _crownWakeFx = PixelFxPool.Create(_data.CrownWakeFx, _fxRoot, 12);
+            _lungeWakeFx = PixelFxPool.Create(_data.LungeWakeFx, _fxRoot, 14);
+            _meteorFx = PixelFxPool.Create(_data.MeteorFx, _fxRoot, _data.MeteorCount);
+            // 반 가르기 경계선 한 줄(맵 대각선 길이)을 한꺼번에 덮을 만큼 미리 만든다. 전투 중 생성을 막는다.
+            // 줄무늬 베기는 줄이 많아 수백 개가 되므로 찢김을 넣지 않고 줄무늬 번쩍임만 쓴다.
+            _riftFx = PixelFxPool.Create(_data.RiftFx, _fxRoot, 64);
             _dropShadowScale = _dropShadow.transform.localScale;
             _dropShadow.transform.SetParent(null);
             _dropRange.transform.SetParent(null);
@@ -466,7 +474,6 @@ namespace ExplodeIt.Enemies
             GameEvents.BossFarewellRequested += OnFarewell;
             GameEvents.BossPoseRequested += OnPoseRequested;
             GameEvents.BossRevertRequested += OnRevertRequested;
-            GameEvents.BombLanded += OnBombLanded;
             HideTelegraphs();
         }
 
@@ -478,7 +485,6 @@ namespace ExplodeIt.Enemies
             GameEvents.BossFarewellRequested -= OnFarewell;
             GameEvents.BossPoseRequested -= OnPoseRequested;
             GameEvents.BossRevertRequested -= OnRevertRequested;
-            GameEvents.BombLanded -= OnBombLanded;
             if (_flyingCrown != null)
             {
                 _flyingCrown.gameObject.SetActive(false);
@@ -517,6 +523,11 @@ namespace ExplodeIt.Enemies
             if (_flyingCrown != null)
             {
                 Destroy(_flyingCrown.gameObject);
+            }
+
+            if (_fxRoot != null)
+            {
+                Destroy(_fxRoot.gameObject);
             }
 
             // 월드로 떼어 둔 표시들은 보스와 함께 사라지지 않으므로 직접 지운다.
@@ -619,7 +630,6 @@ namespace ExplodeIt.Enemies
             _rotationIndex = 0;
             _blockedHits = 0;
             _isImmuneHintShown = false;
-            _dodge = DodgePhase.None;
             _popTime = -1f;
             _summonTime = -1f;
             _hasTransformed = false;
@@ -751,6 +761,7 @@ namespace ExplodeIt.Enemies
         private void Update()
         {
             float deltaTime = Time.deltaTime;
+            TickCrownWake(deltaTime);
             // 쓰러진 뒤 고블린이 반대쪽 옆자리로 걸어가도 계속 고블린 쪽을 본다.
             if (_isHoldingBody && _bodyRenderer.enabled)
             {
@@ -794,7 +805,7 @@ namespace ExplodeIt.Enemies
                 TickPhaseShift(deltaTime);
             }
 
-            UpdateDodgePose();
+            UpdateBodyPose();
             UpdatePoseSprite();
         }
 
@@ -1141,17 +1152,37 @@ namespace ExplodeIt.Enemies
             _crown.transform.localPosition = _crownPositionLocal + (Vector3)_leapOffset + Vector3.up * (_crownRaise + CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
         }
 
-        // 패턴 사이에는 일정 거리까지 다가온다. 구르는 중이면 구르기만 한다.
-        protected override void TickMove(float deltaTime)
+        // 날아가는 왕관(부메랑, 투하, 돌아오기)이 지나간 자리에 금빛 잔상을 남겨 궤적이 보이게 한다.
+        // 떠 있기만 하는 왕관(별의 의식)에는 남기지 않도록, 지난 잔상에서 일정 거리 이상 움직였을 때만 남긴다.
+        private void TickCrownWake(float deltaTime)
         {
-            if (!_isFighting)
+            if (_crownWakeFx == null || _flyingCrown == null || !_flyingCrown.gameObject.activeSelf)
             {
                 return;
             }
 
-            if (IsDodging)
+            _crownWakeTimer -= deltaTime;
+            if (_crownWakeTimer > 0f)
             {
-                TickDodge(deltaTime);
+                return;
+            }
+
+            Vector2 position = _flyingCrown.position;
+            if ((position - _lastCrownWake).sqrMagnitude < _data.CrownWakeMinStep * _data.CrownWakeMinStep)
+            {
+                return;
+            }
+
+            _crownWakeTimer = _data.CrownWakeInterval;
+            _lastCrownWake = position;
+            _crownWakeFx.Play(position, Vector2.right, 1f);
+        }
+
+        // 패턴 사이에는 일정 거리까지 다가온다.
+        protected override void TickMove(float deltaTime)
+        {
+            if (!_isFighting)
+            {
                 return;
             }
 
@@ -1164,7 +1195,7 @@ namespace ExplodeIt.Enemies
 
         protected override bool ShouldStartAttack()
         {
-            return _isFighting && !IsDodging && _moveTimer >= _data.PatternInterval;
+            return _isFighting && _moveTimer >= _data.PatternInterval;
         }
 
         // 왕관 부메랑은 던질 방향을 따라가다 마지막에 고정한다.
@@ -1323,7 +1354,6 @@ namespace ExplodeIt.Enemies
                     break;
             }
 
-            _dodge = DodgePhase.None;
             HideTelegraphs();
             // 별의 의식 도중 맞으면 별과 안전지대, 화면 덮개를 바로 걷는다.
             if (state == EnemyState.Stunned)
@@ -1374,7 +1404,8 @@ namespace ExplodeIt.Enemies
                     if (t >= 1f)
                     {
                         HitInSector(_aimDirection, _data.SlashRadius, _data.SlashAngle);
-                        _slashFill.SetColor(Color.white);
+                        _slashFx?.Play(Body.position, _aimDirection, _data.SlashRadius / _data.SlashFxRadius);
+                        _slashFill.SetColor(FlashSafety.Apply(_data.SlashFlashColor));
                         AudioManager.Play(_data.SlashSound);
                         _step = Step.Pause;
                         _stepTime = 0f;
@@ -1532,6 +1563,24 @@ namespace ExplodeIt.Enemies
             return Physics2D.OverlapCircle(point, radius, _standFilter, StandBuffer) == 0;
         }
 
+        // 돌진하는 동안 일정 간격으로 불꽃 잔상을 떨궈, 지나온 길이 타오르는 꼬리처럼 남게 한다.
+        private void DropLungeWake(Vector2 direction, float deltaTime)
+        {
+            if (_lungeWakeFx == null)
+            {
+                return;
+            }
+
+            _lungeWakeTimer -= deltaTime;
+            if (_lungeWakeTimer > 0f)
+            {
+                return;
+            }
+
+            _lungeWakeTimer = _data.LungeWakeInterval;
+            _lungeWakeFx.Play(Body.position, direction, 1f);
+        }
+
         // 남은 거리만큼 정해진 속도로 나아간다. 돌진은 벽 너머까지 지나간 구간에 닿은 대상을 맞힌다. 다 가면 true.
         private bool StepAlong(Vector2 direction, float deltaTime, bool hits)
         {
@@ -1539,6 +1588,7 @@ namespace ExplodeIt.Enemies
             if (hits)
             {
                 HitInBox(direction, step, _data.LungeWidth, true);
+                DropLungeWake(direction, deltaTime);
             }
 
             Body.MovePosition(Body.position + direction * step);
@@ -2055,6 +2105,7 @@ namespace ExplodeIt.Enemies
             _meteorsLanded++;
             HitOverlapping(meteor.Position, meteor.Radius);
             FeedbackPlayer.Play(_data.MeteorImpactFeedback, meteor.Position);
+            _meteorFx?.Play(meteor.Position, Vector2.right, meteor.Radius / _data.MeteorFxRadius);
             AudioManager.Play(_data.MeteorImpactSound);
         }
 
@@ -2224,6 +2275,34 @@ namespace ExplodeIt.Enemies
             _swordLine.color = SwordLineColor;
         }
 
+        // 벤 경계선을 따라 rift-spark를 줄지어 틀어 선 전체가 한 번에 찢어지듯 보이게 한다. 맵 밖 토막은 건너뛴다.
+        private void RipAlong(Vector2 from, Vector2 to, Bounds bounds)
+        {
+            if (_riftFx == null)
+            {
+                return;
+            }
+
+            Vector2 line = to - from;
+            float length = line.magnitude;
+            if (length < 0.0001f)
+            {
+                return;
+            }
+
+            Vector2 direction = line / length;
+            for (float d = _data.RiftSpacing * 0.5f; d < length; d += _data.RiftSpacing)
+            {
+                Vector2 point = from + direction * d;
+                if (point.x < bounds.min.x || point.x > bounds.max.x || point.y < bounds.min.y || point.y > bounds.max.y)
+                {
+                    continue;
+                }
+
+                _riftFx.Play(point, direction, 1f);
+            }
+        }
+
         private Bounds SwordArena()
         {
             ArenaBounds arena = ArenaBounds.Current;
@@ -2243,6 +2322,9 @@ namespace ExplodeIt.Enemies
             half.Slash();
             const float Reach = 200f;
             HitInBox(direction, Reach, Reach * 2f, true);
+            // 경계선은 왕이 선 자리를 지나 베는 방향과 수직으로 맵을 가로지른다.
+            Vector2 along = new Vector2(-direction.y, direction.x);
+            RipAlong(_swordOrigin - along * Reach, _swordOrigin + along * Reach, SwordArena());
             FeedbackPlayer.Play(_data.SwordSlashFeedback, Body.position);
             AudioManager.Play(_data.SwordSlashSound);
         }
@@ -2528,7 +2610,9 @@ namespace ExplodeIt.Enemies
             if (arrived > _teleportsDone)
             {
                 _teleportsDone = arrived;
-                FeedbackPlayer.Play(_data.TeleportFeedback, _starPoints[StarOrder[(arrived - 1) % 5]]);
+                Vector2 tip = _starPoints[StarOrder[(arrived - 1) % 5]];
+                FeedbackPlayer.Play(_data.TeleportFeedback, tip);
+                _starArriveFx?.Play(tip, Vector2.right, 1f);
                 // 첫 꼭짓점에 도착한 순간부터 맞는다.
                 HitReceiver.IsShielded = false;
             }
@@ -3265,78 +3349,17 @@ namespace ExplodeIt.Enemies
             GameEvents.RaisePlayerHintRequested(_data.ImmuneHintText, _data.CrownHintHold);
         }
 
-        // ── 구르기: 왕관이 있고 패턴 사이에 서 있을 때, 근처에 떨어진 폭탄을 보고 반대쪽으로 구른다. 쿨타임은 없다.
-
-        private void OnBombLanded(Vector2 position, float radius)
+        // 각성 직후에는 부풀었다 돌아오고, 도약은 웅크렸다 눌리고, 천지 가르기 전에는 기를 모으며 늘어난다.
+        private void UpdateBodyPose()
         {
-            if (!_isFighting || !_hasCrown || IsDodging || State != EnemyState.Move)
+            float pop = CurrentPopScale();
+            float windup = SwordWindup();
+            Vector2 stretch = new Vector2(1f - SwordWindupStretch * 0.5f * windup, 1f + SwordWindupStretch * windup);
+            _visual.ExtraScale = new Vector2(pop, pop) * (LeapSquash() * _shrinkSize) * stretch;
+            _visual.ExtraLean = SwordWindupLean * windup;
+            if (_pattern == Pattern.Sword && State == EnemyState.Attack)
             {
-                return;
-            }
-
-            Vector2 away = Body.position - position;
-            float reach = radius + HitRadius + _data.DodgeMargin;
-            if (away.sqrMagnitude > reach * reach)
-            {
-                return;
-            }
-
-            // 폭탄이 몸 한가운데 떨어지면 방향이 없으므로 플레이어를 옆에 두고 구른다.
-            Vector2 toTarget = DirectionToTarget();
-            Vector2 direction = away.sqrMagnitude > 0.0001f ? away.normalized : new Vector2(-toTarget.y, toTarget.x);
-            _dodge = DodgePhase.Crouch;
-            _dodgeTime = 0f;
-            _dodgeDirection = direction;
-            _dodgeLength = ClearDistance(direction, _data.DodgeDistance, BodyRadius);
-        }
-
-        private void TickDodge(float deltaTime)
-        {
-            _dodgeTime += deltaTime;
-            if (_dodge == DodgePhase.Crouch)
-            {
-                if (_dodgeTime >= _data.DodgeWindup)
-                {
-                    _dodge = DodgePhase.Roll;
-                    _dodgeTime = 0f;
-                    AudioManager.Play(_data.DodgeSound);
-                }
-
-                return;
-            }
-
-            float speed = _dodgeLength / _data.DodgeDuration;
-            Body.MovePosition(Body.position + _dodgeDirection * (speed * deltaTime));
-            if (_dodgeTime >= _data.DodgeDuration)
-            {
-                _dodge = DodgePhase.None;
-            }
-        }
-
-        // 웅크릴 때 납작해지고, 구르는 동안 몸을 말아 기울인다. 각성 직후에는 부풀었다 돌아온다.
-        private void UpdateDodgePose()
-        {
-            switch (_dodge)
-            {
-                case DodgePhase.Crouch:
-                    _visual.ExtraScale = new Vector2(1.25f, 0.7f);
-                    _visual.ExtraLean = 0f;
-                    break;
-                case DodgePhase.Roll:
-                    _visual.ExtraScale = new Vector2(0.85f, 0.85f);
-                    _visual.ExtraLean = 35f;
-                    break;
-                default:
-                    float pop = CurrentPopScale();
-                    float windup = SwordWindup();
-                    Vector2 stretch = new Vector2(1f - SwordWindupStretch * 0.5f * windup, 1f + SwordWindupStretch * windup);
-                    _visual.ExtraScale = new Vector2(pop, pop) * (LeapSquash() * _shrinkSize) * stretch;
-                    _visual.ExtraLean = SwordWindupLean * windup;
-                    if (_pattern == Pattern.Sword && State == EnemyState.Attack)
-                    {
-                        _visual.Jitter = SwordWindupJitter * windup;
-                    }
-                    break;
+                _visual.Jitter = SwordWindupJitter * windup;
             }
         }
 

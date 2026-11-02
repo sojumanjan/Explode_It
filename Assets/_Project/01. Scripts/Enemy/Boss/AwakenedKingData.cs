@@ -125,19 +125,6 @@ namespace ExplodeIt.Enemies
         [Tooltip("패턴 시작 자세 (초). 왕관 부메랑을 뺀 패턴이 시작되기 전 잠깐 멈춰 기합을 넣는 시간")]
         [SerializeField, Min(0.05f)] private float _patternStartup = 0.3f;
 
-        [Header("구르기")]
-        [Tooltip("폭탄 범위에서 이만큼 더 바깥까지 닿아도 피한다 (유닛)")]
-        [SerializeField, Min(0f)] private float _dodgeMargin = 0.4f;
-
-        [Tooltip("웅크렸다가 구르기 시작하기까지 (초)")]
-        [SerializeField, Min(0f)] private float _dodgeWindup = 0.08f;
-
-        [Tooltip("구르는 거리 (유닛). 폭탄 중심 반대쪽으로 구르고, 벽이 있으면 그 앞에서 멈춘다")]
-        [SerializeField, Min(0f)] private float _dodgeDistance = 3.5f;
-
-        [Tooltip("구르는 시간 (초)")]
-        [SerializeField, Min(0.05f)] private float _dodgeDuration = 0.25f;
-
         [Header("왕검 연속 베기")]
         [Tooltip("한 패턴에 베는 횟수 (번)")]
         [SerializeField, Min(1)] private int _slashCount = 3;
@@ -404,7 +391,6 @@ namespace ExplodeIt.Enemies
         [Header("사운드")]
         [SerializeField, Tooltip("떨기 시작하는 순간의 효과음")] private SoundData _transformChargeSound;
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 효과음")] private SoundData _transformSound;
-        [SerializeField, Tooltip("구르는 순간의 효과음")] private SoundData _dodgeSound;
         [SerializeField, Tooltip("베는 순간의 효과음")] private SoundData _slashSound;
         [SerializeField, Tooltip("돌진하는 순간의 효과음")] private SoundData _lungeSound;
         [SerializeField, Tooltip("왕관을 던지는 순간의 효과음")] private SoundData _crownThrowSound;
@@ -438,6 +424,19 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("맵 전체 충격파가 치는 순간의 연출 (흔들림)")] private FeedbackData _shockFeedback;
         [SerializeField, Tooltip("국면 전환 끝에 왕관이 머리로 돌아오는 순간의 연출 (흔들림, 파티클). 왕 한가운데서 터진다")] private FeedbackData _phaseShiftFeedback;
         [SerializeField, Tooltip("쓰러뜨린 순간의 연출 (슬로모션)")] private FeedbackData _defeatFeedback;
+        [SerializeField, Tooltip("왕검 연속 베기에서 칼을 휘두르는 순간 트는 pixelfx (PxFx_royal-slash). 베는 방향으로 돌린다")] private PixelFxPlayer _slashFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 베기 궤적이 닿는 반경 (유닛). royal-slash는 70px ÷ PPU 20 = 3.5. 각도(130도)는 시트에 구워져 있다")] private float _slashFxRadius = 3.5f;
+        [SerializeField, Tooltip("별의 의식에서 별 끝에 도착할 때마다 트는 pixelfx (PxFx_star-arrive)")] private PixelFxPlayer _starArriveFx;
+        [SerializeField, Tooltip("날아가는 왕관 뒤에 남기는 금빛 잔상 pixelfx (PxFx_gold-wake). 부메랑과 투하 궤적이 보이게 한다")] private PixelFxPlayer _crownWakeFx;
+        [SerializeField, Min(0.01f), Tooltip("왕관 잔상을 남기는 간격 (초)")] private float _crownWakeInterval = 0.04f;
+        [SerializeField, Min(0f), Tooltip("지난 잔상에서 이만큼은 움직여야 새 잔상을 남긴다 (유닛). 떠 있기만 하는 왕관에는 남기지 않는다")] private float _crownWakeMinStep = 0.15f;
+        [SerializeField, Tooltip("연속 베기가 판정하는 순간 부채꼴 범위를 물들이는 색. 순백이면 베기 궤적이 묻혀 보이지 않아 옅게 둔다")] private Color _slashFlashColor = new Color(1f, 0.9f, 0.6f, 0.3f);
+        [SerializeField, Tooltip("돌진 찌르기 동안 지나간 자리에 남기는 불꽃 잔상 pixelfx (PxFx_lunge-wake)")] private PixelFxPlayer _lungeWakeFx;
+        [SerializeField, Min(0.01f), Tooltip("돌진 잔상을 남기는 간격 (초)")] private float _lungeWakeInterval = 0.03f;
+        [SerializeField, Tooltip("유성우 유성이 떨어진 자리에 트는 pixelfx (PxFx_king-meteor). 유성 반경에 맞춰 키운다")] private PixelFxPlayer _meteorFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 유성 폭발이 덮는 반경 (유닛). king-meteor는 44px ÷ PPU 20 = 2.2")] private float _meteorFxRadius = 2.2f;
+        [SerializeField, Tooltip("천지 가르기 반 가르기가 베는 순간 경계선을 따라 줄지어 트는 pixelfx (PxFx_rift-spark). 선 방향으로 돌린다. 줄무늬 베기에는 쓰지 않는다")] private PixelFxPlayer _riftFx;
+        [SerializeField, Min(0.1f), Tooltip("천지 가르기 경계선에 rift-spark를 놓는 간격 (유닛). rift-spark 한 토막은 22px ÷ 20 = 1.1")] private float _riftSpacing = 1f;
         [SerializeField, Tooltip("쓰러뜨린 순간 카메라가 왕에게 다가가는 확대 배율. 1이면 평소, 작을수록 가까이"), Range(0.3f, 1f)] private float _defeatZoom = 0.7f;
         [SerializeField, Tooltip("쓰러뜨린 순간 카메라가 왕에게 다가가는 시간 (초)"), Min(0f)] private float _defeatZoomTime = 0.4f;
         [SerializeField, Tooltip("왕관에 막혔을 때 번쩍이는 색")] private Color _immuneFlashColor = new Color(1f, 0.9f, 0.4f, 1f);
@@ -485,10 +484,6 @@ namespace ExplodeIt.Enemies
         public float PreferredDistance => _preferredDistance;
         public float PatternInterval => _patternInterval;
         public float PatternStartup => _patternStartup;
-        public float DodgeMargin => _dodgeMargin;
-        public float DodgeWindup => _dodgeWindup;
-        public float DodgeDistance => _dodgeDistance;
-        public float DodgeDuration => _dodgeDuration;
         public int SlashCount => _slashCount;
         public float SlashDashSpeed => _slashDashSpeed;
         public float SlashReach => _slashReach;
@@ -598,7 +593,6 @@ namespace ExplodeIt.Enemies
         public FeedbackData MeteorImpactFeedback => _meteorImpactFeedback;
         public FeedbackData SwordSlashFeedback => _swordSlashFeedback;
         public SoundData TransformSound => _transformSound;
-        public SoundData DodgeSound => _dodgeSound;
         public SoundData SlashSound => _slashSound;
         public SoundData LungeSound => _lungeSound;
         public SoundData CrownThrowSound => _crownThrowSound;
@@ -610,6 +604,19 @@ namespace ExplodeIt.Enemies
         public FeedbackData HurtFeedback => _hurtFeedback;
         public FeedbackData ImmuneFeedback => _immuneFeedback;
         public FeedbackData DefeatFeedback => _defeatFeedback;
+        public PixelFxPlayer SlashFx => _slashFx;
+        public float SlashFxRadius => _slashFxRadius;
+        public PixelFxPlayer StarArriveFx => _starArriveFx;
+        public PixelFxPlayer CrownWakeFx => _crownWakeFx;
+        public float CrownWakeInterval => _crownWakeInterval;
+        public float CrownWakeMinStep => _crownWakeMinStep;
+        public Color SlashFlashColor => _slashFlashColor;
+        public PixelFxPlayer LungeWakeFx => _lungeWakeFx;
+        public float LungeWakeInterval => _lungeWakeInterval;
+        public PixelFxPlayer MeteorFx => _meteorFx;
+        public float MeteorFxRadius => _meteorFxRadius;
+        public PixelFxPlayer RiftFx => _riftFx;
+        public float RiftSpacing => _riftSpacing;
         public float DefeatZoom => _defeatZoom;
         public float DefeatZoomTime => _defeatZoomTime;
         public Color ImmuneFlashColor => _immuneFlashColor;

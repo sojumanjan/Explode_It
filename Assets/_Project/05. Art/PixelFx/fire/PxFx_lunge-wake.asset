@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_lunge-wake
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: fire/lunge-wake
+  _frames:
+  - {fileID: 1671763008, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: 1155584, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: 1482357884, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: -34972862, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: 1997838482, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: -521685627, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: 170386446, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: -140425890, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: -678884053, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  - {fileID: -1653532639, guid: 99a83b107cc1f2947b39c0513ce489f7, type: 3}
+  _fps: 30
+  _loop: 0
