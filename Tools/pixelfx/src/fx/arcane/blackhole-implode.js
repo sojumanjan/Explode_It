@@ -13,7 +13,7 @@ export const meta = {
   loop: false,
   fps: 30,
   bg: "dark",
-  options: { palette: ["#140a24", "#3b1a6b", "#6b33b8", "#a46bff", "#d9b8ff", "#ffffff"], radius: 76, pull: 2, seed: 9 },
+  options: { palette: ["#140a24", "#3b1a6b", "#6b33b8", "#a46bff", "#d9b8ff", "#ffffff"], radius: 76, pull: 2, spinStart: 0.4, spinEnd: 6, seed: 9 },
 };
 
 export function draw(p, t, o) {
@@ -23,18 +23,36 @@ export function draw(p, t, o) {
   // the pull: streaks born all through the pull, spiralling in faster as they near the core
   // the pop lands exactly at t = pull, the game's explosion moment, so the collapse takes the last 0.1 s of the pull
   if (t < P - 0.1) {
+    // the whole swirl turns about the core and winds up faster toward the collapse. Baked into the frames rather than
+    // rotating the sprite in the engine, where a point-filtered pixel sheet shears and jitters at odd angles.
+    // angular speed eases from spinStart to spinEnd (rad/s) along t², so it starts lazy and only races near the end;
+    // spin is that speed integrated over time.
+    const g = seg(t, 0, P), s0 = o.spinStart, s1 = o.spinEnd, spin = s0 * t + ((s1 - s0) * t * t * t) / (3 * P * P);
     burst(130, o.seed, (r, i) => {
       const born = (i / 130) * (P - 0.3) + r.range(0, 0.15), life = r.range(0.35, 0.55), tt = t - born;
       if (tt < 0 || tt > life) return;
       const q = ease.inQuad(tt / life), a0 = r.range(0, TAU), rad = R * r.range(0.85, 1.05) * (1 - q) + 6 * q;
-      const a = a0 + q * 1.4, x = Math.cos(a) * rad, y = Math.sin(a) * rad;
+      const a = a0 + q * 1.4 + spin, x = Math.cos(a) * rad, y = Math.sin(a) * rad;
       // tail points back out along the spiral
       const L = 5 + 9 * q, ta = a - 0.25;
       p.line(x, y, Math.cos(ta) * (rad + L), Math.sin(ta) * (rad + L), (u) => (u < 0.4 ? (q > 0.6 ? C[4] : C[3]) : C[1]));
       if (q > 0.5) p.light(x, y, C[3], 0.3 * q);
     });
+    // spiral arms wound round the core: a faint accretion disc that brightens and tightens as the pull goes on
+    const arms = 3, inner = 12, outer = R * (0.75 - 0.25 * g);
+    for (let k = 0; k < arms; k++) {
+      const base = (k / arms) * TAU + spin;
+      for (let d = inner; d <= outer; d += 0.6) {
+        const u = (d - inner) / (outer - inner), a = base + u * 2.4;
+        const x = Math.cos(a) * d, y = Math.sin(a) * d, alpha = Math.min(1, (1 - u) * (0.6 + 0.6 * g));
+        const c = u < 0.3 ? C[4] : u < 0.65 ? C[3] : C[2];
+        p.blend(x, y, c, alpha);
+        // two pixels thick near the core, thinning to a hair at the tip
+        if (u < 0.5) p.blend(x + Math.cos(a), y + Math.sin(a), c, alpha * 0.6);
+      }
+    }
     // the core: a dark disc with a violet rim that swells and throbs
-    const g = seg(t, 0, P), rr = 5 + 6 * ease.outQuad(g) + Math.sin(t * 18) * 0.8 * g;
+    const rr = 5 + 6 * ease.outQuad(g) + Math.sin(t * 18) * 0.8 * g;
     p.circle(0, 0, rr + 2, C[3]);
     p.circle(0, 0, rr + 1, C[2]);
     p.circle(0, 0, rr, C[0]);
