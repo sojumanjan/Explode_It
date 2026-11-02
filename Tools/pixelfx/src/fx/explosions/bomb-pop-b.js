@@ -19,7 +19,8 @@ const SMOKE = [0x2a2430, 0x3b3242, 0x4f4556];
 
 export function draw(p, t, o) {
   const C = fit(o.palette, 8), R = o.radius;
-  if (t < 0.034) p.circle(0, 0, R * 0.5, WHITE);
+  // first beat in the ramp's brightest step, not white: a big white disc on every blast strained the eyes (user call)
+  if (t < 0.034) p.circle(0, 0, R * 0.35, C[7]);
 
   // flame puffs: thrown out fast, each a lit ball whose color steps down the ramp as it ages
   const puffs = [];
