@@ -1,0 +1,50 @@
+[
+ {
+  "path": "Props/풀 아치1.png",
+  "density": 73.115,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리1.png",
+  "density": 120.184,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리3.png",
+  "density": 68.927,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리4.png",
+  "density": 42.921,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리5.png",
+  "density": 37.821,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리6.png",
+  "density": 45.698,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리7.png",
+  "density": 37.821,
+  "tile": false,
+  "outline": "strip"
+ },
+ {
+  "path": "Props/풀 울타리8.png",
+  "density": 76.681,
+  "tile": false,
+  "outline": "strip"
+ }
+]

@@ -16,6 +16,9 @@ namespace ExplodeIt.Enemies
         [Tooltip("한 번 돌진에 걸리는 시간 (초). 짧을수록 순간이동처럼 보인다")]
         [SerializeField, Min(0.02f)] private float _dashDuration = 0.12f;
 
+        [Tooltip("돌진을 멈출 거리 = 공격 시작 거리 x 이 비율. 돌진하는 동안 플레이어가 멀어져도 시작 거리 안에 남도록 1보다 충분히 작게 둔다")]
+        [SerializeField, Range(0f, 1f)] private float _dashStopRatio = 0.5f;
+
         [Tooltip("돌진 중 눌린 모양 (가로, 세로 배율). 멈추면 튕기듯 돌아온다")]
         [SerializeField] private Vector2 _dashSquash = new Vector2(1.4f, 0.55f);
 
@@ -36,6 +39,7 @@ namespace ExplodeIt.Enemies
         public float PauseDuration => _pauseDuration;
         public float DashDistance => _dashDistance;
         public float DashDuration => _dashDuration;
+        public float DashStopRatio => _dashStopRatio;
         public Vector2 DashSquash => _dashSquash;
         public float SquashRecoverTime => _squashRecoverTime;
         public float AttackRadius => _attackRadius;

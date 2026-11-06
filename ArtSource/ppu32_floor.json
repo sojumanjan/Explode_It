@@ -1,0 +1,74 @@
+[
+ {
+  "path": "Props/바닥/바닥_건초살짝더미1.png",
+  "density": 497.372,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_꽃무더기1.png",
+  "density": 304.017,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_꽃무더기2.png",
+  "density": 338.184,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_꽃무더기3.png",
+  "density": 358.385,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_무언가에파임1.png",
+  "density": 277.778,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_살짝금1.png",
+  "density": 211.282,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_살짝금2.png",
+  "density": 257.355,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_살짝금3.png",
+  "density": 270.588,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_수레바퀴자국1.png",
+  "density": 156.25,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_흐린조각1 1.png",
+  "density": 160,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "Props/바닥/바닥_흐린조각1.png",
+  "density": 160,
+  "tile": false,
+  "method": "box"
+ },
+ {
+  "path": "UI/바닥 타일.png",
+  "density": 160,
+  "tile": true,
+  "method": "box"
+ }
+]

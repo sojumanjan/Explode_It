@@ -13,8 +13,6 @@ namespace ExplodeIt.Enemies
         private const float SquashInPortion = 0.3f;
         // 남은 거리가 이보다 짧으면 돌진하지 않고 계속 멈춰 있는다. 제자리에서 움찔대지 않게 한다.
         private const float MinDashDistance = 0.05f;
-        // 공격 시작 거리 대비 돌진을 멈출 거리. 시작 거리 바로 안쪽에 서야 멈춘 직후 공격이 시작된다.
-        private const float StopRangeRatio = 0.8f;
 
         [SerializeField] private MantisData _data;
         [SerializeField] private EnemyVisual _visual;
@@ -69,8 +67,10 @@ namespace ExplodeIt.Enemies
         private void BeginDash()
         {
             Vector2 position = Body.position;
-            // 입구로 들어오는 중이면 입구 점까지, 아니면 플레이어 공격 거리 바로 앞까지만 돌진한다.
-            float stopRange = IsEntering ? 0f : _data.AttackTriggerRange * StopRangeRatio;
+            // 입구로 들어오는 중이면 입구 점까지, 아니면 플레이어 공격 거리 안쪽까지만 돌진한다.
+            // 멈출 자리는 출발 순간의 플레이어 위치 기준이라, 시작 거리 바로 앞에 서면 돌진하는 동안 도망친 만큼
+            // 시작 거리 밖에 남는다. 일직선으로 도망치면 매번 그 자리에서 멈춰 공격을 못 했다(11/6).
+            float stopRange = IsEntering ? 0f : _data.AttackTriggerRange * _data.DashStopRatio;
             float distance = Mathf.Min(_data.DashDistance, (MoveGoal - position).magnitude - stopRange);
             _moveTime = 0f;
             if (distance < MinDashDistance)

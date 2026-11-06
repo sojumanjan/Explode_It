@@ -104,3 +104,6 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# PixelOE 파이썬 가상환경 (Tools/pixeloe-env, 약 1GB)
+/Tools/pixeloe-env/
