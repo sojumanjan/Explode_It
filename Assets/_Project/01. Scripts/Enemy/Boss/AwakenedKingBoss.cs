@@ -143,6 +143,11 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SpriteRenderer _chibi;
         // 변신하며 떠는 동안 튀는 불티.
         [SerializeField] private ParticleSystem _transformAura;
+        // 불티와 함께 몸 둘레에서 피어오르는 열기 안개(pixelfx 반복 시트). 늘리면 픽셀 크기가 어긋나
+        // 2등신 몸(각성)과 각성한 몸(국면 전환) 크기별로 따로 두고, 색도 시트에 구워져 있어 3국면 전환은 보랏빛 쪽을 켠다.
+        [SerializeField] private PixelFxPlayer _transformHaze;
+        [SerializeField] private PixelFxPlayer _phaseHaze;
+        [SerializeField] private PixelFxPlayer _phaseHazePurple;
         // 각성 모습 그림. 국면 전환에서 줄었다 커질 때 그림 한가운데를 잡는 데 쓴다.
         [SerializeField] private SpriteRenderer _bodyRenderer;
         // 2국면부터 켜지는 분노 오라: 몸 둘레에서 일렁이는 가는 불꽃과 위로 날리는 불티.
@@ -382,6 +387,7 @@ namespace ExplodeIt.Enemies
             _auraBaseRate = _transformAura.emission.rateOverTimeMultiplier;
             _auraBaseScale = _transformAura.shape.scale;
             _auraBaseColor = _transformAura.main.startColor;
+            StopHaze();
             _emberBaseColor = _rageEmbers.colorOverLifetime.color;
             SetRage(false);
             _leapShadow.enabled = false;
@@ -666,6 +672,7 @@ namespace ExplodeIt.Enemies
             SetAuraStrength(1f, 1f);
             SetAuraColor(false);
             _transformAura.Play();
+            PlayHaze(_transformHaze);
             _transformChargeHandle = AudioManager.Play(_data.TransformChargeSound);
             // 떨기 시작하면 원래 곡을 줄여, 각성하는 순간 보스 곡이 조용한 데서 터지게 한다.
             AudioManager.FadeOutBgm(_data.BgmFadeOutTime);
@@ -920,6 +927,7 @@ namespace ExplodeIt.Enemies
             _chibi.transform.localPosition = _chibiPosition;
             _chibi.transform.localScale = _chibiScale;
             _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            StopHaze();
 
             _visual.Alpha = 1f;
             _popCenterHeight = ChibiCenterHeight();
@@ -3149,6 +3157,7 @@ namespace ExplodeIt.Enemies
                 // 3국면(보랏빛)으로 넘어가는 전환이면 불티도 보라색으로 튄다.
                 SetAuraColor(_hitsTaken + 1 >= 3);
                 _transformAura.Play();
+                PlayHaze(_hitsTaken + 1 >= 3 ? _phaseHazePurple : _phaseHaze);
                 GameEvents.RaiseBossLineRequested(_data.GetPhaseLine(_hitsTaken), returnStart - _data.PhaseLineDelay);
             }
 
@@ -3194,6 +3203,7 @@ namespace ExplodeIt.Enemies
             _crownDropTime = -1f;
             _visual.Jitter = 0f;
             _transformAura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            StopHaze();
             _flyingCrown.gameObject.SetActive(false);
             _flyingCrown.localScale = _flyingCrownScale;
             SetCrown(true);
@@ -3236,6 +3246,20 @@ namespace ExplodeIt.Enemies
         {
             ParticleSystem.MainModule main = _transformAura.main;
             main.startColor = isPurple ? new ParticleSystem.MinMaxGradient(_data.Phase3ShiftAuraMin, _data.Phase3ShiftAuraMax) : _auraBaseColor;
+        }
+
+        private void PlayHaze(PixelFxPlayer haze)
+        {
+            StopHaze();
+            haze.gameObject.SetActive(true);
+            haze.Play(1f, null);
+        }
+
+        private void StopHaze()
+        {
+            _transformHaze.gameObject.SetActive(false);
+            _phaseHaze.gameObject.SetActive(false);
+            _phaseHazePurple.gameObject.SetActive(false);
         }
 
         // ── 분노 오라: 2국면부터 몸 둘레에서 가는 불꽃이 짧게 일렁이다 꺼지고, 불티가 위로 날린다.

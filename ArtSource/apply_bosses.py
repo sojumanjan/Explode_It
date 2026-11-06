@@ -28,7 +28,8 @@ KING_CELLS = [
     ("king_cry", (527, 1024), (688, 1061)), ("king_rage", (527, 1024), (1093, 1415)),
 ]
 # 보스는 국면을 색으로 구분하고 눈에 띄어야 해서, 일반 팔레트와 채도 당기기 대신 보스 그림에서 뽑은 팔레트를 쓴다(11/6)
-EFFECT_STRAND = 40       # 그림 키 / 이 값보다 가는 가닥은 이펙트(300px 그림이면 7px)
+PORTRAIT_PX = 100        # 컷인 초상화 캔버스(옛 300px 칸을 1/3로)
+EFFECT_STRAND = 40      # 그림 키 / 이 값보다 가는 가닥은 이펙트(300px 그림이면 7px)
 EFFECT_PIECE = 0.15      # 가장 큰 몸통 덩어리의 이 비율보다 작은 덩어리는 이펙트
 EFFECT_CHROMA = 0.13     # 이보다 채도가 높고
 EFFECT_LIGHT = 0.66      # 이보다 밝으면 불꽃, 빛으로 본다
@@ -54,11 +55,10 @@ def load_palette():
     return colors, pp.oklab(colors)
 
 
-def build(rgba, ow, oh, palette, pixelize=True):
+def build(rgba, ow, oh, palette):
     core = np.asarray(Image.fromarray((core_mask(rgba) * 255).astype(np.uint8)).resize((ow, oh), Image.BOX)) / 255.0 > 0.5
     core = cv2.dilate(core.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
-    # 줄이지 않는 초상화는 PixelOE를 거치지 않는다. 외곽선 늘리기가 눈썹 같은 어두운 선을 두껍게 만든다(11/6 분노 표정)
-    out = pp.remove_islands(pp.shrink(rgba, ow, oh) if pixelize else rgba.copy())
+    out = pp.remove_islands(pp.shrink(rgba, ow, oh))
     out[pp.edge(out[..., 3] > 0.5) & core, :3] = pp.INK
     colors, lab_c = palette
     lab = pp.oklab(out[..., :3].reshape(-1, 3))
@@ -158,8 +158,10 @@ def main():
         pp.save(os.path.join(pp.ART, rel), out)
         results.append({"path": rel, "w": w, "h": h, "ow": ow, "oh": oh})
         if name in kings:
-            # 컷인: 캔버스 크기 그대로. 컷인 칸 450(기준 1080)이면 720p에서 그림 1px = 화면 1px
-            pp.save(os.path.join(PORTRAIT_DIR, name + ".png"), build(king_portraits[name], w, h, palette, pixelize=False))
+            # 컷인도 맵 위 왕과 같은 픽셀 그림으로 쓴다(11/6 사용자). 맵용 그림은 표정마다 캔버스 크기가 달라 컷인 칸에 넣으면
+            # 표정마다 왕 크기가 바뀌므로, 같은 배율로 맞춘 300px 칸을 표정 모두 같은 크기로 픽셀화한다.
+            # 720p 컷인 칸(300px)에서 정확히 3배가 되게 100px로 줄인다
+            pp.save(os.path.join(PORTRAIT_DIR, name + ".png"), build(king_portraits[name], PORTRAIT_PX, PORTRAIT_PX, palette))
         print(f"{rel}\t{w}x{h}\t{ow}x{oh}")
     json.dump(results, open(LIST.replace(".json", "_result.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 

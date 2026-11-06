@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_rage-haze-king-violet
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: fire/rage-haze
+  _frames:
+  - {fileID: -393174237, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -528910153, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 369488542, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 646360338, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1183999992, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 1310726225, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1838554078, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 1199578565, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1315814159, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 687865371, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -291971478, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 477321132, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 675671896, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1760683839, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 1142897122, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -830885517, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -803265111, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -611462146, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 1541597632, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -952828489, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -497786258, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 795566451, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1563861912, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -1371047146, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 816439294, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -519486228, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -29349781, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: 1970941583, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  - {fileID: -279884650, guid: 2375c7eedb391474e8bf8c7f8ee6040f, type: 3}
+  _fps: 24
+  _loop: 1

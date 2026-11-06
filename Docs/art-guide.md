@@ -63,6 +63,8 @@
 4. `pixel_ppu32.py`의 밀도 값을 128(4배)로 고치고 돌린다 → 32px 축소, 외곽선, 팔레트까지 한 번에
 5. Unity에서 덮어쓴 그림이 Sprite Mode **Multiple로 자동 분할되면 Single로** 되돌린다(핸드오프 2번). PPU는 그림 크기가 바뀌면 월드 크기가 같게 다시 맞춘다
 6. 게임 화면에 렌더해 지금 그림과 나란히 비교한다
+7. 32px로 줄인 뒤 직접 도트를 찍어 고친 그림은 `pixel_ppu32.py`의 `HAND_EDITED`에 넣는다. 변환 스크립트를 다시 돌려도 그 그림은 덮어쓰지 않는다. 그 그림을 새로 뽑을 때만 목록에서 뺀다
+   - 지금 목록: `Player3.png`(고블린), `King/king_smug.png`, `King/king_speechless.png`(11/6 입을 손으로 찍음), 같은 두 표정의 컷인 초상화 `King/Portrait/`(맵 그림의 입을 옮겨 찍음)
 
 ---
 

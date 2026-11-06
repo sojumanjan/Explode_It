@@ -37,3 +37,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Galmuri (갈무리)
+
+인게임 HUD 숫자(처치 수, 타이머, 멀티킬 "x3!")에 쓰는 픽셀 글꼴. `Assets/_Project/08. Fonts/Galmuri/`에 Galmuri11-Bold(v2.40.4)를 넣었고,
+숫자와 기호만 담은 TMP 글꼴 에셋 두 개(`Galmuri11_Digits`, 외곽선용 `Galmuri11_Digits_SDF`)를 만들어 쓴다.
+원본: https://github.com/quiple/galmuri
+Copyright (c) 2019–2025 Lee Minseo (quiple@quiple.dev), SIL Open Font License 1.1. 전문은 `Assets/_Project/08. Fonts/Galmuri/Galmuri_OFL.txt`

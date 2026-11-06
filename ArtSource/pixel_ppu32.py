@@ -277,7 +277,16 @@ def apply_palette(rgba, palette):
 PALETTE = None   # main()에서 불러온다
 
 
+# 사용자가 변환 뒤 직접 도트를 찍은 그림. 스크립트를 다시 돌려도 덮어쓰지 않는다(11/6 32px로 줄이며 사라진 입을 손으로 찍음)
+HAND_EDITED = {"Player3.png", "King/king_smug.png", "King/king_speechless.png",
+               "King/Portrait/king_smug.png", "King/Portrait/king_speechless.png"}
+
+
 def save(dst, out):
+    rel = os.path.relpath(dst, ART).replace(os.sep, "/")
+    if rel in HAND_EDITED:
+        print(f"skip (손으로 고친 그림): {rel}")
+        return
     Image.fromarray((out * 255).round().astype(np.uint8), "RGBA").save(dst)
 
 

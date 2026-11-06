@@ -160,7 +160,9 @@ export function canvas(w, h, fill = [12, 11, 16, 255]) {
   for (let i = 0; i < w * h; i++) data.set(fill, i * 4);
   return {
     w, h, data,
-    paste(src, sw, sh, x, y) {
+    // copy: write the pixels as they are (straight alpha). Blending onto a transparent canvas would multiply
+    // every translucent pixel's color by its alpha and store it darkened (Explode It fix, see PINNED.md).
+    paste(src, sw, sh, x, y, copy = false) {
       for (let yy = 0; yy < sh; yy++) {
         const ty = y + yy;
         if (ty < 0 || ty >= h) continue;
@@ -168,6 +170,7 @@ export function canvas(w, h, fill = [12, 11, 16, 255]) {
           const tx = x + xx;
           if (tx < 0 || tx >= w) continue;
           const s = (yy * sw + xx) * 4, d = (ty * w + tx) * 4, a = src[s + 3] / 255;
+          if (copy) { for (let c = 0; c < 4; c++) data[d + c] = src[s + c]; continue; }
           for (let c = 0; c < 3; c++) data[d + c] = src[s + c] * a + data[d + c] * (1 - a);
           data[d + 3] = Math.max(data[d + 3], src[s + 3]);
         }
@@ -225,7 +228,7 @@ export function spriteSheet(fx, r, name) {
   const json = { frames: [], meta: {} };
   frames.forEach((f, i) => {
     const x = (i % cols) * w, y = Math.floor(i / cols) * h;
-    img.paste(f.clear, w, h, x, y);
+    img.paste(f.clear, w, h, x, y, true);
     json.frames.push({
       filename: `${name} ${i}`, frame: { x, y, w, h }, rotated: false, trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w, h }, sourceSize: { w, h }, duration: Math.round(1000 / fps),

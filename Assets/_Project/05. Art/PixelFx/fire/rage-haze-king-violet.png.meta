@@ -1,0 +1,1103 @@
+fileFormatVersion: 2
+guid: 2375c7eedb391474e8bf8c7f8ee6040f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2972625649909860823
+    second: rage-haze-king-violet_0
+  - first:
+      213: 5487865342896340657
+    second: rage-haze-king-violet_1
+  - first:
+      213: 2502711140288492740
+    second: rage-haze-king-violet_2
+  - first:
+      213: -6230002562195666212
+    second: rage-haze-king-violet_3
+  - first:
+      213: -4836348960157707395
+    second: rage-haze-king-violet_4
+  - first:
+      213: -6245471472429480357
+    second: rage-haze-king-violet_5
+  - first:
+      213: -6760815178163056110
+    second: rage-haze-king-violet_6
+  - first:
+      213: 2984763734735256933
+    second: rage-haze-king-violet_7
+  - first:
+      213: 5849882497609985282
+    second: rage-haze-king-violet_8
+  - first:
+      213: -4708209841845858074
+    second: rage-haze-king-violet_9
+  - first:
+      213: 3499458422752108962
+    second: rage-haze-king-violet_10
+  - first:
+      213: -8180021778734367371
+    second: rage-haze-king-violet_11
+  - first:
+      213: 3665765144746433410
+    second: rage-haze-king-violet_12
+  - first:
+      213: 8517119714304185251
+    second: rage-haze-king-violet_13
+  - first:
+      213: -3638352518427653725
+    second: rage-haze-king-violet_14
+  - first:
+      213: 7900813126862255986
+    second: rage-haze-king-violet_15
+  - first:
+      213: 8638112303933481203
+    second: rage-haze-king-violet_16
+  - first:
+      213: -963882759114018066
+    second: rage-haze-king-violet_17
+  - first:
+      213: -8902273066855877514
+    second: rage-haze-king-violet_18
+  - first:
+      213: 4941830173680048364
+    second: rage-haze-king-violet_19
+  - first:
+      213: -3713549194922663248
+    second: rage-haze-king-violet_20
+  - first:
+      213: -4532803920301542728
+    second: rage-haze-king-violet_21
+  - first:
+      213: 7330236405369190252
+    second: rage-haze-king-violet_22
+  - first:
+      213: 5129927106164086150
+    second: rage-haze-king-violet_23
+  - first:
+      213: -7737559646798918974
+    second: rage-haze-king-violet_24
+  - first:
+      213: -8203268629674608915
+    second: rage-haze-king-violet_25
+  - first:
+      213: -2115636652140763145
+    second: rage-haze-king-violet_26
+  - first:
+      213: 891100303285000627
+    second: rage-haze-king-violet_27
+  - first:
+      213: -3436448637689147560
+    second: rage-haze-king-violet_28
+  - first:
+      213: 4620162327748597507
+    second: rage-haze-king-violet_29
+  - first:
+      213: 208077467808130972
+    second: rage-haze-king-violet_30
+  - first:
+      213: 1309865764489832191
+    second: rage-haze-king-violet_31
+  - first:
+      213: -4774323131471964990
+    second: rage-haze-king-violet_32
+  - first:
+      213: -3636327131318253225
+    second: rage-haze-king-violet_33
+  - first:
+      213: 5998085675204094262
+    second: rage-haze-king-violet_34
+  - first:
+      213: -5585834175702015833
+    second: rage-haze-king-violet_35
+  - first:
+      213: -7385972661589991451
+    second: rage-haze-king-violet_36
+  - first:
+      213: 5532327458227428782
+    second: rage-haze-king-violet_37
+  - first:
+      213: -2633931001339730964
+    second: rage-haze-king-violet_38
+  - first:
+      213: 7478368308197194638
+    second: rage-haze-king-violet_39
+  - first:
+      213: -6806999481098040447
+    second: rage-haze-king-violet_40
+  - first:
+      213: 3856845737786947765
+    second: rage-haze-king-violet_41
+  - first:
+      213: 3982027617557978385
+    second: rage-haze-king-violet_42
+  - first:
+      213: 1333326778087380769
+    second: rage-haze-king-violet_43
+  - first:
+      213: -5691657293559676105
+    second: rage-haze-king-violet_44
+  - first:
+      213: -5641036907541918114
+    second: rage-haze-king-violet_45
+  - first:
+      213: 5498257462522969250
+    second: rage-haze-king-violet_46
+  - first:
+      213: -73830689128873275
+    second: rage-haze-king-violet_47
+  - first:
+      213: -6428453661359506059
+    second: rage-haze-king-violet_48
+  - first:
+      213: 3636415105656260902
+    second: rage-haze-king-violet_49
+  - first:
+      213: -8041786971124245547
+    second: rage-haze-king-violet_50
+  - first:
+      213: -5342229869515274206
+    second: rage-haze-king-violet_51
+  - first:
+      213: -9189727224171828203
+    second: rage-haze-king-violet_52
+  - first:
+      213: -3935842375432453368
+    second: rage-haze-king-violet_53
+  - first:
+      213: 885676154965791325
+    second: rage-haze-king-violet_54
+  - first:
+      213: -8581810494080953683
+    second: rage-haze-king-violet_55
+  - first:
+      213: -324497305938301444
+    second: rage-haze-king-violet_56
+  - first:
+      213: 3766945960276151695
+    second: rage-haze-king-violet_57
+  - first:
+      213: 465132983347741105
+    second: rage-haze-king-violet_58
+  - first:
+      213: -8064006954094032675
+    second: rage-haze-king-violet_59
+  - first:
+      213: 5087070365106494360
+    second: rage-haze-king-violet_60
+  - first:
+      213: -580358060687598873
+    second: rage-haze-king-violet_61
+  - first:
+      213: 340515777829074844
+    second: rage-haze-king-violet_62
+  - first:
+      213: 4954186104873147537
+    second: rage-haze-king-violet_63
+  - first:
+      213: -6183530168124301828
+    second: rage-haze-king-violet_64
+  - first:
+      213: -1871091732625589517
+    second: rage-haze-king-violet_65
+  - first:
+      213: -5730905171563664271
+    second: rage-haze-king-violet_66
+  - first:
+      213: 5685469608299337878
+    second: rage-haze-king-violet_67
+  - first:
+      213: -8586227909258184927
+    second: rage-haze-king-violet_68
+  - first:
+      213: -8406203672431081116
+    second: rage-haze-king-violet_69
+  - first:
+      213: 7564855985977820654
+    second: rage-haze-king-violet_70
+  - first:
+      213: 2972488107331222241
+    second: rage-haze-king-violet_71
+  - first:
+      213: -4015554085684361624
+    second: rage-haze-king-violet_72
+  - first:
+      213: 5606343293004040882
+    second: rage-haze-king-violet_73
+  - first:
+      213: 6561078383739196009
+    second: rage-haze-king-violet_74
+  - first:
+      213: -2005070781196496991
+    second: rage-haze-king-violet_75
+  - first:
+      213: -5815849615075029942
+    second: rage-haze-king-violet_76
+  - first:
+      213: -4795974753078627368
+    second: rage-haze-king-violet_77
+  - first:
+      213: -776670345686630794
+    second: rage-haze-king-violet_78
+  - first:
+      213: 3776269308529030099
+    second: rage-haze-king-violet_79
+  - first:
+      213: 4363023897082025121
+    second: rage-haze-king-violet_80
+  - first:
+      213: -1112979745871597977
+    second: rage-haze-king-violet_81
+  - first:
+      213: 3552217305801067620
+    second: rage-haze-king-violet_82
+  - first:
+      213: -8907832020524269632
+    second: rage-haze-king-violet_83
+  - first:
+      213: 6075282188531826742
+    second: rage-haze-king-violet_84
+  - first:
+      213: 7758469040598309165
+    second: rage-haze-king-violet_85
+  - first:
+      213: -8890823546254879684
+    second: rage-haze-king-violet_86
+  - first:
+      213: -2042782561632150271
+    second: rage-haze-king-violet_87
+  - first:
+      213: 5025297435423020278
+    second: rage-haze-king-violet_88
+  - first:
+      213: 1297066673439890897
+    second: rage-haze-king-violet_89
+  - first:
+      213: 7878003032094704540
+    second: rage-haze-king-violet_90
+  - first:
+      213: -2237003610597505139
+    second: rage-haze-king-violet_91
+  - first:
+      213: 27291813506830067
+    second: rage-haze-king-violet_92
+  - first:
+      213: 5579170038632901148
+    second: rage-haze-king-violet_93
+  - first:
+      213: 622914632685573148
+    second: rage-haze-king-violet_94
+  - first:
+      213: 5560753167487086542
+    second: rage-haze-king-violet_95
+  - first:
+      213: -1682391241624882203
+    second: rage-haze-king-violet_96
+  - first:
+      213: -6053054491814543308
+    second: rage-haze-king-violet_97
+  - first:
+      213: 6739700623133594469
+    second: rage-haze-king-violet_98
+  - first:
+      213: -7526242817362268761
+    second: rage-haze-king-violet_99
+  - first:
+      213: -1911081445683058795
+    second: rage-haze-king-violet_100
+  - first:
+      213: -1461802753082409612
+    second: rage-haze-king-violet_101
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rage-haze-king-violet_000
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e08e3f42fc92a324099437b92131125c
+      internalID: -393174237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_001
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0aec9d2a41c48f542850db32955071d5
+      internalID: -528910153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_002
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34a1c80d345f8854e9e1d1e9cdfd136e
+      internalID: 369488542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_003
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e9b5d3554f245b4685fff3087405602
+      internalID: 646360338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_004
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f43a3bc2f1cee9e40a9393d14d48e2e3
+      internalID: -1183999992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_005
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 672
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5de72b9869339fc4cbdb4247a22fb595
+      internalID: 1310726225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_006
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbe6455f9686eb647af82a9574818409
+      internalID: -1838554078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_007
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49fbbbdd567dc0141af41fe991854d5e
+      internalID: 1199578565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_008
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37f3d26075459b048a8677e69715054e
+      internalID: -1315814159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_009
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d14fdb9e2dd58ee4e9fa22ae6e100648
+      internalID: 687865371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_010
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0589eb6ef45a176498b5ccc487fd089f
+      internalID: -291971478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_011
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 504
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db0b925092ba1384992a3b909f4c8787
+      internalID: 477321132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_012
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8da54e864f715964784eab1f781a1ca3
+      internalID: 675671896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_013
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e024591f4e61c4093c91f278d9cb09
+      internalID: -1760683839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_014
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cdd47705470c4742a92f8075e75ebf9
+      internalID: 1142897122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_015
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6608f90f70da9940ae0613528fd7376
+      internalID: -830885517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_016
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5396873bd1680f34988dd4f48188e180
+      internalID: -803265111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_017
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 336
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca43d6ef9983fb74b8b9cadbc1595d62
+      internalID: -611462146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_018
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d867fc911684b0643b6c1615f99d29c2
+      internalID: 1541597632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_019
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f4b337cd38004443ae5fd5d0f273111
+      internalID: -952828489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_020
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9ecf786ca84a6b4dbc17f5d8d8c5dd1
+      internalID: -497786258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_021
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26b553e7f22621343a67932793ee508e
+      internalID: 795566451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_022
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d668765552f9ac148ad4f506ceeee004
+      internalID: -1563861912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_023
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 168
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 568bb1ab48fe7b2449701c337e5fecc3
+      internalID: -1371047146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_024
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 133d18e33d0193144851dc52456444df
+      internalID: 816439294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_025
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c66496c69b998934593aaf138e15dbd3
+      internalID: -519486228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_026
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d6ba75edeeebc048a4fee2165e5866d
+      internalID: -29349781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_027
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cac5f23ac986ce142a77aacb59d2e182
+      internalID: 1970941583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rage-haze-king-violet_028
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 144
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05952381}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b635e2591a017a4580669f1af484e1d
+      internalID: -279884650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 050a091491209ea479165818bdf3c712
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      rage-haze-king-violet_000: -393174237
+      rage-haze-king-violet_001: -528910153
+      rage-haze-king-violet_002: 369488542
+      rage-haze-king-violet_003: 646360338
+      rage-haze-king-violet_004: -1183999992
+      rage-haze-king-violet_005: 1310726225
+      rage-haze-king-violet_006: -1838554078
+      rage-haze-king-violet_007: 1199578565
+      rage-haze-king-violet_008: -1315814159
+      rage-haze-king-violet_009: 687865371
+      rage-haze-king-violet_010: -291971478
+      rage-haze-king-violet_011: 477321132
+      rage-haze-king-violet_012: 675671896
+      rage-haze-king-violet_013: -1760683839
+      rage-haze-king-violet_014: 1142897122
+      rage-haze-king-violet_015: -830885517
+      rage-haze-king-violet_016: -803265111
+      rage-haze-king-violet_017: -611462146
+      rage-haze-king-violet_018: 1541597632
+      rage-haze-king-violet_019: -952828489
+      rage-haze-king-violet_020: -497786258
+      rage-haze-king-violet_021: 795566451
+      rage-haze-king-violet_022: -1563861912
+      rage-haze-king-violet_023: -1371047146
+      rage-haze-king-violet_024: 816439294
+      rage-haze-king-violet_025: -519486228
+      rage-haze-king-violet_026: -29349781
+      rage-haze-king-violet_027: 1970941583
+      rage-haze-king-violet_028: -279884650
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: pixelfx
+  assetBundleName: 
+  assetBundleVariant: 

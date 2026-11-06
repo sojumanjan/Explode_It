@@ -1,0 +1,677 @@
+{
+ "frames": [
+  {
+   "filename": "rage-haze 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 1",
+   "frame": {
+    "x": 144,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 2",
+   "frame": {
+    "x": 288,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 3",
+   "frame": {
+    "x": 432,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 4",
+   "frame": {
+    "x": 576,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 5",
+   "frame": {
+    "x": 720,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 6",
+   "frame": {
+    "x": 0,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 7",
+   "frame": {
+    "x": 144,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 8",
+   "frame": {
+    "x": 288,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 9",
+   "frame": {
+    "x": 432,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 10",
+   "frame": {
+    "x": 576,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 11",
+   "frame": {
+    "x": 720,
+    "y": 168,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 12",
+   "frame": {
+    "x": 0,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 13",
+   "frame": {
+    "x": 144,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 14",
+   "frame": {
+    "x": 288,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 15",
+   "frame": {
+    "x": 432,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 16",
+   "frame": {
+    "x": 576,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 17",
+   "frame": {
+    "x": 720,
+    "y": 336,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 18",
+   "frame": {
+    "x": 0,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 19",
+   "frame": {
+    "x": 144,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 20",
+   "frame": {
+    "x": 288,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 21",
+   "frame": {
+    "x": 432,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 22",
+   "frame": {
+    "x": 576,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 23",
+   "frame": {
+    "x": 720,
+    "y": 504,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 24",
+   "frame": {
+    "x": 0,
+    "y": 672,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 25",
+   "frame": {
+    "x": 144,
+    "y": 672,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 26",
+   "frame": {
+    "x": 288,
+    "y": 672,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 27",
+   "frame": {
+    "x": 432,
+    "y": 672,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  },
+  {
+   "filename": "rage-haze 28",
+   "frame": {
+    "x": 576,
+    "y": 672,
+    "w": 144,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 144,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 144,
+    "h": 168
+   },
+   "duration": 42
+  }
+ ],
+ "meta": {
+  "app": "https://github.com/patch-gg/pixelfx",
+  "version": "1",
+  "image": "rage-haze-king.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 864,
+   "h": 840
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "rage-haze",
+    "from": 0,
+    "to": 28,
+    "direction": "forward"
+   }
+  ],
+  "pixelfx": {
+   "id": "fire/rage-haze",
+   "name": "Rage haze",
+   "fps": 24,
+   "loop": true,
+   "frames": 29,
+   "frameSize": [
+    144,
+    168
+   ],
+   "pivot": [
+    72,
+    158
+   ],
+   "columns": 6
+  }
+ }
+}

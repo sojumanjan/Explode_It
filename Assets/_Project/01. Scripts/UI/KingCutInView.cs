@@ -370,8 +370,8 @@ namespace ExplodeIt.UI
             _king.enabled = false;
         }
 
-        // 컷인은 월드용(32px 밀도)과 따로 그린 300px 초상화(KingPortraits)를 쓴다. 인스펙터 높이 450(기준 1080)이면
-        // 720p에서 그림 1px = 화면 1px라 월드와 점 크기가 같다. 그 높이 그대로 두고 비율만 맞춘다.
+        // 컷인은 월드용(표정마다 캔버스 크기가 다름)과 따로, 표정 모두 같은 배율로 픽셀화한 100px 초상화(KingPortraits)를 쓴다.
+        // 인스펙터 높이 450(기준 1080)이면 720p에서 그림 1px = 화면 3px로 딱 떨어진다. 그 높이 그대로 두고 비율만 맞춘다.
         private void FitKingSize()
         {
             Sprite sprite = _king.sprite;

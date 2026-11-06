@@ -51,9 +51,10 @@ namespace ExplodeIt.UI
             for (int i = 0; i < count; i++)
             {
                 RectTransform slot = SlotRect(i);
-                Vector3 scale = slot.localScale;
-                scale.x = width / slot.sizeDelta.x;
-                slot.localScale = scale;
+                // 배율이 아닌 폭으로 늘린다. 배율로 늘리면 픽셀 틀(9-slice)의 테두리까지 같이 늘어난다.
+                Vector2 size = slot.sizeDelta;
+                size.x = width;
+                slot.sizeDelta = size;
                 slot.anchoredPosition = new Vector2(_left + width * 0.5f + i * (width + _gap), slot.anchoredPosition.y);
             }
         }
