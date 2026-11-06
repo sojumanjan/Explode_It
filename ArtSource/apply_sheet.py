@@ -1,0 +1,81 @@
+# 생성 시트에서 캐릭터를 잘라 지금 게임 그림 자리에 끼운다(키, 발밑 위치, 기준점 유지 + 32px, 외곽선, 공통 팔레트)
+# 사용: Tools/pixeloe-env/Scripts/python.exe ArtSource/apply_sheet.py
+# 결과로 Unity에서 바꿀 기준점을 apply_sheet_result.json에 쓴다(캔버스가 넓어진 그림만 x가 바뀐다).
+# 여기 넣은 그림은 pixel_ppu32.py의 SPRITES에서 빼야 다시 돌릴 때 옛 그림으로 덮이지 않는다.
+import json
+import os
+import sys
+
+import cv2
+import numpy as np
+from PIL import Image
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pixel_ppu32 as pp
+
+ROOT = pp.ROOT
+SHEETS = {
+    "v1": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v1.webp"),
+}
+# (시트, 시트 안 순서(왼쪽 위부터 줄 단위), 게임 그림)
+TARGETS = [
+    ("v1", 0, "Player3.png"),
+    ("v1", 1, "Knight_hd.png"),
+    ("v1", 2, "Archer_hd.png"),
+    ("v1", 4, "Shielder_hd.png"),
+    ("v1", 5, "Sniper_hd.png"),
+]
+ROW_SPLIT = 450   # 시트에서 이 y보다 아래면 둘째 줄
+
+
+def pieces(sheet):
+    # 몸과 떨어진 무기 조각까지 한 덩어리로 묶되 옆 그림과는 붙지 않을 만큼만 부풀려, 그림마다 마스크를 만든다.
+    # 칸 상자로 자르면 옆 칸 무기 끝이 같이 들어온다(11/6 돌격병 칸에 저격수 총 끝)
+    fg = (sheet[..., 3] > 0.5).astype(np.uint8)
+    n, lab, st, _ = cv2.connectedComponentsWithStats(cv2.dilate(fg, np.ones((15, 15), np.uint8)), connectivity=8)
+    ids = sorted([i for i in range(1, n) if st[i, 4] > 3000], key=lambda i: (st[i, 1] > ROW_SPLIT, st[i, 0]))
+    out = []
+    for i in ids:
+        c = sheet.copy()
+        c[..., 3] = ((lab == i) & (fg > 0)).astype(float)
+        ys, xs = np.nonzero(c[..., 3])
+        out.append(pp.remove_islands(c[ys.min():ys.max() + 1, xs.min():xs.max() + 1]))
+    return out
+
+
+def figure_box(alpha):
+    ys, xs = np.nonzero(alpha > 0.5)
+    return xs.min(), xs.max(), ys.min(), ys.max()
+
+
+def main():
+    pal = pp.load_palette()
+    cache = {}
+    results = []
+    for sheet_key, index, rel in TARGETS:
+        if sheet_key not in cache:
+            cache[sheet_key] = pieces(np.asarray(Image.open(SHEETS[sheet_key]).convert("RGBA")) / 255.0)
+        src = cache[sheet_key][index]
+        dst = os.path.join(pp.ART, rel)
+        cur = np.asarray(Image.open(dst).convert("RGBA")) / 255.0
+        ch, cw = cur.shape[:2]
+        x0, x1, y0, y1 = figure_box(cur[..., 3])
+        fig_h = y1 - y0 + 1
+        fig_w = max(1, round(src.shape[1] * fig_h / src.shape[0]))
+        fig = pp.apply_palette(pp.outline(pp.remove_islands(pp.shrink(src, fig_w, fig_h)), "ink"), pal)
+        # 키와 발밑 줄은 지금 그림 그대로, 가로 가운데도 지금 그림 가운데에 맞춘다. 넓으면 캔버스를 양쪽으로 넓힌다
+        nw = max(cw, fig_w + 2)
+        shift = (nw - cw) // 2
+        cx = (x0 + x1) / 2 + shift
+        left = int(round(cx - (fig_w - 1) / 2))
+        left = min(max(left, 0), nw - fig_w)
+        canvas = np.zeros((ch, nw, 4))
+        canvas[y1 - fig_h + 1:y1 + 1, left:left + fig_w] = fig
+        pp.save(dst, canvas)
+        results.append({"path": rel, "old_w": cw, "new_w": nw, "shift": shift})
+        print(f"{rel}\t{cw}x{ch} -> {nw}x{ch}\tfigure {fig_w}x{fig_h}")
+    json.dump(results, open(os.path.join(ROOT, "ArtSource", "apply_sheet_result.json"), "w"), indent=1)
+
+
+if __name__ == "__main__":
+    main()

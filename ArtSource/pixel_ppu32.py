@@ -1,6 +1,7 @@
 # 게임 그림을 1유닛 32px 밀도로 줄인다 (PixelOE k_centroid + 투명도 따로 자르기)
-# 사용: Tools/pixeloe-env/Scripts/python.exe ArtSource/pixel_ppu32.py [목록.json]
+# 사용: Tools/pixeloe-env/Scripts/python.exe ArtSource/pixel_ppu32.py [목록.json | --build-palette]
 #   인자 없이: 아래 SPRITES(캐릭터, 폭탄). 목록을 주면 그 목록(소품, 바닥)을 줄이고 결과 크기를 _result.json에 쓴다
+#   --build-palette: 전부 다시 뽑아 공통 팔레트(ArtSource/palette.json)를 새로 만들고 입힌다. 평소에는 있는 팔레트를 입힌다
 # 원본은 ArtSource/Original/ppu32/에 한 번만 백업하고, 다시 돌리면 그 백업에서 다시 줄인다.
 # 줄인 뒤 Unity에서 PPU를 "옛 PPU x 줄인 비율"로 바꿔야 월드 크기가 그대로다(MCP로 함께 처리).
 import os
@@ -23,15 +24,11 @@ THICKNESS = 1     # 외곽선 늘리기. 2부터는 작은 얼굴이 뭉개진�
 # (그림, 방식, 값)
 #   "density": 지금 화면 밀도(그림 px / 월드 유닛) = PPU / 쓰이는 배율. 32로 맞춘다
 #   "extent":  코드가 크기를 맞추는 그림(폭탄). 긴 변을 이 px로
+# 고블린, 전사, 궁수, 방패병, 저격수는 생성 시트에서 새로 뽑아 apply_sheet.py가 넣는다(11/6). 여기 두면 옛 그림으로 덮인다
 SPRITES = [
-    ("Knight_hd.png", "density", 213.04 / 2.133),
-    ("Archer_hd.png", "density", 171.74 / 1.717),
     ("Mantis_hd.png", "density", 184.78 / 1.484),
-    ("Shielder_hd.png", "density", 213.04 / 2.133),
-    ("Sniper_hd.png", "density", 195.65 / 1.96),
     ("Charger_hd.png", "density", 252.17 / 2.516),
     ("shielder_shield.png", "density", 100 / 1.935),
-    ("Player3.png", "density", 100.0),
     ("player_die.png", "density", 100.0),
     ("golem1.png", "density", 300 / 0.65),   # 골렘 단계별 배율(GolemData _visualScale)
     ("golem2.png", "density", 300 / 0.96),
@@ -186,6 +183,107 @@ def shrink_box(rgba, ow, oh, tile=False):
     return np.dstack([rgb, al])
 
 
+# 공통 팔레트(11/6 결정, 64색 + 채도 맞추기): 그림마다 팔레트가 달라 한 세계로 안 보이던 것을 맞춘다.
+# 바닥 타일, 바닥 장식(넓이 평균 그림)은 넓은 면이 몇 단계로 뭉개져 얼룩이 생겨 뺀다
+PALETTE_PATH = os.path.join(ROOT, "ArtSource", "palette.json")
+PALETTE_SIZE = 64          # 외곽선 검정 포함
+CHROMA_PULL = 0.5          # 그림 평균 채도를 전체 중앙값 쪽으로 당기는 정도(1이면 똑같이)
+CHROMA_CLAMP = (0.7, 1.3)  # 한 그림의 채도 배율 한계
+_M1 = np.array([[0.4122214708, 0.5363325363, 0.0514459929], [0.2119034982, 0.6806995451, 0.1073969566], [0.0883024619, 0.2817188376, 0.6299787005]])
+_M2 = np.array([[0.2104542553, 0.7936177850, -0.0040720468], [1.9779984951, -2.4285922050, 0.4505937099], [0.0259040371, 0.7827717662, -0.8086757660]])
+
+
+def oklab(rgb):
+    lin = np.where(rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055) ** 2.4)
+    return np.cbrt(lin @ _M1.T) @ _M2.T
+
+
+def from_oklab(lab):
+    lin = ((lab @ np.linalg.inv(_M2).T) ** 3) @ np.linalg.inv(_M1).T
+    return np.clip(np.where(lin <= 0.0031308, lin * 12.92, 1.055 * np.clip(lin, 0, None) ** (1 / 2.4) - 0.055), 0, 1)
+
+
+def mean_chroma(rgba):
+    lab = oklab(rgba[..., :3][rgba[..., 3] > 0.5])
+    return float(np.hypot(lab[:, 1], lab[:, 2]).mean()) if len(lab) else 0.0
+
+
+def harmonize(rgba, target):
+    c = mean_chroma(rgba)
+    if c <= 0:
+        return rgba
+    k = np.clip((target / c) ** CHROMA_PULL, *CHROMA_CLAMP)
+    lab = oklab(rgba[..., :3].reshape(-1, 3))
+    lab[:, 1:] *= k
+    out = rgba.copy()
+    out[..., :3] = from_oklab(lab).reshape(rgba.shape[:2] + (3,))
+    out[np.all(np.abs(rgba[..., :3] - INK) < 0.02, -1), :3] = INK
+    return out
+
+
+def kmeans(x, k, iters=30, seed=0):
+    rng = np.random.default_rng(seed)
+    c = [x[rng.integers(len(x))]]
+    for _ in range(k - 1):
+        d = np.min(((x[:, None] - np.array(c)[None]) ** 2).sum(-1), 1)
+        c.append(x[rng.choice(len(x), p=d / d.sum())])
+    c = np.array(c)
+    for _ in range(iters):
+        lab = np.argmin(((x[:, None] - c[None]) ** 2).sum(-1), 1)
+        for i in range(k):
+            if (lab == i).any():
+                c[i] = x[lab == i].mean(0)
+    return c
+
+
+def build_palette(rels):
+    # 그림마다 같은 비중(최대 1500칸)으로 색을 뽑아, 큰 그림이 팔레트를 다 차지하지 않게 한다
+    import json
+    imgs = [np.asarray(Image.open(os.path.join(ART, r)).convert("RGBA")) / 255.0 for r in rels]
+    target = float(np.median([c for c in map(mean_chroma, imgs) if c > 0]))
+    rng = np.random.default_rng(1)
+    samples = []
+    for a in imgs:
+        a = harmonize(a, target)
+        px = a[a[..., 3] > 0.5][:, :3]
+        px = px[~np.all(np.abs(px - INK) < 0.02, 1)]
+        if len(px):
+            samples.append(px[rng.choice(len(px), min(1500, len(px)), replace=False)])
+    colors = np.vstack([from_oklab(kmeans(oklab(np.concatenate(samples)), PALETTE_SIZE - 1)), INK[None]])
+    json.dump({"target_chroma": target, "colors": colors.round(5).tolist()}, open(PALETTE_PATH, "w"), indent=1)
+    order = np.argsort(oklab(colors)[:, 0])
+    swatch = np.repeat(np.repeat(colors[order][None], 24, 0), 24, 1)
+    Image.fromarray((swatch * 255).round().astype(np.uint8)).save(PALETTE_PATH.replace(".json", ".png"))
+
+
+def load_palette():
+    import json
+    if not os.path.exists(PALETTE_PATH):
+        return None
+    p = json.load(open(PALETTE_PATH))
+    colors = np.array(p["colors"])
+    return p["target_chroma"], colors, oklab(colors)
+
+
+def apply_palette(rgba, palette):
+    if palette is None:
+        return rgba
+    target, colors, lab_colors = palette
+    a = harmonize(rgba, target)
+    lab = oklab(a[..., :3].reshape(-1, 3))
+    idx = np.argmin(((lab[:, None] - lab_colors[None]) ** 2).sum(-1), 1)
+    out = a.copy()
+    out[..., :3] = colors[idx].reshape(a.shape[:2] + (3,))
+    return out
+
+
+PALETTE = None   # main()에서 불러온다
+
+
+def save(dst, out):
+    Image.fromarray((out * 255).round().astype(np.uint8), "RGBA").save(dst)
+
+
 def convert(rel, f, tile=False, method="oe", line="none"):
     dst = os.path.join(ART, rel)
     src = os.path.join(BACKUP, rel.replace("/", "_"))
@@ -200,7 +298,9 @@ def convert(rel, f, tile=False, method="oe", line="none"):
         out = shrink_tile(rgba, ow, oh) if tile else shrink(rgba, ow, oh)
     if line != "none":
         out = outline(remove_islands(out), line, deep=True)
-    Image.fromarray((out * 255).round().astype(np.uint8), "RGBA").save(dst)
+    if method != "box":
+        out = apply_palette(out, PALETTE)
+    save(dst, out)
     return w, h, ow, oh
 
 
@@ -221,9 +321,27 @@ def main_list(list_path):
 
 
 def main():
+    global PALETTE
+    if sys.argv[1:] == ["--build-palette"]:
+        # 팔레트 없이 전부 다시 뽑고 → 그 결과로 팔레트를 만든 뒤 → 팔레트를 입혀 한 번 더 뽑는다
+        import json
+        props = os.path.join(ROOT, "ArtSource", "ppu32_props.json")
+        main_sprites()
+        main_list(props)
+        rels = [r for r, _, _ in SPRITES] + [it["path"] for it in json.load(open(props, encoding="utf-8")) if it.get("method") != "box"]
+        build_palette(rels)
+        PALETTE = load_palette()
+        main_sprites()
+        main_list(props)
+        return
+    PALETTE = load_palette()
     if len(sys.argv) > 1:
         main_list(sys.argv[1])
         return
+    main_sprites()
+
+
+def main_sprites():
     os.makedirs(BACKUP, exist_ok=True)
     for rel, kind, value in SPRITES:
         dst = os.path.join(ART, rel)
@@ -234,8 +352,8 @@ def main():
         h, w = rgba.shape[:2]
         f = TARGET / value if kind == "density" else value / max(w, h)
         ow, oh = max(1, round(w * f)), max(1, round(h * f))
-        out = outline(shrink(rgba, ow, oh), "ink")
-        Image.fromarray((out * 255).round().astype(np.uint8), "RGBA").save(dst)
+        out = apply_palette(outline(shrink(rgba, ow, oh), "ink"), PALETTE)
+        save(dst, out)
         # Unity에서 쓸 비율: 세로 기준(발밑 기준점이 그대로 바닥에 닿게)
         print(f"{rel}\t{w}x{h}\t{ow}x{oh}\t{oh / h:.6f}")
 

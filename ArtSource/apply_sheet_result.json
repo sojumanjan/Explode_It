@@ -1,0 +1,32 @@
+[
+ {
+  "path": "Player3.png",
+  "old_w": 60,
+  "new_w": 60,
+  "shift": 0
+ },
+ {
+  "path": "Knight_hd.png",
+  "old_w": 49,
+  "new_w": 49,
+  "shift": 0
+ },
+ {
+  "path": "Archer_hd.png",
+  "old_w": 31,
+  "new_w": 37,
+  "shift": 3
+ },
+ {
+  "path": "Shielder_hd.png",
+  "old_w": 55,
+  "new_w": 55,
+  "shift": 0
+ },
+ {
+  "path": "Sniper_hd.png",
+  "old_w": 52,
+  "new_w": 52,
+  "shift": 0
+ }
+]
