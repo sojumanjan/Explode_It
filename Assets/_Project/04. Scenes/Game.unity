@@ -12381,7 +12381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f70c9c05c167c742918a6e99e2cc5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.KingCutInView
-  _kingSprites: {fileID: 11400000, guid: dc50ef1562488734b9bcdf4a53cd63e4, type: 2}
+  _kingSprites: {fileID: 11400000, guid: 1e3b219e7bf97c6418b203278a6add61, type: 2}
   _panel: {fileID: 167299843}
   _king: {fileID: 827164894}
   _bubble: {fileID: 628698642}
@@ -55541,7 +55541,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &827164894
 MonoBehaviour:
@@ -55563,7 +55563,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 62e0af15a9cd841419083d85ba9ea31f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 125bb73f7d139604382aa9b454eb9187, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

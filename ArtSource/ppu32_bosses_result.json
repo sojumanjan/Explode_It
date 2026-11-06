@@ -1,0 +1,338 @@
+[
+ {
+  "path": "boss/Fire_Mage/fire_mage.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Fire_Mage/fire_mage_groggy.png",
+  "w": 100,
+  "h": 100,
+  "ow": 90,
+  "oh": 90
+ },
+ {
+  "path": "boss/Fire_Mage/fire_mage_die.png",
+  "w": 100,
+  "h": 100,
+  "ow": 85,
+  "oh": 85
+ },
+ {
+  "path": "boss/Miner/miner_walk.png",
+  "w": 800,
+  "h": 800,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Miner/miner_mound.png",
+  "w": 64,
+  "h": 36,
+  "ow": 58,
+  "oh": 32
+ },
+ {
+  "path": "boss/Miner/miner_groggy.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Miner/miner_die.png",
+  "w": 100,
+  "h": 100,
+  "ow": 110,
+  "oh": 110
+ },
+ {
+  "path": "boss/Beast/beast_move.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Beast/beast_die.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Beast/beast_groggy.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "boss/Beast/beast_attack.png",
+  "w": 100,
+  "h": 100,
+  "ow": 77,
+  "oh": 77
+ },
+ {
+  "path": "King/super_king_idle.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/king_rage.png",
+  "w": 300,
+  "h": 300,
+  "ow": 104,
+  "oh": 104
+ },
+ {
+  "path": "King/crown.png",
+  "w": 612,
+  "h": 408,
+  "ow": 49,
+  "oh": 33
+ },
+ {
+  "path": "King/superking_sword_charge.png",
+  "w": 300,
+  "h": 300,
+  "ow": 140,
+  "oh": 140
+ },
+ {
+  "path": "King/superking_meteo_idle.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_무릎꿇고고개숙임.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_slash_attack_2phase.png",
+  "w": 300,
+  "h": 300,
+  "ow": 140,
+  "oh": 140
+ },
+ {
+  "path": "King/superking_idle_3phase.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/super_king_slash_ready.png",
+  "w": 300,
+  "h": 300,
+  "ow": 160,
+  "oh": 160
+ },
+ {
+  "path": "King/super_king_thrust.png",
+  "w": 300,
+  "h": 300,
+  "ow": 140,
+  "oh": 140
+ },
+ {
+  "path": "King/superking_sword_attack.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_도약공중부양.png",
+  "w": 500,
+  "h": 500,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_die.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_도약수직내려찍기.png",
+  "w": 500,
+  "h": 500,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/super_king_slash2.png",
+  "w": 300,
+  "h": 300,
+  "ow": 140,
+  "oh": 140
+ },
+ {
+  "path": "King/superking_stun.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_idle_2phase.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_slash_ready_2phase.png",
+  "w": 300,
+  "h": 300,
+  "ow": 140,
+  "oh": 140
+ },
+ {
+  "path": "King/superking_도약대각내려찍기.png",
+  "w": 500,
+  "h": 500,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "King/superking_무릎꿇고고개들고놀란표정.png",
+  "w": 300,
+  "h": 300,
+  "ow": 112,
+  "oh": 112
+ },
+ {
+  "path": "boss/Fire_Mage/fire_fairy.png",
+  "w": 100,
+  "h": 100,
+  "ow": 54,
+  "oh": 54
+ },
+ {
+  "path": "boss/Fire_Mage/fire_fairy_die.png",
+  "w": 100,
+  "h": 100,
+  "ow": 54,
+  "oh": 54
+ },
+ {
+  "path": "boss/Fire_Mage/fire_ball.png",
+  "w": 100,
+  "h": 100,
+  "ow": 45,
+  "oh": 45
+ },
+ {
+  "path": "boss/Miner/miner_dynamite.png",
+  "w": 100,
+  "h": 100,
+  "ow": 32,
+  "oh": 32
+ },
+ {
+  "path": "boss/Miner/hole_real.png",
+  "w": 500,
+  "h": 500,
+  "ow": 160,
+  "oh": 160
+ },
+ {
+  "path": "boss/Beast/beast_fire.png",
+  "w": 100,
+  "h": 100,
+  "ow": 54,
+  "oh": 54
+ },
+ {
+  "path": "King/king_smug.png",
+  "w": 300,
+  "h": 300,
+  "ow": 92,
+  "oh": 92
+ },
+ {
+  "path": "King/king_lazy.png",
+  "w": 300,
+  "h": 300,
+  "ow": 89,
+  "oh": 89
+ },
+ {
+  "path": "boss/Miner/dig_hole_1.png",
+  "w": 195,
+  "h": 193,
+  "ow": 44,
+  "oh": 43
+ },
+ {
+  "path": "boss/Miner/dig_hole_2.png",
+  "w": 268,
+  "h": 216,
+  "ow": 60,
+  "oh": 48
+ },
+ {
+  "path": "boss/Miner/dig_pile_1.png",
+  "w": 295,
+  "h": 157,
+  "ow": 61,
+  "oh": 33
+ },
+ {
+  "path": "King/king_letsgo.png",
+  "w": 300,
+  "h": 300,
+  "ow": 83,
+  "oh": 83
+ },
+ {
+  "path": "King/king_speechless.png",
+  "w": 300,
+  "h": 300,
+  "ow": 83,
+  "oh": 83
+ },
+ {
+  "path": "King/king_cry.png",
+  "w": 300,
+  "h": 300,
+  "ow": 100,
+  "oh": 100
+ },
+ {
+  "path": "King/king_shock.png",
+  "w": 300,
+  "h": 300,
+  "ow": 86,
+  "oh": 86
+ },
+ {
+  "path": "King/king_laugh.png",
+  "w": 300,
+  "h": 300,
+  "ow": 89,
+  "oh": 89
+ },
+ {
+  "path": "King/king_embarrassed.png",
+  "w": 300,
+  "h": 300,
+  "ow": 83,
+  "oh": 83
+ }
+]

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ExplodeIt.Stage
 {
-    // 표정별 왕 그림. 맵 위 왕과 우측 하단 컷인이 같은 그림을 쓴다.
+    // 표정별 왕 그림. 맵 위 왕(대화, 인트로)은 KingSprites(32px 밀도), 우측 하단 컷인과 결과 창은 KingPortraits(300px 초상화)를 쓴다.
     [CreateAssetMenu(fileName = "KingSprites", menuName = "Explode It/Story/King Sprite Set")]
     public class KingSpriteSet : ScriptableObject
     {
