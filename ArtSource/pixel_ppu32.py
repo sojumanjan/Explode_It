@@ -24,11 +24,8 @@ THICKNESS = 1     # 외곽선 늘리기. 2부터는 작은 얼굴이 뭉개진�
 # (그림, 방식, 값)
 #   "density": 지금 화면 밀도(그림 px / 월드 유닛) = PPU / 쓰이는 배율. 32로 맞춘다
 #   "extent":  코드가 크기를 맞추는 그림(폭탄). 긴 변을 이 px로
-# 고블린, 전사, 궁수, 방패병, 저격수는 생성 시트에서 새로 뽑아 apply_sheet.py가 넣는다(11/6). 여기 두면 옛 그림으로 덮인다
+# 고블린, 적 6종, 방패는 생성 시트에서 새로 뽑아 apply_sheet.py가 넣는다(11/6). 여기 두면 옛 그림으로 덮인다
 SPRITES = [
-    ("Mantis_hd.png", "density", 184.78 / 1.484),
-    ("Charger_hd.png", "density", 252.17 / 2.516),
-    ("shielder_shield.png", "density", 100 / 1.935),
     ("player_die.png", "density", 100.0),
     ("golem1.png", "density", 300 / 0.65),   # 골렘 단계별 배율(GolemData _visualScale)
     ("golem2.png", "density", 300 / 0.96),

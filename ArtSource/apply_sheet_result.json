@@ -13,9 +13,9 @@
  },
  {
   "path": "Archer_hd.png",
-  "old_w": 31,
+  "old_w": 37,
   "new_w": 37,
-  "shift": 3
+  "shift": 0
  },
  {
   "path": "Shielder_hd.png",
@@ -27,6 +27,24 @@
   "path": "Sniper_hd.png",
   "old_w": 52,
   "new_w": 52,
+  "shift": 0
+ },
+ {
+  "path": "Mantis_hd.png",
+  "old_w": 51,
+  "new_w": 51,
+  "shift": 0
+ },
+ {
+  "path": "Charger_hd.png",
+  "old_w": 75,
+  "new_w": 75,
+  "shift": 0
+ },
+ {
+  "path": "shielder_shield.png",
+  "old_w": 62,
+  "new_w": 62,
   "shift": 0
  }
 ]
