@@ -20,19 +20,21 @@ SHEETS = {
     "v2": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v2.png"),
     # 전사 한 장: v1은 칼을 내리고 있어 방패병과 헷갈려, 옛 전사 자세를 참조로 다시 뽑음
     "v3": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v3.png"),
+    # 궁수(활을 가슴 높이로), 방패병(철퇴)
+    "v4": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v4.png"),
 }
-# (시트, 시트 안 순서(왼쪽 위부터 줄 단위), 게임 그림, 좌우 뒤집기)
-# 캐릭터는 옛 그림과 반대 방향으로 그려져 있어 뒤집는다. 플레이어, 적은 프리팹의 _artFacesRight(옛 그림 방향)에 맞춰
-# 진행 방향으로 뒤집으므로, 값을 바꾸는 대신 그림을 옛 방향에 맞춘다(11/6 전부 반대로 보임). 방패는 돌아가는 그림이라 그대로
+# (시트, 시트 안 순서(왼쪽 위부터 줄 단위), 게임 그림, 뒤집기: "h" 좌우, "v" 위아래, None 그대로)
+# 플레이어, 적은 프리팹의 _artFacesRight(옛 그림 방향)에 맞춰 진행 방향으로 뒤집으므로, 값을 바꾸는 대신
+# 그림을 옛 방향에 맞춘다(11/6 사용자 확인). 방패는 코드가 그림 위쪽을 플레이어 쪽으로 돌려 바깥 면이 위여야 한다
 TARGETS = [
-    ("v1", 0, "Player3.png", True),
-    ("v3", 0, "Knight_hd.png", False),   # 옛 자세를 따라 그려 방향도 옛 그림과 같다
-    ("v1", 2, "Archer_hd.png", True),
-    ("v1", 4, "Shielder_hd.png", True),
-    ("v1", 5, "Sniper_hd.png", True),
-    ("v2", 0, "Mantis_hd.png", True),
-    ("v2", 1, "Charger_hd.png", True),
-    ("v2", 2, "shielder_shield.png", False),
+    ("v1", 0, "Player3.png", None),
+    ("v3", 0, "Knight_hd.png", None),    # 옛 자세를 따라 그려 방향도 옛 그림과 같다
+    ("v4", 0, "Archer_hd.png", "h"),
+    ("v4", 1, "Shielder_hd.png", "h"),
+    ("v1", 5, "Sniper_hd.png", "h"),
+    ("v2", 0, "Mantis_hd.png", "h"),
+    ("v2", 1, "Charger_hd.png", "h"),
+    ("v2", 2, "shielder_shield.png", "v"),
 ]
 ROW_SPLIT = 450   # 시트에서 이 y보다 아래면 둘째 줄
 
@@ -61,7 +63,7 @@ def main():
     pal = pp.load_palette()
     cache = {}
     results = []
-    for sheet_key, index, rel, mirror in TARGETS:
+    for sheet_key, index, rel, flip in TARGETS:
         if sheet_key not in cache:
             cache[sheet_key] = pieces(np.asarray(Image.open(SHEETS[sheet_key]).convert("RGBA")) / 255.0)
         src = cache[sheet_key][index]
@@ -72,9 +74,11 @@ def main():
         fig_h = y1 - y0 + 1
         fig_w = max(1, round(src.shape[1] * fig_h / src.shape[0]))
         fig = pp.apply_palette(pp.outline(pp.remove_islands(pp.shrink(src, fig_w, fig_h)), "ink"), pal)
-        if mirror:
-            # 그림만 제자리에서 뒤집어, 가운데와 기준점은 그대로 둔다(다시 돌려도 같은 결과)
+        # 그림만 제자리에서 뒤집어, 가운데와 기준점은 그대로 둔다(다시 돌려도 같은 결과)
+        if flip == "h":
             fig = fig[:, ::-1]
+        elif flip == "v":
+            fig = fig[::-1]
         # 키와 발밑 줄은 지금 그림 그대로, 가로 가운데도 지금 그림 가운데에 맞춘다. 넓으면 캔버스를 양쪽으로 넓힌다
         nw = max(cw, fig_w + 2)
         shift = (nw - cw) // 2

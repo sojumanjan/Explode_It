@@ -14,8 +14,8 @@
  {
   "path": "Archer_hd.png",
   "old_w": 37,
-  "new_w": 37,
-  "shift": 0
+  "new_w": 40,
+  "shift": 1
  },
  {
   "path": "Shielder_hd.png",
