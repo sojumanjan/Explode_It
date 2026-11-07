@@ -21,8 +21,6 @@ namespace ExplodeIt.UI
         // 처음 켰을 때 타이틀 위에 띄우는 언어 고르기와 플레이 기록 수집 동의 창. 언어를 먼저 골라야 동의 창을 읽을 수 있다.
         [SerializeField] private LanguagePickDialog _language;
         [SerializeField] private AnalyticsConsentDialog _consent;
-        // 동의 창 다음에 순위표 닉네임을 정한다. 무한 모드 최고 기록이 이 닉네임으로 자동으로 올라간다.
-        [SerializeField] private NicknameDialog _nickname;
 
         private Vector2 _goblinHome;
 
@@ -42,11 +40,6 @@ namespace ExplodeIt.UI
             }
 
             _consent.ShowIfNeeded();
-            yield return new WaitUntil(() => !_consent.IsOpen);
-            if (_nickname != null)
-            {
-                _nickname.ShowIfNeeded();
-            }
         }
 
         private void Update()

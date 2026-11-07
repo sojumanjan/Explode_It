@@ -42,6 +42,14 @@ namespace ExplodeIt.UI
         // 판이 끝난 순간부터 이 창이 뜰 때까지 결과 창 버튼을 막는 투명한 막. 먼저 눌러 해금 창을 건너뛰지 않게 한다.
         [SerializeField] private GameObject _inputBlocker;
         [SerializeField] private TMP_Text _buttonLabel;
+
+        // 결과 창에서 닉네임을 먼저 묻는 동안 해금 창을 미룬다(결과 창 → 닉네임 → 해금 순서). 닉네임 창이 닫히면 풀린다.
+        private bool _isHeld;
+
+        public void SetHeld(bool isHeld)
+        {
+            _isHeld = isHeld;
+        }
         [SerializeField] private string _nextText = "다음";
         [SerializeField] private string _closeText = "확인";
         [SerializeField] private SoundData _sound;
@@ -133,7 +141,7 @@ namespace ExplodeIt.UI
 
         private void Update()
         {
-            if (_showAt >= 0f && Time.unscaledTime >= _showAt)
+            if (_showAt >= 0f && !_isHeld && Time.unscaledTime >= _showAt)
             {
                 _showAt = -1f;
                 Show();

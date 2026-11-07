@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace ExplodeIt.UI
 {
     // 닉네임은 기기에 바로 저장하고 창을 닫는다. 서버 이름은 기록을 올릴 때 LeaderboardService가 맞추므로 여기서 연결을 기다리지 않는다.
-    // 처음 정할 때는 닫기 버튼 없이 확인만 둔다(닉네임이 있어야 무한 모드 기록이 순위표에 오른다).
+    // 처음 정할 때(무한 모드 첫 최고 기록)는 닫기 버튼 없이 확인만 둔다(닉네임이 있어야 기록이 순위표에 오른다).
     // 씬에서는 꺼 둔다(ConfirmDialog와 같은 이유로 Awake에서 끄지 않는다).
     public class NicknameDialog : MonoBehaviour
     {
@@ -28,8 +28,8 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _cancelLabel;
 
         [Header("문구 (한국어 원문, 번역 표의 키)")]
-        [SerializeField] private string _firstTitle = "닉네임 정하기";
-        [SerializeField, TextArea] private string _firstBody = "최고 기록이 전 세계 순위표에 들어갑니다.\n설정에서 언제든 바꿀 수 있습니다.";
+        [SerializeField] private string _firstTitle = "닉네임 설정";
+        [SerializeField, TextArea] private string _firstBody = "무한모드의 최고 기록이 전 세계 리더보드에 기록됩니다.\n기록될 닉네임을 작성해주세요.\n설정에서 언제든 바꿀 수 있습니다.";
         [SerializeField] private string _renameTitle = "닉네임 바꾸기";
         [SerializeField, TextArea] private string _renameBody = "순위표에 보일 닉네임을 바꿉니다.";
         [SerializeField] private string _confirmText = "확인";
@@ -41,16 +41,10 @@ namespace ExplodeIt.UI
 
         public bool IsOpen { get; private set; }
 
-        // 타이틀이 열릴 때 부른다. 순위표를 쓰는데 닉네임이 아직 없으면 띄운다.
-        public bool ShowIfNeeded()
+        // 무한 모드에서 처음 최고 기록을 세운 결과 창에서 부른다. 처음 켤 때 물으면 무슨 기록인지 몰라 어색했다.
+        public void ShowFirst(Action onClosed)
         {
-            if (!LeaderboardService.IsAvailable || LeaderboardService.HasName)
-            {
-                return false;
-            }
-
-            Open(false, null);
-            return true;
+            Open(false, onClosed);
         }
 
         // 설정의 닉네임 바꾸기.

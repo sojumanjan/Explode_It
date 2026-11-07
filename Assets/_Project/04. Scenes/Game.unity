@@ -109213,6 +109213,9 @@ MonoBehaviour:
   _recorder: {fileID: 837630744}
   _stats: {fileID: 837630742}
   _label: {fileID: 1610603529}
+  _nicknameDialog: {fileID: 6460365584196497486}
+  _resultGroup: {fileID: 94968301}
+  _unlockSummary: {fileID: 1326714948}
   _failedText: "\uB124\uD2B8\uC6CC\uD06C\uAC00 \uC5F0\uACB0\uB418\uC9C0 \uC54A\uC544
     \uC21C\uC704\uC5D0 \uAE30\uB85D\uB418\uC9C0 \uC54A\uC558\uC2B5\uB2C8\uB2E4."
   _successText: "\uC21C\uC704\uD45C\uC5D0 \uAE30\uB85D\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
