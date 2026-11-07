@@ -124,7 +124,7 @@
 | 씬 | 내용 |
 |---|---|
 | `04. Scenes/Title.unity` | **타이틀**(첫 화면: 시작하기·설정·나가기) + **메인**(책 메뉴). 한 씬 안에서 `MenuPager`가 페이지를 넘긴다 |
-| `04. Scenes/Game.unity` | 실제 플레이. 정원(인트로, y≈63)과 분수대 광장(x≈-69, 크레딧 광부 장면)도 이 씬 안에 있다 |
+| `04. Scenes/Game.unity` | 실제 플레이. 정원(인트로, y≈63)과 분수대 광장(x≈-69, 크레딧 광부 장면)도 이 씬 안에 있다. 하이어라키는 한글 이름의 묶음 폴더 `[카메라]` `[플레이어]` `[게임 흐름]` `[적]` `[맵]` `[연출]` `[사운드]` `[UI]` `[개발]`로 정리했다(11/7). `오디오 매니저`는 DontDestroyOnLoad라 루트에 둔다. `보스 등장 지점`은 자식 순서로 읽으니 순서를 바꾸지 않는다 |
 
 - 용어: **"타이틀" = 첫 화면, "메인" = 책 메뉴.**
 - 처음 켤 때 타이틀 위에 언어 고르기 창(`LanguagePickDialog`) → 플레이 기록 동의 창(`AnalyticsConsentDialog`)이 한 번씩 뜬다. 답은 저장되고 설정에서 바꿀 수 있다.
@@ -163,12 +163,12 @@
 
 ### 찐엔딩 · 크레딧
 - `Stage/TrueEndingData`: 결전 대화, 처치 후 확대·페이드, 크레딧 줄 목록(`CreditsEntry`), 마지막 보라 덮기·문구, 첫 장면 지연, 곡 잔향 길이(`BgmTailTime` 4.5), 결과 창 대기(3.25). 글 속도는 곡 길이로 자동 계산. 크레딧 곡은 반복을 끈 `BgmData`(Loop 칸)이고, 파일 끝에 잔향을 덧붙여 두었다(연출은 연주 끝 = 곡 길이 − 잔향에 맞춤).
-- `Stage/TrueEndingSequence`: Game 씬 `TrueEnding` 오브젝트, UI는 `Canvas/Credits`(오른쪽 크레딧 + 그러데이션, 왼쪽 장면, 덮개).
-- 왼쪽 장면은 `CreditsShot`(씬) + `CreditsShotData`(대본). 대본의 횟수 칸은 콩콩 뛰기 횟수이자 떨기의 흔들림 수 배율(길게 떨면 초만큼). 마지막 장면은 까맣게 끊지 않고 보라로 덮인다. 크레딧 곡 길이를 바꾸면 장면 길이 합·글 속도·보라 시작 시각을 다시 맞춘다. 장면 추가 방법: `CreditsShots` 아래 장면 복제 → 배우·자리 바꾸기 → 대본 SO 새로 만들기 → `TrueEnding`의 장면 목록에 넣기.
+- `Stage/TrueEndingSequence`: Game 씬 `[연출]/찐엔딩` 오브젝트, UI는 `[UI]/UI 캔버스/크레딧`(오른쪽 크레딧 + 그러데이션, 왼쪽 장면, 덮개).
+- 왼쪽 장면은 `CreditsShot`(씬) + `CreditsShotData`(대본). 대본의 횟수 칸은 콩콩 뛰기 횟수이자 떨기의 흔들림 수 배율(길게 떨면 초만큼). 마지막 장면은 까맣게 끊지 않고 보라로 덮인다. 크레딧 곡 길이를 바꾸면 장면 길이 합·글 속도·보라 시작 시각을 다시 맞춘다. 장면 추가 방법: `[연출]/크레딧 장면` 아래 장면 복제 → 배우·자리 바꾸기 → 대본 SO 새로 만들기 → `찐엔딩`의 장면 목록에 넣기.
 
 ### 플레이 기록 (Unity Analytics 6.3.0, `Core/Analytics/`)
 - `PlayAnalytics`(정적 창구): 동의했을 때만 `UnityServices.InitializeAsync` + `EndUserConsent.SetConsentState(AnalyticsIntent = Granted)`. 동의를 거두면 Denied. 6.3에서 `StartDataCollection`은 폐기됐다.
-- `AnalyticsBootstrap`: Title·Game 씬의 `Analytics` 오브젝트에 있다.
+- `AnalyticsBootstrap`: Title 씬 `Analytics`, Game 씬 `[개발]/플레이 기록 분석` 오브젝트에 있다.
 - `RunAnalytics`(Game 씬): 게임 이벤트를 듣고 보낸다. 판 끝에 Flush.
 - 설정 `AnalyticsData`(`02. Data/AnalyticsData.asset`): 전체 켜기 / 에디터에서도 보내기 / 콘솔에 찍기.
 - 동의 창 `UI/AnalyticsConsentDialog`(Title `Canvas/ConsentDialog`), 설정 `SettingsPage`의 "기록 보내기".
