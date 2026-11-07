@@ -25,6 +25,9 @@ namespace ExplodeIt.Progression
         protected Vector2 PlayerPosition => _playerCollider != null && _playerCollider.enabled
             ? (Vector2)_playerCollider.bounds.center : (Vector2)_player.position;
 
+        // 바닥에 깔린 것(덫, 늪)을 밟았는지는 발 위치로 본다. 몸통 가운데로 보면 발로 한가운데를 밟아도 몸통이 위로 떨어져 있어 발동하지 않았다.
+        protected Vector2 PlayerFeet => _player.position;
+
         // RunCurses는 장비 적용기(-200)가 Awake에서 채우므로 여기서는 이미 차 있다.
         protected virtual void Awake()
         {

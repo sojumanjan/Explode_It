@@ -176,7 +176,8 @@ namespace ExplodeIt.Progression
             _fill.SetRadius(0f);
         }
 
-        public void SetSprite(Sprite sprite, Color color)
+        // rotation은 그림을 눕히는 각도(도). 세로로 그려진 그림을 바닥에 가로로 깔 때 쓴다.
+        public void SetSprite(Sprite sprite, Color color, float rotation = 0f)
         {
             if (_sprite == null)
             {
@@ -187,7 +188,7 @@ namespace ExplodeIt.Progression
             _sprite.color = color;
             _spriteAlpha = color.a;
             _sprite.enabled = sprite != null;
-            _sprite.transform.localRotation = Quaternion.identity;
+            _sprite.transform.localRotation = Quaternion.Euler(0f, 0f, rotation);
         }
 
         // 나타나고 사라지는 연출용. 처음 정한 색의 알파에 비율을 곱한다.

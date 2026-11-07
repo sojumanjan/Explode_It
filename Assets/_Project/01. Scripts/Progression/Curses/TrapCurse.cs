@@ -85,7 +85,8 @@ namespace ExplodeIt.Progression
             }
 
             _nextTime = Time.time + Data.Interval;
-            Vector2 player = PlayerPosition;
+            // 발밑에 바로 깔리지 않게 하는 최소 거리도 밟는 기준(발)에서 잰다.
+            Vector2 player = PlayerFeet;
             for (int i = 0; i < Data.Count; i++)
             {
                 if (TryPickSpot(player, Data.MinDistance, Data.MaxDistance, Data.TriggerRadius, _obstacleMask, out Vector2 spot))
@@ -109,7 +110,7 @@ namespace ExplodeIt.Progression
             trap.Circle = _pool.Get(spot);
             trap.Age = 0f;
             trap.Circle.Show(spot, Data.TriggerRadius, Data.IdleColor, Data.IdleColor);
-            trap.Circle.SetSprite(Data.TrapSprite, Color.white);
+            trap.Circle.SetSprite(Data.TrapSprite, Color.white, Data.SpriteRotation);
             trap.Circle.SetOpacity(0f);
             _traps.Add(trap);
         }
@@ -121,7 +122,7 @@ namespace ExplodeIt.Progression
                 return;
             }
 
-            Vector2 player = PlayerPosition;
+            Vector2 player = PlayerFeet;
             float sqrTrigger = Data.TriggerRadius * Data.TriggerRadius;
             bool canStep = IsRunning && (_dodge == null || !_dodge.IsDodging);
             for (int i = _traps.Count - 1; i >= 0; i--)
@@ -155,7 +156,9 @@ namespace ExplodeIt.Progression
         private void Spring(int index)
         {
             CurseCircle circle = _traps[index].Circle;
-            CurseHits.Circle(circle.Position, Data.TriggerRadius, _hitMask, Data);
+            // 발로 밟아 발동했으므로, 피격 판정(몸통 가운데 기준)은 발과 몸통의 높이 차만큼 올려 잡아 밟은 플레이어가 반드시 맞게 한다.
+            Vector2 bodyOffset = PlayerPosition - PlayerFeet;
+            CurseHits.Circle(circle.Position + bodyOffset, Data.TriggerRadius, _hitMask, Data);
             FeedbackPlayer.Play(Data.TriggerFeedback, circle.Position);
             AudioManager.Play(Data.TriggerSound);
             Detach(index);

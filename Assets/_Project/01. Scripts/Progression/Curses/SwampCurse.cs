@@ -85,7 +85,8 @@ namespace ExplodeIt.Progression
             _clock += deltaTime;
             TickFades(deltaTime);
             TickFrames();
-            RunCurses.PlayerMoveMultiplier = IsInSwamp(PlayerPosition) ? Data.MoveMultiplier : 1f;
+            // 늪은 바닥이라 발이 들어갔는지로 본다(몸통 기준이면 발이 늪 위쪽 가장자리를 밟아도 느려지지 않았다).
+            RunCurses.PlayerMoveMultiplier = IsInSwamp(PlayerFeet) ? Data.MoveMultiplier : 1f;
             if (!IsRunning)
             {
                 _nextMoveTime += Time.deltaTime;

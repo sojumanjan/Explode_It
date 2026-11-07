@@ -43,12 +43,15 @@ namespace ExplodeIt.Progression
         [SerializeField, Min(1)] private int _maxTraps = 9;
 
         [Header("발동")]
-        [Tooltip("플레이어 중심이 이 거리 안으로 들어오면 밟은 것으로 본다 (유닛)")]
+        [Tooltip("플레이어 발이 덫 중심에서 이 거리 안으로 들어오면 밟은 것으로 본다 (유닛)")]
         [SerializeField, Min(0.05f)] private float _triggerRadius = 0.35f;
 
         [Header("표시와 연출")]
         [Tooltip("덫 그림")]
         [SerializeField] private Sprite _trapSprite;
+
+        [Tooltip("덫 그림을 돌리는 각도 (도). 그림은 집게가 좌우로 벌어진 세로 모양이라 90으로 눕혀 가로로 깐다")]
+        [SerializeField] private float _spriteRotation = 90f;
 
         [Tooltip("밟힌 덫 그림이 탁 닫히고 사라지기까지 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _snapVanishTime = 0.35f;
@@ -79,6 +82,7 @@ namespace ExplodeIt.Progression
         public int MaxTraps => _maxTraps;
         public float TriggerRadius => _triggerRadius;
         public Sprite TrapSprite => _trapSprite;
+        public float SpriteRotation => _spriteRotation;
         public float SnapVanishTime => _snapVanishTime;
         public Color IdleColor => _idleColor;
         public SoundData PlaceSound => _placeSound;
