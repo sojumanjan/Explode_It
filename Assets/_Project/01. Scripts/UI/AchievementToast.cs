@@ -1,9 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using ExplodeIt.Core;
 using ExplodeIt.Progression;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 namespace ExplodeIt.UI
@@ -30,6 +34,8 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _detail;
         [SerializeField] private SoundData _sound;
         [SerializeField] private string _titleFormat = "업적 달성 · {0}";
+        // 업적 이름과 설명의 글자를 판 시작 때 글꼴에 미리 넣는 데 쓴다(전투 중 처음 보는 글자를 만드느라 끊기던 문제).
+        [SerializeField] private UnlockCatalog _catalog;
 
         // 띠 하나에 들어갈 내용.
         private readonly struct Toast
@@ -66,12 +72,44 @@ namespace ExplodeIt.UI
         private void OnEnable()
         {
             ProgressionEvents.AchievementCompleted += OnAchievementCompleted;
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+            StartCoroutine(WarmGlyphs());
         }
 
         private void OnDisable()
         {
             ProgressionEvents.AchievementCompleted -= OnAchievementCompleted;
+            LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
             _sequence?.Kill();
+        }
+
+        private void OnLocaleChanged(Locale locale)
+        {
+            StartCoroutine(WarmGlyphs());
+        }
+
+        // 웹은 번역 표를 비동기로 불러오므로, 표가 준비된 뒤 지금 언어의 문구로 넣는다.
+        private IEnumerator WarmGlyphs()
+        {
+            if (_catalog == null)
+            {
+                yield break;
+            }
+
+            yield return L10n.WaitForTables();
+            var builder = new StringBuilder(L10n.Tr(_titleFormat));
+            AchievementData[] achievements = _catalog.Achievements;
+            for (int i = 0; i < achievements.Length; i++)
+            {
+                if (achievements[i] != null)
+                {
+                    builder.Append(achievements[i].DisplayName).Append(achievements[i].Description);
+                }
+            }
+
+            string characters = builder.ToString();
+            GlyphWarmup.Add(_title, characters);
+            GlyphWarmup.Add(_detail, characters);
         }
 
         private void OnAchievementCompleted(AchievementData achievement)

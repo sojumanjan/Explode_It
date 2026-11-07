@@ -1,9 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using ExplodeIt.Core;
 using ExplodeIt.Stage;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 namespace ExplodeIt.UI
@@ -92,6 +96,36 @@ namespace ExplodeIt.UI
             GameEvents.StageCleared += OnStageCleared;
             GameEvents.PlayerControlLockChanged += OnControlLockChanged;
             GameEvents.PlayerHintRequested += OnPlayerHintRequested;
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+            StartCoroutine(WarmGlyphs());
+        }
+
+        private void OnLocaleChanged(Locale locale)
+        {
+            StartCoroutine(WarmGlyphs());
+        }
+
+        // 대사는 전투 중에 처음 보는 글자가 한꺼번에 나오므로, 판 시작 때 지금 언어의 대사 글자를 글꼴에 미리 넣는다.
+        private IEnumerator WarmGlyphs()
+        {
+            if (_remarks == null)
+            {
+                yield break;
+            }
+
+            yield return L10n.WaitForTables();
+            var builder = new StringBuilder();
+            for (int i = 0; i < _remarks.Length; i++)
+            {
+                if (_remarks[i] != null)
+                {
+                    builder.Append(_remarks[i].Text);
+                }
+            }
+
+            string characters = builder.ToString();
+            GlyphWarmup.Add(_bubble.GetComponentInChildren<TMP_Text>(true), characters);
+            GlyphWarmup.Add(_resultLine, characters);
         }
 
         private void OnDisable()
@@ -106,6 +140,7 @@ namespace ExplodeIt.UI
             GameEvents.StageCleared -= OnStageCleared;
             GameEvents.PlayerControlLockChanged -= OnControlLockChanged;
             GameEvents.PlayerHintRequested -= OnPlayerHintRequested;
+            LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
             _sequence?.Kill();
             _punch?.Kill();
         }
