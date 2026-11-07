@@ -66,6 +66,10 @@ namespace ExplodeIt.Core
         // 플레이 기록 수집. 처음 켤 때 한 번 묻고(물었는지), 답(동의했는지)은 설정에서 바꿀 수 있다.
         [SerializeField] private bool _analyticsAsked;
         [SerializeField] private bool _analyticsEnabled;
+        // 순위표 닉네임. 처음 켤 때 정하고, 비어 있으면 순위표에 올리지 않는다. 서버 이름은 기록을 올릴 때 이것으로 맞춘다.
+        [SerializeField] private string _leaderboardName = "";
+        // 순위표에 마지막으로 올린 무한 처치 수. 올리지 못한 최고 기록이 있으면 다음 기회에 다시 올린다.
+        [SerializeField] private int _leaderboardSubmittedKills;
         // 지금까지 시작한 판 수와 판에서 보낸 시간 (초). 플레이 기록에서 "이 사람이 얼마나 해 봤는지"를 붙이는 데 쓴다.
         [SerializeField] private int _runCount;
         [SerializeField] private float _totalPlaySeconds;
@@ -196,6 +200,18 @@ namespace ExplodeIt.Core
         {
             get => _analyticsEnabled;
             set => _analyticsEnabled = value;
+        }
+
+        public string LeaderboardName
+        {
+            get => _leaderboardName;
+            set => _leaderboardName = value ?? "";
+        }
+
+        public int LeaderboardSubmittedKills
+        {
+            get => _leaderboardSubmittedKills;
+            set => _leaderboardSubmittedKills = value;
         }
 
         public int RunCount

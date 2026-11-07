@@ -22,6 +22,8 @@ namespace ExplodeIt.Progression
         public bool LastIsNewTime { get; private set; }
         public int LastBestKills { get; private set; }
         public bool LastIsNewKills { get; private set; }
+        // 방금 끝난 판이 무한 모드 기록으로 남았는지(스토리, 찐엔딩 판, 판이 끝나기 전에는 false). 순위표에 올릴지 정하는 데 쓴다.
+        public bool LastIsRecordedEndless { get; private set; }
 
         private void OnEnable()
         {
@@ -45,6 +47,7 @@ namespace ExplodeIt.Progression
         {
             _isRunning = true;
             _isStoryMode = isStoryMode;
+            LastIsRecordedEndless = false;
         }
 
         private void OnStageCleared()
@@ -105,6 +108,7 @@ namespace ExplodeIt.Progression
             {
                 // 저주를 몇 개 걸었든 무한 기록은 하나로 겨룬다. 건 저주는 결과 창에 늘어놓아 보여 준다.
                 LastIsNewKills = data.TryRecordEndlessKills(_stats.Kills);
+                LastIsRecordedEndless = true;
             }
 
             // 클리어한 판은 "버틴 시간"이 아니므로 생존 기록에 넣지 않는다.

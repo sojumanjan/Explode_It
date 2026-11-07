@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b526dfa6982dd409a3873f3795745a, type: 3}
+  m_Name: LeaderboardData
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.LeaderboardData
+  _isEnabled: 1
+  _leaderboardId: endless_kills
+  _submitFromEditor: 0
+  _pageSize: 10
+  _nameMinLength: 2
+  _nameMaxLength: 12
+  _bannedWords:
+  - "\uC2DC\uBC1C"
+  - "\uC528\uBC1C"
+  - "\u3145\u3142"
+  - "\uBCD1\uC2E0"
+  - "\u3142\u3145"
+  - "\uC886"
+  - "\uAC1C\uC0C8"
+  - "\uC0C8\uB07C"
+  - fuck
+  - shit
+  - bitch
+  - nigger
+  _maxKillsPerSecond: 6
+  _requestTimeout: 8

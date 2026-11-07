@@ -12,6 +12,13 @@ namespace ExplodeIt.UI
         [SerializeField] private RectTransform _anchor;
         [SerializeField, TextArea(2, 5)] private string _text;
 
+        // 순위표 저주 아이콘처럼 칸마다 내용이 바뀌는 곳에서 코드로 설명을 넣는다(이미 번역된 글).
+        public string Text
+        {
+            get => _text;
+            set => _text = value;
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             _panel.Show(_text, _anchor != null ? _anchor : (RectTransform)transform);

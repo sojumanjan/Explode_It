@@ -37,6 +37,12 @@ namespace ExplodeIt.UI
         [Header("스토리 중간부터 시작")]
         [SerializeField] private StoryCheckpointButtons _checkpoints;
 
+        [Header("무한 모드 순위표")]
+        // 무한 모드일 때 창 왼쪽(스토리의 중간 시작 버튼 반대편)에 붙는다. 비워 두면 띄우지 않는다.
+        [SerializeField] private LeaderboardPanel _leaderboard;
+        [Tooltip("순위표 패널이 들어갈 자리를 넓히려고, 무한 모드일 때 창을 오른쪽으로 옮기는 거리 (UI 단위)")]
+        [SerializeField] private float _endlessShiftX = 130f;
+
         [Header("글")]
         [SerializeField] private string _storyTitle = "스토리 모드";
         [SerializeField] private string _endlessTitle = "무한 모드";
@@ -76,6 +82,17 @@ namespace ExplodeIt.UI
                 _killsRow.Set(_killsLabel, FormatKills(data.BestKills(false)), false);
                 _survivalRow.Set(_survivalLabel, FormatTime(data.BestSurvival(false)), false);
                 ShowEquippedCurses();
+            }
+
+            bool showsLeaderboard = _leaderboard != null && mode == RunMode.Endless && LeaderboardService.IsAvailable;
+            _box.anchoredPosition = new Vector2(showsLeaderboard ? _endlessShiftX : 0f, _box.anchoredPosition.y);
+            if (showsLeaderboard)
+            {
+                _leaderboard.Open();
+            }
+            else if (_leaderboard != null)
+            {
+                _leaderboard.gameObject.SetActive(false);
             }
 
             gameObject.SetActive(true);

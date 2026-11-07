@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using Unity.Services.Analytics;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.UnityConsent;
 
@@ -41,6 +40,19 @@ namespace ExplodeIt.Core
             }
 
             _data = data;
+            // 순위표가 서비스를 먼저 켜도 동의 값(거절이면 수집 거절)을 바로 맞춘다.
+            UgsServices.Ready += OnServicesReady;
+            if (UgsServices.IsReady)
+            {
+                _isReady = true;
+            }
+
+            Apply();
+        }
+
+        private static void OnServicesReady()
+        {
+            _isReady = true;
             Apply();
         }
 
@@ -126,9 +138,8 @@ namespace ExplodeIt.Core
             _isInitializing = true;
             try
             {
-                await UnityServices.InitializeAsync();
-                _isReady = true;
-                Apply();
+                // 켜지면 Ready 알림(OnServicesReady)으로 동의 값을 맞춘다.
+                await UgsServices.InitializeAsync();
             }
             catch (Exception exception)
             {

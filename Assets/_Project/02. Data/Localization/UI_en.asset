@@ -655,6 +655,102 @@ MonoBehaviour:
     m_Localized: 'Achievement: {0}'
     m_Metadata:
       m_Items: []
+  - m_Id: 3696004966711300
+    m_Localized: No records yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246281
+    m_Localized: Loading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246280
+    m_Localized: Leaderboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711301
+    m_Localized: You have no record yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246278
+    m_Localized: No nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246277
+    m_Localized: 'Nickname: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3689234860933125
+    m_Localized: Change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3689234860933126
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711302
+    m_Localized: No network connection. Your record was not added to the leaderboard.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711303
+    m_Localized: Rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246275
+    m_Localized: Nickname ({0}-{1} characters)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711304
+    m_Localized: Nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711297
+    m_Localized: Use {0}-{1} letters, numbers or underscores.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711296
+    m_Localized: Change the nickname shown on the leaderboard.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004954128384
+    m_Localized: 'Your best record goes on the global leaderboard.
+
+      You can
+      change it anytime in Settings.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246273
+    m_Localized: Change Nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711305
+    m_Localized: Kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692276051968
+    m_Localized: Choose a Nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711299
+    m_Localized: Couldn't load the leaderboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711298
+    m_Localized: Your best Endless record goes on the global leaderboard under this
+      nickname.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692692280246285
+    m_Localized: My Rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3696004966711306
+    m_Localized: Curses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3697895284998144
+    m_Localized: Your record was added to the leaderboard.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
