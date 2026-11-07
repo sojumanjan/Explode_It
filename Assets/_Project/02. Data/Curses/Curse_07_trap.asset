@@ -33,6 +33,7 @@ MonoBehaviour:
   _maxTraps: 9
   _triggerRadius: 0.35
   _trapSprite: {fileID: 21300000, guid: 38650bd34b8194b4da07cc8524137162, type: 3}
+  _spriteRotation: -90
   _snapVanishTime: 0.35
   _idleColor: {r: 0.3, g: 0.15, b: 0.05, a: 0.35}
   _placeSound: {fileID: 11400000, guid: c4fa9a92b92ee6a46b06b028b3d5c17c, type: 2}

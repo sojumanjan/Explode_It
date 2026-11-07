@@ -50,8 +50,8 @@ namespace ExplodeIt.Progression
         [Tooltip("덫 그림")]
         [SerializeField] private Sprite _trapSprite;
 
-        [Tooltip("덫 그림을 돌리는 각도 (도). 그림은 집게가 좌우로 벌어진 세로 모양이라 90으로 눕혀 가로로 깐다")]
-        [SerializeField] private float _spriteRotation = 90f;
+        [Tooltip("덫 그림을 돌리는 각도 (도). 그림은 집게가 좌우로 벌어진 세로 모양이라 -90으로 눕혀 가로로 깐다(90이면 위아래가 뒤집혀 아래를 향한다)")]
+        [SerializeField] private float _spriteRotation = -90f;
 
         [Tooltip("밟힌 덫 그림이 탁 닫히고 사라지기까지 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _snapVanishTime = 0.35f;
