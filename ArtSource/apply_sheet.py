@@ -22,12 +22,14 @@ SHEETS = {
     "v3": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v3.png"),
     # 궁수(활을 가슴 높이로), 방패병(철퇴)
     "v4": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v4.png"),
+    # 고블린 한 장: 32px에서 눈, 입이 뭉개져 얼굴을 크게 다시 뽑음(11/6). 마젠타 배경을 지운 것
+    "v5": os.path.join(ROOT, "ArtSource", "Original", "characters_sheet_v5.png"),
 }
 # (시트, 시트 안 순서(왼쪽 위부터 줄 단위), 게임 그림, 뒤집기: "h" 좌우, "v" 위아래, None 그대로)
 # 플레이어, 적은 프리팹의 _artFacesRight(옛 그림 방향)에 맞춰 진행 방향으로 뒤집으므로, 값을 바꾸는 대신
 # 그림을 옛 방향에 맞춘다(11/6 사용자 확인). 방패는 코드가 그림 위쪽을 플레이어 쪽으로 돌려 바깥 면이 위여야 한다
 TARGETS = [
-    ("v1", 0, "Player3.png", None),
+    ("v5", 0, "Player3.png", None),
     ("v3", 0, "Knight_hd.png", None),    # 옛 자세를 따라 그려 방향도 옛 그림과 같다
     ("v4", 0, "Archer_hd.png", "h"),
     ("v4", 1, "Shielder_hd.png", "h"),
@@ -59,11 +61,13 @@ def figure_box(alpha):
     return xs.min(), xs.max(), ys.min(), ys.max()
 
 
-def main():
+def main(only=None):
     pal = pp.load_palette()
     cache = {}
     results = []
     for sheet_key, index, rel, flip in TARGETS:
+        if only and rel not in only:
+            continue
         if sheet_key not in cache:
             cache[sheet_key] = pieces(np.asarray(Image.open(SHEETS[sheet_key]).convert("RGBA")) / 255.0)
         src = cache[sheet_key][index]
@@ -90,8 +94,11 @@ def main():
         pp.save(dst, canvas)
         results.append({"path": rel, "old_w": cw, "new_w": nw, "shift": shift})
         print(f"{rel}\t{cw}x{ch} -> {nw}x{ch}\tfigure {fig_w}x{fig_h}")
-    json.dump(results, open(os.path.join(ROOT, "ArtSource", "apply_sheet_result.json"), "w"), indent=1)
+    # 일부만 다시 만들 때는 전체 기록을 덮지 않는다
+    if not only:
+        json.dump(results, open(os.path.join(ROOT, "ArtSource", "apply_sheet_result.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":
-    main()
+    # 그림 이름을 주면 그 그림만 다시 만든다. 예: apply_sheet.py Player3.png
+    main(sys.argv[1:] or None)

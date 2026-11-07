@@ -277,7 +277,8 @@ def apply_palette(rgba, palette):
 PALETTE = None   # main()에서 불러온다
 
 
-# 사용자가 변환 뒤 직접 도트를 찍은 그림. 스크립트를 다시 돌려도 덮어쓰지 않는다(11/6 32px로 줄이며 사라진 입을 손으로 찍음)
+# 변환 뒤 손으로 도트를 고친 그림. 스크립트를 다시 돌려도 덮어쓰지 않는다(11/6 32px로 줄이며 사라진 입을 손으로 찍음).
+# Player3은 시트 v5(apply_sheet.py)로 바꾼 뒤 눈을 2x2로 둥글게, 눈썹과 입꼬리를 고쳐 순한 표정으로 손봄. 자동 결과는 ArtSource/Export/Player3_v5_auto.png
 HAND_EDITED = {"Player3.png", "King/king_smug.png", "King/king_speechless.png",
                "King/Portrait/king_smug.png", "King/Portrait/king_speechless.png"}
 
