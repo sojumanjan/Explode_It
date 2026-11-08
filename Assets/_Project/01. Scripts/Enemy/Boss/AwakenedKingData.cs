@@ -373,6 +373,12 @@ namespace ExplodeIt.Enemies
         [Tooltip("안전지대 반경 (유닛). 몸 중심이 이 원 안이면 충격파를 버틴다")]
         [SerializeField, Min(0.3f)] private float _safeZoneRadius = 1.6f;
 
+        [Tooltip("안전지대 하나가 0에서 다 커지며 나타나는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _safeZoneAppearTime = 0.4f;
+
+        [Tooltip("안전지대가 차례로 나타나는 간격 (초). 0이면 한꺼번에")]
+        [SerializeField, Min(0f)] private float _safeZoneAppearStagger = 0.15f;
+
         [Tooltip("충격파 때 화면을 덮는 색 (불투명도까지 이 색을 쓴다)")]
         [SerializeField] private Color _shockColor = new Color(0.82f, 0.6f, 1f, 1f);
 
@@ -578,6 +584,8 @@ namespace ExplodeIt.Enemies
         public Vector2 SafeZoneDistance => _safeZoneDistance;
         public float StarDashTime => _starDashTime;
         public float SafeZoneRadius => _safeZoneRadius;
+        public float SafeZoneAppearTime => _safeZoneAppearTime;
+        public float SafeZoneAppearStagger => _safeZoneAppearStagger;
         public Color ShockColor => _shockColor;
         public SoundData StarDrawSound => _starDrawSound;
         public SoundData TeleportSound => _teleportSound;

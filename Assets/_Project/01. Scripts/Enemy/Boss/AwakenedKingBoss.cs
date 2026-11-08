@@ -342,6 +342,9 @@ namespace ExplodeIt.Enemies
         private Vector2 _starCenter;
         private readonly Vector2[] _starPoints = new Vector2[5];
         private readonly Vector2[] _safeCenters = new Vector2[5];
+        // 안전지대마다 다 나타났을 때의 크기와 씬에 정해 둔 색. 나타나는 동안 0에서 이 값까지 키우고 진하게 한다.
+        private readonly float[] _safeScales = new float[5];
+        private Color[] _safeColors;
         private int _safeCount;
         private int _teleportsDone;
         private bool _isSafeZoneShown;
@@ -457,9 +460,11 @@ namespace ExplodeIt.Enemies
                 _starTips[i].transform.SetParent(null);
             }
 
+            _safeColors = new Color[_safeZones.Length];
             for (int i = 0; i < _safeZones.Length; i++)
             {
                 _safeZones[i].transform.SetParent(null);
+                _safeColors[i] = _safeZones[i].color;
             }
 
             HideStar();
@@ -2792,6 +2797,11 @@ namespace ExplodeIt.Enemies
                 ShowSafeZones();
             }
 
+            if (_isSafeZoneShown && !_isShockDone)
+            {
+                AnimateSafeZones(t - safeAt);
+            }
+
             if (!_isShockCharging && t >= fadeAt)
             {
                 _isShockCharging = true;
@@ -2862,10 +2872,34 @@ namespace ExplodeIt.Enemies
                 Transform zone = _safeZones[i].transform;
                 zone.position = point;
                 float size = _safeZones[i].sprite != null ? _safeZones[i].sprite.bounds.size.x : 1f;
-                float scale = _data.SafeZoneRadius * 2f / size;
-                zone.localScale = new Vector3(scale, scale, 1f);
+                _safeScales[i] = _data.SafeZoneRadius * 2f / size;
                 _safeZones[i].enabled = true;
             }
+
+            AnimateSafeZones(0f);
+        }
+
+        // 한꺼번에 툭 생기면 어색해서(사용자 지적) 하나씩 차례로 0에서 살짝 넘치게 커졌다가 자리 잡으며 진해진다.
+        // 판정 원(_safeCenters)은 처음부터 그대로다. 충격파까지 몇 초 남아 있어 다 나타난 뒤에 친다.
+        private void AnimateSafeZones(float elapsed)
+        {
+            for (int i = 0; i < _safeCount; i++)
+            {
+                float p = Mathf.Clamp01((elapsed - i * _data.SafeZoneAppearStagger) / _data.SafeZoneAppearTime);
+                float scale = _safeScales[i] * EaseOutBack(p);
+                _safeZones[i].transform.localScale = new Vector3(scale, scale, 1f);
+                Color color = _safeColors[i];
+                color.a *= p;
+                _safeZones[i].color = color;
+            }
+        }
+
+        private static float EaseOutBack(float x)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1f;
+            float k = x - 1f;
+            return 1f + c3 * k * k * k + c1 * k * k;
         }
 
         private void HideSafeZones()
