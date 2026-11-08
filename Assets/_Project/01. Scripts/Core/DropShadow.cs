@@ -1,24 +1,72 @@
-// 그림 모양 그대로 오른쪽 아래로 민 한 색 그림자를 자식으로 만들어 붙이는 컴포넌트
+// 그림에 한 색 그림자(민 실루엣, 바닥 타원 등)를 자식으로 붙이는 컴포넌트. 맵 소품은 씬에 미리 깔아 두고 손으로 맞춘다
 using UnityEngine;
 
 namespace ExplodeIt.Core
 {
     // 빛이 왼쪽 위에서 온다고 보고 그림을 오른쪽 아래로 민 실루엣을 바닥 바로 위 순서에 그린다. 아이콘, 고블린 명암과 같은 방향이다.
     // 예전 타원 그림자는 물체 밑에 깔려 거의 가려졌고 모양도 물체와 달라 바꿨다(11/8 사용자).
-    // 맵 소품처럼 그대로인 그림은 시작할 때 한 번만 맞추고, 캐릭터처럼 그림이 바뀌거나 움직이는 것은 매 프레임 따라간다.
+    // 캐릭터처럼 그림이 바뀌거나 움직이는 것은 시작할 때 그림자를 만들어 매 프레임 따라간다.
+    // 맵 소품은 그림자를 씬에 미리 깔아 두고(_shadow), 씬 창에서 크기와 위치를 손으로 맞춘다. 코드는 깔아 둔 그림자의 위치, 크기를 건드리지 않는다.
+    // 자동으로 맞춘 크기가 석상은 너무 작고 나무는 너무 커서 사용자가 직접 맞추기로 했다(11/8).
     public class DropShadow : MonoBehaviour
     {
         [SerializeField] private DropShadowData _data;
         [Tooltip("그림자를 만들 그림. 비우면 같은 오브젝트의 SpriteRenderer")]
         [SerializeField] private SpriteRenderer _source;
-        [Tooltip("그림이 바뀌거나 움직이면 켠다(캐릭터). 끄면 시작할 때 한 번만 맞춘다(맵 소품)")]
+        [Tooltip("그림이 바뀌거나 움직이면 켠다(캐릭터). 끄면 미리 깔아 둔 그림자를 그대로 쓴다(맵 소품)")]
         [SerializeField] private bool _followsSource;
+        [Tooltip("씬에 미리 깔아 둔 그림자. 컴포넌트 메뉴(⋮)의 '그림자 미리 깔기'로 만든다. 비어 있으면 시작할 때 만든다")]
+        [SerializeField] private SpriteRenderer _shadow;
 
-        private SpriteRenderer _shadow;
         private Transform _shadowTransform;
         private Transform _sourceTransform;
 
         private void Awake()
+        {
+            if (!Prepare())
+            {
+                enabled = false;
+                return;
+            }
+
+            if (_shadow != null && !_followsSource)
+            {
+                // 미리 깔아 둔 그림자는 모양과 자리는 그대로 두고, 색과 그리는 순서만 데이터를 따른다(진하기를 한 곳에서 바꾸려고).
+                ApplyLook();
+                _shadow.color = ShadowColor();
+                enabled = false;
+                return;
+            }
+
+            if (_shadow == null)
+            {
+                CreateShadow();
+            }
+
+            _shadowTransform = _shadow.transform;
+            Sync();
+            enabled = _followsSource;
+        }
+
+        // 에디터에서 그림자를 자식으로 만들어 지금 데이터대로 놓는다. 그 뒤로는 씬 창에서 손으로 맞춘다.
+        [ContextMenu("그림자 미리 깔기")]
+        private void Bake()
+        {
+            if (!Prepare())
+            {
+                return;
+            }
+
+            if (_shadow == null)
+            {
+                CreateShadow();
+            }
+
+            _shadowTransform = _shadow.transform;
+            Sync();
+        }
+
+        private bool Prepare()
         {
             if (_source == null)
             {
@@ -27,22 +75,34 @@ namespace ExplodeIt.Core
 
             if (_source == null || _data == null)
             {
-                enabled = false;
-                return;
+                return false;
             }
 
             _sourceTransform = _source.transform;
+            return true;
+        }
+
+        private void CreateShadow()
+        {
             var shadowObject = new GameObject("그림자");
-            _shadowTransform = shadowObject.transform;
-            _shadowTransform.SetParent(_sourceTransform, false);
+            shadowObject.transform.SetParent(_sourceTransform, false);
             _shadow = shadowObject.AddComponent<SpriteRenderer>();
+            ApplyLook();
+        }
+
+        private void ApplyLook()
+        {
             _shadow.sharedMaterial = _data.Material;
             _shadow.sortingLayerID = _source.sortingLayerID;
             _shadow.sortingOrder = _data.SortingOrder;
-            _shadow.drawMode = _source.drawMode;
-            Sync();
-            // 그대로인 그림은 더 맞출 일이 없어 매 프레임 호출을 끈다.
-            enabled = _followsSource;
+        }
+
+        // 사라지며 흐려지는 그림(죽는 적 등)은 그림자도 같이 흐려진다.
+        private Color ShadowColor()
+        {
+            Color color = _data.Color;
+            color.a *= _source.color.a;
+            return color;
         }
 
         private void LateUpdate()
@@ -61,22 +121,21 @@ namespace ExplodeIt.Core
             _shadow.sprite = _source.sprite;
             _shadow.flipX = _source.flipX;
             _shadow.flipY = _source.flipY;
+            _shadow.drawMode = _source.drawMode;
             if (_shadow.drawMode != SpriteDrawMode.Simple)
             {
                 _shadow.size = _source.size;
             }
 
             _shadow.enabled = _source.enabled && _source.sprite != null;
-            // 사라지며 흐려지는 그림(죽는 적 등)은 그림자도 같이 흐려진다.
-            Color color = _data.Color;
-            color.a *= _source.color.a;
-            _shadow.color = color;
+            _shadow.color = ShadowColor();
             if (_data.Shape == DropShadowShape.Ground)
             {
                 PlaceOnGround();
                 return;
             }
 
+            _shadowTransform.localScale = Vector3.one;
             _shadowTransform.position = _sourceTransform.position + (Vector3)_data.Offset;
         }
 
@@ -86,9 +145,7 @@ namespace ExplodeIt.Core
             Sprite ellipse = _data.EllipseSprite;
             _shadow.sprite = ellipse;
             _shadow.enabled = _source.enabled && _source.sprite != null && ellipse != null;
-            Color color = _data.Color;
-            color.a *= _source.color.a;
-            _shadow.color = color;
+            _shadow.color = ShadowColor();
             if (ellipse == null)
             {
                 return;
