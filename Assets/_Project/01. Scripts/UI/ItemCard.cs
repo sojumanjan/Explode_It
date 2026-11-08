@@ -21,6 +21,10 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _selectedMark;
         // 새로 해금하고 아직 눌러 보지 않았다는 NEW 도장. 비워 두면(저주 카드 등) NEW를 쓰지 않는다.
         [SerializeField] private RectTransform _newMark;
+        // 잠긴 그림을 한 색으로 채우는 재질(UISilhouette). 색을 곱하면 픽셀 아이콘 무늬가 비쳐 보여서다(11/8).
+        // 비우면 예전처럼 LockedTint를 곱한다.
+        [SerializeField] private Material _silhouetteMaterial;
+        [SerializeField] private Color _silhouetteColor = new Color(0.376f, 0.251f, 0.165f, 1f);
 
         // NEW 도장은 가만히 있다가 이 간격(초)마다 한 번 피융: 커졌다(NewPop) → 원래보다 작아졌다(NewPopUnder) → 제자리.
         // 계속 움직이면 거슬려서 가끔만 눈길을 끈다. NewPopTime은 세 단계를 합친 시간(초)이다.
@@ -82,7 +86,9 @@ namespace ExplodeIt.UI
             _onClick = onClick;
             _icon.sprite = icon;
             _icon.enabled = icon != null;
-            _icon.color = isLocked ? LockedTint : Color.white;
+            bool isSilhouette = isLocked && _silhouetteMaterial != null;
+            _icon.material = isSilhouette ? _silhouetteMaterial : null;
+            _icon.color = !isLocked ? Color.white : isSilhouette ? _silhouetteColor : LockedTint;
             _name.text = isLocked ? "???" : displayName;
             _lockMark.SetActive(isLocked);
             SetDimmed(false);

@@ -1,0 +1,138 @@
+[
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/Icon_bomb_balance.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/Icon_bomb_rapid.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/Icon_bomb_huge.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/bomb_tripple.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/Icon_blackhole.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/다발폭탄.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_bombs_skills_gen.webp",
+  "dst": "UI/IconsPixel/순간폭탄.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_LeatherGloves.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_OldSocks.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_LeatherShoes.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_OldCoin.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_LeatherCloak.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_Pendant.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_OldRing.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_RedRibbon.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_LeatherBelt.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "src": "생성 시트 icons_artifacts_gen.webp",
+  "dst": "UI/IconsPixel/Artifact_LeatherHelm.png",
+  "pivot": [
+   0.5,
+   0.5
+  ]
+ }
+]

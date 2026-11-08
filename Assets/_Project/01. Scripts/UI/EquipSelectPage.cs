@@ -44,7 +44,9 @@ namespace ExplodeIt.UI
         // 카드를 누를 때 소리. 잠긴 카드도 같은 소리다(못 쓰는 기능이 아니라 아직 안 모은 것이라서).
         [SerializeField] private SoundData _clickSound;
         // 잠긴 것을 눌렀을 때 그림을 이 색으로 칠해 실루엣만 보여 준다.
-        [SerializeField] private Color _silhouetteColor = new Color(0.12f, 0.09f, 0.07f, 0.85f);
+        [SerializeField] private Color _silhouetteColor = new Color(0.376f, 0.251f, 0.165f, 1f);
+        // 실루엣을 한 색으로 채우는 재질(UISilhouette). 색을 곱하면 픽셀 아이콘 무늬가 비쳐 보여서다. 비우면 색만 곱한다.
+        [SerializeField] private Material _silhouetteMaterial;
         [SerializeField] private TMP_Text _previewName;
         [SerializeField] private TMP_Text _previewText;
         [SerializeField] private Button _equipButton;
@@ -448,6 +450,7 @@ namespace ExplodeIt.UI
             _previewIcon.sprite = icon;
             _previewIcon.enabled = icon != null;
             _previewIcon.color = Color.white;
+            _previewIcon.material = null;
             _previewName.text = item != null ? item.DisplayName : "";
             _previewText.text = item != null ? item.Description : "";
             _clearStamp.SetActive(false);
@@ -538,6 +541,7 @@ namespace ExplodeIt.UI
             _previewIcon.sprite = item.Icon;
             _previewIcon.enabled = item.Icon != null;
             _previewIcon.color = _silhouetteColor;
+            _previewIcon.material = _silhouetteMaterial;
             _previewName.text = "???";
             _clearStamp.SetActive(false);
             _previewText.text = achievement == null ? L10n.Tr(_noUnlockText) : L10n.Format(_unlockFormat, achievement.IsHidden ? "???" : achievement.Description);
