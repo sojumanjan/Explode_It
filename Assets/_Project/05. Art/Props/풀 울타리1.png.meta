@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 26.6
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -116,12 +116,12 @@ TextureImporter:
       name: Flowered_Green_Wall-output-2-25ee4dc2591c930deda0b7d33e89aebb-removebg-preview_0
       rect:
         serializedVersion: 2
-        x: 39
-        y: 23
-        width: 55
-        height: 90
+        x: 0
+        y: 0
+        width: 66
+        height: 106
       alignment: 9
-      pivot: {x: 0.5, y: 0.35845327}
+      pivot: {x: 0.5, y: 0.36792454}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
