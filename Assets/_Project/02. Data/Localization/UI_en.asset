@@ -350,18 +350,6 @@ MonoBehaviour:
     m_Localized: Endless Mode is coming soon!
     m_Metadata:
       m_Items: []
-  - m_Id: 3652249980937
-    m_Localized: Choose Weapon
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980938
-    m_Localized: Choose Skill
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980939
-    m_Localized: Choose Artifact {0}
-    m_Metadata:
-      m_Items: []
   - m_Id: 3652249980940
     m_Localized: Unequip
     m_Metadata:
@@ -751,6 +739,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3697895284998144
     m_Localized: Your record was added to the leaderboard.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4057798050643968
+    m_Localized: Artifact {0}
     m_Metadata:
       m_Items: []
   references:

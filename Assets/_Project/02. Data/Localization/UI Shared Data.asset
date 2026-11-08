@@ -330,18 +330,6 @@ MonoBehaviour:
     m_Key: "\uBB34\uD55C \uBAA8\uB4DC\uB294 \uC900\uBE44 \uC911\uC774\uC5D0\uC694!"
     m_Metadata:
       m_Items: []
-  - m_Id: 3652249980937
-    m_Key: "\uBB34\uAE30 \uACE0\uB974\uAE30"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980938
-    m_Key: "\uC2A4\uD0AC \uACE0\uB974\uAE30"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980939
-    m_Key: "\uC544\uD2F0\uD329\uD2B8 {0} \uACE0\uB974\uAE30"
-    m_Metadata:
-      m_Items: []
   - m_Id: 3652249980940
     m_Key: "\uC7A5\uCC29 \uD574\uC81C"
     m_Metadata:
@@ -712,6 +700,10 @@ MonoBehaviour:
       \uC138\uACC4 \uB9AC\uB354\uBCF4\uB4DC\uC5D0 \uAE30\uB85D\uB429\uB2C8\uB2E4.\n\uAE30\uB85D\uB420
       \uB2C9\uB124\uC784\uC744 \uC791\uC131\uD574\uC8FC\uC138\uC694.\n\uC124\uC815\uC5D0\uC11C
       \uC5B8\uC81C\uB4E0 \uBC14\uAFC0 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4057798050643968
+    m_Key: "\uC544\uD2F0\uD329\uD2B8 {0}"
     m_Metadata:
       m_Items: []
   m_Metadata:

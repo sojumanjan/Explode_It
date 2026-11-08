@@ -15,9 +15,9 @@ namespace ExplodeIt.UI
     {
         [SerializeField] private UnlockCatalog _catalog;
         [SerializeField] private TMP_Text _title;
-        [SerializeField, TextArea] private string _weaponTitle = "무기 고르기";
-        [SerializeField, TextArea] private string _abilityTitle = "스킬 고르기";
-        [SerializeField, TextArea] private string _artifactTitle = "아티팩트 {0} 고르기";
+        [SerializeField, TextArea] private string _weaponTitle = "무기";
+        [SerializeField, TextArea] private string _abilityTitle = "스킬";
+        [SerializeField, TextArea] private string _artifactTitle = "아티팩트 {0}";
         // 아티팩트 칸 번호 표시. 칸 순서대로.
         [SerializeField] private string[] _slotNames = { "I", "II" };
 
@@ -26,6 +26,16 @@ namespace ExplodeIt.UI
         [SerializeField] private ItemCard[] _artifactCards;
         // 무기·아티팩트 카드를 담는 칸. 스킬일 때는 숨긴다.
         [SerializeField] private Transform _list;
+        // 무기는 4개뿐이라 아티팩트(10개)와 같은 3열이면 빈칸이 많아 보인다. 무기일 때만 열 수와 칸 크기를 바꾼다.
+        [SerializeField] private GridLayoutGroup _listGrid;
+        [Tooltip("무기 목록의 열 수")]
+        [SerializeField] private int _weaponColumns = 2;
+        [Tooltip("무기 카드 크기 (UI 단위). 무기 카드 안의 그림·이름은 이 크기에 맞춰 씬에 놓는다")]
+        [SerializeField] private Vector2 _weaponCellSize = new Vector2(270f, 210f);
+        [Tooltip("아티팩트 목록의 열 수")]
+        [SerializeField] private int _artifactColumns = 3;
+        [Tooltip("아티팩트 카드 크기 (UI 단위)")]
+        [SerializeField] private Vector2 _artifactCellSize = new Vector2(180f, 140f);
         // 고를 것이 하나도 없을 때(아직 아티팩트가 없는 등) 대신 보이는 글.
         [SerializeField] private GameObject _empty;
 
@@ -107,6 +117,9 @@ namespace ExplodeIt.UI
             bool isAbility = _kind == Kind.Ability;
             _list.gameObject.SetActive(!isAbility);
             _abilityList.gameObject.SetActive(isAbility);
+            bool isWeapon = _kind == Kind.Weapon;
+            _listGrid.constraintCount = isWeapon ? _weaponColumns : _artifactColumns;
+            _listGrid.cellSize = isWeapon ? _weaponCellSize : _artifactCellSize;
             for (int k = 0; k < _cards.Length; k++)
             {
                 for (int i = 0; i < _cards[k].Count; i++)
