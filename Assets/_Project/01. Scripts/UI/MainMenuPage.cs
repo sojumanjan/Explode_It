@@ -30,7 +30,7 @@ namespace ExplodeIt.UI
         [SerializeField] private EquipSelectPage _select;
         [SerializeField] private CanvasGroup _selectPage;
         [SerializeField] private string _emptySlotText = "빈 칸";
-        [SerializeField, TextArea] private string _noArtifactsText = "아티팩트는 준비 중이에요!";
+        [SerializeField, TextArea] private string _noArtifactsText = "아티팩트는 준비 중입니다!";
 
         [Header("무한 모드")]
         [SerializeField] private RectTransform _endlessButton;
@@ -38,8 +38,8 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _endlessLock;
         [Tooltip("무한 모드 구현이 끝나면 켠다. 끄면 해금돼도 누를 때 준비 중 알림만 뜬다")]
         [SerializeField] private bool _isEndlessReady;
-        [SerializeField, TextArea] private string _endlessLockedText = "스토리 모드를 클리어하면 열려요!";
-        [SerializeField, TextArea] private string _endlessNotReadyText = "무한 모드는 준비 중이에요!";
+        [SerializeField, TextArea] private string _endlessLockedText = "스토리 모드를 클리어하면 열립니다!";
+        [SerializeField, TextArea] private string _endlessNotReadyText = "무한 모드는 준비 중입니다!";
 
         [Header("승천")]
         // 무한 모드에 거는 저주·난이도 칸. 무한 모드처럼 스토리를 클리어해야 열린다.
@@ -50,7 +50,7 @@ namespace ExplodeIt.UI
         [SerializeField] private TMP_Text _curseCountText;
         [Tooltip("장착한 저주 수 표시. {0} = 장착 수, {1} = 전체 수 (??? 칸 제외)")]
         [SerializeField] private string _curseCountFormat = "{0} / {1}";
-        [SerializeField, TextArea] private string _ascensionLockedText = "스토리 모드를 클리어하면 열려요!";
+        [SerializeField, TextArea] private string _ascensionLockedText = "스토리 모드를 클리어하면 열립니다!";
 
         [Header("알림")]
         // 잠겼거나 준비 중이라 못 누를 때 소리.

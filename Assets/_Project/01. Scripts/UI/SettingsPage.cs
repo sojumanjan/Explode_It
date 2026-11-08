@@ -18,8 +18,8 @@ namespace ExplodeIt.UI
         [SerializeField] private ConfirmDialog _dialog;
         // 효과음 크기를 바꿀 때 바로 들려 줄 소리.
         [SerializeField] private SoundData _previewSound;
-        [SerializeField, TextArea] private string _resetAskText = "저장을 초기화할까요?\n업적, 해금, 기록이 모두 사라져요.";
-        [SerializeField, TextArea] private string _resetFinalText = "정말로 지울까요?\n되돌릴 수 없어요!";
+        [SerializeField, TextArea] private string _resetAskText = "저장을 초기화하시겠습니까?\n업적, 해금, 기록이 모두 사라집니다.";
+        [SerializeField, TextArea] private string _resetFinalText = "정말 지우시겠습니까?\n되돌릴 수 없습니다!";
 
         private void Awake()
         {

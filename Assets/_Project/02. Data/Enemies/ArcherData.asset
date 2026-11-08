@@ -22,6 +22,7 @@ MonoBehaviour:
   _sightConfirmTime: 0.2
   _separationDistanceRatio: 0.6
   _separationSpeed: 1.5
+  _pulledSeparationRatio: 2.5
   _telegraphDuration: 1.3
   _recoverDuration: 1
   _deathDuration: 0.5
@@ -33,5 +34,5 @@ MonoBehaviour:
   _aimTurnRate: 5
   _aimMinTurnSpeed: 25
   _aimMaxTurnSpeed: 720
-  _aimSound: {fileID: 0}
+  _aimSound: {fileID: 11400000, guid: 3d11e39af8bc8f842ad90930c33ea7ea, type: 2}
   _shotSound: {fileID: 11400000, guid: 420a6457b1943fc44b717b507474aeb9, type: 2}

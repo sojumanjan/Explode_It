@@ -28,7 +28,7 @@ namespace ExplodeIt.Stage
         [SerializeField, TextArea] private string _abilityDoneText = "<color=#FFD54A>블랙홀</color>은 적들을 가운데로 끌어모아 한 방에 터뜨립니다!";
 
         [Tooltip("블랙홀이 터진 뒤 화면 아래 게이지를 밝게 강조하며 뜨는 설명. 이 설명이 걷히면 첫 웨이브가 시작된다")]
-        [SerializeField, TextArea] private string _gaugeText = "게이지 한 칸이 가득 차면 스킬을 사용할 수 있습니다.\n적을 처치해 게이지를 쌓아 스킬을 사용하세요!";
+        [SerializeField, TextArea] private string _gaugeText = "게이지 한 칸이 가득 차면 스킬을 사용할 수 있습니다.\n적을 처치해 게이지를 쌓아 스킬을 사용하십시오!";
 
         [Header("진행")]
         [Tooltip("시작하고 첫 과제가 뜨기까지 (초)")]

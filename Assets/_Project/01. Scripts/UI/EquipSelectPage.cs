@@ -56,7 +56,7 @@ namespace ExplodeIt.UI
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
         [SerializeField] private string _upgradeEquipText = "강화 장착";
-        [SerializeField, TextArea] private string _noUnlockText = "아직 해금 방법이 없어요.";
+        [SerializeField, TextArea] private string _noUnlockText = "아직 해금 방법이 없습니다.";
         // 잠긴 카드에는 업적 이름 없이 해금 조건만 보여 준다.
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n{0}";
         // 해금한 아티팩트는 어떻게 땄는지를 지우지 않고 남겨 두고, 그 밑에 능력을 보여 준다. 도감 대신 여기서 다시 볼 수 있게 한다.

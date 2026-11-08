@@ -22,8 +22,8 @@ namespace ExplodeIt.UI
         [SerializeField] private HitReceiver _player;
         // 실수로 판을 날리지 않게 한 번 더 묻는다.
         [SerializeField] private ConfirmDialog _confirm;
-        [SerializeField, TextArea] private string _mainMenuMessage = "메인 메뉴로 나갈까요?\n이번 판은 여기서 끝나요.";
-        [SerializeField, TextArea] private string _titleMessage = "타이틀로 나갈까요?\n이번 판은 여기서 끝나요.";
+        [SerializeField, TextArea] private string _mainMenuMessage = "메인 메뉴로 나가시겠습니까?\n이번 판은 여기서 끝납니다.";
+        [SerializeField, TextArea] private string _titleMessage = "타이틀로 나가시겠습니까?\n이번 판은 여기서 끝납니다.";
         // 결과 창 나가기 버튼 글자. 타이틀로 나가기를 골랐으면 이 글자로 바꾼다.
         // 코드가 바꾸는 글자라 씬 글자 번역을 붙이지 않고, 판이 시작될 때 지금 언어로 직접 채운다.
         [SerializeField] private TMP_Text[] _resultLeaveLabels;

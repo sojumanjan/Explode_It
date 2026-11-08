@@ -20,7 +20,7 @@ namespace ExplodeIt.UI
         [Tooltip("영어판 설문의 플레이어 번호 칸 이름(entry.숫자). 폼마다 번호가 달라 따로 적는다")]
         [SerializeField] private string _englishPlayerIdEntry = "";
         [Tooltip("설문 버튼을 눌렀을 때 확인 창에 띄울 글")]
-        [SerializeField, TextArea(2, 4)] private string _confirmMessage = "플레이 소감 설문 페이지를 열까요?\n(브라우저 새 창에서 열려요)";
+        [SerializeField, TextArea(2, 4)] private string _confirmMessage = "플레이 소감 설문 페이지를 여시겠습니까?\n(브라우저 새 창에서 열립니다.)";
 
         public string ConfirmMessage => L10n.Data(_confirmMessage);
         public bool HasUrl => !string.IsNullOrWhiteSpace(_url);
