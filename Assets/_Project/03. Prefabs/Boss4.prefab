@@ -15046,6 +15046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2735658416450848655}
   - component: {fileID: 174810300840114448}
+  - component: {fileID: 930981180091488406}
   m_Layer: 6
   m_Name: Chibi
   m_TagString: Untagged
@@ -15128,6 +15129,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
+--- !u!114 &930981180091488406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5865665706125805735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abc11a972abd5043a35e7e0a1aaaf88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.DropShadow
+  _data: {fileID: 11400000, guid: b6d84810123b82d4f916941a9e8aab90, type: 2}
+  _source: {fileID: 174810300840114448}
+  _followsSource: 1
 --- !u!1 &5872730645673654077
 GameObject:
   m_ObjectHideFlags: 0
@@ -15518,6 +15534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2147835468946153252}
   - component: {fileID: 1114590347147929343}
+  - component: {fileID: 3832219966109549538}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -15601,6 +15618,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
+--- !u!114 &3832219966109549538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6749783564133615348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abc11a972abd5043a35e7e0a1aaaf88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.DropShadow
+  _data: {fileID: 11400000, guid: b6d84810123b82d4f916941a9e8aab90, type: 2}
+  _source: {fileID: 1114590347147929343}
+  _followsSource: 1
 --- !u!1 &6825697987883692234
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5192431c2184c04b8a8010c280a9d5e, type: 3}
+  m_Name: DropShadow_Map
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.DropShadowData
+  _shape: 0
+  _offset: {x: 0.45, y: -0.55}
+  _groundSquash: 0.3
+  _ellipseSprite: {fileID: 0}
+  _ellipseWidth: 0.85
+  _ellipseHeight: 0.3
+  _ellipseLift: 0.2
+  _color: {r: 0.2, g: 0.13, b: 0.1, a: 0.45}
+  _sortingOrder: -18
+  _material: {fileID: 2100000, guid: 6771463a901cef54ebbb943af0134810, type: 2}

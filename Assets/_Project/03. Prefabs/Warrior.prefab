@@ -166,6 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1246727631161508885}
   - component: {fileID: 2587545048131987524}
+  - component: {fileID: 1297489611235561759}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -248,6 +249,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
+--- !u!114 &1297489611235561759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3569141686551466355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abc11a972abd5043a35e7e0a1aaaf88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.DropShadow
+  _data: {fileID: 11400000, guid: b6d84810123b82d4f916941a9e8aab90, type: 2}
+  _source: {fileID: 2587545048131987524}
+  _followsSource: 1
 --- !u!1 &3720169601030004348
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +370,9 @@ MonoBehaviour:
   _segments: 64
   _color: {r: 1, g: 0.95, b: 0.85, a: 0.6}
   _sortingOrder: 6
+  _outlineWidth: 0
+  _outlineDarken: 0.5
+  _outlineAlphaRatio: 4
 --- !u!1 &4842431432039568094
 GameObject:
   m_ObjectHideFlags: 0
