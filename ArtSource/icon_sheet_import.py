@@ -1,5 +1,5 @@
 # 생성기로 뽑은 아이콘 시트(초록 배경, 확대된 픽셀 아트)를 원래 픽셀 칸으로 되돌려 40x40 아이콘으로 자른다
-# 사용: Tools/pixeloe-env/Scripts/python.exe -I ArtSource/icon_sheet_import.py [bombs|artifacts]  (없으면 둘 다)
+# 사용: Tools/pixeloe-env/Scripts/python.exe -I ArtSource/icon_sheet_import.py [bombs|artifacts]  (없으면 전부)
 # 11/8 무기 4 + 스킬 3 시트(위 4칸, 아래 3칸), 아티팩트 10 시트(5칸씩 두 줄). 빠른연사의 잔상 선(왼쪽 가로줄)은 사용자 요청으로 지운다.
 import json
 import os
@@ -16,21 +16,22 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = os.path.join(ROOT, "Assets", "_Project", "05. Art")
 DST_DIR = os.path.join(ART, "UI", "IconsPixel")
 RESULT = os.path.join(ROOT, "ArtSource", "icon_pixel_result.json")
-# 시트의 점 크기를 그대로 둔다(아이콘끼리 크기 차이가 의미 있음). 큰폭발이 불꽃까지 37칸이라 40칸 바탕에 놓는다
-SIZE = 40
+# 시트의 점 크기를 그대로 둔다(아이콘끼리 크기 차이가 의미 있음). 무기, 아티팩트는 큰폭발이 불꽃까지 37칸이라 40칸 바탕(시트마다 SHEETS에서 정함)
 # 웹p 압축 잡음으로 칸마다 색이 조금씩 달라 그림 하나에 수백 색이 나왔다(11/8 사용자 지적).
 # 게임 공통 64색에 맞춰 보니 보라(블랙홀)가 파랑으로, 금색 시계와 불꽃이 갈색, 분홍으로 바랬다(공통 팔레트에 진한 보라, 금색이 없음).
 # 그래서 시트마다 그 안의 그림들끼리 팔레트를 함께 뽑아 같은 색을 나눠 쓴다
 SET_COLORS = 24
+MARGIN = 40         # 칸보다 넓게 잘라 보는 여유(원본 px)
 EDGE = 90           # 이웃 칸과 이만큼 색이 달라야 픽셀 경계로 본다(RGB 합)
-# 시트마다: 원본 파일, 줄마다 칸 수, 떨어진 조각 지우기, (줄, 줄 안 순서, 파일 이름).
+# 시트마다: 원본 파일, 줄마다 칸 수, 떨어진 조각 지우기, 바탕 칸 수, (줄, 줄 안 순서, 파일 이름).
+# 저주 아이콘도 시험해 봤으나 날카로운 느낌이 사라져(11/8 사용자) 원래 그림을 쓴다.
 # 아티팩트 시트는 옆 칸 그림 끝이 칸 경계를 넘어와 조각으로 남아(양말 왼쪽) 몸통과 떨어진 조각을 지운다. 폭탄 시트는 다발폭탄의 작은 폭탄이 떨어져 있어 지우지 않는다. 이름은 지금 데이터가 가리키는 IconsPixel 이름 그대로
 SHEETS = {
-    "bombs": ("icons_bombs_skills_gen.webp", (4, 3), False, [
+    "bombs": ("icons_bombs_skills_gen.webp", (4, 3), False, 40, [
         (0, 0, "Icon_bomb_balance"), (0, 1, "Icon_bomb_rapid"), (0, 2, "Icon_bomb_huge"), (0, 3, "bomb_tripple"),
         (1, 0, "Icon_blackhole"), (1, 1, "다발폭탄"), (1, 2, "순간폭탄"),
     ]),
-    "artifacts": ("icons_artifacts_gen.webp", (5, 5), True, [
+    "artifacts": ("icons_artifacts_gen.webp", (5, 5), True, 40, [
         (0, 0, "Artifact_LeatherGloves"), (0, 1, "Artifact_OldSocks"), (0, 2, "Artifact_LeatherShoes"),
         (0, 3, "Artifact_OldCoin"), (0, 4, "Artifact_LeatherCloak"),
         (1, 0, "Artifact_Pendant"), (1, 1, "Artifact_OldRing"), (1, 2, "Artifact_RedRibbon"),
@@ -41,9 +42,10 @@ SHEETS = {
 KEEP_MAIN_ONLY = {"Icon_bomb_rapid"}
 
 
-def pixel_period(img, lo=6.0, hi=24.0):
+def pixel_period(img, ranges=((6.0, 24.0), (6.0, 24.0))):
     # 픽셀 경계(색이 크게 바뀌는 곳)가 같은 간격으로 늘어선다. 간격 후보마다 경계 위치의 위상이 얼마나 모이는지 보고 가장 잘 모이는 값을 고른다
     def axis(g, coord):
+        lo, hi = ranges[coord]
         ys, xs = np.nonzero(g > EDGE)
         pos = (xs if coord == 0 else ys) + 0.5
         w = g[ys, xs]
@@ -79,7 +81,7 @@ def to_palette(rgb, mask, palette_lab, palette_rgb):
     return out
 
 
-def import_sheet(file, row_counts, drop_stray, icons):
+def import_sheet(file, row_counts, drop_stray, size, icons):
     src = os.path.join(ROOT, "ArtSource", "Original", "UI", file)
     img = np.asarray(Image.open(src).convert("RGB")).astype(float)
     gp = pixel_period(img)
@@ -96,12 +98,22 @@ def import_sheet(file, row_counts, drop_stray, icons):
         n = row_counts[row]
         x0, x1 = int(col * img_w / n), int((col + 1) * img_w / n)
         y0, y1 = int(row * img_h / 2), int((row + 1) * img_h / 2)
+        # 그림이 칸 경계를 조금 넘기도 해서(아티팩트 장갑 오른쪽 끝) 칸보다 넓게 잘라 본다
+        x0, x1 = max(0, x0 - MARGIN), min(img_w, x1 + MARGIN)
+        y0, y1 = max(0, y0 - MARGIN), min(img_h, y1 + MARGIN)
         part = img[y0:y1, x0:x1]
-        # 시트 전체로 잰 칸 간격은 시트 끝으로 갈수록 반 칸 가까이 밀려 둥근 폭탄이 찌그러졌다(11/8). 그림마다 따로 잰다
-        px, py, ox, oy = pixel_period(part, gp[0] - 0.6, gp[0] + 0.6)
+        # 시트 전체로 잰 칸 간격은 시트 끝으로 갈수록 반 칸 가까이 밀려 둥근 폭탄이 찌그러졌다(11/8). 그림마다 따로 잰다.
+        # 가로, 세로 간격이 다른 시트가 있어(시험한 저주 시트: 약 10.2 x 10.6) 축마다 시트 값 근처에서 찾는다
+        px, py, ox, oy = pixel_period(part, ((gp[0] - 0.6, gp[0] + 0.6), (gp[1] - 0.6, gp[1] + 0.6)))
         cell, _, _ = downsample(part, px, py, ox, oy)
         # 경계 칸은 초록 배경과 섞여 어두운 초록으로 남는다. 그림에 초록은 없으므로 초록 기운이 조금이라도 있으면 배경으로 본다
         mask = ~(cell[..., 1] > np.maximum(cell[..., 0], cell[..., 2]) + 25)
+        # 넓게 자른 가장자리에 닿은 조각은 옆 칸 그림이다(아티팩트 장갑 끝이 양말 칸 왼쪽에 남음). 가장 큰 조각(이 칸 그림)은 남긴다
+        count, labels = cv2.connectedComponents(mask.astype(np.uint8), connectivity=8)
+        biggest = 1 + int(np.argmax([(labels == k).sum() for k in range(1, count)]))
+        border = set(np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))) - {0, biggest}
+        for k in border:
+            mask[labels == k] = False
         if drop_stray or name in KEEP_MAIN_ONLY:
             count, labels = cv2.connectedComponents(mask.astype(np.uint8), connectivity=8)
             sizes = [(labels == k).sum() for k in range(1, count)]
@@ -127,10 +139,10 @@ def import_sheet(file, row_counts, drop_stray, icons):
         crop = cell[ys_.min():ys_.max() + 1, xs_.min():xs_.max() + 1]
         cm = mask[ys_.min():ys_.max() + 1, xs_.min():xs_.max() + 1]
         ch, cw = cm.shape
-        if ch > SIZE or cw > SIZE:
-            raise SystemExit(f"{name}: {cw}x{ch} 가 {SIZE}칸보다 큼")
-        out = np.zeros((SIZE, SIZE, 4), np.uint8)
-        oxp, oyp = (SIZE - cw) // 2, (SIZE - ch) // 2
+        if ch > size or cw > size:
+            raise SystemExit(f"{name}: {cw}x{ch} 가 {size}칸보다 큼")
+        out = np.zeros((size, size, 4), np.uint8)
+        oxp, oyp = (size - cw) // 2, (size - ch) // 2
         out[oyp:oyp + ch, oxp:oxp + cw, :3] = crop.round().clip(0, 255).astype(np.uint8)
         out[oyp:oyp + ch, oxp:oxp + cw, 3] = cm * 255
         outs.append((name, out))
