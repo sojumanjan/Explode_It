@@ -1,4 +1,5 @@
 using ExplodeIt.Core;
+using ExplodeIt.Enemies;
 using UnityEngine;
 
 namespace ExplodeIt.Progression
@@ -22,6 +23,15 @@ namespace ExplodeIt.Progression
             {
                 Collider2D target = Buffer[i];
                 if (((Vector2)target.bounds.center - center).sqrMagnitude > sqrRadius)
+                {
+                    continue;
+                }
+
+                // 보스는 저주에 맞지 않는다. 저주는 플레이어를 괴롭히는 난이도라, 찐엔딩 왕 결전 등에서 보스를 대신 깎아 주면 의도와 어긋난다(11/8 사용자).
+                // 실드를 푸는 보스 기믹(화염 마법사 요정, 구슬 보스 구슬)도 저주가 대신 깨 주면 같은 문제라 함께 뺀다.
+                // 콜라이더가 본체의 자식에 있을 수 있어 부모까지 본다.
+                if (target.GetComponentInParent<IBoss>() != null || target.GetComponentInParent<FireFairy>() != null
+                    || target.GetComponentInParent<BossOrb>() != null)
                 {
                     continue;
                 }
