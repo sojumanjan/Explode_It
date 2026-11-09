@@ -12,7 +12,8 @@ namespace ExplodeIt.Core
 
         private SpriteRenderer _renderer;
         private float _time;
-        private int _index = -1;
+        private float _duration;
+        private int _index;
 
         private void Awake()
         {
@@ -25,31 +26,40 @@ namespace ExplodeIt.Core
 
         private void OnEnable()
         {
-            if (_data == null)
+            if (_data == null || _data.Frames == null || _data.Frames.Length == 0)
             {
                 return;
             }
 
-            _time = _data.RandomStart ? Random.value * _data.Frames.Length * _data.FrameTime : 0f;
-            _index = -1;
+            // 장마다 보여 주는 시간이 다를 수 있어 전체 시간 대신 지금 장과 그 장에서 지난 시간을 센다.
+            _duration = _data.NextFrameTime();
+            if (_data.RandomStart)
+            {
+                _index = Random.Range(0, _data.Frames.Length);
+                _time = Random.value * _duration;
+            }
+            else
+            {
+                _index = 0;
+                _time = 0f;
+            }
+
+            _renderer.sprite = _data.Frames[_index];
         }
 
         private void Update()
         {
-            Sprite[] frames = _data.Frames;
             _time += Time.deltaTime;
-            float cycle = frames.Length * _data.FrameTime;
-            if (_time >= cycle)
+            if (_time < _duration)
             {
-                _time -= cycle;
+                return;
             }
 
-            int index = Mathf.Min((int)(_time / _data.FrameTime), frames.Length - 1);
-            if (index != _index)
-            {
-                _index = index;
-                _renderer.sprite = frames[index];
-            }
+            Sprite[] frames = _data.Frames;
+            _time -= _duration;
+            _duration = _data.NextFrameTime();
+            _index = (_index + 1) % frames.Length;
+            _renderer.sprite = frames[_index];
         }
     }
 }

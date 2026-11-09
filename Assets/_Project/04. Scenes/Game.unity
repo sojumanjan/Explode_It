@@ -11138,6 +11138,7 @@ GameObject:
   - component: {fileID: 147464634}
   - component: {fileID: 147464633}
   - component: {fileID: 147464635}
+  - component: {fileID: 147464636}
   m_Layer: 0
   m_Name: "\uB098\uBB34 9"
   m_TagString: Untagged
@@ -11237,6 +11238,19 @@ MonoBehaviour:
   _source: {fileID: 147464633}
   _followsSource: 0
   _shadow: {fileID: 1157315356}
+--- !u!114 &147464636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147464632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &147855296
 GameObject:
   m_ObjectHideFlags: 0
@@ -11543,6 +11557,7 @@ GameObject:
   - component: {fileID: 153414242}
   - component: {fileID: 153414241}
   - component: {fileID: 153414243}
+  - component: {fileID: 153414244}
   m_Layer: 0
   m_Name: "\uB098\uBB34 8"
   m_TagString: Untagged
@@ -11642,6 +11657,19 @@ MonoBehaviour:
   _source: {fileID: 153414241}
   _followsSource: 0
   _shadow: {fileID: 1084345744}
+--- !u!114 &153414244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153414240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &159800571
 GameObject:
   m_ObjectHideFlags: 0
@@ -23295,6 +23323,7 @@ GameObject:
   - component: {fileID: 346910135}
   - component: {fileID: 346910134}
   - component: {fileID: 346910136}
+  - component: {fileID: 346910137}
   m_Layer: 0
   m_Name: "\uB098\uBB34 2"
   m_TagString: Untagged
@@ -23394,6 +23423,19 @@ MonoBehaviour:
   _source: {fileID: 346910134}
   _followsSource: 0
   _shadow: {fileID: 1454312205}
+--- !u!114 &346910137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346910133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &348545512
 GameObject:
   m_ObjectHideFlags: 0
@@ -38484,6 +38526,7 @@ GameObject:
   - component: {fileID: 580134942}
   - component: {fileID: 580134941}
   - component: {fileID: 580134943}
+  - component: {fileID: 580134944}
   m_Layer: 0
   m_Name: "\uB098\uBB34 6"
   m_TagString: Untagged
@@ -38583,6 +38626,19 @@ MonoBehaviour:
   _source: {fileID: 580134941}
   _followsSource: 0
   _shadow: {fileID: 91957208}
+--- !u!114 &580134944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580134940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &582830055
 GameObject:
   m_ObjectHideFlags: 0
@@ -42597,6 +42653,7 @@ GameObject:
   - component: {fileID: 657228578}
   - component: {fileID: 657228577}
   - component: {fileID: 657228579}
+  - component: {fileID: 657228580}
   m_Layer: 0
   m_Name: "\uB098\uBB34 3"
   m_TagString: Untagged
@@ -42696,6 +42753,19 @@ MonoBehaviour:
   _source: {fileID: 657228577}
   _followsSource: 0
   _shadow: {fileID: 179755038}
+--- !u!114 &657228580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657228576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &658648081
 GameObject:
   m_ObjectHideFlags: 0
@@ -46140,6 +46210,7 @@ GameObject:
   - component: {fileID: 737208506}
   - component: {fileID: 737208505}
   - component: {fileID: 737208507}
+  - component: {fileID: 737208508}
   m_Layer: 0
   m_Name: "\uB098\uBB34 1"
   m_TagString: Untagged
@@ -46239,6 +46310,19 @@ MonoBehaviour:
   _source: {fileID: 737208505}
   _followsSource: 0
   _shadow: {fileID: 1637943275}
+--- !u!114 &737208508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737208504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &738699704
 GameObject:
   m_ObjectHideFlags: 0
@@ -51855,6 +51939,7 @@ GameObject:
   - component: {fileID: 806657392}
   - component: {fileID: 806657391}
   - component: {fileID: 806657393}
+  - component: {fileID: 806657394}
   m_Layer: 0
   m_Name: "\uB098\uBB34 4"
   m_TagString: Untagged
@@ -51954,6 +52039,19 @@ MonoBehaviour:
   _source: {fileID: 806657391}
   _followsSource: 0
   _shadow: {fileID: 1447468213}
+--- !u!114 &806657394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806657390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &806927056
 GameObject:
   m_ObjectHideFlags: 0
@@ -56541,6 +56639,7 @@ GameObject:
   - component: {fileID: 877618612}
   - component: {fileID: 877618611}
   - component: {fileID: 877618613}
+  - component: {fileID: 877618614}
   m_Layer: 0
   m_Name: "\uB098\uBB34 7"
   m_TagString: Untagged
@@ -56640,6 +56739,19 @@ MonoBehaviour:
   _source: {fileID: 877618611}
   _followsSource: 0
   _shadow: {fileID: 452512391}
+--- !u!114 &877618614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877618610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &881213007
 GameObject:
   m_ObjectHideFlags: 0
@@ -60162,6 +60274,7 @@ GameObject:
   - component: {fileID: 954114298}
   - component: {fileID: 954114300}
   - component: {fileID: 954114299}
+  - component: {fileID: 954114301}
   m_Layer: 0
   m_Name: "\uB098\uBB34 5 (1)"
   m_TagString: Untagged
@@ -60262,6 +60375,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
+--- !u!114 &954114301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954114297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &956577751
 GameObject:
   m_ObjectHideFlags: 0
@@ -120577,6 +120703,7 @@ GameObject:
   - component: {fileID: 1938398575}
   - component: {fileID: 1938398574}
   - component: {fileID: 1938398576}
+  - component: {fileID: 1938398577}
   m_Layer: 0
   m_Name: "\uB098\uBB34 5"
   m_TagString: Untagged
@@ -120676,6 +120803,19 @@ MonoBehaviour:
   _source: {fileID: 1938398574}
   _followsSource: 0
   _shadow: {fileID: 407240586}
+--- !u!114 &1938398577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938398573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &1938601571
 GameObject:
   m_ObjectHideFlags: 0
@@ -129522,6 +129662,7 @@ GameObject:
   - component: {fileID: 2101077243}
   - component: {fileID: 2101077242}
   - component: {fileID: 2101077244}
+  - component: {fileID: 2101077245}
   m_Layer: 0
   m_Name: "\uB098\uBB34 10"
   m_TagString: Untagged
@@ -129621,6 +129762,19 @@ MonoBehaviour:
   _source: {fileID: 2101077242}
   _followsSource: 0
   _shadow: {fileID: 1729041008}
+--- !u!114 &2101077245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101077241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb16380a94b4c8e9446b92f049a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoop
+  _data: {fileID: 11400000, guid: b307ed07a85a41c49956978b5fdabc73, type: 2}
 --- !u!1 &2101522301
 GameObject:
   m_ObjectHideFlags: 0

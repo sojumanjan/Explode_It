@@ -17,5 +17,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 17ac69765838c1645ba470db8ba7e779, type: 3}
   - {fileID: 21300000, guid: f267ad37ddbe86e4c9dbdd56525220c7, type: 3}
   - {fileID: 21300000, guid: 6647d13497046ec49848fb58f76ba45f, type: 3}
-  _frameTime: 0.18
+  - {fileID: 21300000, guid: 8450cfe0df53c404999979cf528394d4, type: 3}
+  - {fileID: 21300000, guid: a1c4cf73ff5b33140b072389d3648f13, type: 3}
+  - {fileID: 21300000, guid: dc37b898835ab384b8360edf2e79df6a, type: 3}
+  _frameTime: 0.12
+  _frameTimeMax: 0
   _randomStart: 1

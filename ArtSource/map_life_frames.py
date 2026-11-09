@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import building_import as bi
 
 OUT = os.path.join(bi.PROPS, "Life")
-WATER_FRAMES = 4
+WATER_FRAMES = 7  # 4장은 물결이 뚝뚝 끊겨 보여 늘림(11/9)
 FLAG_FRAMES = 4
 CANDLE_FRAMES = 3
 
@@ -43,21 +43,18 @@ def color_mask(arr, hexes):
 WATER = {
     "분수대1_grid.png": {
         "blues": ["2f7184", "2f9bc3", "3fb3d8", "51c4e4", "66cee8", "83dbf1", "a5e5f9", "cbf5fd", "e6f9fd", "55a4b7"],
-        # 물결 색 → 4장 동안 바뀌는 색. 바탕 물색(51c4e4)과 테두리 어두운 색은 그대로 둔다.
-        "cycle": {
-            "3fb3d8": ["3fb3d8", "51c4e4", "66cee8", "51c4e4"],
-            "66cee8": ["66cee8", "83dbf1", "66cee8", "51c4e4"],
-            "83dbf1": ["83dbf1", "a5e5f9", "83dbf1", "66cee8"],
-            "a5e5f9": ["a5e5f9", "cbf5fd", "a5e5f9", "83dbf1"],
-            "cbf5fd": ["cbf5fd", "e6f9fd", "cbf5fd", "a5e5f9"],
-        },
-        "ring": 7,  # 이 점 수마다 물결 단계가 한 칸 늦는다
-        "jet_step": 3,  # 한 장마다 물줄기 무늬가 올라가는 점 수
+        # 물결 색이 오르내리는 밝기 단계(어두운 → 밝은). waves의 색만 이 단계에서 한 칸씩 밝아졌다 어두워진다.
+        # 바탕 물색(51c4e4)과 테두리 어두운 색은 그대로 둔다.
+        "ramp": ["3fb3d8", "51c4e4", "66cee8", "83dbf1", "a5e5f9", "cbf5fd", "e6f9fd"],
+        "waves": ["3fb3d8", "66cee8", "83dbf1", "a5e5f9", "cbf5fd"],
+        "ring": 7,  # 이 점 수마다 물결 단계가 한 장 늦는다
+        "jet_step": 2,  # 한 장마다 물줄기 무늬가 올라가는 점 수(4장 때 3점 × 0.18초와 빠르기를 맞춤)
         "out": "분수대1_물",
     },
     "미니 음수대.png": {
         "blues": ["3790b5", "54c2e7", "a4e9f9"],
-        "cycle": {"a4e9f9": ["a4e9f9", "cbf5fd", "a4e9f9", "7fd6f0"]},
+        "ramp": ["7fd6f0", "a4e9f9", "cbf5fd"],
+        "waves": ["a4e9f9"],
         "ring": 4,
         "jet_step": 1,
         "out": "미니 음수대_물",
@@ -86,13 +83,19 @@ def water_frames(name, cfg):
     yy, xx = np.mgrid[0:h, 0:w]
     dist = np.sqrt((xx - cx) ** 2 + ((yy - jet_bottom) * 2.0) ** 2)
     lag = (dist // cfg["ring"]).astype(int)
+    ramp = cfg["ramp"]
+    ramp_cols = np.array([hexrgb(c) for c in ramp], np.uint8)
+    # 장마다 밝기 단계를 사인 모양으로 한 칸 오르내린다(0, +1, +1, 0, 0, -1, -1). 4장일 때는 한 장마다 바로 바뀌어 깜빡였다.
+    offsets = np.array([int(round(math.sin(2 * math.pi * f / WATER_FRAMES))) for f in range(WATER_FRAMES)])
     for f in range(WATER_FRAMES):
         out = src.copy()
-        for base, seq in cfg["cycle"].items():
+        for base in cfg["waves"]:
             m = color_mask(src, [base]) & ~jet
-            idx = (f - lag[m]) % len(seq)
-            cols = np.array([hexrgb(c) for c in seq], np.uint8)
-            out[..., :3][m] = cols[idx]
+            i = ramp.index(base) + offsets[(f - lag[m]) % WATER_FRAMES]
+            # 단계 끝을 넘으면 반대로 꺾는다(가장 어두운 물결도 어두워질 차례에 밝아진다)
+            i = np.where(i < 0, -i, i)
+            i = np.where(i >= len(ramp), 2 * (len(ramp) - 1) - i, i)
+            out[..., :3][m] = ramp_cols[i]
         # 물줄기: 열마다 물 점들의 색을 위로 굴린다(맨 위로 나간 색은 아래로 다시 들어온다)
         shift = f * cfg["jet_step"]
         for x in range(jx0, jx1 + 1):
