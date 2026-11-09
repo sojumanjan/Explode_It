@@ -13,13 +13,12 @@ namespace ExplodeIt.UI
     {
         [SerializeField] private TMP_Text _label;
         [SerializeField] private Button _renameButton;
-        [SerializeField] private TMP_Text _renameLabel;
         [SerializeField] private NicknameDialog _nicknameDialog;
 
+        // 바꾸기 버튼 글자는 캔버스에서 정한 문구를 그대로 쓰고 번역은 LocalizeStringEvent에 맡긴다(코드가 덮어쓰면 캔버스 수정이 사라졌다).
         [Header("문구 (한국어 원문, 번역 표의 키)")]
         [SerializeField] private string _labelFormat = "닉네임: {0}";
         [SerializeField] private string _noNameText = "닉네임 없음";
-        [SerializeField] private string _renameText = "바꾸기";
 
         private void Awake()
         {
@@ -46,7 +45,6 @@ namespace ExplodeIt.UI
         {
             string name = SaveSystem.Data.LeaderboardName;
             _label.text = name.Length > 0 ? L10n.Format(_labelFormat, name) : L10n.Tr(_noNameText);
-            _renameLabel.text = L10n.Tr(_renameText);
             // 순위표 기능을 꺼 둔 빌드에서는 줄은 남기고 누를 수만 없게 한다(설정 칸 배치가 흐트러지지 않게).
             _renameButton.interactable = LeaderboardService.IsAvailable;
         }

@@ -344,7 +344,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636491
-    m_Localized: Defeat 100 enemies this run without using a skill
+    m_Localized: Defeat 100 enemies in one run without using a skill
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636492
@@ -352,7 +352,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6819880636493
-    m_Localized: 'Defeat 100 enemies this run
+    m_Localized: 'Defeat 100 enemies in one run
 
       without a single missed bomb'
     m_Metadata:

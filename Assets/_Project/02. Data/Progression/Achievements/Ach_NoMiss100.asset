@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Progression.AchievementData
   _id: no_miss_100
   _displayName: "\uBC31\uBC1C\uBC31\uC911"
-  _description: "\uD3ED\uD0C4\uC744 \uD55C \uBC88\uB3C4 \uBE57\uB9DE\uD788\uC9C0
-    \uC54A\uACE0\n\uC5F0\uC18D\uC73C\uB85C \uC801 100\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30"
+  _description: "\uD55C \uD310 \uB3D9\uC548 \uD3ED\uD0C4\uC744 \uD55C \uBC88\uB3C4
+    \uBE57\uB9DE\uD788\uC9C0 \uC54A\uACE0\n\uC801 100\uB9C8\uB9AC \uCC98\uCE58\uD558\uAE30"
   _sticker: {fileID: 21300000, guid: 5b7f1cb1d96d222469e64690c01c69b7, type: 3}
   _stickerSilhouette: {fileID: 21300000, guid: 22cf1e5f93ae5e94aad96bde1bc09f0c, type: 3}
   _isHidden: 0

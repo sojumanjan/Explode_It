@@ -30,7 +30,7 @@ namespace ExplodeIt.UI
         [Header("문구 (한국어 원문, 번역 표의 키)")]
         [SerializeField] private string _firstTitle = "닉네임 설정";
         [SerializeField, TextArea] private string _firstBody = "무한모드의 최고 기록이 전 세계 리더보드에 기록됩니다.\n기록될 닉네임을 입력해 주십시오.\n설정에서 언제든 바꿀 수 있습니다.";
-        [SerializeField] private string _renameTitle = "닉네임 바꾸기";
+        [SerializeField] private string _renameTitle = "닉네임 변경";
         [SerializeField, TextArea] private string _renameBody = "순위표에 보일 닉네임을 바꿉니다.";
         [SerializeField] private string _confirmText = "확인";
         [SerializeField] private string _cancelText = "취소";

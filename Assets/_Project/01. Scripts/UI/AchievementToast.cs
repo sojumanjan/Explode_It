@@ -33,7 +33,6 @@ namespace ExplodeIt.UI
         // 달성 방법(업적 설명).
         [SerializeField] private TMP_Text _detail;
         [SerializeField] private SoundData _sound;
-        [SerializeField] private string _titleFormat = "업적 달성 · {0}";
         // 업적 이름과 설명의 글자를 판 시작 때 글꼴에 미리 넣는 데 쓴다(전투 중 처음 보는 글자를 만드느라 끊기던 문제).
         [SerializeField] private UnlockCatalog _catalog;
 
@@ -97,7 +96,7 @@ namespace ExplodeIt.UI
             }
 
             yield return L10n.WaitForTables();
-            var builder = new StringBuilder(L10n.Tr(_titleFormat));
+            var builder = new StringBuilder();
             AchievementData[] achievements = _catalog.Achievements;
             for (int i = 0; i < achievements.Length; i++)
             {
@@ -115,7 +114,7 @@ namespace ExplodeIt.UI
         private void OnAchievementCompleted(AchievementData achievement)
         {
             Sprite icon = achievement.Sticker != null ? achievement.Sticker : _fallbackSticker;
-            Enqueue(new Toast(icon, L10n.Format(_titleFormat, achievement.DisplayName), achievement.Description));
+            Enqueue(new Toast(icon, achievement.DisplayName, achievement.Description));
         }
 
         private void Enqueue(Toast toast)
