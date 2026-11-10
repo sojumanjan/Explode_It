@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d76ee5f3856f4e4f92491a95d1b942c, type: 3}
+  m_Name: SpriteLoop_FireMageFlame
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SpriteLoopData
+  _frames:
+  - {fileID: 21300000, guid: 59ca56b4684afdc459a86bf5c30feb9a, type: 3}
+  - {fileID: 21300000, guid: bc6853fce5cf1da44af352e271b795aa, type: 3}
+  - {fileID: 21300000, guid: c58429f067d8ace4f8ada7ec7d445517, type: 3}
+  - {fileID: 21300000, guid: f715604c437646647bfe19aefa24fdfd, type: 3}
+  _frameTime: 0.1
+  _frameTimeMax: 0.14
+  _randomStart: 1

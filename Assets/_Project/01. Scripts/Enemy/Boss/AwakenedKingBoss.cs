@@ -201,6 +201,10 @@ namespace ExplodeIt.Enemies
         [SerializeField] private SpriteRenderer _swordLine;
         // 별의 의식: 별 낙인 선, 다섯 끝 표시, 안전지대들. 맵 가운데 고정이라 보스를 따라다니지 않게 시작할 때 월드로 뗀다.
         [SerializeField] private SpriteRenderer _starSigil;
+        // 마법진 그림 위에서 피어오르는 보라 불티. 마법진 자식이라 함께 월드로 떨어지고, 마법진이 보일 때만 뿜는다.
+        [SerializeField] private ParticleSystem _sigilEmbers;
+        // 마법진 뒤에 까는 반투명 보라 빛(계단식 동심원). 마법진 자식이라 같이 커졌다 돌아온다.
+        [SerializeField] private SpriteRenderer _sigilGlow;
         // 질주 잔상으로 돌려 쓰는 그림들. 몸 그림을 그 순간 그대로 베껴 보랏빛으로 흐려진다.
         [SerializeField] private SpriteRenderer[] _afterimages;
         [SerializeField] private SpriteRenderer[] _starTips;
@@ -340,6 +344,12 @@ namespace ExplodeIt.Enemies
         private bool _isGridShown;
 
         private Vector2 _starCenter;
+        // 마법진을 별 크기에 맞춘 배율과 그리기 시작한 시각. 숨 쉬는 빛이 이 배율을 기준으로 조금 커졌다 돌아온다.
+        private float _sigilBaseScale = 1f;
+        private float _sigilStartTime;
+        // 마법진이 나타난 정도(0~1)와 숨 쉬기 위치(0~1). 보라 빛 진하기를 둘에서 함께 정한다.
+        private float _sigilAlpha;
+        private float _sigilWave;
         private readonly Vector2[] _starPoints = new Vector2[5];
         private readonly Vector2[] _safeCenters = new Vector2[5];
         // 안전지대마다 다 나타났을 때의 크기와 씬에 정해 둔 색. 나타나는 동안 0에서 이 값까지 키우고 진하게 한다.
@@ -2581,8 +2591,19 @@ namespace ExplodeIt.Enemies
             float spriteSize = _starSigil.sprite != null ? _starSigil.sprite.bounds.size.x : 1f;
             float scale = _data.StarRadius / StarSpriteTipRatio / spriteSize;
             sigil.localScale = new Vector3(scale, scale, 1f);
+            _sigilBaseScale = scale;
+            _sigilStartTime = Time.time;
             SetSigilAlpha(0f);
             _starSigil.enabled = true;
+            if (_sigilGlow != null)
+            {
+                _sigilGlow.enabled = true;
+            }
+
+            if (_sigilEmbers != null)
+            {
+                _sigilEmbers.Play(true);
+            }
 
             // 왕관이 머리를 떠나 별 꼭대기에 걸친다. 첫 꼭짓점에 도착하기 전까지는 무적이다.
             // 별이 나타나는 동안 가운데 서 있는 왕을 맞히면 "빛나는 끝을 노린다"는 공략을 건너뛰게 된다.
@@ -2600,6 +2621,7 @@ namespace ExplodeIt.Enemies
         private bool TickStar(float deltaTime)
         {
             _flyingCrown.position = StarCrownPoint() + Vector2.up * (CrownBobHeight * Mathf.Sin(Time.time * CrownBobSpeed));
+            PulseSigil();
             if (_step == Step.StarShock)
             {
                 return TickShock();
@@ -2682,11 +2704,44 @@ namespace ExplodeIt.Enemies
             return _starCenter + Vector2.up * (_data.StarRadius + CrownOnStarHeight);
         }
 
+        // 마법진이 숨 쉬듯 천천히 어두워졌다 밝아지고 아주 조금 커졌다 돌아온다. 그려지는 순간에 가장 밝게 시작한다.
+        // 스프라이트 색은 1을 넘길 수 없어 밝게 하는 대신 어둡게 했다 되돌린다. 알파는 SetSigilAlpha가 따로 맡는다.
+        private void PulseSigil()
+        {
+            float wave = 0.5f - 0.5f * Mathf.Cos((Time.time - _sigilStartTime) * Mathf.PI * 2f / _data.SigilPulsePeriod);
+            float bright = 1f - _data.SigilPulseDim * wave;
+            Color color = _starSigil.color;
+            color.r = bright;
+            color.g = bright;
+            color.b = bright;
+            _starSigil.color = color;
+            float scale = _sigilBaseScale * (1f + _data.SigilPulseScale * wave);
+            _starSigil.transform.localScale = new Vector3(scale, scale, 1f);
+            _sigilWave = wave;
+            UpdateSigilGlow();
+        }
+
         private void SetSigilAlpha(float alpha)
         {
             Color color = _starSigil.color;
             color.a = alpha;
             _starSigil.color = color;
+            _sigilAlpha = alpha;
+            UpdateSigilGlow();
+        }
+
+        private void UpdateSigilGlow()
+        {
+            if (_sigilGlow == null)
+            {
+                return;
+            }
+
+            // 마법진이 어두워질수록(wave 1) 빛이 차오르고, 밝을 때는 SigilGlowPulse만큼 옅어진다.
+            float pulse = 1f - _data.SigilGlowPulse * (1f - _sigilWave);
+            Color color = _sigilGlow.color;
+            color.a = _sigilAlpha * _data.SigilGlowAlpha * pulse;
+            _sigilGlow.color = color;
         }
 
         // order번째로 도착할 끝을 밝게 맥동시키고 나머지는 숨긴다. -1이면 모두 숨긴다. 별 그림에 이미 끝이 그려져 있어 빛나는 끝만 표시한다.
@@ -2913,6 +2968,16 @@ namespace ExplodeIt.Enemies
         private void HideStar()
         {
             _starSigil.enabled = false;
+            if (_sigilGlow != null)
+            {
+                _sigilGlow.enabled = false;
+            }
+
+            if (_sigilEmbers != null)
+            {
+                _sigilEmbers.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
+
             for (int i = 0; i < _starTips.Length; i++)
             {
                 _starTips[i].enabled = false;

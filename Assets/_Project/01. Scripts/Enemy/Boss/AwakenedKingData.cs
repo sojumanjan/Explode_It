@@ -340,6 +340,21 @@ namespace ExplodeIt.Enemies
         [Tooltip("별이 한 획씩 그려지는 시간 (초). 왕관이 머리를 떠나는 순간부터 맞는다")]
         [SerializeField, Min(0.1f)] private float _starDrawTime = 1f;
 
+        [Tooltip("바닥 마법진이 숨 쉬듯 밝아졌다 어두워지는 한 번의 시간 (초). 가만히 있는 그림이 배지처럼 보이지 않게 한다")]
+        [SerializeField, Min(0.1f)] private float _sigilPulsePeriod = 1.6f;
+
+        [Tooltip("숨 쉴 때 마법진이 가장 어두워지는 정도 (0~1). 0이면 밝기는 그대로")]
+        [SerializeField, Range(0f, 1f)] private float _sigilPulseDim = 0.2f;
+
+        [Tooltip("숨 쉴 때 마법진이 커지는 정도 (배). 꼭짓점이 왕이 순간이동하는 자리에서 벗어나지 않게 아주 작게 둔다(0.015면 반지름 7에서 0.1유닛)")]
+        [SerializeField, Range(0f, 0.05f)] private float _sigilPulseScale = 0.015f;
+
+        [Tooltip("마법진 뒤 보라 빛의 진하기 (0~1). 1이면 빛 그림의 불투명도 그대로. 바닥에 그려 놓은 그림이 아니라 빛나는 마법진처럼 보이게 한다")]
+        [SerializeField, Range(0f, 1f)] private float _sigilGlowAlpha = 1f;
+
+        [Tooltip("숨 쉴 때 보라 빛이 옅어지는 정도 (0~1). 마법진이 어두워질 때 빛이 차오르고, 밝아질 때 이만큼 옅어진다")]
+        [SerializeField, Range(0f, 1f)] private float _sigilGlowPulse = 0.35f;
+
         [Tooltip("별 끝을 옮겨 다니는 간격 (초). 다음에 나타날 끝이 이 시간만큼 먼저 빛난다. 폭탄 지연(1초)과 같게 두면 빛나는 순간 던진 폭탄이 나타나는 순간 터진다")]
         [SerializeField, Min(0.2f)] private float _starTeleportInterval = 1f;
 
@@ -573,6 +588,11 @@ namespace ExplodeIt.Enemies
         public Color Phase3ShiftAuraMin => _phase3ShiftAuraMin;
         public float StarRadius => _starRadius;
         public float StarDrawTime => _starDrawTime;
+        public float SigilPulsePeriod => _sigilPulsePeriod;
+        public float SigilPulseDim => _sigilPulseDim;
+        public float SigilPulseScale => _sigilPulseScale;
+        public float SigilGlowAlpha => _sigilGlowAlpha;
+        public float SigilGlowPulse => _sigilGlowPulse;
         public float StarTeleportInterval => _starTeleportInterval;
         public int StarTeleportCount => _starTeleportCount;
         public float ShockSafeZoneDelay => _shockSafeZoneDelay;

@@ -108,6 +108,7 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: b6d84810123b82d4f916941a9e8aab90, type: 2}
   _source: {fileID: 1092477605792415003}
   _followsSource: 1
+  _shadow: {fileID: 0}
 --- !u!1 &2848005985275566939
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +406,7 @@ MonoBehaviour:
   _attackSprite: {fileID: 0}
   _stunnedSprite: {fileID: 21300000, guid: a6e7adcf2c8fde747bf0e9cd03203302, type: 3}
   _deathSprite: {fileID: 21300000, guid: 0b58df57ccff0cd4e8937b92cb366180, type: 3}
+  _idleLoop: {fileID: 11400000, guid: 6cc4570ea418a7a45aab55d571e92127, type: 2}
 --- !u!114 &6499077392668045236
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -136,6 +136,11 @@ MonoBehaviour:
   _swordRecover: 0.6
   _starRadius: 7
   _starDrawTime: 1
+  _sigilPulsePeriod: 1.6
+  _sigilPulseDim: 0.2
+  _sigilPulseScale: 0.015
+  _sigilGlowAlpha: 1
+  _sigilGlowPulse: 0.35
   _starTeleportInterval: 0.8
   _starTeleportCount: 5
   _starDashTime: 0.15
@@ -147,6 +152,8 @@ MonoBehaviour:
   _safeZoneCount: 3
   _safeZoneDistance: {x: 10, y: 12}
   _safeZoneRadius: 2
+  _safeZoneAppearTime: 0.4
+  _safeZoneAppearStagger: 0.15
   _shockColor: {r: 0.82, g: 0.6, b: 1, a: 1}
   _phase3CrownColor: {r: 0.75, g: 0.45, b: 1, a: 1}
   _phase3EmberStart: {r: 0.9, g: 0.6, b: 1, a: 1}

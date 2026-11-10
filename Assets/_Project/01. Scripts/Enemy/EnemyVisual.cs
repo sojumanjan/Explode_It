@@ -33,6 +33,9 @@ namespace ExplodeIt.Enemies
         [SerializeField] private Sprite _stunnedSprite;
         // 죽는 순간(폭탄이 터진 순간)부터 사망 연출 동안 보여줄 그림. 비워 두면 죽기 직전 그림 그대로 간다.
         [SerializeField] private Sprite _deathSprite;
+        // 기본 그림 대신 차례로 넘길 그림(화염 마법사 손 불꽃 일렁임). 기절·공격·자세 그림이 나올 때는 쉬고, 비워 두면 기본 그림 한 장 그대로다.
+        // 맵 소품처럼 SpriteLoop를 따로 붙이면 이 컴포넌트가 매 프레임 그림을 골라 넣어 서로 덮어쓰므로 여기서 함께 고른다.
+        [SerializeField] private SpriteLoopData _idleLoop;
 
         private Transform _body;
         private Vector3 _baseLocalPosition;
@@ -45,6 +48,9 @@ namespace ExplodeIt.Enemies
         private bool _hasPlayedDeathEnd;
         private Color _flashColor;
         private float _flashDuration;
+        private int _idleIndex;
+        private float _idleTime;
+        private float _idleDuration;
         // 번쩍임이 시작된 뒤 지난 시간. 음수면 번쩍이는 중이 아니다.
         private float _flashTime = -1f;
         private Color _tint = Color.white;
@@ -90,6 +96,9 @@ namespace ExplodeIt.Enemies
             _sprite.color = _baseColor;
             _sprite.sprite = _baseSprite;
             _attackSpriteTime = -1f;
+            _idleIndex = 0;
+            _idleTime = 0f;
+            _idleDuration = _idleLoop != null ? _idleLoop.NextFrameTime() : 0f;
             _hasPlayedDeathEnd = false;
             _flashTime = -1f;
             _tint = Color.white;
@@ -343,7 +352,7 @@ namespace ExplodeIt.Enemies
                 }
             }
 
-            Sprite sprite = PoseSprite != null ? PoseSprite : _baseSprite;
+            Sprite sprite = PoseSprite != null ? PoseSprite : IdleSprite(deltaTime);
             if (state == EnemyState.Stunned && _stunnedSprite != null)
             {
                 sprite = _stunnedSprite;
@@ -357,6 +366,26 @@ namespace ExplodeIt.Enemies
             {
                 _sprite.sprite = sprite;
             }
+        }
+
+        // 반복 그림이 있으면 장마다 데이터의 시간(범위면 장마다 새로 뽑음)만큼 보여 주고 넘긴다. 다른 그림이 나오는 동안에도 시간은 흘러 박자가 이어진다.
+        private Sprite IdleSprite(float deltaTime)
+        {
+            if (_idleLoop == null || _idleLoop.Frames == null || _idleLoop.Frames.Length == 0)
+            {
+                return _baseSprite;
+            }
+
+            Sprite[] frames = _idleLoop.Frames;
+            _idleTime += deltaTime;
+            if (_idleTime >= _idleDuration)
+            {
+                _idleTime -= _idleDuration;
+                _idleDuration = _idleLoop.NextFrameTime();
+                _idleIndex = (_idleIndex + 1) % frames.Length;
+            }
+
+            return frames[_idleIndex % frames.Length];
         }
 
         private void TickPose(EnemyState state, Vector2 delta, float deltaTime)
