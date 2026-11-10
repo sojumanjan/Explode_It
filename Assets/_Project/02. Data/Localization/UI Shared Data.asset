@@ -706,6 +706,10 @@ MonoBehaviour:
     m_Key: "\uC544\uD2F0\uD329\uD2B8 {0}"
     m_Metadata:
       m_Items: []
+  - m_Id: 4857787387543552
+    m_Key: Game/Outro/Letter/Seal
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
