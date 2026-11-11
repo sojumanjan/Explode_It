@@ -27,6 +27,8 @@ namespace ExplodeIt.UI
         // 모드 기록 창도 같다.
         [SerializeField] private ModeRecordPopup _recordPopup;
         [SerializeField] private SoundData _pageSound;
+        // 타이틀은 책이 아니라서, 타이틀에서 누르거나 타이틀로 돌아갈 때는 책장 소리 대신 버튼 소리를 낸다.
+        [SerializeField] private SoundData _clickSound;
         // 타이틀 ↔ 메인처럼 배경이 바뀌는 넘김에서 화면을 검게 덮는 막.
         [SerializeField] private ScreenFader _fader;
         [Tooltip("타이틀 ↔ 메인을 오갈 때 화면이 검게 어두워지는 시간 (초). 길게 두어 장면이 천천히 끝나는 느낌을 준다")]
@@ -129,7 +131,7 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            AudioManager.Play(_pageSound);
+            AudioManager.Play(_current == _firstPage ? _clickSound : _pageSound);
             _history.Push(_current);
             _overlayBase = _current;
             BlockInput(_overlayBase);
@@ -171,7 +173,8 @@ namespace ExplodeIt.UI
 
         private void SwitchTo(CanvasGroup page)
         {
-            AudioManager.Play(_pageSound);
+            bool isTitleInvolved = page == _firstPage || _current == _firstPage;
+            AudioManager.Play(isTitleInvolved ? _clickSound : _pageSound);
             if (page == _overlayBase)
             {
                 CloseOverlay();

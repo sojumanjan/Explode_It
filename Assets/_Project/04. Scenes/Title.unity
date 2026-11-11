@@ -53024,6 +53024,7 @@ MonoBehaviour:
   _dialog: {fileID: 1808690169}
   _recordPopup: {fileID: 843542914}
   _pageSound: {fileID: 11400000, guid: 67666361bc526d0469d0c2692da7651c, type: 2}
+  _clickSound: {fileID: 11400000, guid: 815e32da799a91441b2cdbe890ad8d7e, type: 2}
   _fader: {fileID: 1886730002}
   _coverTime: 1.5
   _revealTime: 0.5

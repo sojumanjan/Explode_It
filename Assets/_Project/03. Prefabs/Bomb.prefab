@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Bombs.ExplosionShape
   _segments: 64
-  _color: {r: 1, g: 0.38590717, b: 0, a: 0.4}
+  _color: {r: 1, g: 0.96, b: 0.9, a: 0.4}
   _sortingOrder: 1
   _outlineWidth: 0
   _outlineDarken: 0.5
