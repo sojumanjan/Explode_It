@@ -8,7 +8,7 @@ namespace ExplodeIt.Enemies
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이다. (폭탄을 굴러 피하던 동작은 무적일 때만 일어나 공략에 의미가 없고,
     // 피하니까 맞힐 수 있다는 오해만 키워서 뺐다.)
-    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 검기 날리기 → 도약 내려찍기 → 왕관 투하,
+    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 검기 날리기 → 도약 내려찍기 → 왕관 공전,
     // 3국면은 유성우 → 천지 가르기 → 별의 의식(왕관을 맵 가운데 띄우고 별 끝을 순간이동, 못 잡으면 맵 전체 충격파)을 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
@@ -55,6 +55,8 @@ namespace ExplodeIt.Enemies
         private const int LandSearchDirections = 16;
         // 공중에서 그림자가 가장 작을 때의 크기 비율. 왕이 내려올수록 원래 크기로 커진다.
         private const float LeapShadowMinScale = 0.55f;
+        // 왕관 튕기기 전에 달려들 때, 울타리 가장 큰 크기에 둘이 딱 들어가는 거리의 이 비율까지 다가간다. 경계에 걸쳐 울타리가 들쭉날쭉하지 않게 여유를 둔다.
+        private const float CageDashFill = 0.8f;
         // 왕관 투하 예고 때 왕관이 머리 위로 올라가는 높이 (유닛), 던진 왕관이 커지는 배율, 왕관을 주웠다고 보는 거리 (유닛).
         private const float CrownRaiseHeight = 1f;
         private const float BigCrownScale = 2f;
@@ -97,7 +99,8 @@ namespace ExplodeIt.Enemies
             Meteor,
             Sword,
             Star,
-            Wave
+            Wave,
+            CrownBounce
         }
 
         private enum Step
@@ -114,6 +117,7 @@ namespace ExplodeIt.Enemies
             LeapTrack,
             LeapLock,
             LeapLand,
+            LeapCombo,
             DropThrow,
             DropTrack,
             DropLock,
@@ -129,7 +133,9 @@ namespace ExplodeIt.Enemies
             StarShock,
             WaveHop,
             WaveAim,
-            WavePause
+            WavePause,
+            BounceFly,
+            BounceReturn
         }
 
         // 국면별 패턴 순서. 맞을 때마다 다음 국면으로 넘어가고, 마지막 국면 순서를 그 뒤로도 쓴다.
@@ -137,7 +143,7 @@ namespace ExplodeIt.Enemies
         private static readonly Pattern[][] Rotations =
         {
             new[] { Pattern.Slash, Pattern.Lunge, Pattern.Crown },
-            new[] { Pattern.Wave, Pattern.Leap, Pattern.CrownDrop },
+            new[] { Pattern.Wave, Pattern.Leap, Pattern.CrownBounce },
             new[] { Pattern.Meteor, Pattern.Sword, Pattern.Star }
         };
 
@@ -279,6 +285,15 @@ namespace ExplodeIt.Enemies
         private Vector2 _leapAirOffset;
         private Vector2 _leapDiveOffset;
         private bool _isLeapDiving;
+        // 마지막 도약의 연타 내려찍기: 원마다 둔 예고 원·채움(월드에 둔 사본), 착지 자리, 뛰어오른 공중 자리,
+        // 깔린 원 수, 내리찍은 수, 몸(판정 위치)을 옮겨 둔 착지 번호.
+        private ExplosionShape[] _comboRanges;
+        private ExplosionShape[] _comboFills;
+        private Vector2[] _comboLands;
+        private Vector2 _comboAir;
+        private int _comboShown;
+        private int _comboSlammed;
+        private int _comboMovedTo;
         private Sprite _leapSlamPose;
         private bool _leapSlamFacesRight;
         private Vector3 _leapShadowScale;
@@ -304,6 +319,23 @@ namespace ExplodeIt.Enemies
         private TelegraphLine[] _waveLines;
         private PixelFxPool _waveTrailFx;
         private int _waveVolley;
+        // 왕관 튕기기: 플레이어를 가두는 팔각 울타리(선 콜라이더와 그림), 울타리 중심과 중심에서 변까지 거리 (유닛),
+        // 울타리가 나타난 뒤 지난 시간(음수면 걷힌 상태).
+        private static readonly Vector2[] CagePoints = BuildCagePoints();
+        private EdgeCollider2D _cageCollider;
+        private LineRenderer _cageLine;
+        private Vector2[] _cageColliderPoints;
+        private Vector2 _cageCenter;
+        private float _cageRadius;
+        private float _cageTime = -1f;
+        // 너무 멀어 울타리에 둘이 다 들어가지 않으면 예고 앞부분에 플레이어 쪽으로 달려든다. 그 출발·도착 자리와 달려드는 중인지.
+        private Vector2 _cageDashFrom;
+        private Vector2 _cageDashTo;
+        private bool _isCageDashing;
+        // 던지는 자리와 튕기는 자리들, 길 한 줄마다 하나씩 둔 예고선(마지막은 왕에게 돌아오는 줄), 왕관이 지금 날고 있는 줄 번호.
+        private Vector2[] _bouncePoints;
+        private TelegraphLine[] _bounceLines;
+        private int _bounceSegment;
         // 뛰어 물러날 때 출발 자리가 착지 자리에서 떨어진 만큼. 몸은 먼저 착지 자리에 두고 그림만 이만큼 밀었다 당긴다.
         private Vector2 _waveHopFrom;
         private float _lungeWakeTimer;
@@ -402,7 +434,9 @@ namespace ExplodeIt.Enemies
             State == EnemyState.Telegraph || State == EnemyState.Attack ? _aimDirection : DirectionToTarget();
         // 유성우·천지 가르기는 예고 상태에서 자세만 잡고, 실제 예고(원, 웨이브)는 공격 단계 안에서 보인다.
         protected override float BaseTelegraphDuration =>
-            _pattern == Pattern.Crown ? _data.CrownWindup : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
+            _pattern == Pattern.Crown ? _data.CrownWindup
+            : _pattern == Pattern.CrownBounce ? _data.CrownBounceWindup
+            : _pattern == Pattern.CrownDrop ? _data.CrownDropWindup : _data.PatternStartup;
 
         protected override void Awake()
         {
@@ -455,6 +489,28 @@ namespace ExplodeIt.Enemies
             _dropRange.transform.SetParent(null);
             _dropFill.transform.SetParent(null);
             HideDropMarker();
+            CreateCage();
+            // 연타 예고 원은 왕이 다른 자리로 옮겨 가도 그 자리에 남아야 하므로, 내려찍기 원을 이펙트 묶음 아래(월드)로 복제한다.
+            int slams = Mathf.Max(1, _data.LeapComboSlams);
+            _comboRanges = new ExplosionShape[slams];
+            _comboFills = new ExplosionShape[slams];
+            _comboLands = new Vector2[slams];
+            for (int i = 0; i < slams; i++)
+            {
+                _comboRanges[i] = Instantiate(_slashRange, _fxRoot);
+                _comboFills[i] = Instantiate(_slashFill, _fxRoot);
+            }
+
+            HideComboCircles();
+
+            // 튕기기 예고선은 검기 예고선처럼 돌진 예고선을 복제해 쓴다.
+            _bouncePoints = new Vector2[_data.CrownBounceCount + 1];
+            _bounceLines = new TelegraphLine[_data.CrownBounceCount + 1];
+            for (int i = 0; i < _bounceLines.Length; i++)
+            {
+                _bounceLines[i] = Instantiate(_aimLine, _aimLine.transform.parent);
+                _bounceLines[i].Hide();
+            }
 
             _meteors = new Meteor[_data.MeteorCount];
             _onMeteorImpact = OnMeteorImpact;
@@ -527,6 +583,7 @@ namespace ExplodeIt.Enemies
             GameEvents.BossPoseRequested += OnPoseRequested;
             GameEvents.BossRevertRequested += OnRevertRequested;
             HideTelegraphs();
+            HideCage();
         }
 
         protected override void OnDisable()
@@ -537,6 +594,8 @@ namespace ExplodeIt.Enemies
             GameEvents.BossFarewellRequested -= OnFarewell;
             GameEvents.BossPoseRequested -= OnPoseRequested;
             GameEvents.BossRevertRequested -= OnRevertRequested;
+            // 보스가 꺼진 뒤에 울타리가 남아 플레이어를 가두지 않게 한다.
+            HideCage();
             if (_flyingCrown != null)
             {
                 _flyingCrown.gameObject.SetActive(false);
@@ -815,6 +874,7 @@ namespace ExplodeIt.Enemies
         {
             float deltaTime = Time.deltaTime;
             TickCrownWake(deltaTime);
+            TickCageFade(deltaTime);
             // 쓰러진 뒤 고블린이 반대쪽 옆자리로 걸어가도 계속 고블린 쪽을 본다.
             if (_isHoldingBody && _bodyRenderer.enabled)
             {
@@ -1269,6 +1329,25 @@ namespace ExplodeIt.Enemies
                 return;
             }
 
+            // 왕관 튕기기는 첫 줄이 플레이어를 따라가다 고정되고, 울타리 안에서 튕겨 갈 길 전체가 함께 따라 그려진다.
+            if (_pattern == Pattern.CrownBounce)
+            {
+                if (_isCageDashing)
+                {
+                    TickCageDash();
+                    return;
+                }
+
+                if (StateTime < _data.CrownBounceWindup - _data.CrownBounceLockTime)
+                {
+                    _aimDirection = DirectionToTarget();
+                }
+
+                BuildBouncePath(Body.position, _aimDirection);
+                ShowBounceLines(_bouncePoints[0], 0);
+                return;
+            }
+
             if (_pattern != Pattern.Crown)
             {
                 return;
@@ -1303,6 +1382,8 @@ namespace ExplodeIt.Enemies
                     return TickSword(deltaTime);
                 case Pattern.Star:
                     return TickStar(deltaTime);
+                case Pattern.CrownBounce:
+                    return TickCrownBounce(deltaTime);
                 default:
                     return TickCrown(deltaTime);
             }
@@ -1338,6 +1419,11 @@ namespace ExplodeIt.Enemies
                     _rotationIndex = (_rotationIndex + 1) % rotation.Length;
                     _aimDirection = DirectionToTarget();
                     HideTelegraphs();
+                    if (_pattern == Pattern.CrownBounce)
+                    {
+                        BeginCageApproach();
+                    }
+
                     return;
 
                 case EnemyState.Attack:
@@ -1375,6 +1461,10 @@ namespace ExplodeIt.Enemies
                     else if (_pattern == Pattern.Star)
                     {
                         BeginStar();
+                    }
+                    else if (_pattern == Pattern.CrownBounce)
+                    {
+                        ThrowBouncingCrown();
                     }
                     else
                     {
@@ -1422,6 +1512,8 @@ namespace ExplodeIt.Enemies
             }
 
             HideTelegraphs();
+            // 왕관 튕기기 도중 맞거나 끊기면 플레이어를 가두던 울타리도 걷는다.
+            HideCage();
             // 별의 의식 도중 맞으면 별과 안전지대, 화면 덮개를 바로 걷는다.
             if (state == EnemyState.Stunned)
             {
@@ -1852,9 +1944,20 @@ namespace ExplodeIt.Enemies
                     FaceLeapTarget(_leapHoverSprite);
                     if (_stepTime >= _data.LeapTrackTime)
                     {
-                        LockLeap();
+                        if (_count == _data.LeapCount - 1 && _comboRanges.Length > 1)
+                        {
+                            BeginLeapCombo();
+                        }
+                        else
+                        {
+                            LockLeap();
+                        }
                     }
 
+                    return false;
+
+                case Step.LeapCombo:
+                    TickLeapCombo();
                     return false;
 
                 case Step.LeapLock:
@@ -1897,6 +2000,166 @@ namespace ExplodeIt.Enemies
 
                     BeginLeap();
                     return false;
+            }
+        }
+
+        // ── 연타 내려찍기(마지막 도약): 예고 원이 간격마다 그때 플레이어 자리에 하나씩 깔리고, 원마다 착지까지 시간이 지나면
+        // 깔린 순서대로 내리찍는다(파, 파, 팡). 원 하나하나는 보통 내려찍기와 같은 "그 자리 1초 뒤" 규칙이라, 계속 움직이면 다 피한다.
+        // 첫 번째는 공중에서 내리꽂고, 다음부터는 앞 착지 자리에서 다음 원으로 짧게 뛰어 옮겨 가 내리찍는다.
+
+        private void BeginLeapCombo()
+        {
+            _step = Step.LeapCombo;
+            _stepTime = 0f;
+            _comboShown = 0;
+            _comboSlammed = 0;
+            _comboMovedTo = -1;
+            _comboAir = Body.position + _leapOffset;
+            _leapShadow.enabled = true;
+            _leapShadow.transform.localScale = _leapShadowScale * LeapShadowMinScale;
+        }
+
+        private void TickLeapCombo()
+        {
+            int count = _comboRanges.Length;
+            float interval = _data.LeapComboInterval;
+            float lockTime = _data.LeapLockTime;
+            float time = _stepTime;
+
+            while (_comboShown < count && time >= _comboShown * interval)
+            {
+                PlaceComboCircle(_comboShown);
+                _comboShown++;
+            }
+
+            for (int i = _comboSlammed; i < _comboShown; i++)
+            {
+                _comboFills[i].SetRadius(_data.LeapRadius * Mathf.Clamp01((time - i * interval) / lockTime));
+            }
+
+            for (int i = 0; i < _comboSlammed; i++)
+            {
+                if (time >= i * interval + lockTime + _data.LeapComboHideDelay)
+                {
+                    HideComboCircle(i);
+                }
+            }
+
+            int next = _comboSlammed;
+            if (next >= count)
+            {
+                return;
+            }
+
+            // 첫 번째는 보통 내려찍기처럼 마지막 짧은 구간에 공중에서 내리꽂고, 다음부터는 앞 착지부터 다음 착지까지 간격 내내 뛰어 옮겨 간다.
+            float slamTime = next * interval + lockTime;
+            float travel = next == 0 ? _data.LeapFallTime : interval;
+            float start = slamTime - travel;
+            if (time < start)
+            {
+                FaceLeapTarget(_leapHoverSprite);
+                return;
+            }
+
+            Vector2 from = next == 0 ? _comboAir : _comboLands[next - 1];
+            Vector2 to = _comboLands[next];
+            if (_comboMovedTo != next)
+            {
+                // 판정 위치를 착지 자리로 먼저 옮기고, 그림만 출발 자리에서 따라 내려오게 한다.
+                _comboMovedTo = next;
+                Body.position = to;
+                transform.position = to;
+                _isLeapDiving = true;
+                bool isVertical = next == 0 && IsAboveTarget(from);
+                _leapSlamPose = isVertical || _leapDiagonalSlamSprite == null ? _leapVerticalSlamSprite : _leapDiagonalSlamSprite;
+                _leapSlamFacesRight = to.x > from.x;
+                _visual.FlipOverride = _leapSlamFacesRight != IsArtFacingRight(_leapSlamPose);
+            }
+
+            float k = Mathf.Clamp01((time - start) / travel);
+            Vector2 offset = next == 0
+                ? (from - to) * (1f - k * k)
+                : (from - to) * (1f - k) + Vector2.up * (4f * _data.LeapComboHopHeight * k * (1f - k));
+            SetLeapOffset(offset);
+            _leapShadow.transform.localScale = _leapShadowScale * Mathf.Lerp(LeapShadowMinScale, 1f, k);
+            if (time >= slamTime)
+            {
+                SlamCombo(next, next == count - 1);
+            }
+        }
+
+        private bool IsAboveTarget(Vector2 air)
+        {
+            Vector2 fromTarget = air - TargetPosition;
+            return fromTarget.sqrMagnitude > 0.0001f && Vector2.Angle(Vector2.up, fromTarget) <= _data.LeapVerticalSlamAngle * 0.5f;
+        }
+
+        // 그 순간 플레이어 자리에 원을 깐다. 왕이 내려설 자리라 구조물에 걸리면 가장 가까운 설 수 있는 자리로 옮긴다.
+        private void PlaceComboCircle(int index)
+        {
+            Vector2 land = FindLandingPoint(ClampToArena(TargetPosition));
+            _comboLands[index] = land;
+            ExplosionShape range = _comboRanges[index];
+            ExplosionShape fill = _comboFills[index];
+            range.transform.position = land;
+            fill.transform.position = land;
+            range.BuildCircle(_data.LeapRadius);
+            fill.CopyLimits(range);
+            fill.SetRadius(0f);
+            range.ResetColor();
+            fill.ResetColor();
+            range.Visible = true;
+            fill.Visible = true;
+        }
+
+        // 마지막 한 방만 화면을 반짝이고 그대로 착지 자세로 마친다. 그 전 착지에서는 바로 다음 원으로 뛴다.
+        private void SlamCombo(int index, bool isLast)
+        {
+            _comboSlammed = index + 1;
+            Vector2 land = _comboLands[index];
+            SetLeapOffset(Vector2.zero);
+            HitOverlapping(land, _data.LeapRadius);
+            _comboFills[index].SetRadius(_data.LeapRadius);
+            _comboFills[index].SetColor(Color.white);
+            FeedbackPlayer.Play(_data.LeapImpactFeedback, land);
+            FeedbackPlayer.Play(_data.LeapFireFeedback, land);
+            _leapDirtFx?.Play(land, Vector2.right, _data.LeapRadius / _data.LeapDirtFxRadius);
+            AudioManager.Play(_data.LeapImpactSound);
+            if (!isLast)
+            {
+                return;
+            }
+
+            EndLeapVisual();
+            PlaceShockCover();
+            _screenFlashTime = 0f;
+            _step = Step.LeapLand;
+            _stepTime = 0f;
+        }
+
+        private void HideComboCircle(int index)
+        {
+            if (_comboRanges[index] != null)
+            {
+                _comboRanges[index].Visible = false;
+            }
+
+            if (_comboFills[index] != null)
+            {
+                _comboFills[index].Visible = false;
+            }
+        }
+
+        private void HideComboCircles()
+        {
+            if (_comboRanges == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _comboRanges.Length; i++)
+            {
+                HideComboCircle(i);
             }
         }
 
@@ -2014,6 +2277,320 @@ namespace ExplodeIt.Enemies
             point.x = Mathf.Clamp(point.x, bounds.min.x + radius, bounds.max.x - radius);
             point.y = Mathf.Clamp(point.y, bounds.min.y + radius, bounds.max.y - radius);
             return point;
+        }
+
+        // ── 왕관 튕기기: 플레이어와 왕을 함께 감싸는 팔각 울타리를 세워 플레이어를 가두고, 왕관을 플레이어 쪽으로 던지면
+        // 울타리 벽에 정해진 횟수만큼 튕긴 뒤 왕에게 곧장 돌아온다. 튕겨 갈 길은 던지기 전부터 다 그려 두고, 지나간 줄은 지운다.
+        // 던진 순간부터 받을 때까지 왕관이 없어 맞는다. 왕관을 받으면(또는 맞아서 패턴이 끊기면) 울타리가 걷힌다.
+        // 예측 과제: 좁은 울타리 안에서 꺾이는 길을 피해 서며, 천천히 걸어오는 왕의 1초 뒤 자리에 폭탄을 둔다.
+
+        // 울타리는 맵 테두리 벽과 같은 층(MapLine)의 선 콜라이더라, 플레이어 이동과 대시를 똑같이 막는다.
+        private void CreateCage()
+        {
+            var cage = new GameObject("왕관 튕기기 울타리", typeof(EdgeCollider2D), typeof(LineRenderer));
+            cage.transform.SetParent(_fxRoot, false);
+            cage.layer = LayerMask.NameToLayer("MapLine");
+            _cageCollider = cage.GetComponent<EdgeCollider2D>();
+            _cageLine = cage.GetComponent<LineRenderer>();
+            // 재질과 그리는 순서는 다른 예고선과 맞추고, 사본을 써서 다른 그림과 묶이지 않게 한다.
+            LineRenderer aim = _aimLine.GetComponent<LineRenderer>();
+            _cageLine.sharedMaterial = new Material(aim.sharedMaterial);
+            _cageLine.sortingLayerID = aim.sortingLayerID;
+            _cageLine.sortingOrder = aim.sortingOrder;
+            _cageLine.useWorldSpace = false;
+            _cageLine.loop = true;
+            _cageLine.positionCount = CagePoints.Length;
+            _cageLine.startWidth = _data.CageWallWidth;
+            _cageLine.endWidth = _data.CageWallWidth;
+            _cageColliderPoints = new Vector2[CagePoints.Length + 1];
+            HideCage();
+        }
+
+        // 정팔각형 꼭짓점. 변이 가로·세로·대각을 향하고, 중심에서 변까지 거리가 1이다.
+        private static Vector2[] BuildCagePoints()
+        {
+            var points = new Vector2[8];
+            float corner = 1f / Mathf.Cos(22.5f * Mathf.Deg2Rad);
+            for (int i = 0; i < points.Length; i++)
+            {
+                float angle = (22.5f + 45f * i) * Mathf.Deg2Rad;
+                points[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * corner;
+            }
+
+            return points;
+        }
+
+        // 울타리 가장 큰 크기에 둘이 다 들어가면 바로 세운다. 아니면 그 크기에 넉넉히 들어갈 거리까지 플레이어 쪽으로 달려든 뒤 세운다.
+        private void BeginCageApproach()
+        {
+            _isCageDashing = false;
+            Vector2 player = TargetPosition;
+            Vector2 fromPlayer = Body.position - player;
+            float fit = 2f * (_data.CageMaxRadius - _data.CageMargin);
+            if (fromPlayer.magnitude <= fit)
+            {
+                RaiseCage();
+                return;
+            }
+
+            _isCageDashing = true;
+            _cageDashFrom = Body.position;
+            _cageDashTo = FindLandingPoint(ClampToArena(player + fromPlayer.normalized * (fit * CageDashFill)));
+            AudioManager.Play(_data.LungeSound);
+        }
+
+        // 돌진 찌르기처럼 벽을 뚫고 곧게 달려든다. 잔상도 돌진과 같은 것을 남긴다.
+        private void TickCageDash()
+        {
+            float t = Mathf.Clamp01(StateTime / _data.CageDashTime);
+            Vector2 next = Vector2.Lerp(_cageDashFrom, _cageDashTo, 1f - (1f - t) * (1f - t));
+            Vector2 delta = next - Body.position;
+            if (delta.sqrMagnitude > 0.0001f)
+            {
+                DropLungeWake(delta.normalized, Time.deltaTime);
+            }
+
+            if (t < 1f)
+            {
+                Body.MovePosition(next);
+                return;
+            }
+
+            // 다음 물리 단계를 기다리지 않고 도착 자리에서 바로 울타리를 세운다.
+            Body.position = _cageDashTo;
+            transform.position = _cageDashTo;
+            _isCageDashing = false;
+            RaiseCage();
+        }
+
+        // 둘 사이 한가운데에 세운다. 둘이 너무 멀면 가장 큰 크기로 두고 플레이어 쪽으로 당겨, 플레이어는 반드시 안에 갇힌다.
+        private void RaiseCage()
+        {
+            Vector2 player = TargetPosition;
+            Vector2 king = Body.position;
+            float half = Vector2.Distance(player, king) * 0.5f;
+            float margin = _data.CageMargin;
+            _cageRadius = Mathf.Clamp(half + margin, _data.CageMinRadius, _data.CageMaxRadius);
+            _cageCenter = Vector2.Lerp(player, king, 0.5f);
+            if (half + margin > _data.CageMaxRadius)
+            {
+                _cageCenter = player + (king - player).normalized * (_cageRadius - margin);
+            }
+
+            Transform cage = _cageCollider.transform;
+            cage.position = _cageCenter;
+            for (int i = 0; i < CagePoints.Length; i++)
+            {
+                Vector2 point = CagePoints[i] * _cageRadius;
+                _cageLine.SetPosition(i, point);
+                _cageColliderPoints[i] = point;
+            }
+
+            _cageColliderPoints[CagePoints.Length] = _cageColliderPoints[0];
+            _cageCollider.points = _cageColliderPoints;
+            _cageCollider.enabled = true;
+            _cageLine.enabled = true;
+            _cageTime = 0f;
+            SetCageAlpha(0f);
+        }
+
+        // 울타리는 막는 순간부터 막고, 그림만 짧게 진해지며 나타난다.
+        private void TickCageFade(float deltaTime)
+        {
+            if (_cageTime < 0f)
+            {
+                return;
+            }
+
+            _cageTime += deltaTime;
+            SetCageAlpha(Mathf.Clamp01(_cageTime / _data.CageFadeTime));
+        }
+
+        private void SetCageAlpha(float alpha)
+        {
+            Color color = _data.CageColor;
+            color.a *= alpha;
+            _cageLine.startColor = color;
+            _cageLine.endColor = color;
+        }
+
+        // 씬이 닫힐 때는 보스보다 울타리가 먼저 지워져 있을 수 있다.
+        private void HideCage()
+        {
+            _cageTime = -1f;
+            _isCageDashing = false;
+            if (_cageCollider != null)
+            {
+                _cageCollider.enabled = false;
+            }
+
+            if (_cageLine != null)
+            {
+                _cageLine.enabled = false;
+            }
+        }
+
+        private void ThrowBouncingCrown()
+        {
+            _step = Step.BounceFly;
+            _stepTime = 0f;
+            _bounceSegment = 0;
+            _crownPosition = _bouncePoints[0];
+            SetCrown(false);
+            _flyingCrown.position = _crownPosition;
+            _flyingCrown.gameObject.SetActive(true);
+            ShowBounceLines(_crownPosition, 0);
+            AudioManager.Play(_data.CrownThrowSound);
+        }
+
+        private bool TickCrownBounce(float deltaTime)
+        {
+            WalkCrownless(deltaTime);
+            float step = _data.CrownBounceSpeed * deltaTime;
+            int last = _bouncePoints.Length - 1;
+            // 한 프레임에 꺾이는 자리를 넘어가도 남은 거리를 다음 줄로 이어 가, 빠른 왕관이 모서리를 깎지 않게 한다.
+            while (_step == Step.BounceFly && step > 0f)
+            {
+                Vector2 next = _bouncePoints[_bounceSegment + 1];
+                float distance = Vector2.Distance(_crownPosition, next);
+                if (step < distance)
+                {
+                    _crownPosition = Vector2.MoveTowards(_crownPosition, next, step);
+                    step = 0f;
+                    break;
+                }
+
+                _crownPosition = next;
+                step -= distance;
+                _bounceSegment++;
+                AudioManager.Play(_data.CrownBounceSound);
+                if (_bounceSegment >= last)
+                {
+                    _step = Step.BounceReturn;
+                }
+            }
+
+            if (_step == Step.BounceReturn)
+            {
+                Vector2 toHome = Body.position - _crownPosition;
+                if (toHome.magnitude <= Mathf.Max(step, CrownCatchDistance))
+                {
+                    HideBounceLines();
+                    HideCage();
+                    CatchCrown();
+                    return true;
+                }
+
+                _crownPosition += toHome.normalized * step;
+            }
+
+            ShowBounceLines(_crownPosition, _bounceSegment);
+            _flyingCrown.position = _crownPosition;
+            _flyingCrown.Rotate(0f, 0f, -720f * deltaTime);
+            HitOverlapping(_crownPosition, _data.CrownBounceHitRadius);
+            return false;
+        }
+
+        // 울타리 안쪽(판정 반경만큼 당긴 팔각형)에서 빛처럼 반사되는 길을 미리 구한다.
+        // 팔각형 변 k의 바깥 방향은 45°×k이고, 중심에서 변까지 거리가 같아 변마다 같은 식으로 닿는 거리를 구한다.
+        private void BuildBouncePath(Vector2 start, Vector2 direction)
+        {
+            float wall = _cageRadius - _data.CrownBounceHitRadius;
+            Vector2 point = start;
+            Vector2 offset = point - _cageCenter;
+            // 시작점이 벽 바깥이면(울타리를 가장 크게 세워 왕이 밖에 남은 경우) 벽 안쪽으로 당긴다.
+            float outward = 0f;
+            for (int k = 0; k < 8; k++)
+            {
+                outward = Mathf.Max(outward, Vector2.Dot(offset, CageNormal(k)) / wall);
+            }
+
+            if (outward > 0.98f)
+            {
+                point = _cageCenter + offset * (0.98f / outward);
+            }
+
+            _bouncePoints[0] = point;
+            for (int i = 1; i < _bouncePoints.Length; i++)
+            {
+                float best = float.PositiveInfinity;
+                int hitSide = 0;
+                for (int k = 0; k < 8; k++)
+                {
+                    Vector2 normal = CageNormal(k);
+                    float toward = Vector2.Dot(direction, normal);
+                    if (toward <= 0.0001f)
+                    {
+                        continue;
+                    }
+
+                    float t = (wall - Vector2.Dot(point - _cageCenter, normal)) / toward;
+                    if (t < best)
+                    {
+                        best = t;
+                        hitSide = k;
+                    }
+                }
+
+                point += direction * Mathf.Max(0f, best);
+                _bouncePoints[i] = point;
+                direction = Vector2.Reflect(direction, CageNormal(hitSide));
+            }
+        }
+
+        private static Vector2 CageNormal(int side)
+        {
+            float angle = side * 45f * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        }
+
+        // 왕관 앞쪽 길만 그린다. 지금 줄은 왕관 자리부터, 마지막 줄은 다 튕긴 자리(또는 돌아오는 왕관)에서 왕까지.
+        private void ShowBounceLines(Vector2 head, int segment)
+        {
+            float width = _data.CrownBounceHitRadius * 2f;
+            int last = _bouncePoints.Length - 1;
+            for (int i = 0; i < last; i++)
+            {
+                if (i < segment)
+                {
+                    _bounceLines[i].Hide();
+                    continue;
+                }
+
+                Vector2 from = i == segment ? head : _bouncePoints[i];
+                ShowLine(_bounceLines[i], from, _bouncePoints[i + 1], width);
+            }
+
+            ShowLine(_bounceLines[last], segment >= last ? head : _bouncePoints[last], Body.position, width);
+        }
+
+        private static void ShowLine(TelegraphLine line, Vector2 from, Vector2 to, float width)
+        {
+            Vector2 delta = to - from;
+            float length = delta.magnitude;
+            if (length < 0.0001f)
+            {
+                line.Hide();
+                return;
+            }
+
+            line.Show(from, delta / length, length, width);
+        }
+
+        private void HideBounceLines()
+        {
+            if (_bounceLines == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _bounceLines.Length; i++)
+            {
+                if (_bounceLines[i] != null)
+                {
+                    _bounceLines[i].Hide();
+                }
+            }
         }
 
         // ── 왕관 투하: 왕관을 하늘로 던져 올리면 큰 그림자가 플레이어를 따라가다 멈추고, 금빛 원이 다 차는 순간 왕관이 박힌다.
@@ -3685,6 +4262,8 @@ namespace ExplodeIt.Enemies
         {
             _aimLine.Hide();
             HideWaveLines();
+            HideBounceLines();
+            HideComboCircles();
             _slashRange.Visible = false;
             _slashFill.Visible = false;
         }

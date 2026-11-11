@@ -259,8 +259,8 @@ namespace ExplodeIt.Enemies
         [SerializeField, Min(0f)] private float _crownlessWalkSpeed = 1.2f;
 
         [Header("도약 내려찍기 (2국면부터, 왕관을 쓴 채라 무적)")]
-        [Tooltip("한 번 패턴에 연달아 뛰는 횟수 (번)")]
-        [SerializeField, Min(1)] private int _leapCount = 2;
+        [Tooltip("한 번 패턴에 연달아 뛰는 횟수 (번). 마지막 도약은 연타 내려찍기다(아래 연타 횟수가 2 이상일 때)")]
+        [SerializeField, Min(1)] private int _leapCount = 3;
 
         [Tooltip("땅을 박차고 공중 자리로 뛰어오르는 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _leapRiseTime = 0.35f;
@@ -301,7 +301,59 @@ namespace ExplodeIt.Enemies
         [Tooltip("착지한 뒤 멈춰 있는 시간 (초). 지나면 다음 도약을 하거나 패턴을 마친다")]
         [SerializeField, Min(0f)] private float _leapLandTime = 0.5f;
 
-        [Header("왕관 투하 (2국면부터, 유일한 공격 기회)")]
+        [Tooltip("마지막 도약의 연타 내려찍기 횟수 (번). 예고 원이 이 수만큼 그때그때 플레이어 자리에 차례로 깔리고, 깔린 순서대로 내리찍는다. 1이면 연타 없이 한 번만 찍는다. 바꾸면 다음 전투부터 적용된다")]
+        [SerializeField, Min(1)] private int _leapComboSlams = 3;
+
+        [Tooltip("연타 예고 원이 깔리는 간격이자 내리찍는 간격 (초). 원마다 차오르는 시간은 착지까지 시간과 같다")]
+        [SerializeField, Min(0.05f)] private float _leapComboInterval = 0.3f;
+
+        [Tooltip("연타 사이 다음 원으로 뛰어 옮겨 갈 때 그리는 포물선 높이 (유닛)")]
+        [SerializeField, Min(0f)] private float _leapComboHopHeight = 1.5f;
+
+        [Tooltip("내리찍은 원이 하얗게 남아 있다가 사라지기까지 (초)")]
+        [SerializeField, Min(0f)] private float _leapComboHideDelay = 0.2f;
+
+        [Header("왕관 튕기기 (2국면, 유일한 공격 기회)")]
+        [Tooltip("던지기 예고 시간 (초). 예고가 시작될 때 울타리가 서고, 왕관이 울타리 안에서 튕겨 갈 길 전체가 보인다")]
+        [SerializeField, Min(0.05f)] private float _crownBounceWindup = 1f;
+
+        [Tooltip("예고가 끝나기 이만큼 전부터 던질 방향을 고정한다 (초). 그 전에는 첫 줄이 플레이어를 따라간다")]
+        [SerializeField, Min(0f)] private float _crownBounceLockTime = 0.35f;
+
+        [Tooltip("울타리 벽에 튕기는 횟수 (번). 다 튕기면 왕에게 곧장 돌아온다. 바꾸면 다음 전투부터 적용된다")]
+        [SerializeField, Min(1)] private int _crownBounceCount = 3;
+
+        [Tooltip("왕관이 날아가는 속도 (유닛/초). 튕기는 길과 돌아오는 길 모두 이 속도다")]
+        [SerializeField, Min(0.1f)] private float _crownBounceSpeed = 18f;
+
+        [Tooltip("날아가는 왕관의 판정 반경 (유닛). 예고선 굵기는 이 지름이고, 왕관은 울타리 벽에서 이만큼 안쪽에서 튕긴다")]
+        [SerializeField, Min(0f)] private float _crownBounceHitRadius = 0.7f;
+
+        [Tooltip("울타리 벽에 튕기는 순간의 효과음. 비워 두면 소리 없이 튕긴다")]
+        [SerializeField] private SoundData _crownBounceSound;
+
+        [Tooltip("울타리를 세울 때 플레이어·왕과 벽 사이에 두는 여유 (유닛). 울타리 크기 = 둘 사이 거리의 절반 + 이 값 (중심에서 변까지)")]
+        [SerializeField, Min(0.5f)] private float _cageMargin = 3f;
+
+        [Tooltip("울타리 최소 크기, 중심에서 변까지 (유닛). 둘이 붙어 있어도 이만큼은 넓다")]
+        [SerializeField, Min(1f)] private float _cageMinRadius = 6f;
+
+        [Tooltip("울타리 최대 크기, 중심에서 변까지 (유닛). 화면 세로 절반(11)보다 작게 둔다. 둘이 더 멀면 이 크기로 플레이어 쪽에 세워 왕이 밖에 남을 수 있다")]
+        [SerializeField, Min(1f)] private float _cageMaxRadius = 9f;
+
+        [Tooltip("울타리 선 굵기 (유닛). 그림만 바뀌고 막는 벽은 선 한가운데에 있다")]
+        [SerializeField, Min(0.01f)] private float _cageWallWidth = 0.25f;
+
+        [Tooltip("울타리 선 색 (불투명도까지 이 색을 쓴다)")]
+        [SerializeField] private Color _cageColor = new Color(1f, 0.8f, 0.25f, 0.9f);
+
+        [Tooltip("울타리 선이 진해지며 나타나는 시간 (초). 막는 것은 서는 순간부터다")]
+        [SerializeField, Min(0.01f)] private float _cageFadeTime = 0.2f;
+
+        [Tooltip("플레이어와 너무 멀어 울타리에 둘이 다 들어가지 않을 때, 왕이 플레이어 쪽으로 빠르게 달려드는 시간 (초). 예고 시간 앞부분을 쓰고, 다 달려든 뒤 울타리가 선다")]
+        [SerializeField, Min(0.05f)] private float _cageDashTime = 0.3f;
+
+        [Header("왕관 투하 (지금은 쓰지 않음, 2국면은 왕관 튕기기)")]
         [Tooltip("왕관을 머리 위로 높이 들어 올리는 예고 시간 (초)")]
         [SerializeField, Min(0.05f)] private float _crownDropWindup = 0.5f;
 
@@ -608,7 +660,24 @@ namespace ExplodeIt.Enemies
         public float CrownHangTime => _crownHangTime;
         public float CrownHitRadius => _crownHitRadius;
         public float CrownlessWalkSpeed => _crownlessWalkSpeed;
+        public float CrownBounceWindup => _crownBounceWindup;
+        public float CrownBounceLockTime => _crownBounceLockTime;
+        public int CrownBounceCount => _crownBounceCount;
+        public float CrownBounceSpeed => _crownBounceSpeed;
+        public float CrownBounceHitRadius => _crownBounceHitRadius;
+        public SoundData CrownBounceSound => _crownBounceSound;
+        public float CageMargin => _cageMargin;
+        public float CageMinRadius => _cageMinRadius;
+        public float CageMaxRadius => _cageMaxRadius;
+        public float CageWallWidth => _cageWallWidth;
+        public Color CageColor => _cageColor;
+        public float CageFadeTime => _cageFadeTime;
+        public float CageDashTime => _cageDashTime;
         public int LeapCount => _leapCount;
+        public int LeapComboSlams => _leapComboSlams;
+        public float LeapComboInterval => _leapComboInterval;
+        public float LeapComboHopHeight => _leapComboHopHeight;
+        public float LeapComboHideDelay => _leapComboHideDelay;
         public float LeapRiseTime => _leapRiseTime;
         public float LeapAirDistanceMin => _leapAirDistanceMin;
         public float LeapAirDistanceMax => Mathf.Max(_leapAirDistanceMin, _leapAirDistanceMax);

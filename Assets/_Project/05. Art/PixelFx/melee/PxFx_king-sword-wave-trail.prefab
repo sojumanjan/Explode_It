@@ -107,6 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxPlayer
   _clip: {fileID: 11400000, guid: d86d77980fcd8b145a58a9d43f45f9ae, type: 2}
   _playOnEnable: 1
-  _speed: 1
+  _speed: 2
   _useUnscaledTime: 0
   _forceLoop: 0

@@ -110,7 +110,7 @@ MonoBehaviour:
   _crownHangTime: 0.8
   _crownHitRadius: 0.5
   _crownlessWalkSpeed: 1.2
-  _leapCount: 5
+  _leapCount: 3
   _leapRiseTime: 0.2
   _leapAirDistanceMin: 6
   _leapAirDistanceMax: 8
@@ -124,6 +124,23 @@ MonoBehaviour:
   _leapFlashColor: {r: 1, g: 0.25, b: 0.15, a: 0.22}
   _leapFlashTime: 0.25
   _leapLandTime: 0.2
+  _leapComboSlams: 3
+  _leapComboInterval: 0.3
+  _leapComboHopHeight: 1.5
+  _leapComboHideDelay: 0.2
+  _crownBounceWindup: 1
+  _crownBounceLockTime: 0.35
+  _crownBounceCount: 3
+  _crownBounceSpeed: 18
+  _crownBounceHitRadius: 0.7
+  _crownBounceSound: {fileID: 11400000, guid: 8e883999be2b60f4589801337ffc432c, type: 2}
+  _cageMargin: 3
+  _cageMinRadius: 6
+  _cageMaxRadius: 9
+  _cageWallWidth: 0.25
+  _cageColor: {r: 1, g: 0.8, b: 0.25, a: 0.9}
+  _cageFadeTime: 0.2
+  _cageDashTime: 0.3
   _crownDropWindup: 0.5
   _crownDropThrowTime: 0.2
   _crownDropTrackTime: 0.4
