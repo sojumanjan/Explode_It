@@ -33,11 +33,10 @@ namespace ExplodeIt.UI
         [SerializeField] private SettingsPage _settings;
 
         [Header("결과 창 스토리 중간부터 다시 하기 (게임 씬)")]
-        // 스토리 판에서만 보인다. 결과 창 다시하기는 스토리에서 처음부터 다시 하므로 글자를 바꿔 구분한다.
+        // 스토리 판에서만 보인다.
         [SerializeField] private CheckpointRetryButton[] _resultCheckpoints;
         [SerializeField] private TMP_Text[] _resultRetryLabels;
         [SerializeField] private string _retryText = "다시하기";
-        [SerializeField] private string _storyRetryText = "처음부터 다시하기";
 
         private bool _isLeaving;
         private bool _leavesToTitle;
@@ -62,8 +61,7 @@ namespace ExplodeIt.UI
 
         private void ApplyResultLabels()
         {
-            bool isStory = RunSetup.Mode == RunMode.Story;
-            string retryText = L10n.Tr(isStory ? _storyRetryText : _retryText);
+            string retryText = L10n.Tr(_retryText);
             for (int i = 0; _resultRetryLabels != null && i < _resultRetryLabels.Length; i++)
             {
                 _resultRetryLabels[i].text = retryText;

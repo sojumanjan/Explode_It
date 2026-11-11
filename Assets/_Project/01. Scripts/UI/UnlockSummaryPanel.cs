@@ -55,11 +55,11 @@ namespace ExplodeIt.UI
         [SerializeField] private SoundData _sound;
         // 장을 넘길 때 소리. 비워 두면 해금 소리를 다시 낸다.
         [SerializeField] private SoundData _pageSound;
-        [SerializeField] private string _weaponKind = "새 무기";
-        [SerializeField] private string _abilityKind = "새 스킬";
+        [SerializeField] private string _weaponKind = "무기";
+        [SerializeField] private string _abilityKind = "스킬";
         [SerializeField] private string _upgradeKind = "스킬 강화";
-        [SerializeField] private string _artifactKind = "새 아티팩트";
-        [SerializeField] private string _curseKind = "새 저주";
+        [SerializeField] private string _artifactKind = "아티팩트";
+        [SerializeField] private string _curseKind = "저주";
         [Tooltip("저주의 획득 경로 문구. {0} = 장착한 저주 수 기준, {1} = 처치 수")]
         [SerializeField] private string _curseSourceFormat = "저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
 

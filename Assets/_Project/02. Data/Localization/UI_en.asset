@@ -268,10 +268,6 @@ MonoBehaviour:
     m_Localized: To Do
     m_Metadata:
       m_Items: []
-  - m_Id: 1975711174656
-    m_Localized: Press R to retry
-    m_Metadata:
-      m_Items: []
   - m_Id: 1975711174657
     m_Localized: CLEAR!
     m_Metadata:
@@ -328,10 +324,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3652249980931
     m_Localized: Retry
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980932
-    m_Localized: Restart from Beginning
     m_Metadata:
       m_Items: []
   - m_Id: 3652249980933
@@ -611,20 +603,8 @@ MonoBehaviour:
     m_Localized: OK
     m_Metadata:
       m_Items: []
-  - m_Id: 3652249980995
-    m_Localized: New Weapon
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980996
-    m_Localized: New Skill
-    m_Metadata:
-      m_Items: []
-  - m_Id: 3652249980997
-    m_Localized: New Artifact
-    m_Metadata:
-      m_Items: []
   - m_Id: 3652249980998
-    m_Localized: New Curse
+    m_Localized: Curse
     m_Metadata:
       m_Items: []
   - m_Id: 3652249980999
