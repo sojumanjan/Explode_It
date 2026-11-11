@@ -166,9 +166,21 @@ namespace ExplodeIt.UI
             }
         }
 
+        // 뒤로가기는 P 키도 쓰므로, 닉네임처럼 글자를 치는 중에는 받지 않는다.
         private void OnBackInput(InputAction.CallbackContext context)
         {
+            if (IsTyping())
+            {
+                return;
+            }
+
             Back();
+        }
+
+        private static bool IsTyping()
+        {
+            GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+            return selected != null && selected.TryGetComponent(out TMPro.TMP_InputField field) && field.isFocused;
         }
 
         private void SwitchTo(CanvasGroup page)
