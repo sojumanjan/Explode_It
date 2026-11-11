@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 59fdd51303671e646ad1b285820b0ef5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 9175288099621094896
+    second: chain-pop-c_0
+  - first:
+      213: 3942131133533022788
+    second: chain-pop-c_1
+  - first:
+      213: -3193276946155255028
+    second: chain-pop-c_2
+  - first:
+      213: 524233313554203497
+    second: chain-pop-c_3
+  - first:
+      213: -325536264291370291
+    second: chain-pop-c_4
+  - first:
+      213: 9163992030283145872
+    second: chain-pop-c_5
+  - first:
+      213: -5088219680119719918
+    second: chain-pop-c_6
+  - first:
+      213: 4452536078358224525
+    second: chain-pop-c_7
+  - first:
+      213: -6345249468940339727
+    second: chain-pop-c_8
+  - first:
+      213: -8669841734763619607
+    second: chain-pop-c_9
+  - first:
+      213: -8247516359978353499
+    second: chain-pop-c_10
+  - first:
+      213: 7410185999733226493
+    second: chain-pop-c_11
+  - first:
+      213: 8870516785519355661
+    second: chain-pop-c_12
+  - first:
+      213: -6080772801678485326
+    second: chain-pop-c_13
+  - first:
+      213: -6267319174578340390
+    second: chain-pop-c_14
+  - first:
+      213: -1050986446516719124
+    second: chain-pop-c_15
+  - first:
+      213: 6050887136982542573
+    second: chain-pop-c_16
+  - first:
+      213: 7368527075490915569
+    second: chain-pop-c_17
+  - first:
+      213: -6738293075420177851
+    second: chain-pop-c_18
+  - first:
+      213: -3507605430307155484
+    second: chain-pop-c_19
+  - first:
+      213: -2738692752203605188
+    second: chain-pop-c_20
+  - first:
+      213: 5664122500860602935
+    second: chain-pop-c_21
+  - first:
+      213: -985882917273467234
+    second: chain-pop-c_22
+  - first:
+      213: -6421459836637929712
+    second: chain-pop-c_23
+  - first:
+      213: -913007141181003730
+    second: chain-pop-c_24
+  - first:
+      213: 7910779470910348245
+    second: chain-pop-c_25
+  - first:
+      213: 7270712599538211255
+    second: chain-pop-c_26
+  - first:
+      213: -8464849052925251166
+    second: chain-pop-c_27
+  - first:
+      213: -5525373714105535568
+    second: chain-pop-c_28
+  - first:
+      213: -2993012613353389400
+    second: chain-pop-c_29
+  - first:
+      213: -7910867364899935108
+    second: chain-pop-c_30
+  - first:
+      213: -202481679114429135
+    second: chain-pop-c_31
+  - first:
+      213: 5546243691739593479
+    second: chain-pop-c_32
+  - first:
+      213: 6865088604011707530
+    second: chain-pop-c_33
+  - first:
+      213: -2673320575159525092
+    second: chain-pop-c_34
+  - first:
+      213: -1048557466140568703
+    second: chain-pop-c_35
+  - first:
+      213: 3393458525335158220
+    second: chain-pop-c_36
+  - first:
+      213: 4237933602633424390
+    second: chain-pop-c_37
+  - first:
+      213: -5906228462931314654
+    second: chain-pop-c_38
+  - first:
+      213: 6316137352764066208
+    second: chain-pop-c_39
+  - first:
+      213: -7816420755926858848
+    second: chain-pop-c_40
+  - first:
+      213: 121722904739875636
+    second: chain-pop-c_41
+  - first:
+      213: -612909905061764854
+    second: chain-pop-c_42
+  - first:
+      213: 331877865594850737
+    second: chain-pop-c_43
+  - first:
+      213: 3997749677336442186
+    second: chain-pop-c_44
+  - first:
+      213: 8771560825969616960
+    second: chain-pop-c_45
+  - first:
+      213: 1451614364377223746
+    second: chain-pop-c_46
+  - first:
+      213: 936364526349689167
+    second: chain-pop-c_47
+  - first:
+      213: 2091121016440765947
+    second: chain-pop-c_48
+  - first:
+      213: 3059237012866825458
+    second: chain-pop-c_49
+  - first:
+      213: 4929290629565225300
+    second: chain-pop-c_50
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: chain-pop-c_000
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d4e8bd0545181b41b76da42d208a725
+      internalID: -428326378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_001
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 465ee0fcbe4293f4b9ece0d5699ede61
+      internalID: -2064713378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_002
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e20ab2104c07cd242bc2e227c5eb3a39
+      internalID: 1128285604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_003
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 192
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba897a0046666314690335faca66df8d
+      internalID: -99171031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_004
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b082690a138bed4f9c91196fa6f4d3a
+      internalID: 764076411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_005
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 268716323d9fc6a4aa0251ccd41c3a51
+      internalID: -976110594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_006
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cecb3502512b83243942364962c22038
+      internalID: 184824616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_007
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 96
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75e14bb5bcba1da4ebb1ca4cbb96295c
+      internalID: 868225085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_008
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b3336f1c20d74c4f8d4ad2f5eb265e8
+      internalID: -1346236024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_009
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75efea87ae8c48d4c8e483b56894fd84
+      internalID: -770397941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_010
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b2ed1e64735905479936c22c87f3457
+      internalID: 487155676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chain-pop-c_011
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03116f8ca11ede3429f9424af7f5737c
+      internalID: -662117809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 2ac6617bfa2c1484b80fd0f2d5cb04a8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      chain-pop-c_000: -428326378
+      chain-pop-c_001: -2064713378
+      chain-pop-c_002: 1128285604
+      chain-pop-c_003: -99171031
+      chain-pop-c_004: 764076411
+      chain-pop-c_005: -976110594
+      chain-pop-c_006: 184824616
+      chain-pop-c_007: 868225085
+      chain-pop-c_008: -1346236024
+      chain-pop-c_009: -770397941
+      chain-pop-c_010: 487155676
+      chain-pop-c_011: -662117809
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: pixelfx
+  assetBundleName: 
+  assetBundleVariant: 

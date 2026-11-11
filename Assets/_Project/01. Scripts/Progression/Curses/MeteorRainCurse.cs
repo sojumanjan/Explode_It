@@ -20,6 +20,7 @@ namespace ExplodeIt.Progression
 
         private ComponentPool<Meteor> _pool;
         private Action<Meteor> _onImpact;
+        private PixelFxPool _impactFx;
         private float _nextTime = float.PositiveInfinity;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -39,6 +40,7 @@ namespace ExplodeIt.Progression
             _pool = new ComponentPool<Meteor>(_meteorPrefab, transform, _prewarm, _maxMeteors);
             _pool.Prewarm(_prewarm);
             _onImpact = OnImpact;
+            _impactFx = PixelFxPool.Create(Data.ImpactFx, transform, _prewarm);
         }
 
         protected override void OnRunStarted()
@@ -73,7 +75,8 @@ namespace ExplodeIt.Progression
             Vector2 point = PointAround(PlayerPosition, Data.MinDistance, Data.MaxDistance);
             Meteor meteor = _pool.Get(point);
             meteor.UsesCurseClock = true;
-            meteor.Launch(point, Data.FallTime, Data.Radius, _onImpact);
+            float fallTime = Mathf.Max(0.1f, Data.FallTime + UnityEngine.Random.Range(-Data.FallTimeJitter, Data.FallTimeJitter));
+            meteor.Launch(point, fallTime, Data.Radius, _onImpact);
         }
 
         private void OnImpact(Meteor meteor)
@@ -81,6 +84,7 @@ namespace ExplodeIt.Progression
             CurseHits.Circle(meteor.Position, meteor.Radius, _hitMask, Data);
             Impacted?.Invoke(meteor.Position, meteor.Radius);
             FeedbackPlayer.Play(Data.ImpactFeedback, meteor.Position);
+            _impactFx?.Play(meteor.Position, Vector2.right, meteor.Radius / Data.ImpactFxRadius);
             AudioManager.Play(Data.ImpactSound);
             _pool.Release(meteor);
         }

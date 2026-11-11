@@ -13,6 +13,8 @@ namespace ExplodeIt.UI
         public static readonly Color LockedTint = new Color(0.08f, 0.06f, 0.05f, 0.92f);
         // 다른 칸에 이미 끼운 카드는 칸째 회색으로 칠한다. 눌러서 설명은 볼 수 있다.
         private static readonly Color DimmedTint = new Color(0.55f, 0.55f, 0.55f, 1f);
+        // 지금 눌러서 오른쪽에 띄워 둔 카드는 칸 바탕만 살짝 회색으로 눌러, 어느 칸을 보고 있는지 알린다. 장착 표시(노란색)와는 따로다.
+        private static readonly Color FocusedTint = new Color(0.78f, 0.78f, 0.78f, 1f);
 
         [SerializeField] private Button _button;
         [SerializeField] private Image _icon;
@@ -46,6 +48,8 @@ namespace ExplodeIt.UI
         private Color _nameColor;
         private Image _background;
         private Color _backgroundColor;
+        private bool _isDimmed;
+        private bool _isFocused;
 
         public object Item { get; private set; }
         public bool IsLocked { get; private set; }
@@ -129,16 +133,43 @@ namespace ExplodeIt.UI
 
         public void SetDimmed(bool isDimmed)
         {
+            _isDimmed = isDimmed;
             _name.color = isDimmed ? _nameColor * DimmedTint : _nameColor;
-            if (_background != null)
-            {
-                _background.color = isDimmed ? _backgroundColor * DimmedTint : _backgroundColor;
-            }
+            ApplyBackground();
 
             if (!IsLocked)
             {
                 _icon.color = isDimmed ? DimmedTint : Color.white;
             }
+        }
+
+        // Setup이 끄지 않는다. 목록을 다시 그린 뒤 페이지가 보고 있는 칸에 다시 정해 준다.
+        public void SetFocused(bool isFocused)
+        {
+            Initialize();
+            _isFocused = isFocused;
+            ApplyBackground();
+        }
+
+        private void ApplyBackground()
+        {
+            if (_background == null)
+            {
+                return;
+            }
+
+            Color color = _backgroundColor;
+            if (_isDimmed)
+            {
+                color *= DimmedTint;
+            }
+
+            if (_isFocused)
+            {
+                color *= FocusedTint;
+            }
+
+            _background.color = color;
         }
 
         public void SetSelected(bool isSelected)

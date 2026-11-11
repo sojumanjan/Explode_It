@@ -29,3 +29,5 @@ MonoBehaviour:
   _fallTime: 1.2
   _impactFeedback: {fileID: 11400000, guid: 73d51ffe459e55643b64633db4838796, type: 2}
   _impactSound: {fileID: 11400000, guid: ceb51ec362f39514380edc3005726baf, type: 2}
+  _impactFx: {fileID: 960637808908533836, guid: 9b9c673780c197a488dce1131a40ab43, type: 3}
+  _impactFxRadius: 1.3

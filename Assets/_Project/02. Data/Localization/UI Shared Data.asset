@@ -363,7 +363,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3652249980948
-    m_Key: "\uBAA8\uB4E0 \uC800\uC8FC \uC7A5\uCC29 \uD544\uC694"
+    m_Key: "\uBAA8\uB4E0 \uC800\uC8FC\n\uC7A5\uCC29 \uD544\uC694"
     m_Metadata:
       m_Items: []
   - m_Id: 3652249980949
@@ -708,6 +708,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4857787387543552
     m_Key: Game/Outro/Letter/Seal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5154877019848704
+    m_Key: "\uCD5C\uC885\uC804 \uC2DC\uC791"
     m_Metadata:
       m_Items: []
   m_Metadata:

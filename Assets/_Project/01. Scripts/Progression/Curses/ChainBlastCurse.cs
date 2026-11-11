@@ -14,9 +14,12 @@ namespace ExplodeIt.Progression
         // 블랙홀로 한꺼번에 수십 마리가 죽어도 새로 만들지 않도록 넉넉히 준비해 둔다.
         [SerializeField, Min(1)] private int _prewarm = 48;
         [SerializeField, Min(1)] private int _maxCircles = 160;
+        [Tooltip("폭발 그림 종류마다 미리 만들어 두는 수 (개)")]
+        [SerializeField, Min(1)] private int _fxPrewarm = 16;
 
         private ComponentPool<CurseCircle> _pool;
         private Action<CurseCircle> _onExplode;
+        private PixelFxPool[] _fxPools;
 
         protected override void Awake()
         {
@@ -29,6 +32,12 @@ namespace ExplodeIt.Progression
             _pool = new ComponentPool<CurseCircle>(_circlePrefab, transform, _prewarm, _maxCircles);
             _pool.Prewarm(_prewarm);
             _onExplode = Explode;
+            PixelFxPlayer[] fx = Data.ExplodeFx;
+            _fxPools = new PixelFxPool[fx != null ? fx.Length : 0];
+            for (int i = 0; i < _fxPools.Length; i++)
+            {
+                _fxPools[i] = PixelFxPool.Create(fx[i], transform, _fxPrewarm);
+            }
         }
 
         // 연출 재생기는 자기 OnEnable에서 준비되므로 판이 시작될 때 이펙트 풀을 채운다.
@@ -59,13 +68,21 @@ namespace ExplodeIt.Progression
 
             CurseCircle circle = _pool.Get(position);
             circle.Show(position, Data.Radius, Data.RangeColor, Data.FillColor);
-            circle.Countdown(Data.Delay, true, 0f, _onExplode);
+            float delay = Mathf.Max(0.1f, Data.Delay + UnityEngine.Random.Range(-Data.DelayJitter, Data.DelayJitter));
+            circle.Countdown(delay, true, 0f, _onExplode);
         }
 
         private void Explode(CurseCircle circle)
         {
             CurseHits.Circle(circle.Position, circle.Radius, _hitMask, Data);
             FeedbackPlayer.Play(Data.ExplodeFeedback, circle.Position);
+            if (_fxPools.Length > 0)
+            {
+                // 같은 그림이 한꺼번에 터지면 도장처럼 보여서, 터질 때마다 종류를 무작위로 고른다(등장 조합이 아닌 겉모습만).
+                _fxPools[UnityEngine.Random.Range(0, _fxPools.Length)]
+                    ?.Play(circle.Position, Vector2.right, circle.Radius / Data.ExplodeFxRadius * Data.ExplodeFxScale);
+            }
+
             AudioManager.Play(Data.ExplodeSound);
             _pool.Release(circle);
         }

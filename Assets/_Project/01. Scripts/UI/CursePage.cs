@@ -9,10 +9,12 @@ namespace ExplodeIt.UI
     // 메인 메뉴 승천 칸을 누르면 열리는 저주 고르기 페이지. 왼쪽 페이지에 저주 칸이 늘어서 있고, 누르면 오른쪽에 설명이 뜬다.
     // 무기와 달리 여러 개를 함께 걸 수 있다. 건 저주는 무한 모드에만 적용된다.
     // 저주는 목록 순서대로 하나씩 열린다. 잠긴 칸은 다음 해금 조건(몇 개를 걸고 몇 마리)을 보여 준다.
-    // 마지막 칸(왕)은 다른 저주를 모두 걸어야 걸 수 있고, 저주를 하나라도 풀면 함께 풀린다.
+    // 마지막 칸(왕)은 장착하는 칸이 아니다. 다른 저주를 모두 걸면 버튼이 "최종전 시작"으로 바뀌고, 누르면 모든 저주를 건 채 곧장 최종전에 들어간다.
     public class CursePage : MonoBehaviour, IMenuPage
     {
         [SerializeField] private UnlockCatalog _catalog;
+        // 왕 칸의 "최종전 시작"이 지금 장비 그대로 판을 시작하도록 메인 메뉴에 맡긴다.
+        [SerializeField] private MainMenuPage _mainMenu;
 
         [Header("왼쪽 페이지 (씬에 미리 놓은 칸, 카탈로그 저주 목록과 같은 순서)")]
         [SerializeField] private ItemCard[] _cards;
@@ -27,7 +29,8 @@ namespace ExplodeIt.UI
         [SerializeField] private string _equipText = "장착";
         [SerializeField] private string _equippedText = "장착 중";
         [SerializeField] private string _unequipText = "장착 해제";
-        [SerializeField] private string _kingBlockedText = "모든 저주 장착 필요";
+        [SerializeField] private string _kingBlockedText = "모든 저주\n장착 필요";
+        [SerializeField] private string _kingStartText = "최종전 시작";
         // 잠긴 칸은 이름을 가리고 해금 조건만 보여 준다. 바로 다음 차례가 아닌 칸은 조건도 가린다.
         [Tooltip("다음 차례 저주의 해금 조건. {0} = 걸어야 하는 저주 수, {1} = 처치 수")]
         [SerializeField, TextArea] private string _unlockFormat = "<b>해금 조건</b>\n저주 {0}개 이상을 장착하고 한 판에 {1}마리 처치";
@@ -38,6 +41,8 @@ namespace ExplodeIt.UI
         [SerializeField] private SoundData _clickSound;
 
         private CurseData _preview;
+        // 지금 눌러 보고 있는 칸의 저주. 잠긴 칸도 누르면 여기에 들어간다(_preview는 열린 저주만).
+        private CurseData _focus;
 
         public void OnPageOpened()
         {
@@ -47,6 +52,7 @@ namespace ExplodeIt.UI
             }
 
             _preview = FirstUnlocked();
+            _focus = _preview;
             Refresh();
         }
 
@@ -62,34 +68,20 @@ namespace ExplodeIt.UI
                 return;
             }
 
-            bool isEquipped = !_preview.IsEquipped;
-            if (isEquipped && _preview.Kind == CurseKind.King && !_catalog.CanEquipKing)
+            if (_preview.Kind == CurseKind.King)
             {
+                if (_catalog.CanEquipKing)
+                {
+                    _mainMenu.StartFinalBattle(_preview.Id);
+                }
+
                 return;
             }
 
-            SaveData data = SaveSystem.Data;
-            data.SetCurseEquipped(_preview.Id, isEquipped);
-            if (!isEquipped && _preview.Kind != CurseKind.King)
-            {
-                UnequipKing(data);
-            }
-
+            SaveSystem.Data.SetCurseEquipped(_preview.Id, !_preview.IsEquipped);
             SaveSystem.Save();
             AudioManager.Play(_clickSound);
             Refresh();
-        }
-
-        private void UnequipKing(SaveData data)
-        {
-            CurseData[] curses = _catalog.Curses;
-            for (int i = 0; i < curses.Length; i++)
-            {
-                if (curses[i].Kind == CurseKind.King)
-                {
-                    data.SetCurseEquipped(curses[i].Id, false);
-                }
-            }
         }
 
         private CurseData FirstUnlocked()
@@ -120,7 +112,8 @@ namespace ExplodeIt.UI
 
                 CurseData curse = curses[i];
                 _cards[i].Setup(curse, curse.Icon, curse.DisplayName, !curse.IsUnlocked, OnCardClicked, OnCardDoubleClicked);
-                _cards[i].SetSelected(curse.IsEquipped);
+                _cards[i].SetSelected(curse.Kind != CurseKind.King && curse.IsEquipped);
+                _cards[i].SetFocused(curse == _focus);
             }
 
             ShowPreview(_preview);
@@ -140,10 +133,16 @@ namespace ExplodeIt.UI
                 return;
             }
 
+            if (curse.Kind == CurseKind.King)
+            {
+                _equipButton.interactable = _catalog.CanEquipKing;
+                _equipHover.SetTexts(_catalog.CanEquipKing ? _kingStartText : _kingBlockedText, "");
+                return;
+            }
+
             bool isEquipped = curse.IsEquipped;
-            bool isBlocked = !isEquipped && curse.Kind == CurseKind.King && !_catalog.CanEquipKing;
-            _equipButton.interactable = !isBlocked;
-            _equipHover.SetTexts(isEquipped ? _equippedText : isBlocked ? _kingBlockedText : _equipText, isEquipped ? _unequipText : "");
+            _equipButton.interactable = true;
+            _equipHover.SetTexts(isEquipped ? _equippedText : _equipText, isEquipped ? _unequipText : "");
         }
 
         private void ShowLocked(CurseData curse)
@@ -162,6 +161,12 @@ namespace ExplodeIt.UI
         {
             AudioManager.Play(_clickSound);
             var curse = (CurseData)card.Item;
+            _focus = curse;
+            for (int i = 0; i < _cards.Length; i++)
+            {
+                _cards[i].SetFocused(_cards[i] == card);
+            }
+
             if (card.IsLocked)
             {
                 card.Shake();
@@ -173,10 +178,10 @@ namespace ExplodeIt.UI
             ShowPreview(curse);
         }
 
-        // 편의 기능: 같은 칸을 두 번 누르면 걸기 버튼을 누른 것과 같다.
+        // 편의 기능: 같은 칸을 두 번 누르면 걸기 버튼을 누른 것과 같다. 왕 칸은 실수로 최종전에 들어가지 않게 뺀다.
         private void OnCardDoubleClicked(ItemCard card)
         {
-            if (!card.IsLocked && ReferenceEquals(card.Item, _preview))
+            if (!card.IsLocked && ReferenceEquals(card.Item, _preview) && _preview.Kind != CurseKind.King)
             {
                 ToggleEquip();
             }

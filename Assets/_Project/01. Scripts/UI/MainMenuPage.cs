@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using ExplodeIt.Bombs;
 using ExplodeIt.Core;
@@ -62,6 +63,7 @@ namespace ExplodeIt.UI
 
         public void OnPageOpened()
         {
+            ClearEquippedKing();
             _endlessLock.SetActive(!SaveSystem.Data.StoryCleared);
             _ascensionLock.SetActive(!SaveSystem.Data.StoryCleared);
             _curseCountText.gameObject.SetActive(SaveSystem.Data.StoryCleared);
@@ -136,13 +138,40 @@ namespace ExplodeIt.UI
             _pager.Open(_cursePage);
         }
 
-        // startCheckpoint: 스토리를 시작할 지점. 0이면 처음부터.
-        private void BeginRun(RunMode mode, int startCheckpoint = 0)
+        // 저주 페이지 왕 칸의 "최종전 시작". 장착한 저주에 왕 저주를 이번 판에만 얹어 무한 모드로 들어간다.
+        // 왕 저주는 저장에 장착으로 남기지 않아, 무한 모드 시작 버튼으로는 최종전에 들어가지 않는다.
+        public void StartFinalBattle(string kingCurseId)
+        {
+            BeginRun(RunMode.Endless, 0, kingCurseId);
+        }
+
+        // 예전 저장에는 왕 저주가 장착으로 남아 있을 수 있다. 그대로 두면 무한 모드 시작이 최종전이 되므로 메뉴를 열 때 푼다.
+        private void ClearEquippedKing()
+        {
+            CurseData[] curses = _catalog.Curses;
+            for (int i = 0; i < curses.Length; i++)
+            {
+                if (curses[i].Kind == CurseKind.King && SaveSystem.Data.IsCurseEquipped(curses[i].Id))
+                {
+                    SaveSystem.Data.SetCurseEquipped(curses[i].Id, false);
+                    SaveSystem.Save();
+                }
+            }
+        }
+
+        // startCheckpoint: 스토리를 시작할 지점. 0이면 처음부터. extraCurseId: 이번 판에만 얹는 저주.
+        private void BeginRun(RunMode mode, int startCheckpoint = 0, string extraCurseId = null)
         {
             WeaponData weapon = _catalog.FindUsableWeapon(SaveSystem.Data.SelectedWeapon);
             AbilityData ability = _catalog.FindUsableAbility(SaveSystem.Data.SelectedAbility);
+            IReadOnlyList<string> curseIds = SaveSystem.Data.EquippedCurses;
+            if (extraCurseId != null)
+            {
+                curseIds = new List<string>(curseIds) { extraCurseId };
+            }
+
             _launcher.Launch(mode, weapon != null ? weapon.Id : "", ability != null ? ability.Id : "", SaveSystem.Data.SelectedArtifacts,
-                SaveSystem.Data.EquippedCurses, startCheckpoint);
+                curseIds, startCheckpoint);
         }
 
         private void RefreshSlots()

@@ -1991,7 +1991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9, g: 0.45, b: 0.38, a: 1}
+  m_Color: {r: 1, g: 0.72, b: 0.35, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8251,8 +8251,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -527}
-  m_SizeDelta: {x: 168, y: 132}
+  m_AnchoredPosition: {x: 0, y: -544}
+  m_SizeDelta: {x: 203.8265, y: 159.4024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201092397
 MonoBehaviour:
@@ -10155,7 +10155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -336, y: -311}
+  m_AnchoredPosition: {x: -239, y: -380}
   m_SizeDelta: {x: 600, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &255217808
@@ -14990,7 +14990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &399817019
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19975,7 +19975,7 @@ RectTransform:
   m_Father: {fileID: 519696461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -25199,7 +25199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.72, b: 0.35, a: 1}
+  m_Color: {r: 0.9, g: 0.45, b: 0.38, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -28038,8 +28038,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 231152290}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 28, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -31461,7 +31461,7 @@ RectTransform:
   m_Father: {fileID: 139801759}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -32371,9 +32371,9 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 22
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -32407,7 +32407,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 8, y: 12, z: 8, w: 12}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -38402,7 +38402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC2DC\uC791\uD558\uAE30"
+  m_text: "\uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bccc44b61ede7e546bba8a03cad4144d, type: 2}
   m_sharedMaterial: {fileID: 8892332144950154642, guid: bccc44b61ede7e546bba8a03cad4144d, type: 2}
@@ -45154,8 +45154,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 82430861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 28, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -65408,7 +65408,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &1726068134
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -65434,6 +65434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.CursePage
   _catalog: {fileID: 11400000, guid: 1a90652f710aab84a9ffa223e9c2943a, type: 2}
+  _mainMenu: {fileID: 1626104605}
   _cards:
   - {fileID: 1985113581}
   - {fileID: 1501739682}
@@ -65453,7 +65454,8 @@ MonoBehaviour:
   _equipText: "\uC7A5\uCC29"
   _equippedText: "\uC7A5\uCC29 \uC911"
   _unequipText: "\uC7A5\uCC29 \uD574\uC81C"
-  _kingBlockedText: "\uBAA8\uB4E0 \uC800\uC8FC \uC7A5\uCC29 \uD544\uC694"
+  _kingBlockedText: "\uBAA8\uB4E0 \uC800\uC8FC\n\uC7A5\uCC29 \uD544\uC694"
+  _kingStartText: "\uCD5C\uC885\uC804 \uC2DC\uC791"
   _unlockFormat: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC800\uC8FC {0}\uAC1C \uC774\uC0C1\uC744
     \uC7A5\uCC29\uD558\uACE0 \uD55C \uD310\uC5D0 {1}\uB9C8\uB9AC \uCC98\uCE58"
   _laterUnlockText: "<b>\uD574\uAE08 \uC870\uAC74</b>\n\uC55E\uC758 \uC800\uC8FC\uB97C
@@ -76908,7 +76910,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0C0\uC774\uD2C0\uB85C"
+  m_text: "\uD0C0\uC774\uD2C0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ef36af3bb0845a84daf8d0a8f99f422e, type: 2}
   m_sharedMaterial: {fileID: 1383221766076316926, guid: ef36af3bb0845a84daf8d0a8f99f422e, type: 2}

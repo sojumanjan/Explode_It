@@ -31,9 +31,18 @@ namespace ExplodeIt.Progression
         [Tooltip("원이 깔리고 운석이 떨어지기까지 시간 (초). 원이 차오르는 시간이 곧 예고다")]
         [SerializeField, Min(0.1f)] private float _fallTime = 1.2f;
 
+        [Tooltip("떨어지는 시간을 흩뜨리는 폭 (초). 함께 깔린 운석이 동시에 떨어지지 않게, 운석마다 떨어지기까지 시간을 ±이 값 안에서 무작위로 정한다. 원이 차오르는 속도도 같이 달라져 예고는 그대로 맞는다")]
+        [SerializeField, Min(0f)] private float _fallTimeJitter = 0.1f;
+
         [Header("연출")]
         [SerializeField] private FeedbackData _impactFeedback;
         [SerializeField] private SoundData _impactSound;
+
+        [Tooltip("운석이 떨어진 자리에 트는 pixelfx (PxFx_meteor-impact). 화염 마법사 메테오와 같은 그림이다. 비워 두면 틀지 않는다")]
+        [SerializeField] private PixelFxPlayer _impactFx;
+
+        [Tooltip("배율 1일 때 운석 폭발 그림이 덮는 반경 (유닛). meteor-impact는 26px ÷ PPU 20 = 1.3")]
+        [SerializeField, Min(0.01f)] private float _impactFxRadius = 1.3f;
 
         public override CurseKind Kind => CurseKind.MeteorRain;
         public float Interval => _interval;
@@ -43,7 +52,10 @@ namespace ExplodeIt.Progression
         public float MaxDistance => Mathf.Max(_minDistance, _maxDistance);
         public float Radius => _radius;
         public float FallTime => _fallTime;
+        public float FallTimeJitter => _fallTimeJitter;
         public FeedbackData ImpactFeedback => _impactFeedback;
         public SoundData ImpactSound => _impactSound;
+        public PixelFxPlayer ImpactFx => _impactFx;
+        public float ImpactFxRadius => _impactFxRadius;
     }
 }

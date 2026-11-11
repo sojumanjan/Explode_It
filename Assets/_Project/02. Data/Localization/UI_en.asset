@@ -75,7 +75,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1975694397446
-    m_Localized: To Title
+    m_Localized: Title
     m_Metadata:
       m_Items: []
   - m_Id: 1975698591744
@@ -747,6 +747,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4857787387543552
     m_Localized: (Seal)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5154877019848704
+    m_Localized: Start Final Battle
     m_Metadata:
       m_Items: []
   references:

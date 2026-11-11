@@ -87,6 +87,8 @@ namespace ExplodeIt.UI
         // 아티팩트 칸 번호. 무기·스킬에서는 쓰지 않는다.
         private int _slot;
         private IUnlockable _preview;
+        // 지금 눌러 보고 있는 칸의 것(잠긴 카드와 강화 칸 포함). 그 칸 바탕을 회색으로 눌러 보인다.
+        private object _focus;
         private bool _hasCards;
         // 스킬 줄마다의 강화 칸과 그 강화.
         private readonly List<ItemCard> _upgradeCells = new List<ItemCard>();
@@ -133,6 +135,7 @@ namespace ExplodeIt.UI
             _empty.SetActive(_items[(int)_kind].Count == 0);
             _upgradePreview = null;
             _preview = Equipped();
+            _focus = _preview;
             Refresh();
         }
 
@@ -336,6 +339,7 @@ namespace ExplodeIt.UI
                 RefreshUpgradeCells();
             }
 
+            ApplyFocus();
             ShowPreview(_preview);
             bool isEquipped = _preview != null && _preview == equipped;
             _equipButton.gameObject.SetActive(_preview != null);
@@ -347,6 +351,20 @@ namespace ExplodeIt.UI
             }
 
             SetEquipButton(isEquipped, CanUnequip(), _equipText);
+        }
+
+        private void ApplyFocus()
+        {
+            List<ItemCard> cards = _cards[(int)_kind];
+            for (int i = 0; i < cards.Count; i++)
+            {
+                cards[i].SetFocused(ReferenceEquals(cards[i].Item, _focus));
+            }
+
+            for (int i = 0; i < _upgradeCells.Count; i++)
+            {
+                _upgradeCells[i].SetFocused(ReferenceEquals(_upgradeCells[i].Item, _focus));
+            }
         }
 
         // 같은 스킬의 강화는 목록 순서대로 I, II로 부른다. 잠긴 칸은 이름 대신 ???가 보인다.
@@ -372,6 +390,8 @@ namespace ExplodeIt.UI
         {
             AudioManager.Play(_clickSound);
             var upgrade = (AbilityUpgradeData)cell.Item;
+            _focus = upgrade;
+            ApplyFocus();
             if (cell.IsLocked)
             {
                 _upgradePreview = null;
@@ -414,6 +434,8 @@ namespace ExplodeIt.UI
         {
             AudioManager.Play(_clickSound);
             IUnlockable item = (IUnlockable)card.Item;
+            _focus = item;
+            ApplyFocus();
             if (card.IsLocked)
             {
                 if (_upgradePreview != null)
