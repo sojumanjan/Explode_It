@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2100244554436762776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7816375248265721534}
+  - component: {fileID: 2960786068000118939}
+  m_Layer: 0
+  m_Name: KingSwordWave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7816375248265721534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100244554436762776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6524436974794566337}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2960786068000118939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100244554436762776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc2adeef2007b548838ff8ffde1949c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.KingSwordWave
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _visual: {fileID: 802470240703144684}
+--- !u!1001 &527172140108270548
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7816375248265721534}
+    m_Modifications:
+    - target: {fileID: 3199181635047516512, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_Name
+      value: "\uADF8\uB9BC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+--- !u!114 &802470240703144684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 896803645801900344, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+  m_PrefabInstance: {fileID: 527172140108270548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99297ee5b5e799840bdd730340f8b9f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxPlayer
+--- !u!4 &6524436974794566337 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6763158251705934101, guid: 7a731228df71eb84fab5824b3e70f950, type: 3}
+  m_PrefabInstance: {fileID: 527172140108270548}
+  m_PrefabAsset: {fileID: 0}

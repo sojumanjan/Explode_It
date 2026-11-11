@@ -150,6 +150,64 @@ namespace ExplodeIt.Enemies
         [Tooltip("베는 동작 그림 한 장을 보여 주는 시간 (초). 베는 순간부터 그림을 차례로 넘기고 마지막 그림에서 멈춘다. 장수 × 이 값이 쉬는 시간보다 짧아야 끝까지 보인다")]
         [SerializeField, Min(0.01f)] private float _slashFrameTime = 0.04f;
 
+        [Header("검기 날리기 (2국면 첫 패턴, 왕관을 쓴 채라 무적)")]
+        [Tooltip("검기를 날리기 전 플레이어의 왼쪽이나 오른쪽(지금 왕이 있는 쪽)으로 뛰어 물러나, 플레이어에게서 가로로 이만큼 떨어진 곳에 내려선다 (유닛). 화면이 가로로 넓어 위아래보다 멀리 갈 수 있다. 그쪽 화면이 좁으면 반대쪽으로 간다")]
+        [SerializeField, Min(0f)] private float _waveHopDistance = 14f;
+
+        [Tooltip("뛰어 물러나는 시간 (초)")]
+        [SerializeField, Min(0.05f)] private float _waveHopTime = 0.45f;
+
+        [Tooltip("뛰어 물러나며 떠오르는 높이 (유닛)")]
+        [SerializeField, Min(0f)] private float _waveHopHeight = 2f;
+
+        [Tooltip("한 패턴에 검기를 날리는 번 수 (번). 매번 가운데 줄이 플레이어를 향한다")]
+        [SerializeField, Min(1)] private int _waveVolleys = 3;
+
+        [Tooltip("한 번에 부채꼴로 날리는 검기 수 (발)")]
+        [SerializeField, Min(1)] private int _waveCount = 5;
+
+        [Tooltip("부채꼴 전체 각도 (도). 가운데 줄이 플레이어를 향한다")]
+        [SerializeField, Range(0f, 180f)] private float _waveSpread = 70f;
+
+        [Tooltip("날아갈 줄을 보여 주는 예고 시간 (초). 이 시간이 다 차면 날린다")]
+        [SerializeField, Min(0.05f)] private float _waveAimTime = 0.7f;
+
+        [Tooltip("첫 번째로 날릴 때만 예고를 이만큼 더 길게 둔다 (초). 뛰어 물러난 직후라 줄을 읽을 틈을 준다. 늘어난 만큼은 플레이어를 따라오는 시간이다")]
+        [SerializeField, Min(0f)] private float _waveFirstExtraAim = 0.2f;
+
+        [Tooltip("예고 끝에서 이 시간 동안은 줄 방향을 고정한다 (초). 끝까지 따라오면 어디로 피할지 읽을 수 없다")]
+        [SerializeField, Min(0f)] private float _waveLockTime = 0.5f;
+
+        [Tooltip("날린 뒤 다음 예고까지 쉬는 시간 (초)")]
+        [SerializeField, Min(0f)] private float _wavePause = 0.25f;
+
+        [Tooltip("검기가 날아가는 속도 (유닛/초)")]
+        [SerializeField, Min(0.1f)] private float _waveSpeed = 38f;
+
+        [Tooltip("검기가 날아가는 거리 (유닛). 벽은 뚫고 지나가며, 예고선도 이 길이로 그린다")]
+        [SerializeField, Min(0.1f)] private float _waveRange = 34f;
+
+        [Tooltip("예고선 굵기 (유닛). 날아가는 칼날 그림의 높이도 이 값에 정확히 맞춘다")]
+        [SerializeField, Min(0.05f)] private float _waveWidth = 2f;
+
+        [Tooltip("실제 판정 지름이 예고선 굵기의 몇 배인지. 칼날 끝이 스치기만 해도 맞으면 억울해서 조금 좁힌다")]
+        [SerializeField, Range(0.1f, 1f)] private float _waveHitRatio = 0.85f;
+
+        [Tooltip("날아가는 검기 프리팹 (KingSwordWave)")]
+        [SerializeField] private KingSwordWave _waveProjectile;
+
+        [Tooltip("배율 1일 때 칼날 그림 높이 (유닛, 외곽선 포함). king-sword-wave는 31px ÷ PPU 20 = 1.55. 예고선 굵기에 맞출 배율을 이 값으로 구한다")]
+        [SerializeField, Min(0.01f)] private float _waveFxHeight = 1.55f;
+
+        [Tooltip("날아가는 칼날 뒤에 남는 잔상 pixelfx (PxFx_king-sword-wave-trail)")]
+        [SerializeField] private PixelFxPlayer _waveTrailFx;
+
+        [Tooltip("잔상을 남기는 간격 (초). 짧을수록 잔상이 촘촘하다")]
+        [SerializeField, Min(0.005f)] private float _waveTrailInterval = 0.025f;
+
+        [Tooltip("검기를 날리는 순간의 효과음")]
+        [SerializeField] private SoundData _waveSound;
+
         [Header("돌진 찌르기")]
         [Tooltip("한 패턴에 돌진하는 횟수 (번)")]
         [SerializeField, Min(1)] private int _lungeCount = 3;
@@ -513,6 +571,25 @@ namespace ExplodeIt.Enemies
         public float SlashAngle => _slashAngle;
         public float SlashPause => _slashPause;
         public float SlashFrameTime => _slashFrameTime;
+        public float WaveHopDistance => _waveHopDistance;
+        public float WaveHopTime => _waveHopTime;
+        public float WaveHopHeight => _waveHopHeight;
+        public int WaveVolleys => _waveVolleys;
+        public int WaveCount => _waveCount;
+        public float WaveSpread => _waveSpread;
+        public float WaveAimTime => _waveAimTime;
+        public float WaveFirstExtraAim => _waveFirstExtraAim;
+        public float WaveLockTime => _waveLockTime;
+        public float WavePause => _wavePause;
+        public float WaveSpeed => _waveSpeed;
+        public float WaveRange => _waveRange;
+        public float WaveWidth => _waveWidth;
+        public float WaveHitRadius => _waveWidth * 0.5f * _waveHitRatio;
+        public KingSwordWave WaveProjectile => _waveProjectile;
+        public float WaveFxScale => _waveWidth / _waveFxHeight;
+        public PixelFxPlayer WaveTrailFx => _waveTrailFx;
+        public float WaveTrailInterval => _waveTrailInterval;
+        public SoundData WaveSound => _waveSound;
         public int LungeCount => _lungeCount;
         public float BackstepDistance => _backstepDistance;
         public float BackstepDuration => _backstepDuration;

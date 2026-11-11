@@ -8575,13 +8575,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa2c47830355c846a5432a8bc6fc57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Enemies.EnemyVisual
-  _artFacesRight: 1
+  _artFacesRight: 0
   _enemy: {fileID: 2656955896382719035}
   _sprite: {fileID: 1114590347147929343}
   _motion: {fileID: 11400000, guid: 63da58c2d46d2ef458d60ba6cd9e9c33, type: 2}
   _attackSprite: {fileID: 0}
   _stunnedSprite: {fileID: 0}
   _deathSprite: {fileID: 21300000, guid: d1177e1851be9f44a9f050e880dd0665, type: 3}
+  _idleLoop: {fileID: 0}
 --- !u!114 &2656955896382719035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8634,6 +8635,11 @@ MonoBehaviour:
   _rightFacingPoseSprites:
   - {fileID: 21300000, guid: 3b891905a3150ce4394beb4a0d708aee, type: 3}
   - {fileID: 21300000, guid: 9e50ad1bc00973340b371f18bb02c46f, type: 3}
+  - {fileID: 21300000, guid: dce7286de63c1ff47bb163fe432e18a6, type: 3}
+  - {fileID: 21300000, guid: 75d4ed74056e243458a6f3a8ebdb29ee, type: 3}
+  - {fileID: 21300000, guid: 40cee37ee7c3ed84bbeea7a60549e856, type: 3}
+  - {fileID: 21300000, guid: d3dcb0921a8e19c4688a80da46479c5a, type: 3}
+  - {fileID: 21300000, guid: 6340304905dd47144a5e9837b3436c4f, type: 3}
   _swordChargeSprite: {fileID: 21300000, guid: 19ddd669d370cda42afd1e2f03d6e676, type: 3}
   _swordAttackSprite: {fileID: 21300000, guid: f3b7d1694dd31e64bb6509fd83c559e8, type: 3}
   _meteorAura: {fileID: 4920020763899043614}

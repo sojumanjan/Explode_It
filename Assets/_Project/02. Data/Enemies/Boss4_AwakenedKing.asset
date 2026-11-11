@@ -75,6 +75,25 @@ MonoBehaviour:
   _slashAngle: 130
   _slashPause: 0.2
   _slashFrameTime: 0.04
+  _waveHopDistance: 14
+  _waveHopTime: 0.45
+  _waveHopHeight: 2
+  _waveVolleys: 3
+  _waveCount: 5
+  _waveSpread: 70
+  _waveAimTime: 0.5
+  _waveFirstExtraAim: 0.2
+  _waveLockTime: 0.35
+  _wavePause: 0.15
+  _waveSpeed: 38
+  _waveRange: 34
+  _waveWidth: 2
+  _waveHitRatio: 0.85
+  _waveProjectile: {fileID: 2960786068000118939, guid: 068dd5e45c72f684f8d09148a2428707, type: 3}
+  _waveFxHeight: 1.55
+  _waveTrailFx: {fileID: 608011514719824491, guid: 4837711997da95a418f2f73f88093486, type: 3}
+  _waveTrailInterval: 0.025
+  _waveSound: {fileID: 11400000, guid: 026eeb36209715940bd5495ef3616d3a, type: 2}
   _lungeCount: 3
   _backstepDistance: 3
   _backstepDuration: 0.15

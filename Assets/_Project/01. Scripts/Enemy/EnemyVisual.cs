@@ -106,6 +106,7 @@ namespace ExplodeIt.Enemies
             Lift = 0f;
             Shift = Vector2.zero;
             FlipOverride = null;
+            PoseArtFacesRight = null;
             ExtraLean = 0f;
             ExtraScale = Vector2.one;
             Jitter = 0f;
@@ -191,8 +192,9 @@ namespace ExplodeIt.Enemies
             if (Mathf.Abs(faceX) > TurnThreshold)
             {
                 _facesRight = faceX > 0f;
-                _sprite.flipX = _facesRight != _artFacesRight;
             }
+
+            _sprite.flipX = _facesRight != (PoseArtFacesRight ?? _artFacesRight);
         }
 
         private void OnStateChanged(EnemyState previous, EnemyState current, Vector2 position)
@@ -237,6 +239,9 @@ namespace ExplodeIt.Enemies
 
         // 값이 있으면 상태별 방향 고르기를 건너뛰고 그림을 이대로 뒤집는다. 자세 그림마다 그려진 방향이 달라 보스가 직접 정할 때 쓴다.
         public bool? FlipOverride { get; set; }
+        // 지금 자세 그림이 기본 그림과 반대 방향으로 그려졌을 때 그 방향(오른쪽이면 true). 비우면 기본 그림 방향을 쓴다.
+        // 자세마다 그려진 방향이 다른 보스(최종 보스 베기·찌르기)가 자세를 바꿀 때 알려 준다.
+        public bool? PoseArtFacesRight { get; set; }
 
         // 상태별 자세에 더하는 기울기 (도, + = 바라보는 쪽으로 숙임, - = 뒤로 젖힘). 뒷도약처럼 잠깐 몸을 젖힐 때 쓴다.
         public float ExtraLean { get; set; }

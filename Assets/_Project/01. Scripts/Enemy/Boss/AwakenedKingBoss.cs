@@ -8,7 +8,7 @@ namespace ExplodeIt.Enemies
     // 최종 보스(각성한 왕). 2등신 왕이 변신해 싸운다.
     // 머리 위에 왕관이 떠서 빛나는 동안은 무적이다. (폭탄을 굴러 피하던 동작은 무적일 때만 일어나 공략에 의미가 없고,
     // 피하니까 맞힐 수 있다는 오해만 키워서 뺐다.)
-    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 왕검 연속 베기 → 도약 내려찍기 → 왕관 투하,
+    // 1국면은 왕검 연속 베기 → 돌진 찌르기 → 왕관 부메랑, 2국면은 검기 날리기 → 도약 내려찍기 → 왕관 투하,
     // 3국면은 유성우 → 천지 가르기 → 별의 의식(왕관을 맵 가운데 띄우고 별 끝을 순간이동, 못 잡으면 맵 전체 충격파)을 차례로 돈다.
     // 왕관이 머리에서 떠나 있는 동안만 맞는다.
     // 세 번 맞으면 그로기에 빠지고, 그로기 때 한 번 더 맞히면 쓰러진다. 맞을 때마다 다음 국면으로 넘어간다(지금은 1국면 패턴만 있다).
@@ -34,6 +34,8 @@ namespace ExplodeIt.Enemies
         private const float CrownCatchDistance = 0.4f;
         // 그로기 직후 같은 폭발이 바로 잡지 못하게 하는 짧은 무적. 한 폭발 안의 판정은 같은 프레임에 끝난다.
         private const float GroggyGrace = 0.1f;
+        // 검기 전 뛰어 물러날 때, 지금 쪽 화면 여유가 반대쪽의 이 배율보다 작으면 반대쪽으로 간다.
+        private const float HopSideRatio = 0.7f;
         // 벽을 뚫는 돌진이 멈출 자리를 찾을 때 뒤로 당겨 보는 간격 (유닛).
         private const float LungeSafeStep = 0.25f;
         // 맞아서 떨어진 왕관이 튀어 오르는 높이 (유닛), 바닥까지 떨어지는 거리 (유닛), 떨어지는 시간 (초), 바닥에 누운 기울기 (도).
@@ -94,7 +96,8 @@ namespace ExplodeIt.Enemies
             CrownDrop,
             Meteor,
             Sword,
-            Star
+            Star,
+            Wave
         }
 
         private enum Step
@@ -123,7 +126,10 @@ namespace ExplodeIt.Enemies
             SwordSlash,
             StarDraw,
             StarTeleport,
-            StarShock
+            StarShock,
+            WaveHop,
+            WaveAim,
+            WavePause
         }
 
         // 국면별 패턴 순서. 맞을 때마다 다음 국면으로 넘어가고, 마지막 국면 순서를 그 뒤로도 쓴다.
@@ -131,7 +137,7 @@ namespace ExplodeIt.Enemies
         private static readonly Pattern[][] Rotations =
         {
             new[] { Pattern.Slash, Pattern.Lunge, Pattern.Crown },
-            new[] { Pattern.Slash, Pattern.Leap, Pattern.CrownDrop },
+            new[] { Pattern.Wave, Pattern.Leap, Pattern.CrownDrop },
             new[] { Pattern.Meteor, Pattern.Sword, Pattern.Star }
         };
 
@@ -177,8 +183,8 @@ namespace ExplodeIt.Enemies
         // 그로기로 주저앉은 그림. 쓰러짐 그림은 표시 컴포넌트(EnemyVisual)의 사망 그림 칸에 둔다.
         [SerializeField] private Sprite _stunSprite;
         [SerializeField] private Sprite _meteorPoseSprite;
-        // 쓰러진 뒤 그림 중 오른쪽을 보고 그려진 것(무릎 꿇기 등). 나머지(기절·쓰러짐)는 왼쪽을 보고 그려졌다.
-        // 쓰러진 뒤에는 이 기준으로 뒤집어 고블린을 보게 한다.
+        // 오른쪽을 보고 그려진 자세 그림(베기 준비·베기·찌르기, 쓰러진 뒤 무릎 꿇기 등). 나머지(기본·기절·쓰러짐 등)는 왼쪽을 보고 그려졌다.
+        // 싸우는 동안은 이 그림을 보여 줄 때 뒤집는 기준을 바꾸고, 쓰러진 뒤에는 이 기준으로 뒤집어 고블린을 보게 한다.
         [SerializeField] private Sprite[] _rightFacingPoseSprites;
         [SerializeField] private Sprite _swordChargeSprite;
         [SerializeField] private Sprite _swordAttackSprite;
@@ -291,6 +297,14 @@ namespace ExplodeIt.Enemies
         private PixelFxPool _lungeWakeFx;
         private PixelFxPool _meteorFx;
         private PixelFxPool _riftFx;
+        // 검기 날리기: 날아가는 검기 풀과, 부채꼴 줄마다 하나씩 둔 예고선(돌진 예고선을 복제).
+        private ComponentPool<KingSwordWave> _wavePool;
+        private System.Action<KingSwordWave> _releaseWave;
+        private TelegraphLine[] _waveLines;
+        private PixelFxPool _waveTrailFx;
+        private int _waveVolley;
+        // 뛰어 물러날 때 출발 자리가 착지 자리에서 떨어진 만큼. 몸은 먼저 착지 자리에 두고 그림만 이만큼 밀었다 당긴다.
+        private Vector2 _waveHopFrom;
         private float _lungeWakeTimer;
         private float _crownWakeTimer;
         private Vector2 _lastCrownWake;
@@ -419,6 +433,21 @@ namespace ExplodeIt.Enemies
             // 반 가르기 경계선 한 줄(맵 대각선 길이)을 한꺼번에 덮을 만큼 미리 만든다. 전투 중 생성을 막는다.
             // 줄무늬 베기는 줄이 많아 수백 개가 되므로 찢김을 넣지 않고 줄무늬 번쩍임만 쓴다.
             _riftFx = PixelFxPool.Create(_data.RiftFx, _fxRoot, 64);
+            // 한 패턴에 날리는 검기를 다 담을 만큼 미리 만든다. 전투 중 생성을 막는다.
+            int waveTotal = _data.WaveCount * _data.WaveVolleys;
+            _wavePool = new ComponentPool<KingSwordWave>(_data.WaveProjectile, _fxRoot, waveTotal, waveTotal * 2);
+            _wavePool.Prewarm(waveTotal);
+            _releaseWave = _wavePool.Release;
+            // 검기 하나가 잔상 수명 동안 남기는 잔상 수 × 검기 수만큼.
+            float trailLife = _data.WaveTrailFx != null ? _data.WaveTrailFx.Clip.Duration : 0f;
+            _waveTrailFx = PixelFxPool.Create(_data.WaveTrailFx, _fxRoot,
+                waveTotal * (Mathf.CeilToInt(trailLife / _data.WaveTrailInterval) + 1));
+            _waveLines = new TelegraphLine[_data.WaveCount];
+            for (int i = 0; i < _waveLines.Length; i++)
+            {
+                _waveLines[i] = Instantiate(_aimLine, _aimLine.transform.parent);
+                _waveLines[i].Hide();
+            }
             _dropShadowScale = _dropShadow.transform.localScale;
             _dropShadow.transform.SetParent(null);
             _dropRange.transform.SetParent(null);
@@ -847,6 +876,11 @@ namespace ExplodeIt.Enemies
             {
                 pose = _step == Step.Pause ? SlashFrame() : RagePick(_rageSlashReadySprite, _slashReadySprite);
             }
+            else if (State == EnemyState.Attack && _pattern == Pattern.Wave)
+            {
+                pose = _step == Step.WaveHop ? _leapHoverSprite
+                    : _step == Step.WavePause ? SlashFrame() : RagePick(_rageSlashReadySprite, _slashReadySprite);
+            }
             else if (State == EnemyState.Attack && _pattern == Pattern.Lunge && _step == Step.Dash)
             {
                 pose = _thrustSprite;
@@ -882,6 +916,7 @@ namespace ExplodeIt.Enemies
             }
 
             _visual.PoseSprite = pose;
+            _visual.PoseArtFacesRight = pose != null && IsArtFacingRight(pose) ? true : (bool?)null;
         }
 
         private Sprite RagePick(Sprite rage, Sprite normal)
@@ -1252,6 +1287,8 @@ namespace ExplodeIt.Enemies
             {
                 case Pattern.Slash:
                     return TickSlash(deltaTime);
+                case Pattern.Wave:
+                    return TickWave();
                 case Pattern.Lunge:
                     return TickLunge(deltaTime);
                 case Pattern.Leap:
@@ -1307,6 +1344,11 @@ namespace ExplodeIt.Enemies
                     if (_pattern == Pattern.Slash)
                     {
                         BeginSlashDash();
+                    }
+                    else if (_pattern == Pattern.Wave)
+                    {
+                        _waveVolley = 0;
+                        BeginWaveHop();
                     }
                     else if (_pattern == Pattern.Lunge)
                     {
@@ -1467,6 +1509,128 @@ namespace ExplodeIt.Enemies
             _slashFill.ResetColor();
             _slashRange.Visible = true;
             _slashFill.Visible = true;
+        }
+
+        // ── 검기 날리기: 플레이어 반대쪽으로 멀리 뛰어 물러난 뒤, 칼을 들고 부채꼴로 날아갈 줄을 보여 주고 줄마다 초승달 검기를 날린다.
+        // 이를 정해진 번 수만큼. 가까이서 날리면 검기를 느리게 둘 수밖에 없어, 멀리서 빠르게 날아오게 한다.
+        // 줄은 매번 가운데 줄이 플레이어를 향하도록 따라오다 끝에서 고정한다.
+
+        // 도약처럼 몸(판정)은 먼저 착지 자리에 두고, 그림만 출발 자리에서 포물선을 그리며 따라오게 한다.
+        private void BeginWaveHop()
+        {
+            _step = Step.WaveHop;
+            _stepTime = 0f;
+            Vector2 start = Body.position;
+            Vector2 target = TargetPosition;
+            float side = start.x >= target.x ? 1f : -1f;
+            Vector2 near = ClampToView(target + new Vector2(side * _data.WaveHopDistance, 0f));
+            Vector2 far = ClampToView(target - new Vector2(side * _data.WaveHopDistance, 0f));
+            // 지금 쪽 화면이 반대쪽보다 확 좁으면(벽 가까이 몰렸으면) 반대쪽으로 넘어간다.
+            Vector2 pick = Mathf.Abs(near.x - target.x) >= Mathf.Abs(far.x - target.x) * HopSideRatio ? near : far;
+            Vector2 land = FindLandingPoint(ClampToArena(pick));
+            Body.position = land;
+            transform.position = land;
+            _waveHopFrom = start - land;
+            SetLeapOffset(_waveHopFrom);
+            AudioManager.Play(_data.LeapSound);
+        }
+
+        private void BeginWaveAim()
+        {
+            _step = Step.WaveAim;
+            _stepTime = 0f;
+            _aimDirection = DirectionToTarget();
+        }
+
+        private bool TickWave()
+        {
+            if (_step == Step.WaveHop)
+            {
+                float t = Mathf.Clamp01(_stepTime / _data.WaveHopTime);
+                float glide = 1f - (1f - t) * (1f - t);
+                SetLeapOffset(_waveHopFrom * (1f - glide) + Vector2.up * (_data.WaveHopHeight * Mathf.Sin(t * Mathf.PI)));
+                if (t >= 1f)
+                {
+                    SetLeapOffset(Vector2.zero);
+                    BeginWaveAim();
+                }
+
+                return false;
+            }
+
+            if (_step == Step.WaveAim)
+            {
+                float aimTime = _data.WaveAimTime + (_waveVolley == 0 ? _data.WaveFirstExtraAim : 0f);
+                if (_stepTime < aimTime - _data.WaveLockTime)
+                {
+                    _aimDirection = DirectionToTarget();
+                }
+
+                float width = _data.WaveWidth;
+                for (int i = 0; i < _waveLines.Length; i++)
+                {
+                    _waveLines[i].Show(Body.position, WaveDirection(i), _data.WaveRange, width);
+                }
+
+                if (_stepTime >= aimTime)
+                {
+                    FireWaves();
+                    _step = Step.WavePause;
+                    _stepTime = 0f;
+                }
+
+                return false;
+            }
+
+            if (_stepTime < _data.WavePause)
+            {
+                return false;
+            }
+
+            _waveVolley++;
+            if (_waveVolley >= _data.WaveVolleys)
+            {
+                return true;
+            }
+
+            BeginWaveAim();
+            return false;
+        }
+
+        private Vector2 WaveDirection(int index)
+        {
+            int count = _waveLines.Length;
+            float gap = count > 1 ? _data.WaveSpread / (count - 1) : 0f;
+            float angle = -_data.WaveSpread * 0.5f + gap * index;
+            return Quaternion.Euler(0f, 0f, angle) * _aimDirection;
+        }
+
+        private void FireWaves()
+        {
+            HideWaveLines();
+            Vector2 origin = Body.position;
+            for (int i = 0; i < _waveLines.Length; i++)
+            {
+                KingSwordWave wave = _wavePool.Get(origin);
+                wave.Launch(WaveDirection(i), _data.WaveSpeed, _data.WaveRange, _data.WaveHitRadius, _data.WaveFxScale,
+                    _waveTrailFx, _data.WaveTrailInterval, _releaseWave, _data);
+            }
+
+            _slashFx?.Play(origin, _aimDirection, _data.SlashRadius / _data.SlashFxRadius);
+            AudioManager.Play(_data.WaveSound);
+        }
+
+        private void HideWaveLines()
+        {
+            if (_waveLines == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _waveLines.Length; i++)
+            {
+                _waveLines[i].Hide();
+            }
         }
 
         // ── 돌진 찌르기: 뒤로 물러나 거리를 벌린 뒤, 예고선을 따라 플레이어를 지나쳐 돌진. 돌진은 벽을 뚫는다. 이를 정해진 횟수만큼.
@@ -1643,6 +1807,12 @@ namespace ExplodeIt.Enemies
             float angle = (90f + Random.Range(-half, half)) * Mathf.Deg2Rad;
             Vector2 point = TargetPosition + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * Random.Range(_data.LeapAirDistanceMin, _data.LeapAirDistanceMax);
 
+            return ClampToView(point);
+        }
+
+        // 몸 전체가 화면 안에 보이도록 자리를 화면 안쪽으로 당긴다.
+        private Vector2 ClampToView(Vector2 point)
+        {
             Camera view = Camera.main;
             if (view == null)
             {
@@ -3511,6 +3681,7 @@ namespace ExplodeIt.Enemies
         private void HideTelegraphs()
         {
             _aimLine.Hide();
+            HideWaveLines();
             _slashRange.Visible = false;
             _slashFill.Visible = false;
         }
