@@ -4,6 +4,7 @@ import { burst, fly, seg, ease, fit, TAU } from "../../core/index.js";
 // flung out to the hole's radius and drop, a brown dust cloud swells and settles, and a dark crater shadow fades.
 // Every hole bursts with the same sheet, so the real hole can't be told apart by the burst.
 // `radius` is the hole radius in pixels; clods land inside it so the picture matches what was hit.
+// `clods` (count) and `crater` (0 or 1) let the final boss's leap slam reuse just the dust cloud.
 export const meta = {
   name: "Dirt burst",
   desc: "Top-down dirt eruption: clods and stones fly out to the hole radius and drop, a brown dust cloud swells and settles and a crater shadow fades, gone in 0.6 s.",
@@ -14,7 +15,7 @@ export const meta = {
   loop: false,
   fps: 30,
   bg: "dark",
-  options: { palette: ["#2a1d16", "#4a3426", "#6b4c36", "#8c6a4c", "#b08a66", "#d8b88e"], radius: 44, seed: 5 },
+  options: { palette: ["#2a1d16", "#4a3426", "#6b4c36", "#8c6a4c", "#b08a66", "#d8b88e"], radius: 44, seed: 5, clods: 16, crater: 1 },
 };
 
 export function draw(p, t, o) {
@@ -22,7 +23,7 @@ export function draw(p, t, o) {
 
   // crater shadow: soft and short so it doesn't read as a lingering hazard
   const ck = seg(t, 0.05, 0.5);
-  if (ck < 1) p.disc(0, 0, R * 0.4, C[0], 0.5 * (1 - ck));
+  if (ck < 1 && o.crater) p.disc(0, 0, R * 0.4, C[0], 0.5 * (1 - ck));
 
   // dust: soft discs swelling out from the middle and settling
   burst(9, o.seed + 1, (r, i) => {
@@ -36,8 +37,8 @@ export function draw(p, t, o) {
   });
 
   // clods: chunky earth thrown out to the radius, popping up toward the camera (bigger) then dropping (smaller)
-  burst(16, o.seed, (r, i) => {
-    const a = (i / 16) * TAU + r.range(-0.2, 0.2), d = R * r.range(0.5, 0.95), life = r.range(0.32, 0.48), d0 = r.range(0, 0.04);
+  burst(o.clods, o.seed, (r, i) => {
+    const a = (i / o.clods) * TAU + r.range(-0.2, 0.2), d = R * r.range(0.5, 0.95), life = r.range(0.32, 0.48), d0 = r.range(0, 0.04);
     const tt = t - d0;
     if (tt < 0 || tt > life) return;
     const k = tt / life, out = ease.outQuad(k), hop = Math.sin(Math.PI * k);

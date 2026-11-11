@@ -297,6 +297,7 @@ namespace ExplodeIt.Enemies
         private PixelFxPool _lungeWakeFx;
         private PixelFxPool _meteorFx;
         private PixelFxPool _riftFx;
+        private PixelFxPool _leapDirtFx;
         // 검기 날리기: 날아가는 검기 풀과, 부채꼴 줄마다 하나씩 둔 예고선(돌진 예고선을 복제).
         private ComponentPool<KingSwordWave> _wavePool;
         private System.Action<KingSwordWave> _releaseWave;
@@ -433,6 +434,7 @@ namespace ExplodeIt.Enemies
             // 반 가르기 경계선 한 줄(맵 대각선 길이)을 한꺼번에 덮을 만큼 미리 만든다. 전투 중 생성을 막는다.
             // 줄무늬 베기는 줄이 많아 수백 개가 되므로 찢김을 넣지 않고 줄무늬 번쩍임만 쓴다.
             _riftFx = PixelFxPool.Create(_data.RiftFx, _fxRoot, 64);
+            _leapDirtFx = PixelFxPool.Create(_data.LeapDirtFx, _fxRoot, 2);
             // 한 패턴에 날리는 검기를 다 담을 만큼 미리 만든다. 전투 중 생성을 막는다.
             int waveTotal = _data.WaveCount * _data.WaveVolleys;
             _wavePool = new ComponentPool<KingSwordWave>(_data.WaveProjectile, _fxRoot, waveTotal, waveTotal * 2);
@@ -1949,6 +1951,7 @@ namespace ExplodeIt.Enemies
             _slashFill.SetColor(Color.white);
             FeedbackPlayer.Play(_data.LeapImpactFeedback, Body.position);
             FeedbackPlayer.Play(_data.LeapFireFeedback, Body.position);
+            _leapDirtFx?.Play(Body.position, Vector2.right, _data.LeapRadius / _data.LeapDirtFxRadius);
             AudioManager.Play(_data.LeapImpactSound);
             // 화면 전체를 덮는 칸을 붉게 잠깐 반짝인다. 유성우 물들이기와 같은 칸이지만 두 패턴은 겹치지 않는다.
             PlaceShockCover();

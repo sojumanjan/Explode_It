@@ -494,8 +494,10 @@ namespace ExplodeIt.Enemies
         [SerializeField, Tooltip("각성 모습으로 바뀌는 순간의 연출 (흔들림, 히트스톱, 폭발). 그림 한가운데서 터진다")] private FeedbackData _transformFeedback;
         [SerializeField, Tooltip("왕관 없이 맞은 순간의 연출")] private FeedbackData _hurtFeedback;
         [SerializeField, Tooltip("왕관에 막혔을 때의 연출")] private FeedbackData _immuneFeedback;
-        [SerializeField, Tooltip("도약 후 내려찍는 순간의 연출 (흔들림, 먼지). 착지 자리에서 터진다")] private FeedbackData _leapImpactFeedback;
+        [SerializeField, Tooltip("도약 후 내려찍는 순간의 연출 (흔들림, 히트스톱). 불꽃과 먼지 그림은 아래 칸이 맡는다")] private FeedbackData _leapImpactFeedback;
         [SerializeField, Tooltip("내려찍는 순간 함께 터지는 불꽃 연출. 착지 자리에서 터진다")] private FeedbackData _leapFireFeedback;
+        [SerializeField, Tooltip("내려찍는 순간 함께 피어오르는 흙먼지 pixelfx (PxFx_king-slam-dust, 흙덩이 없이 먼지만)")] private PixelFxPlayer _leapDirtFx;
+        [SerializeField, Min(0.01f), Tooltip("배율 1일 때 먼지가 퍼지는 반경 (유닛). king-slam-dust는 44px ÷ PPU 20 = 2.2. 내려찍기 판정 반경에 맞춰 키운다")] private float _leapDirtFxRadius = 2.2f;
         [SerializeField, Tooltip("왕관이 땅에 박히는 순간의 연출 (흔들림, 먼지). 박힌 자리에서 터진다")] private FeedbackData _crownDropImpactFeedback;
         [SerializeField, Tooltip("유성 하나가 떨어지는 순간의 연출. 떨어진 자리에서 터진다")] private FeedbackData _meteorImpactFeedback;
         [SerializeField, Tooltip("천지 가르기로 절반을 베는 순간의 연출 (흔들림). 왕 자리에서 터진다")] private FeedbackData _swordSlashFeedback;
@@ -622,6 +624,8 @@ namespace ExplodeIt.Enemies
         public SoundData LeapImpactSound => _leapImpactSound;
         public FeedbackData LeapImpactFeedback => _leapImpactFeedback;
         public FeedbackData LeapFireFeedback => _leapFireFeedback;
+        public PixelFxPlayer LeapDirtFx => _leapDirtFx;
+        public float LeapDirtFxRadius => _leapDirtFxRadius;
         public Color LeapFlashColor => _leapFlashColor;
         public float LeapFlashTime => _leapFlashTime;
         public float CrownDropWindup => _crownDropWindup;

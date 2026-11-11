@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1827dd90080f5c046a089280739adb19, type: 3}
+  m_Name: PxFx_king-slam-dust
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.PixelFxClip
+  _sourceId: explosions/dirt-burst
+  _frames:
+  - {fileID: 1729459449, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: -1031228496, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 683532775, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 382576700, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 1937262077, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 191958359, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: -1515489841, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 1998955216, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 796117716, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: -140792833, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 150299808, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 299110007, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 368587716, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 452865009, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 796165090, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: -1180807996, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 1958444995, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 1729341048, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  - {fileID: 1451018215, guid: 4dad51ace5c10da4f860783f86ef0cef, type: 3}
+  _fps: 30
+  _loop: 0

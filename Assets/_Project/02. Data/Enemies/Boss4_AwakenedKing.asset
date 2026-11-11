@@ -81,11 +81,11 @@ MonoBehaviour:
   _waveVolleys: 3
   _waveCount: 5
   _waveSpread: 70
-  _waveAimTime: 0.5
+  _waveAimTime: 0.6
   _waveFirstExtraAim: 0.2
   _waveLockTime: 0.35
   _wavePause: 0.15
-  _waveSpeed: 38
+  _waveSpeed: 70
   _waveRange: 34
   _waveWidth: 2
   _waveHitRatio: 0.85
@@ -203,8 +203,10 @@ MonoBehaviour:
   _transformFeedback: {fileID: 11400000, guid: d007e2b017fd78b40ab28b406244ba1e, type: 2}
   _hurtFeedback: {fileID: 11400000, guid: c814bb79101123449b12c72ccb695a94, type: 2}
   _immuneFeedback: {fileID: 11400000, guid: d23eef9dd40e2e74db8c0ca75092bf8c, type: 2}
-  _leapImpactFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
+  _leapImpactFeedback: {fileID: 11400000, guid: 21aae6a669be2f14bb5608b34dc4e8dd, type: 2}
   _leapFireFeedback: {fileID: 11400000, guid: daf501db46f9baf44b153bca43ec811d, type: 2}
+  _leapDirtFx: {fileID: 5784948803072503011, guid: bea04b95d1717684b8e03446881b75df, type: 3}
+  _leapDirtFxRadius: 2.2
   _crownDropImpactFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
   _meteorImpactFeedback: {fileID: 11400000, guid: 2cfedf0554798294c9f4aab705a9c8ff, type: 2}
   _swordSlashFeedback: {fileID: 11400000, guid: 0dfe9a4eb4951d74e9ca717a37a40722, type: 2}
