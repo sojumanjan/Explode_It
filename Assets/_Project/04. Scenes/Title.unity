@@ -20119,6 +20119,7 @@ GameObject:
   - component: {fileID: 516360673}
   - component: {fileID: 516360674}
   - component: {fileID: 516360675}
+  - component: {fileID: 516360676}
   m_Layer: 5
   m_Name: Curse1
   m_TagString: Untagged
@@ -20167,7 +20168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -20183,6 +20184,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &516360676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516360672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &519696460
 GameObject:
   m_ObjectHideFlags: 0
@@ -27942,6 +27958,7 @@ GameObject:
   - component: {fileID: 738254646}
   - component: {fileID: 738254647}
   - component: {fileID: 738254648}
+  - component: {fileID: 738254649}
   m_Layer: 5
   m_Name: Curse6
   m_TagString: Untagged
@@ -27990,7 +28007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -28006,6 +28023,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &738254649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738254645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &739716675
 GameObject:
   m_ObjectHideFlags: 0
@@ -32921,6 +32953,17 @@ MonoBehaviour:
   - {fileID: 1851519273}
   - {fileID: 891063569}
   - {fileID: 939839320}
+  _curseTooltips:
+  - {fileID: 516360676}
+  - {fileID: 1227869412}
+  - {fileID: 1677483745}
+  - {fileID: 1288064777}
+  - {fileID: 2099598154}
+  - {fileID: 738254649}
+  - {fileID: 1891362257}
+  - {fileID: 1851519274}
+  - {fileID: 891063570}
+  - {fileID: 939839323}
   _checkpoints: {fileID: 1473780277}
   _leaderboard: {fileID: 945750126}
   _endlessShiftX: 150
@@ -34827,6 +34870,7 @@ GameObject:
   - component: {fileID: 891063567}
   - component: {fileID: 891063568}
   - component: {fileID: 891063569}
+  - component: {fileID: 891063570}
   m_Layer: 5
   m_Name: Curse9
   m_TagString: Untagged
@@ -34875,7 +34919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -34891,6 +34935,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &891063570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891063566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &892108710
 GameObject:
   m_ObjectHideFlags: 0
@@ -36315,6 +36374,7 @@ GameObject:
   - component: {fileID: 939839322}
   - component: {fileID: 939839321}
   - component: {fileID: 939839320}
+  - component: {fileID: 939839323}
   m_Layer: 5
   m_Name: Curse10
   m_TagString: Untagged
@@ -36336,7 +36396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -36379,6 +36439,21 @@ RectTransform:
   m_AnchoredPosition: {x: 551, y: -26}
   m_SizeDelta: {x: 52, y: 52}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &939839323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939839319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &944891866
 GameObject:
   m_ObjectHideFlags: 0
@@ -46992,6 +47067,7 @@ GameObject:
   - component: {fileID: 1227869409}
   - component: {fileID: 1227869410}
   - component: {fileID: 1227869411}
+  - component: {fileID: 1227869412}
   m_Layer: 5
   m_Name: Curse2
   m_TagString: Untagged
@@ -47040,7 +47116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -47056,6 +47132,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1227869412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227869408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &1236761887
 GameObject:
   m_ObjectHideFlags: 0
@@ -48415,6 +48506,7 @@ GameObject:
   - component: {fileID: 1288064774}
   - component: {fileID: 1288064775}
   - component: {fileID: 1288064776}
+  - component: {fileID: 1288064777}
   m_Layer: 5
   m_Name: Curse4
   m_TagString: Untagged
@@ -48463,7 +48555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -48479,6 +48571,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1288064777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288064773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &1292194041
 GameObject:
   m_ObjectHideFlags: 0
@@ -63572,6 +63679,7 @@ GameObject:
   - component: {fileID: 1677483742}
   - component: {fileID: 1677483743}
   - component: {fileID: 1677483744}
+  - component: {fileID: 1677483745}
   m_Layer: 5
   m_Name: Curse3
   m_TagString: Untagged
@@ -63620,7 +63728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -63636,6 +63744,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1677483745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677483741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &1681527424
 GameObject:
   m_ObjectHideFlags: 0
@@ -71412,6 +71535,7 @@ GameObject:
   - component: {fileID: 1851519271}
   - component: {fileID: 1851519272}
   - component: {fileID: 1851519273}
+  - component: {fileID: 1851519274}
   m_Layer: 5
   m_Name: Curse8
   m_TagString: Untagged
@@ -71460,7 +71584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -71476,6 +71600,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1851519274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851519270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &1852399903
 GameObject:
   m_ObjectHideFlags: 0
@@ -73127,7 +73266,6 @@ MonoBehaviour:
   _resultCheckpoints: []
   _resultRetryLabels: []
   _retryText: "\uB2E4\uC2DC\uD558\uAE30"
-  _storyRetryText: "\uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC\uD558\uAE30"
 --- !u!114 &1886729998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73245,6 +73383,7 @@ GameObject:
   - component: {fileID: 1891362254}
   - component: {fileID: 1891362255}
   - component: {fileID: 1891362256}
+  - component: {fileID: 1891362257}
   m_Layer: 5
   m_Name: Curse7
   m_TagString: Untagged
@@ -73293,7 +73432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -73309,6 +73448,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1891362257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891362253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &1898369886
 GameObject:
   m_ObjectHideFlags: 0
@@ -81924,6 +82078,7 @@ GameObject:
   - component: {fileID: 2099598151}
   - component: {fileID: 2099598152}
   - component: {fileID: 2099598153}
+  - component: {fileID: 2099598154}
   m_Layer: 5
   m_Name: Curse5
   m_TagString: Untagged
@@ -81972,7 +82127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -81988,6 +82143,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2099598154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2099598150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba962f8a7463c94ab72685e1952f27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.UI.HoverTooltip
+  _panel: {fileID: 1426884293}
+  _anchor: {fileID: 0}
+  _text: 
 --- !u!1 &2101008706
 GameObject:
   m_ObjectHideFlags: 0

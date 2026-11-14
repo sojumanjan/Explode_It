@@ -22,6 +22,9 @@ namespace ExplodeIt.Core
         [Tooltip("동시 재생 상한 (개). 이보다 많이 울리고 있으면 새 요청을 무시한다")]
         [SerializeField, Min(1)] private int _maxInstances = 4;
 
+        [Tooltip("상한이 차면 새 요청을 버리는 대신, 이 소리 중 가장 오래된 것을 끊고 새로 튼다. 끝음이 긴 폭발처럼 앞소리는 이미 잦아들었는데 새 소리가 묻히는 경우에 켠다")]
+        [SerializeField] private bool _replacesOldest;
+
         [Tooltip("최소 재생 간격 (초). 직전 재생 후 이 시간 안의 요청은 무시한다. 같은 순간 여러 번 요청돼도 한 번만 들리게 한다")]
         [SerializeField, Min(0f)] private float _minInterval = 0.03f;
 
@@ -34,6 +37,7 @@ namespace ExplodeIt.Core
         public float Volume => _volume;
         public bool IsInterface => _isInterface;
         public int MaxInstances => _maxInstances;
+        public bool ReplacesOldest => _replacesOldest;
         public float MinInterval => _minInterval;
 
         // 이번 재생 뒤 다음 재생까지 비워 둘 간격.

@@ -33,6 +33,8 @@ namespace ExplodeIt.UI
         [SerializeField] private GameObject _curseRow;
         // 저주 칸 수만큼 미리 놓아 둔다. 남는 칸은 숨긴다.
         [SerializeField] private Image[] _curseIcons;
+        // 아이콘과 같은 순서. 순위표처럼 마우스를 올리면 저주 이름과 설명을 띄운다.
+        [SerializeField] private HoverTooltip[] _curseTooltips;
 
         [Header("스토리 중간부터 시작")]
         [SerializeField] private StoryCheckpointButtons _checkpoints;
@@ -138,6 +140,11 @@ namespace ExplodeIt.UI
 
                 _curseIcons[shown].sprite = curses[i].Icon;
                 _curseIcons[shown].gameObject.SetActive(true);
+                if (shown < _curseTooltips.Length && _curseTooltips[shown] != null)
+                {
+                    _curseTooltips[shown].Text = curses[i].DisplayName + "\n" + curses[i].Description;
+                }
+
                 shown++;
             }
 

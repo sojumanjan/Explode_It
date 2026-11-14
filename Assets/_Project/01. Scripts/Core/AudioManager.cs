@@ -362,17 +362,20 @@ namespace ExplodeIt.Core
                 return SoundHandle.None;
             }
 
-            if (CountPlaying(sound) >= sound.MaxInstances)
+            int index = -1;
+            AudioSource voice = CountPlaying(sound) >= sound.MaxInstances ? null : FindFreeVoice(out index);
+            // 상한이 찼거나 빈 자리가 없으면, 허용된 소리는 자기 소리 중 가장 오래된 것(이미 끝음만 남은 것)을 끊고 그 자리에서 튼다.
+            if (voice == null && sound.ReplacesOldest)
             {
-                return SoundHandle.None;
+                voice = FindOldestVoice(sound, out index);
             }
 
-            AudioSource voice = FindFreeVoice(out int index);
             if (voice == null)
             {
                 return SoundHandle.None;
             }
 
+            voice.Stop();
             voice.clip = sound.PickClip();
             voice.volume = sound.Volume * _sfxVolume;
             _voiceBasePitches[index] = pitch;
@@ -399,6 +402,21 @@ namespace ExplodeIt.Core
             }
 
             return count;
+        }
+
+        // 재생 번호가 가장 작은 것이 가장 먼저 튼 소리다.
+        private AudioSource FindOldestVoice(SoundData sound, out int index)
+        {
+            index = -1;
+            for (int i = 0; i < _voices.Length; i++)
+            {
+                if (_voiceData[i] == sound && _voices[i].isPlaying && (index < 0 || _voicePlayIds[i] < _voicePlayIds[index]))
+                {
+                    index = i;
+                }
+            }
+
+            return index < 0 ? null : _voices[index];
         }
 
         // 다 쓰고 있으면 새 소리를 버린다. 이미 울리는 소리를 끊는 것보다 덜 거슬린다.
