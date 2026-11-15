@@ -85249,7 +85249,7 @@ MonoBehaviour:
   _nextText: "\uB2E4\uC74C"
   _closeText: "\uD655\uC778"
   _sound: {fileID: 11400000, guid: 8c3ae3c40687ef643a141e4d6e499103, type: 2}
-  _pageSound: {fileID: 11400000, guid: 67666361bc526d0469d0c2692da7651c, type: 2}
+  _pageSound: {fileID: 0}
   _weaponKind: "\uBB34\uAE30"
   _abilityKind: "\uC2A4\uD0AC"
   _upgradeKind: "\uC2A4\uD0AC \uAC15\uD654"
