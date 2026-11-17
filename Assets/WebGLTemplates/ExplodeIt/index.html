@@ -127,8 +127,7 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "{{{ WIDTH }}}px";
-        canvas.style.height = "{{{ HEIGHT }}}px";
+        // 크기를 픽셀로 고정하면 전체화면에서도 그 크기로만 그려진다. 크기는 style.css가 창에 맞춰 16:9로 정한다.
       }
 
 #if BACKGROUND_FILENAME

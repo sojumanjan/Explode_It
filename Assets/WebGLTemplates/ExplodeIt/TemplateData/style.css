@@ -1,6 +1,8 @@
-body { padding: 0; margin: 0 }
+body { padding: 0; margin: 0; background: #000; overflow: hidden }
 #unity-container { position: absolute }
-#unity-container.unity-desktop { left: 50%; top: 50%; transform: translate(-50%, -50%) }
+/* 게임 칸(itch 임베드든 전체화면이든)을 가득 채우되 16:9를 지키고, 남는 곳은 검은 띠로 둔다. */
+#unity-container.unity-desktop { left: 0; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center }
+.unity-desktop #unity-canvas { width: min(100vw, 177.7778vh); height: min(100vh, 56.25vw) }
 #unity-container.unity-mobile { position: fixed; width: 100%; height: 100% }
 #unity-canvas { background: {{{ BACKGROUND_COLOR }}} }
 .unity-mobile #unity-canvas { width: 100%; height: 100% }
