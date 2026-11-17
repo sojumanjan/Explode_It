@@ -38,8 +38,8 @@ MonoBehaviour:
   _stunnedBreathRate: 1.5
   _stunnedSway: 4
   _stunnedSwayRate: 0.8
-  _deathKnockDistance: 2.5
-  _deathKnockDistanceNear: 4
+  _deathKnockDistance: 3
+  _deathKnockDistanceNear: 4.5
   _deathKnockDistanceJitter: 0.3
   _deathKnockAngleJitter: 20
   _deathKnockEnd: 0.57
