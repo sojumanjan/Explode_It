@@ -18,6 +18,7 @@ MonoBehaviour:
   _pitchMin: 0.95
   _pitchMax: 1.05
   _maxInstances: 2
+  _replacesOldest: 0
   _minInterval: 0.05
   _maxInterval: 0
   _isInterface: 0

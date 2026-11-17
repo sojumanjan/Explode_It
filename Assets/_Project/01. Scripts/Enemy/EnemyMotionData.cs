@@ -94,8 +94,17 @@ namespace ExplodeIt.Enemies
 
 
         [Header("사망: 밀려남 → 부풀기 → 줄어들기 (전체 시간은 적 데이터의 사망 연출 시간)")]
-        [Tooltip("플레이어 반대쪽으로 밀려나는 거리 (유닛)")]
+        [Tooltip("폭발 범위 가장자리에서 맞았을 때 플레이어 반대쪽으로 밀려나는 거리 (유닛). 가장 조금 밀리는 값")]
         [SerializeField, Min(0f)] private float _deathKnockDistance = 2.5f;
+
+        [Tooltip("폭발 한가운데에서 맞았을 때 밀려나는 거리 (유닛). 가장 멀리 밀리는 값. 그 사이는 중심과의 거리에 따라 고르게 섞는다. 폭탄이 아닌 것에 죽으면 두 값의 중간")]
+        [SerializeField, Min(0f)] private float _deathKnockDistanceNear = 2.5f;
+
+        [Tooltip("밀려나는 거리에 더하거나 빼는 무작위 폭 (유닛). 0이면 늘 같은 거리. 죽을 때마다 ±이 값 안에서 뽑는다")]
+        [SerializeField, Min(0f)] private float _deathKnockDistanceJitter = 0.6f;
+
+        [Tooltip("밀려나는 방향을 좌우로 트는 무작위 폭 (도). 0이면 늘 플레이어 정반대쪽. 죽을 때마다 ±이 값 안에서 뽑는다")]
+        [SerializeField, Range(0f, 90f)] private float _deathKnockAngleJitter = 20f;
 
         [Tooltip("밀려나는 구간이 끝나는 지점 (전체 시간 대비 비율)")]
         [SerializeField, Range(0.05f, 0.9f)] private float _deathKnockEnd = 0.45f;
@@ -148,6 +157,9 @@ namespace ExplodeIt.Enemies
         public float StunnedSway => _stunnedSway;
         public float StunnedSwayRate => _stunnedSwayRate;
         public float DeathKnockDistance => _deathKnockDistance;
+        public float DeathKnockDistanceNear => _deathKnockDistanceNear;
+        public float DeathKnockDistanceJitter => _deathKnockDistanceJitter;
+        public float DeathKnockAngleJitter => _deathKnockAngleJitter;
         public float DeathKnockEnd => _deathKnockEnd;
         public float DeathPopPeak => Mathf.Max(_deathPopPeak, _deathKnockEnd + 0.01f);
         public float DeathPopScale => _deathPopScale;

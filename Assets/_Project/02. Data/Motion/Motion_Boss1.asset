@@ -15,6 +15,7 @@ MonoBehaviour:
   _springFrequency: 6
   _springDamping: 0.45
   _hopRate: 2.2
+  _pulledHopRateRatio: 0.3
   _hopHeight: 0.14
   _hopStretch: 0.08
   _hopSquash: 0.2
@@ -38,6 +39,9 @@ MonoBehaviour:
   _stunnedSway: 4
   _stunnedSwayRate: 0.8
   _deathKnockDistance: 0.6
+  _deathKnockDistanceNear: 0.6
+  _deathKnockDistanceJitter: 0
+  _deathKnockAngleJitter: 0
   _deathKnockEnd: 0.3
   _deathPopPeak: 0.6
   _deathPopScale: 1.4

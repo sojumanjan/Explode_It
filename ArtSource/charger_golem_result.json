@@ -1,0 +1,22 @@
+{
+ "Charger_hd.png": {
+  "width": 59,
+  "height": 61,
+  "ppu": 66.69158
+ },
+ "golem1.png": {
+  "width": 44,
+  "height": 44,
+  "ppu": 19.76048
+ },
+ "golem2.png": {
+  "width": 82,
+  "height": 75,
+  "ppu": 33.25762
+ },
+ "golem3.png": {
+  "width": 91,
+  "height": 83,
+  "ppu": 28.04183
+ }
+}

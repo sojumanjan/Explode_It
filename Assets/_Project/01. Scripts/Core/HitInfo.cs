@@ -14,10 +14,13 @@ namespace ExplodeIt.Core
         public readonly EnemyKind Attacker;
         // 공격을 낸 적의 이름·얼굴. 투사체처럼 "직접 때린" 공격이 아니어도 채운다(업적 판정은 IsFromEnemy만 본다).
         public readonly IKillerProfile Killer;
+        // 범위 공격의 반경. 맞은 쪽이 중심에서 얼마나 가까웠는지 연출에 쓴다. 범위 공격이 아니면 0.
+        public readonly float Radius;
 
         public HitInfo(Vector2 sourcePosition, bool ignoresGuard = false, DamageSource source = DamageSource.None,
-            IKillerProfile killer = null)
+            IKillerProfile killer = null, float radius = 0f)
         {
+            Radius = radius;
             SourcePosition = sourcePosition;
             IgnoresGuard = ignoresGuard;
             Source = source;
@@ -28,6 +31,7 @@ namespace ExplodeIt.Core
 
         private HitInfo(Vector2 sourcePosition, EnemyKind attacker, IKillerProfile killer)
         {
+            Radius = 0f;
             SourcePosition = sourcePosition;
             IgnoresGuard = false;
             Source = DamageSource.None;

@@ -177,7 +177,7 @@ namespace ExplodeIt.Bombs
         {
             Vector2 position = transform.position;
             int candidateCount = Physics2D.OverlapCircle(position, _radius, _hitFilter, HitBuffer);
-            var hit = new HitInfo(position, _options.IgnoresGuard, _options.Source);
+            var hit = new HitInfo(position, _options.IgnoresGuard, _options.Source, radius: _radius);
             int hitCount = 0;
 
             for (int i = 0; i < candidateCount; i++)

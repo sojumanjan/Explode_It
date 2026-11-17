@@ -97,6 +97,8 @@ namespace ExplodeIt.Enemies
         // 움직이는 중에도 그림이 플레이어 쪽을 보게 할지. 뒷걸음질·뒷도약처럼 가는 방향과 보는 방향이 반대일 때 켠다.
         public virtual bool FacesTargetWhileMoving => false;
         public float DeathDuration => Data.DeathDuration;
+        // 죽인 폭발의 중심에 얼마나 가까웠는지. 0 = 범위 가장자리, 1 = 중심. 사망 연출이 밀려나는 거리를 정할 때 쓴다.
+        public float DeathBlastCloseness { get; private set; }
         // 공격에 들어간 횟수. 공격 상태는 물리 한 스텝만에 끝나기도 해서, 그림 쪽이 상태만 보고는 공격 순간을 놓칠 수 있다.
         public int AttackCount { get; private set; }
 
@@ -730,6 +732,10 @@ namespace ExplodeIt.Enemies
         {
             LeaveArenaCount();
             bool wasPulled = _state == EnemyState.Pulled;
+            // 범위 공격이 아니면 반경이 없으므로 중간값으로 둔다.
+            DeathBlastCloseness = hit.Radius > 0f
+                ? 1f - Mathf.Clamp01(Vector2.Distance(Body.position, hit.SourcePosition) / hit.Radius)
+                : 0.5f;
             EnterState(EnemyState.Dead);
             _collider.enabled = false;
             if (Data.CountsAsKill)

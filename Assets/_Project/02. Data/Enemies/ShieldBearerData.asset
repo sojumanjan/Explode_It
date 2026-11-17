@@ -22,10 +22,11 @@ MonoBehaviour:
   _sightConfirmTime: 0
   _separationDistanceRatio: 0.6
   _separationSpeed: 1.5
+  _pulledSeparationRatio: 2.5
   _telegraphDuration: 0.5
   _recoverDuration: 0.8
   _deathDuration: 0.5
-  _shieldAngle: 180
+  _shieldAngle: 150
   _shieldTurnSpeed: 90
   _shieldOrbitRadius: 0.6
   _bodyCenterOffset: {x: 0, y: 0.3}

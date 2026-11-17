@@ -63,6 +63,7 @@ namespace ExplodeIt.Enemies
         private float _hopPhase;
         private float _hopWeight;
         private Vector2 _deathDirection;
+        private float _deathKnockDistance;
 
         private SpringValue _scaleX;
         private SpringValue _scaleY;
@@ -205,6 +206,18 @@ namespace ExplodeIt.Enemies
                     // 터진 쪽이 아니라 플레이어 반대쪽으로 날려, 누가 잡았는지가 바로 읽히게 한다.
                     Vector2 away = position - _enemy.TargetPosition;
                     _deathDirection = away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.right;
+
+                    // 여러 마리가 한 줄로 똑같이 밀리면 딱딱해 보여서, 방향과 거리를 조금씩 흩는다.
+                    float angleJitter = _motion.DeathKnockAngleJitter;
+                    float turn = Random.Range(-angleJitter, angleJitter);
+                    _deathDirection = Quaternion.Euler(0f, 0f, turn) * _deathDirection;
+
+                    float distanceJitter = _motion.DeathKnockDistanceJitter;
+                    // 폭발 한가운데에서 맞을수록 멀리 날아가, 폭탄을 잘 맞춘 손맛이 거리로 보이게 한다.
+                    float baseDistance = Mathf.Lerp(
+                        _motion.DeathKnockDistance, _motion.DeathKnockDistanceNear, _enemy.DeathBlastCloseness);
+                    _deathKnockDistance = Mathf.Max(
+                        0f, baseDistance + Random.Range(-distanceJitter, distanceJitter));
                     if (_deathSprite != null)
                     {
                         _sprite.sprite = _deathSprite;
@@ -491,7 +504,7 @@ namespace ExplodeIt.Enemies
 
             float knock = Mathf.Clamp01(t / knockEnd);
             float knockEase = 1f - (1f - knock) * (1f - knock) * (1f - knock);
-            Vector2 offset = _deathDirection * (_motion.DeathKnockDistance * knockEase);
+            Vector2 offset = _deathDirection * (_deathKnockDistance * knockEase);
 
             float size;
             if (t < knockEnd)
