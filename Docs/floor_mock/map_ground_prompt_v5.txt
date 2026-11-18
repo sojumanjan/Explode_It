@@ -1,0 +1,39 @@
+Create the complete ground layer for one 2D top-down action game map, as a single square image. This image goes under all buildings, hedges, trees and characters in the game engine, so it contains ONLY the ground surface.
+
+LAYOUT (most important rule)
+The attached zone map is an exact floor plan. Copy every path at exactly the same position, width and curve, including the two ring-shaped paths. Do not move, straighten, simplify, add or remove any path. Keep the same colors as the zone map.
+- Green everywhere (also inside both rings) = mown lawn
+- Tan bands = earthen garden footpaths
+
+SETTING
+A well-kept royal palace garden: neatly mown lawn with soft earthen walking paths. Cared for, lush and pleasant.
+
+LIGHTING (very important)
+Flat, even lighting from directly overhead, like the sun exactly at noon on an overcast-bright day. There is NO light direction at all. The whole ground lies on one perfectly level plane, so nothing on the ground casts or receives shading: no ambient occlusion, no bevel, no emboss, no inner shadow, no drop shadow, no highlight strip. Think of a flat painted tabletop game map or a flat color illustration.
+
+HOW A PATH MEETS THE LAWN
+The path and the lawn are at exactly the same height. The boundary is just a change of material, like two colors of paint touching: tan earth on one side, green grass on the other. Along the boundary, a few short grass blades in the SAME green as the surrounding lawn lie over the path edge. This boundary is drawn identically all around every path: the upper side, lower side, left side and right side of a path look exactly alike, like mirror images. The path color stays the same right up to the grass; it does not get darker or lighter near the boundary.
+
+LAWN
+Short, evenly mown, healthy grass in a soft, light, slightly yellowish green with low saturation, matching the zone map green. Clearly lighter and more yellow than dark hedge green. A few very soft patches in 2 close green tones, sparse tiny clover leaves and a very few tiny white or yellow flower dots. Calm, low contrast.
+
+PATHS
+One even tone of soft packed sandy earth, warm light tan, matching the zone map. Inside the path only: a few faint footprints and a few tiny pebbles, all small and spread out.
+
+AVOID
+Cracks, dry soil, bare dirt patches on the lawn, rocks, puddles, dead or yellowed grass, dark outlines, lines along path edges, grooves, ridges, trenches, curbs, raised or sunken paths, vignette, texture noise.
+
+SCALE
+The image covers a 64 x 64 meter garden. Paths are about 2 meters wide. A character is about 2 meters tall, about 1/32 of the image width. Small details (grass blades, clover, pebbles) stay small at that scale.
+
+COLOR AND VALUE
+Muted, natural, slightly desaturated colors in a medium value range: pleasant daytime, not glaring, never near white. Match the brightness of the zone map. No pure white, no pure black, no neon green.
+
+STYLE
+Clean hand-painted 2D game art matching the attached character sprite: flat color areas, crisp small details, simple shapes. No gradients across large areas, no airbrush, no blur, no glow, no photo texture, no visible pixel grid (it will be converted to pixel art later).
+
+DO NOT DRAW
+Buildings, walls, hedges, trees, bushes, flower beds, fences, benches, fountains, statues, gazebos, paving stones, carts, barrels, banners, water, bridges, characters, animals, UI, text, labels, arrows, grid lines, borders or frames. Every pixel is ground.
+
+OUTPUT
+Square image, ground filled edge to edge, the same framing as the zone map (top of the zone map = top of the image).

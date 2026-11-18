@@ -1,0 +1,36 @@
+Create the complete ground layer for one 2D top-down action game map, as a single square image. This image will be placed under all buildings, hedges, trees and characters inside the game engine, so it must contain ONLY the ground surface.
+
+LAYOUT (most important rule)
+The attached zone map is an exact floor plan. Copy every shape at exactly the same position, size, width and curve. Do not move, straighten, simplify, add or remove any path, plaza or lawn. The colors in the zone map are already close to the final colors.
+Zone key:
+- Light tan (the background everywhere) = loose sandy dirt
+- Slightly darker brown bands = worn footpaths
+- Grey oval in the lower right = paved stone plaza (a fountain will stand in its center later)
+- Dark green areas = lawn (one round lawn inside a ring path, one larger lawn on the left)
+
+SCALE
+The image covers a 64 x 64 meter royal garden. Paths are about 2 meters wide. A character is about 2 meters tall, about 1/32 of the image width. Keep all small details (pebbles, grass blades, cracks) small at that scale: a pebble is roughly the size of a character's foot.
+
+THE PATHS MUST BE SUBTLE (very important)
+The paths are NOT gravel, NOT cream, NOT lighter than the ground. They are the same sandy earth, only packed down by many footsteps: one small step DARKER and slightly smoother than the dirt around them, with the same hue. The difference should be gentle, readable when you look for it but never loud.
+The edge between path and dirt is soft and irregular: no outline, no rim, no border stones, no sharp line. The darker packed earth fades into the loose dirt over a short distance, with a few scattered footprints, small pebbles and faint scuff marks along the edge. Where paths meet, they merge naturally.
+
+OTHER ZONES
+1. Loose dirt: warm sandy earth of a garden, dry. Large soft irregular patches in 2-3 very close tones, a few faint cracks, very sparse tiny pebbles. Calm and almost empty.
+2. Stone plaza: the grey oval becomes an area paved with rounded, irregular flagstones of different sizes in muted grey-beige, with thin dark mortar lines, and a ring of curb stones at the outer edge. Muted, not bright.
+3. Lawns: short, dense, slightly DARK olive-green grass (deep and muted, not bright, not lime, not yellow). Two close tones of green in soft patches. Edges are slightly ragged, with small grass tufts spilling onto the dirt.
+
+VIEW AND LIGHT
+Camera looks down from above at a slight angle, like a classic top-down adventure game. The ground is drawn flat (no perspective, no vanishing point). Small raised details (pebbles, curb stones, grass tufts) show a tiny darker side on their bottom-right, because light comes from the top-left. No cast shadows from objects that are not in this image.
+
+COLOR AND VALUE
+Muted, natural, slightly desaturated colors. The image must NOT be bright or glaring: medium values overall, nothing near white. Very low contrast inside each zone so that colorful characters, enemies and bomb effects stand out clearly. Paths a little darker than the dirt, lawns clearly darker but still soft. No pure white, no pure black.
+
+STYLE
+Clean hand-painted 2D game art matching the attached character sprite: large flat color areas, crisp small details, 2-3 shade steps per material, simple shapes. No gradients across large areas, no airbrush, no blur, no glow, no photo texture, no noisy grain, no visible pixel grid (it will be converted to pixel art later).
+
+DO NOT DRAW
+No buildings, walls, hedges, trees, bushes, fences, benches, fountains, statues, gazebos, carts, barrels, banners, water, bridges, characters, animals, UI, text, labels, arrows, grid lines, borders, frames or vignette. No outlines around any zone. No shadows of missing objects. Do not leave blank areas: every pixel is ground.
+
+OUTPUT
+Square image, ground filled edge to edge, the same framing as the zone map (top of the zone map = top of the image).

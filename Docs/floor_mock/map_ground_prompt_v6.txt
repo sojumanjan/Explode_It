@@ -1,0 +1,44 @@
+Create the complete ground layer for one 2D top-down action game map, as a single square image. This image goes under the hedges, buildings, trees and characters in the game engine, so it contains ONLY the ground surface.
+
+REFERENCE IMAGES
+1. Zone map: the exact floor plan (positions and colors).
+2. Hedge sprites: the hedges that will stand on this ground. The ground must look like it belongs to the same garden and the same art as these hedges.
+3. Character sprite: overall art style.
+
+LAYOUT (most important rule)
+Copy every shape of the zone map at exactly the same position, size, width and curve. Do not move, straighten, simplify, add or remove anything. Keep the zone map colors.
+- Light green (everywhere, also inside both rings) = mown lawn
+- Tan bands = earthen garden footpaths
+- Darker green areas = lawn where a hedge will stand, plus a narrow margin around it. Draw this ONLY as grass: slightly darker, slightly longer and denser grass, as if the hedge roots keep the grass lush. Do NOT draw hedges, bushes, walls or any raised shape there; it is flat grass. Its border fades softly into the lawn, with no outline.
+
+MATCH THE HEDGES (very important)
+- Same green family as the hedge sprites. The lawn uses lighter, slightly less saturated steps of the exact hedge greens; the darker hedge-base grass sits between the lawn and the hedge's lightest green. No yellow-olive, no blue-green, no separate palette.
+- Same texture language as the hedge tops: the grass is made of many tiny clustered leaf and blade shapes in 2-3 close green tones, at the same small size as the leaf clumps on the hedges. A finely detailed surface everywhere, not smooth brush washes and not big painted patches.
+- Same crisp, clean rendering as the hedges and the character, so the ground and the sprites look drawn by the same artist.
+
+LIGHTING
+Flat, even lighting from directly overhead, like the sun exactly at noon. There is NO light direction. The whole ground lies on one perfectly level plane: no ambient occlusion, no bevel, no emboss, no inner shadow, no drop shadow, no highlight strip.
+
+HOW A PATH MEETS THE LAWN
+Path and lawn are at exactly the same height; the boundary is only a change of material, like two paints touching. A few tiny grass blades in the same green as the lawn lie over the path edge. The boundary looks identical on every side of every path, like mirror images. The path color stays the same right up to the grass.
+
+PATHS
+One even tone of soft packed sandy earth, warm light tan as in the zone map, with a very fine sandy texture and a few tiny pebbles and faint footprints spread out.
+
+DETAILS
+Sparse tiny clover leaves and a very few tiny white or yellow flower dots on the lawn. Calm and low contrast, so characters and bomb effects stand out.
+
+AVOID
+Cracks, dry soil, bare dirt patches on the lawn, rocks, puddles, dead or yellowed grass, dark outlines, lines along path edges, grooves, ridges, curbs, raised or sunken paths, big soft blotches, watercolor washes, vignette.
+
+SCALE
+The image covers a 64 x 64 meter garden. Paths are about 2 meters wide. A character is about 2 meters tall, about 1/32 of the image width.
+
+COLOR AND VALUE
+Natural, slightly desaturated colors in a medium value range: pleasant daytime, not glaring, never near white. Match the brightness of the zone map. No pure white, no pure black, no neon green.
+
+DO NOT DRAW
+Hedges, buildings, walls, trees, bushes, flower beds, fences, benches, fountains, statues, gazebos, paving stones, carts, water, bridges, characters, UI, text, grid lines, borders or frames. Every pixel is ground.
+
+OUTPUT
+Square image, ground filled edge to edge, the same framing as the zone map (top of the zone map = top of the image). No visible pixel grid; it will be converted to pixel art later.

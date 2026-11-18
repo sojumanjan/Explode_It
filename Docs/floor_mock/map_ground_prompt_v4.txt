@@ -1,0 +1,39 @@
+Create the complete ground layer for one 2D top-down action game map, as a single square image. This image will be placed under all buildings, hedges, trees and characters inside the game engine, so it must contain ONLY the ground surface.
+
+LAYOUT (most important rule)
+The attached zone map is an exact floor plan. Copy every path at exactly the same position, width and curve, including the two ring-shaped paths. Do not move, straighten, simplify, add or remove any path. The colors in the zone map are already close to the final colors.
+Zone key:
+- Green (the background everywhere, including the inside of both rings) = lawn
+- Tan bands = garden footpaths of packed earth
+
+SETTING
+This is a well-kept royal palace garden on a sunny day: neatly mown lawn with soft earthen walking paths. It must feel cared for, lush and pleasant, never dry, abandoned or ruined.
+
+SCALE
+The image covers a 64 x 64 meter garden. Paths are about 2 meters wide. A character is about 2 meters tall, about 1/32 of the image width. Keep all small details (grass blades, clover, pebbles) small at that scale.
+
+LAWN (most of the image)
+Short, evenly mown, healthy grass. Color: a soft, light, slightly yellowish green with low saturation, like the attached zone map green. It must be clearly LIGHTER and MORE YELLOW than dark hedge green, so dark green hedges placed on top stand out. Large very soft patches in 2-3 close green tones, very subtle hints of mowing direction, sparse tiny clover leaves and a very few tiny white or yellow flower dots. Calm and quiet; low contrast so characters stand out.
+
+PATHS
+Soft packed sandy earth, warm light tan, slightly lighter than the lawn, as in the zone map. Smooth surface with a few faint footprints and a few tiny pebbles.
+The paths are completely flat, NOT sunken and NOT raised: no darker band along the upper edge, no lighter band along the lower edge, no shading that makes a path look like a groove, trench or ridge. Both edges of every path look exactly the same.
+Edges are soft and natural: short grass tufts overlap the path edge a little, with no outline, no rim, no border stones and no sharp line. Where paths meet, they merge smoothly.
+
+NOT ALLOWED ANYWHERE
+No cracks, no dry or cracked soil, no bare dirt patches on the lawn, no rubble, no large rocks, no puddles, no dead grass, no burnt or yellowed spots. Nothing that looks dry, poor or abandoned.
+
+VIEW AND LIGHT
+Camera looks down from above at a slight angle, like a classic top-down adventure game. The ground is drawn flat (no perspective, no vanishing point). Light comes from the top-left, but the ground itself has no directional shading; only tiny pebbles and grass tufts may have a very small darker side on their bottom-right. No cast shadows from objects that are not in this image.
+
+COLOR AND VALUE
+Muted, natural, slightly desaturated colors in a medium value range: bright and pleasant daytime, but not glaring and never near white. Match the brightness of the attached zone map closely. Very low contrast inside each zone. No pure white, no pure black, no neon green.
+
+STYLE
+Clean hand-painted 2D game art matching the attached character sprite: large flat color areas, crisp small details, 2-3 shade steps per material, simple shapes. No gradients across large areas, no airbrush, no blur, no glow, no photo texture, no noisy grain, no visible pixel grid (it will be converted to pixel art later).
+
+DO NOT DRAW
+No buildings, walls, hedges, trees, bushes, flower beds, fences, benches, fountains, statues, gazebos, plazas, paving stones, carts, barrels, banners, water, bridges, characters, animals, UI, text, labels, arrows, grid lines, borders, frames or vignette. No outlines around any zone. No shadows of missing objects. Do not leave blank areas: every pixel is ground.
+
+OUTPUT
+Square image, ground filled edge to edge, the same framing as the zone map (top of the zone map = top of the image).

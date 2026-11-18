@@ -1,0 +1,34 @@
+Create the complete ground layer for one 2D top-down action game map, as a single square image. This image goes under the hedges, buildings, trees and characters in the game engine, so it contains ONLY the ground surface.
+
+REFERENCE IMAGES
+1. Zone map: the exact floor plan and the exact colors.
+2. Mood reference: follow its rendering style closely. Large, simple, flat shapes in a few close tones, layered on top of each other with soft stepped pixel edges, muted and slightly hazy. Calm, quiet and easy on the eyes. Use only its STYLE; do not copy its content (no poles, wires, animals, fog or dark mood).
+
+LAYOUT (most important rule)
+Copy every path of the zone map at exactly the same position, width and curve, including the two ring-shaped paths. Do not move, straighten, simplify, add or remove any path.
+- Light grey-brown (everywhere) = packed garden earth
+- Slightly darker grey-brown bands = footpaths
+There is no grass, no lawn and no plaza anywhere. The whole image is earth.
+
+HOW TO PAINT THE GROUND
+- The ground is built ONLY from 3 to 4 flat tone layers of the same muted grey-brown, very close in value: large irregular soft shapes, like posterized layers or contour bands, each a single flat color. Shapes are big (several meters wide) and few.
+- The paths are one tone darker than the earth around them, same hue. Their edges are soft and stepped like the tone layers, identical on every side, with no outline, no rim, no highlight and no shadow.
+- No small details at all: no grass, no grass blades, no tufts, no weeds, no flowers, no clover, no leaves, no pebbles, no stones, no footprints, no cracks, no scratches, no noise, no speckles. The surface is calm and empty.
+
+COLOR AND VALUE
+Muted, low-saturation warm grey-brown, matching the zone map colors and brightness exactly. Medium value: not glaring, not dark, never near white or black. Very low contrast across the whole image, so colorful characters, enemies and bomb effects stand out and the eyes do not get tired during long play. No green, no saturated colors.
+
+LIGHTING
+Flat, even lighting with no light direction. The whole ground lies on one level plane: no ambient occlusion, no bevel, no emboss, no shading, no shadows, no vignette.
+
+SCALE
+The image covers a 64 x 64 meter garden. Paths are about 2 meters wide. A character is about 2 meters tall, about 1/32 of the image width.
+
+STYLE
+Clean 2D game art made of flat color areas with crisp stepped edges, like the mood reference. No gradients, no airbrush, no blur, no glow, no watercolor texture, no paper texture, no photo texture.
+
+DO NOT DRAW
+Grass, plants, hedges, buildings, walls, trees, fences, benches, fountains, statues, paving stones, water, bridges, characters, animals, poles, wires, UI, text, grid lines, borders or frames. Every pixel is ground.
+
+OUTPUT
+Square image, ground filled edge to edge, the same framing as the zone map (top of the zone map = top of the image).
