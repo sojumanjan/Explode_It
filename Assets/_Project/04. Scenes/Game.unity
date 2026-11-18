@@ -349,7 +349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3220530
 Transform:
   m_ObjectHideFlags: 0
@@ -35925,7 +35925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &547493745
 Transform:
   m_ObjectHideFlags: 0
@@ -36954,7 +36954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &561604863
 Transform:
   m_ObjectHideFlags: 0
@@ -76418,7 +76418,7 @@ SpriteRenderer:
   m_SortingOrder: -23
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d493fb56a1ba0b645aaf300c529b7b90, type: 3}
-  m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
@@ -80778,7 +80778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1257683017
 Transform:
   m_ObjectHideFlags: 0
@@ -84469,7 +84469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1315710412
 Transform:
   m_ObjectHideFlags: 0
@@ -86296,7 +86296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1352127195
 Transform:
   m_ObjectHideFlags: 0
@@ -86547,7 +86547,7 @@ SpriteRenderer:
   m_SortingOrder: -23
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d493fb56a1ba0b645aaf300c529b7b90, type: 3}
-  m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
@@ -88702,7 +88702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1390695483
 Transform:
   m_ObjectHideFlags: 0
@@ -99626,11 +99626,11 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -23
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 808c4ca9177dcec4d91da947586eb58d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: d493fb56a1ba0b645aaf300c529b7b90, type: 3}
+  m_Color: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 2
   m_Size: {x: 64, y: 64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -133576,7 +133576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2147149695
 Transform:
   m_ObjectHideFlags: 0

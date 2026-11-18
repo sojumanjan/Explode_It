@@ -1,5 +1,5 @@
 # 생성한 통짜 맵 바닥 그림을 맵 크기(2048px = 64유닛)에 맞추고 색 수를 줄여 픽셀 그림으로 만드는 스크립트
-# 사용: Tools/pixeloe-env/Scripts/python.exe ArtSource/map_ground_pixelize.py [원본 이름] [--flatten-rims | --flatten-lawn-rims]
+# 사용: Tools/pixeloe-env/Scripts/python.exe ArtSource/map_ground_pixelize.py [원본 이름] [--flatten-rims | --flatten-lawn-rims] [--out=출력 경로]
 # 생성기가 가짜 점 없이 매끈하게 그려서(2000px), 격자를 재지 않고 1px = 게임 1px로 바로 맞춘 뒤 색만 나눈다.
 import sys
 from pathlib import Path
@@ -97,9 +97,11 @@ def main() -> None:
     if "--flatten-lawn-rims" in sys.argv:
         idx = flatten_lawn_path_rims(idx, pal)
     q = Image.fromarray(pal[idx])
-    q.save(DST)
+    # 버전 비교 씬용 그림은 맵 바닥 대신 따로 저장한다
+    dst = next((Path(a[6:]) for a in sys.argv if a.startswith("--out=")), DST)
+    q.save(dst)
     a = np.asarray(q)
-    print(DST.name, q.size, "colors", len(np.unique(a.reshape(-1, 3), axis=0)))
+    print(dst.name, q.size, "colors", len(np.unique(a.reshape(-1, 3), axis=0)))
 
 
 if __name__ == "__main__":
