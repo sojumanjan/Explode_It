@@ -1,0 +1,33 @@
+=== 1. 수로 반복 타일 (1:1) ===
+A seamless vertical tile of a straight formal canal in a royal palace garden, for a 2D top-down pixel art action game. Square image.
+
+LAYOUT
+- The canal runs straight from the top edge to the bottom edge of the image.
+- Left 1/8 of the width: stone coping (flat cut stone edge). Middle 6/8: water. Right 1/8: stone coping.
+- The top edge and the bottom edge must match exactly so the tile repeats vertically with no seam. Nothing touches or crosses the top or bottom edge except the straight canal itself.
+
+LOOK
+- Water: calm, clean, medium blue with a slight teal, gentle small ripples and a few soft light glints. Slightly darker strip of water along both stone edges (shade of the wall), the same on both sides.
+- Stone coping: pale warm cream limestone blocks, same color family as the palace and the fountain, neat rectangular blocks with thin dark grout lines, a thin darker line where stone meets water.
+- No lily pads, no plants, no boats, no bridges, no fish, no reflections of objects.
+
+STYLE
+Same art style as the attached sprites (fountain, hedge, buildings): clean 2D game pixel art, crisp dark outlines on the stone, flat colors with 2-3 shade steps, no gradients, no blur, no photo texture. Viewed from almost directly above, flat ground, no perspective.
+
+=== 2. 돌다리 (1:1) ===
+One small stone arch footbridge for a royal palace garden canal, for a 2D top-down pixel art action game. Square image, the bridge in the middle on a plain solid flat background of one color (#FF00FF), nothing else.
+
+SHAPE
+- The bridge crosses the canal from left to right: its walkway runs horizontally, about 4 times longer than it is wide.
+- Flat paved walkway on top with low stone balustrades (short railings with small round posts) along the top and bottom sides of the walkway. Both ends open, wide enough to walk on.
+- Viewed from almost directly above with a slight tilt, like the attached buildings: we mostly see the walkway top, and a little of the arch's front face below the bottom railing.
+
+LOOK
+Pale warm cream limestone, same color family as the canal coping, the palace and the fountain. Crisp dark outlines, flat colors with 2-3 shade steps. No water, no plants, no shadows on the background.
+
+STYLE
+Same art style as the attached sprites (fountain, hedge, buildings): clean 2D game pixel art, no gradients, no blur, no photo texture.
+
+=== 생성기 설정 ===
+- 1:1, 2K 이상
+- 참조: 분수대, 풀 울타리, 건물(선술집 2 또는 파란 원형 성) 스프라이트
