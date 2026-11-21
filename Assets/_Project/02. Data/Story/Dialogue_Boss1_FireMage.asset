@@ -81,3 +81,4 @@ MonoBehaviour:
   _revertPause: 0.6
   _focusOnBoss: 1
   _focusZoom: 0.8
+  _bossVoice: {fileID: 11400000, guid: 8ec114f99ccdf9c41b612ca0c27082a3, type: 2}

@@ -18,21 +18,45 @@ MonoBehaviour:
     _text: "\uC9D0\uC758 \uBCD1\uC0AC\uB3C4, \uC6A9\uBCD1\uB3C4,\n\uC560\uC644\uB3D9\uBB3C\uAE4C\uC9C0..."
     _spawnBoss: 0
     _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
   - _speaker: 0
     _mood: 8
     _text: "\uB354\uB294 \uBABB \uCC38\uACA0\uB2E4..."
     _spawnBoss: 0
     _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
   - _speaker: 0
     _mood: 8
     _text: "\uD655\uC2E4\uD558\uAC8C \uC8FD\uC5EC\uC904\uAC8C...."
     _spawnBoss: 0
     _startEntrance: 0
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
   - _speaker: 1
     _mood: 8
     _text: "\uC624\uB298 \uB05D\uC744 \uBCF4\uC790.."
     _spawnBoss: 1
     _startEntrance: 1
+    _bossSprite: {fileID: 0}
+    _revertToKing: 0
+    _bgm: {fileID: 0}
+    _startAction: 0
+    _endAction: 0
   _spawnPause: 2.2
   _kingBecomesBoss: 1
   _kingStandHeight: -1.221
+  _revertPause: 0.6
+  _focusOnBoss: 0
+  _focusZoom: 0.8
+  _bossVoice: {fileID: 11400000, guid: e9f7298e507f25a4f87dae4cc8ddc3cd, type: 2}

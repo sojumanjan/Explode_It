@@ -1,4 +1,5 @@
 using DG.Tweening;
+using ExplodeIt.Core;
 using TMPro;
 using UnityEngine;
 
@@ -27,8 +28,16 @@ namespace ExplodeIt.UI
         [SerializeField, Min(0f)] private float _nextMarkRate = 2.5f;
         [Tooltip("줄이 늘어날 때 상자 높이가 따라 커지는 빠르기 (캔버스 단위/초)")]
         [SerializeField, Min(1f)] private float _growSpeed = 400f;
+        [Tooltip("글자가 나올 때 내는 목소리(동물의 숲처럼 웅얼거리는 소리). 피치 범위를 캐릭터마다 다르게 두어 목소리를 가른다. Show에서 목소리를 따로 넘기지 않으면 이 소리를 쓴다. 비우면 조용하다")]
+        [SerializeField] private SoundData _voice;
+        [Tooltip("목소리를 몇 글자마다 한 번 낼지. 빈칸과 문장 부호는 세지 않는다. 1이면 매 글자")]
+        [SerializeField, Min(1)] private int _voiceEveryLetters = 2;
 
         private float _shown;
+        // 이번 줄에 쓸 목소리와, 지금까지 나온 글자 중 목소리를 셌던 마지막 위치·센 글자 수.
+        private SoundData _lineVoice;
+        private int _voicedUntil;
+        private int _letterCount;
         private int _total;
         private Tween _pop;
         private Vector2 _nextMarkHome;
@@ -68,10 +77,14 @@ namespace ExplodeIt.UI
         public float TypingProgress => _total > 0 ? Mathf.Clamp01((float)_text.maxVisibleCharacters / _total) : 1f;
 
         // waitsForClick: 클릭해야 넘어가는 줄인지. 저절로 사라지는 줄에 ▼가 뜨면 눌러야 할 것처럼 읽히므로 끈다.
-        public void Show(string line, bool waitsForClick = true)
+        // voice: 이 줄을 말하는 캐릭터의 목소리. 한 말풍선을 여러 캐릭터가 돌려 쓰는 곳(보스 대화)에서 넘긴다. 비우면 말풍선에 둔 목소리.
+        public void Show(string line, bool waitsForClick = true, SoundData voice = null)
         {
             gameObject.SetActive(true);
             _waitsForClick = waitsForClick;
+            _lineVoice = voice != null ? voice : _voice;
+            _voicedUntil = 0;
+            _letterCount = 0;
             _text.text = line;
             // 보이는 줄만큼만 상자를 키우므로, 글은 위에서부터 차고 아래 줄은 상자 밖에 숨어 있다(보이지 않는 글자).
             _text.verticalAlignment = VerticalAlignmentOptions.Top;
@@ -97,6 +110,8 @@ namespace ExplodeIt.UI
 
         public void CompleteTyping()
         {
+            // 넘겨서 한꺼번에 나온 글자는 목소리를 내지 않는다(한 번에 수십 번 울린다).
+            _voicedUntil = _total;
             _shown = _total;
             _text.maxVisibleCharacters = _total;
             UpdateVisibleLines(_text.textInfo.lineCount);
@@ -163,6 +178,42 @@ namespace ExplodeIt.UI
             if (visible > 0)
             {
                 UpdateVisibleLines(_text.textInfo.characterInfo[visible - 1].lineNumber + 1);
+            }
+
+            PlayVoice(visible);
+        }
+
+        // 새로 나온 글자 가운데 글자·숫자만 세어 정한 수마다 한 번 목소리를 낸다. 피치는 목소리 데이터의 범위에서 매번 무작위라 웅얼거리듯 들린다.
+        private void PlayVoice(int visible)
+        {
+            if (_lineVoice == null)
+            {
+                _voicedUntil = visible;
+                return;
+            }
+
+            TMP_CharacterInfo[] chars = _text.textInfo.characterInfo;
+            bool shouldPlay = false;
+            for (int i = _voicedUntil; i < visible; i++)
+            {
+                if (!char.IsLetterOrDigit(chars[i].character))
+                {
+                    continue;
+                }
+
+                if (_letterCount % _voiceEveryLetters == 0)
+                {
+                    shouldPlay = true;
+                }
+
+                _letterCount++;
+            }
+
+            _voicedUntil = visible;
+            // 한 프레임에 글자가 여러 개 나와도 한 번만 낸다.
+            if (shouldPlay)
+            {
+                AudioManager.Play(_lineVoice);
             }
         }
 

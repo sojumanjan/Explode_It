@@ -61,6 +61,9 @@ namespace ExplodeIt.Stage
         // 대사 말풍선. 보스 대화가 쓰는 씬 말풍선을 같이 쓴다(동시에 쓰는 일이 없다).
         [SerializeField] private SpeechBubble _kingBubble;
         [SerializeField] private SpeechBubble _playerBubble;
+        // 씬 말풍선은 보스 대화와 돌려 쓰므로(고블린 줄이 보스 말풍선에 뜬다) 목소리를 말하는 쪽마다 넘긴다.
+        [SerializeField, Tooltip("왕 줄의 글자마다 나는 목소리")] private SoundData _kingVoice;
+        [SerializeField, Tooltip("고블린(플레이어) 줄의 글자마다 나는 목소리")] private SoundData _playerVoice;
 
         [Header("플레이어")]
         [SerializeField] private Transform _player;
@@ -429,7 +432,7 @@ namespace ExplodeIt.Stage
             {
                 _kingBubble.Hide();
                 _playerBubble.transform.position = new Vector3(_player.position.x, _playerSprite.bounds.max.y + BubbleGap, 0f);
-                _playerBubble.Show(line.Text);
+                _playerBubble.Show(line.Text, true, _playerVoice);
             }
             else
             {
@@ -440,7 +443,7 @@ namespace ExplodeIt.Stage
                 _punch = _king.transform.DOPunchScale(_kingScale * MoodPunch, 0.25f, 6).SetLink(gameObject);
                 _playerBubble.Hide();
                 _kingBubble.transform.position = new Vector3(_king.transform.position.x, _king.bounds.max.y + BubbleGap, 0f);
-                _kingBubble.Show(line.Text);
+                _kingBubble.Show(line.Text, true, _kingVoice);
             }
 
             if (line.CallsSoldiers && !_areSoldiersCalled)

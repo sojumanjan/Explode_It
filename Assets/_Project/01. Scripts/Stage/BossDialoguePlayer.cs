@@ -17,6 +17,9 @@ namespace ExplodeIt.Stage
         [SerializeField] private SpriteRenderer _king;
         [SerializeField] private SpeechBubble _kingBubble;
         [SerializeField] private SpeechBubble _bossBubble;
+        // 왕 말풍선은 고블린 줄에도 돌려 쓰므로 목소리를 말풍선이 아니라 말하는 쪽마다 정해 넘긴다. 보스 목소리는 대화 데이터에 둔다.
+        [SerializeField, Tooltip("왕 줄의 글자마다 나는 목소리")] private SoundData _kingVoice;
+        [SerializeField, Tooltip("고블린(플레이어) 줄의 글자마다 나는 목소리")] private SoundData _playerVoice;
         // 왕이 보스 자리 옆 어디에 서는지(유닛). 플레이어 쪽으로 서서 카메라 안에 들어오게 한다.
         [SerializeField, Min(0f)] private float _kingSideDistance = 2.6f;
         // 말하는 쪽 머리 위와 말풍선 사이 간격(유닛). 보스가 아직 없을 때 보스 줄은 자리 위 이 높이(유닛)에 뜬다.
@@ -160,7 +163,7 @@ namespace ExplodeIt.Stage
             }
 
             _bossBubble.transform.position = new Vector3(_boss.position.x, TopOf(_boss) + _bubbleGap, 0f);
-            _bossBubble.Show(text, false);
+            _bossBubble.Show(text, false, _data != null ? _data.BossVoice : null);
             _shoutHide?.Kill();
             _shoutHide = DOVirtual.DelayedCall(Mathf.Max(duration, _bossBubble.TypingDuration + _shoutReadHold), _onShoutEnd).SetLink(gameObject);
         }
@@ -441,7 +444,7 @@ namespace ExplodeIt.Stage
             if (line.Speaker == DialogueSpeaker.Player && _speakingPlayer != null)
             {
                 _kingBubble.transform.position = new Vector3(_speakingPlayer.position.x, TopOf(_speakingPlayer) + _bubbleGap, 0f);
-                _kingBubble.Show(line.Text, waitsForClick);
+                _kingBubble.Show(line.Text, waitsForClick, _playerVoice);
             }
             else if (UsesKingBubble(line))
             {
@@ -451,13 +454,13 @@ namespace ExplodeIt.Stage
                 _king.transform.localScale = _kingScale;
                 _punch = _king.transform.DOPunchScale(_kingScale * _moodPunch, 0.25f, 6).SetLink(gameObject);
                 _kingBubble.transform.position = new Vector3(_king.transform.position.x, _king.bounds.max.y + _bubbleGap, 0f);
-                _kingBubble.Show(line.Text, waitsForClick);
+                _kingBubble.Show(line.Text, waitsForClick, _kingVoice);
             }
             else
             {
                 Vector2 boss = _boss != null ? (Vector2)_boss.position : _bossPoint;
                 _bossBubble.transform.position = new Vector3(boss.x, boss.y + _bossTopOffset + _bubbleGap, 0f);
-                _bossBubble.Show(line.Text, waitsForClick);
+                _bossBubble.Show(line.Text, waitsForClick, _data.BossVoice);
             }
         }
 

@@ -89,3 +89,6 @@ MonoBehaviour:
   _kingBecomesBoss: 1
   _kingStandHeight: -1.221
   _revertPause: 0.6
+  _focusOnBoss: 0
+  _focusZoom: 0.8
+  _bossVoice: {fileID: 11400000, guid: e9f7298e507f25a4f87dae4cc8ddc3cd, type: 2}

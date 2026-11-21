@@ -75,7 +75,11 @@ namespace ExplodeIt.Stage
         [Tooltip("보스 자리를 비출 때 카메라 화면 크기 배율 (1 = 그대로, 작을수록 확대). 보스 자리 비추기를 켰을 때만 쓴다")]
         [SerializeField, Range(0.3f, 1f)] private float _focusZoom = 0.8f;
 
+        [Tooltip("보스 줄(싸우는 도중 외치는 대사 포함)의 글자마다 나는 목소리. 보스마다 피치 범위를 달리 둔다. 비우면 보스 말풍선에 둔 목소리")]
+        [SerializeField] private SoundData _bossVoice;
+
         public float SpawnPause => _spawnPause;
+        public SoundData BossVoice => _bossVoice;
         public bool FocusOnBoss => _focusOnBoss;
         public float FocusZoom => _focusZoom;
         public bool KingBecomesBoss => _kingBecomesBoss;
