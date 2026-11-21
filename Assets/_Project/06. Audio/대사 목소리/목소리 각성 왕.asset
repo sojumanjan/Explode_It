@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: "\uBAA9\uC18C\uB9AC \uAC01\uC131 \uC655"
   m_EditorClassIdentifier: Assembly-CSharp::ExplodeIt.Core.SoundData
   _clips:
-  - {fileID: 8300000, guid: 05631cec8b01e9e429d7abbade9d1895, type: 3}
+  - {fileID: 8300000, guid: 362d52a1b90c4204f873dec4235495a8, type: 3}
   _volume: 0.85
-  _pitchMin: 0.62
-  _pitchMax: 0.74
+  _pitchMin: 0.7
+  _pitchMax: 0.78
   _maxInstances: 2
   _replacesOldest: 1
   _minInterval: 0.05
