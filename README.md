@@ -2,7 +2,7 @@
 
 **1초 뒤에 터지는 폭탄. 적이 아니라, 적이 올 자리를 노려라.**
 
-<img width="400" height="225" alt="Image" src="https://github.com/user-attachments/assets/324c1305-0cd1-4c8b-9796-e541b44e2a12" />
+<img width="460" height="258" alt="Explode_It_15fps_github" src="https://github.com/user-attachments/assets/39c058f5-3772-4347-a63d-8ee2737258f2" />
 
 ---
 
